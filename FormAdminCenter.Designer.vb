@@ -69,6 +69,10 @@ Partial Class FormAdminCenter
         Me.tpCustomerRecords = New System.Windows.Forms.TabPage()
         Me.dgvCustomerRecords = New System.Windows.Forms.DataGridView()
         Me.btnAdd = New System.Windows.Forms.Button()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.lblBookings = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpSearchReports.SuspendLayout()
         CType(Me.dgvReportBookings, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -172,6 +176,9 @@ Partial Class FormAdminCenter
         '
         Me.tpSearchReports.BackColor = System.Drawing.Color.WhiteSmoke
         Me.tpSearchReports.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.tpSearchReports.Controls.Add(Me.Label10)
+        Me.tpSearchReports.Controls.Add(Me.Label9)
+        Me.tpSearchReports.Controls.Add(Me.lblBookings)
         Me.tpSearchReports.Controls.Add(Me.Label7)
         Me.tpSearchReports.Controls.Add(Me.Label4)
         Me.tpSearchReports.Controls.Add(Me.lblTotalBookingsContainer)
@@ -194,7 +201,7 @@ Partial Class FormAdminCenter
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.ForeColor = System.Drawing.Color.Black
-        Me.Label7.Location = New System.Drawing.Point(38, 84)
+        Me.Label7.Location = New System.Drawing.Point(39, 46)
         Me.Label7.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(144, 19)
@@ -218,7 +225,7 @@ Partial Class FormAdminCenter
         Me.lblTotalBookingsContainer.AutoSize = True
         Me.lblTotalBookingsContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTotalBookingsContainer.ForeColor = System.Drawing.Color.Black
-        Me.lblTotalBookingsContainer.Location = New System.Drawing.Point(228, 84)
+        Me.lblTotalBookingsContainer.Location = New System.Drawing.Point(206, 46)
         Me.lblTotalBookingsContainer.Name = "lblTotalBookingsContainer"
         Me.lblTotalBookingsContainer.Size = New System.Drawing.Size(16, 19)
         Me.lblTotalBookingsContainer.TabIndex = 1
@@ -229,7 +236,7 @@ Partial Class FormAdminCenter
         Me.lblNumCustomersContainer.AutoSize = True
         Me.lblNumCustomersContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNumCustomersContainer.ForeColor = System.Drawing.Color.Black
-        Me.lblNumCustomersContainer.Location = New System.Drawing.Point(228, 23)
+        Me.lblNumCustomersContainer.Location = New System.Drawing.Point(206, 23)
         Me.lblNumCustomersContainer.Name = "lblNumCustomersContainer"
         Me.lblNumCustomersContainer.Size = New System.Drawing.Size(16, 19)
         Me.lblNumCustomersContainer.TabIndex = 1
@@ -238,19 +245,19 @@ Partial Class FormAdminCenter
         'dgvReportBookings
         '
         Me.dgvReportBookings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvReportBookings.Location = New System.Drawing.Point(250, 23)
+        Me.dgvReportBookings.Location = New System.Drawing.Point(250, 45)
         Me.dgvReportBookings.Name = "dgvReportBookings"
         Me.dgvReportBookings.RowHeadersWidth = 51
-        Me.dgvReportBookings.Size = New System.Drawing.Size(225, 143)
+        Me.dgvReportBookings.Size = New System.Drawing.Size(225, 121)
         Me.dgvReportBookings.TabIndex = 31
         '
         'dgvAvailability
         '
         Me.dgvAvailability.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvAvailability.Location = New System.Drawing.Point(481, 23)
+        Me.dgvAvailability.Location = New System.Drawing.Point(481, 45)
         Me.dgvAvailability.Name = "dgvAvailability"
         Me.dgvAvailability.RowHeadersWidth = 51
-        Me.dgvAvailability.Size = New System.Drawing.Size(288, 366)
+        Me.dgvAvailability.Size = New System.Drawing.Size(288, 344)
         Me.dgvAvailability.TabIndex = 29
         '
         'btnReject
@@ -619,6 +626,7 @@ Partial Class FormAdminCenter
         'tpCustomerRecords
         '
         Me.tpCustomerRecords.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.tpCustomerRecords.Controls.Add(Me.Label8)
         Me.tpCustomerRecords.Controls.Add(Me.dgvCustomerRecords)
         Me.tpCustomerRecords.Location = New System.Drawing.Point(30, 4)
         Me.tpCustomerRecords.Name = "tpCustomerRecords"
@@ -630,10 +638,10 @@ Partial Class FormAdminCenter
         'dgvCustomerRecords
         '
         Me.dgvCustomerRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCustomerRecords.Location = New System.Drawing.Point(16, 17)
+        Me.dgvCustomerRecords.Location = New System.Drawing.Point(16, 35)
         Me.dgvCustomerRecords.Name = "dgvCustomerRecords"
         Me.dgvCustomerRecords.RowHeadersWidth = 51
-        Me.dgvCustomerRecords.Size = New System.Drawing.Size(774, 365)
+        Me.dgvCustomerRecords.Size = New System.Drawing.Size(774, 347)
         Me.dgvCustomerRecords.TabIndex = 0
         '
         'btnAdd
@@ -648,6 +656,54 @@ Partial Class FormAdminCenter
         Me.btnAdd.TabIndex = 11
         Me.btnAdd.Text = "Add"
         Me.btnAdd.UseVisualStyleBackColor = False
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.Black
+        Me.Label8.Location = New System.Drawing.Point(12, 13)
+        Me.Label8.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(69, 19)
+        Me.Label8.TabIndex = 34
+        Me.Label8.Text = "Customers"
+        '
+        'lblBookings
+        '
+        Me.lblBookings.AutoSize = True
+        Me.lblBookings.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblBookings.ForeColor = System.Drawing.Color.Black
+        Me.lblBookings.Location = New System.Drawing.Point(39, 107)
+        Me.lblBookings.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.lblBookings.Name = "lblBookings"
+        Me.lblBookings.Size = New System.Drawing.Size(59, 19)
+        Me.lblBookings.TabIndex = 34
+        Me.lblBookings.Text = "Bookings"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.Black
+        Me.Label9.Location = New System.Drawing.Point(246, 23)
+        Me.Label9.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(98, 19)
+        Me.Label9.TabIndex = 35
+        Me.Label9.Text = "Report Bookings"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.ForeColor = System.Drawing.Color.Black
+        Me.Label10.Location = New System.Drawing.Point(477, 23)
+        Me.Label10.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(68, 19)
+        Me.Label10.TabIndex = 36
+        Me.Label10.Text = "Availability"
         '
         'FormAdminCenter
         '
@@ -674,6 +730,7 @@ Partial Class FormAdminCenter
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.tpCustomerRecords.ResumeLayout(False)
+        Me.tpCustomerRecords.PerformLayout()
         CType(Me.dgvCustomerRecords, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -727,4 +784,8 @@ Partial Class FormAdminCenter
     Friend WithEvents tpCustomerRecords As TabPage
     Friend WithEvents dgvCustomerRecords As DataGridView
     Friend WithEvents btnAdd As Button
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Label9 As Label
+    Friend WithEvents lblBookings As Label
 End Class

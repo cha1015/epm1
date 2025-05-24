@@ -12,7 +12,6 @@ Public Class HelperUI
                                            lblEventTimePaymentContainer As Label, lblTotalPricePaymentContainer As Label, txtTotalPrice As TextBox,
                                            txtCustomerName As TextBox, eventPlaceName As String)
 
-        ' Ensure values are not empty before setting them
         lblCustomerContainer.Text = If(String.IsNullOrWhiteSpace(txtCustomerName.Text), "Not Provided", txtCustomerName.Text)
         lblEventPlacePaymentContainer.Text = If(String.IsNullOrWhiteSpace(eventPlaceName), "Unknown Venue", eventPlaceName)
         lblEventTypePaymentContainer.Text = If(String.IsNullOrWhiteSpace(cbEventType.Text), "Not Selected", cbEventType.Text)
