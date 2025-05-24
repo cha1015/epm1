@@ -37,133 +37,137 @@ Public Class FormSignUp
         End Select
     End Sub
 
-
-
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HideErrorLabels()
         txtAdminCode.Visible = False
         lblAdminCode.Visible = False
         ApplyFieldIndicators()
 
-        AddHandler txtFirstName.TextChanged, AddressOf RemoveAsteriskOnInput
-        AddHandler txtLastName.TextChanged, AddressOf RemoveAsteriskOnInput
-        AddHandler txtUsername.TextChanged, AddressOf RemoveAsteriskOnInput
-        AddHandler txtEmail.TextChanged, AddressOf RemoveAsteriskOnInput
-        AddHandler txtPass.TextChanged, AddressOf RemoveAsteriskOnInput
-        AddHandler txtConfPass.TextChanged, AddressOf RemoveAsteriskOnInput
+        Me.ActiveControl = txtFirstName
+        Me.BeginInvoke(Sub() txtFirstName.Select())
+
+        AddHandler txtFirstName.TextChanged, AddressOf ValidateFieldsInRealTime
+        AddHandler txtLastName.TextChanged, AddressOf ValidateFieldsInRealTime
+        AddHandler txtUsername.TextChanged, AddressOf ValidateFieldsInRealTime
+        AddHandler txtUsername.TextChanged, AddressOf CheckUsernameAvailability
+        AddHandler txtEmail.TextChanged, AddressOf ValidateFieldsInRealTime
+        AddHandler txtEmail.TextChanged, AddressOf CheckEmailAvailability
+        AddHandler txtPass.TextChanged, AddressOf ValidateFieldsInRealTime
+        AddHandler txtConfPass.TextChanged, AddressOf ValidateFieldsInRealTime
+        AddHandler cbRole.SelectedIndexChanged, AddressOf ValidateFieldsInRealTime
+
+        AddHandler txtPass.TextChanged, AddressOf ShowPasswordStrength
+    End Sub
+
+    Private Sub ValidateFieldsInRealTime(sender As Object, e As EventArgs)
+        Dim txtBox As TextBox = TryCast(sender, TextBox)
+
+        If txtBox IsNot Nothing Then
+            Select Case txtBox.Name
+                Case "txtFirstName"
+                    lblFirstName.Text = If(String.IsNullOrWhiteSpace(txtFirstName.Text), "First Name *", "First Name")
+                Case "txtLastName"
+                    lblLastName.Text = If(String.IsNullOrWhiteSpace(txtLastName.Text), "Last Name *", "Last Name")
+                Case "txtUsername"
+                    lblUsername.Text = If(String.IsNullOrWhiteSpace(txtUsername.Text), "Username *", "Username")
+                Case "txtEmail"
+                    lblEmail.Text = If(String.IsNullOrWhiteSpace(txtEmail.Text), "Email *", "Email")
+                Case "txtPass"
+                    lblPassword.Text = If(String.IsNullOrWhiteSpace(txtPass.Text), "Password *", "Password")
+                Case "txtConfPass"
+                    lblConfirmPassword.Text = If(String.IsNullOrWhiteSpace(txtConfPass.Text), "Confirm Password *", "Confirm Password")
+            End Select
+        End If
+
+        If cbRole.SelectedItem Is Nothing Then
+            lblRole.Text = "Role *"
+        Else
+            lblRole.Text = "Role"
+        End If
+
+    End Sub
+
+    Private Sub CheckUsernameAvailability(sender As Object, e As EventArgs)
+        Dim query As String = "SELECT COUNT(*) FROM Users WHERE username = @uname"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@uname", txtUsername.Text}}
+
+        Dim userExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+
+        lblUsernameError.Text = If(userExists > 0, $"Username already exists! Try {txtUsername.Text}123", "")
+        lblUsernameError.Visible = userExists > 0
+    End Sub
+
+    Private Sub CheckEmailAvailability(sender As Object, e As EventArgs)
+        Dim query As String = "SELECT COUNT(*) FROM Users WHERE email = @email"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@email", txtEmail.Text}}
+
+        Dim emailExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+
+        lblEmailError.Text = If(emailExists > 0, "Email already registered. Try a different one.", "")
+        lblEmailError.Visible = emailExists > 0
+    End Sub
+
+
+    Private Sub ShowPasswordStrength(sender As Object, e As EventArgs)
+        lblPwStrength.Text = CheckPasswordStrength(txtPass.Text)
+        lblPwStrength.Visible = True
+    End Sub
+    Private Sub ValidateAdminCode()
+        Dim predefinedAdminCode As String = "SECURE123"
+
+        If txtAdminCode.Text <> predefinedAdminCode Then
+            lblAdminCodeError.Text = "Invalid admin authentication code."
+            lblAdminCodeError.Visible = True
+            Return
+        End If
+    End Sub
+
+    Private Sub txtConfPass_Leave(sender As Object, e As EventArgs) Handles txtConfPass.Leave
+        lblPasswordError.Text = If(txtPass.Text <> txtConfPass.Text, "Passwords do not match!", "")
+        lblPasswordError.Visible = txtPass.Text <> txtConfPass.Text
     End Sub
 
     Private Sub btnSignUp_Click(sender As Object, e As EventArgs) Handles btnSignUp.Click
         HideErrorLabels()
         ShowAsteriskOnMissedFields()
 
-        Dim missingFields As Boolean = False
+        CheckUsernameAvailability(Nothing, Nothing)
+        CheckEmailAvailability(Nothing, Nothing)
+        txtConfPass_Leave(Nothing, Nothing)
 
-        If String.IsNullOrWhiteSpace(txtFirstName.Text) Then
-            SetMissingFieldIndicator(txtFirstName)
-            missingFields = True
-        End If
-
-        If String.IsNullOrWhiteSpace(txtLastName.Text) Then
-            SetMissingFieldIndicator(txtLastName)
-            missingFields = True
-        End If
-
-        If String.IsNullOrWhiteSpace(txtUsername.Text) Then
-            SetMissingFieldIndicator(txtUsername)
-            missingFields = True
-        End If
-
-        If String.IsNullOrWhiteSpace(txtEmail.Text) Then
-            SetMissingFieldIndicator(txtEmail)
-            missingFields = True
-        End If
-
-        If String.IsNullOrWhiteSpace(txtPass.Text) Then
-            SetMissingFieldIndicator(txtPass)
-            missingFields = True
-        End If
-
-        If String.IsNullOrWhiteSpace(txtConfPass.Text) Then
-            SetMissingFieldIndicator(txtConfPass)
-            missingFields = True
-        End If
-
-        If cbRole.SelectedItem Is Nothing Then
-            lblRequiredMessage.Visible = True
-            missingFields = True
-        End If
-
-        If missingFields Then Return
-
-        ValidateUserInput()
-    End Sub
-
-    Private Sub ValidateUserInput()
-        If txtPass.Text <> txtConfPass.Text Then
-            lblPasswordError.Text = "Passwords do not match!"
-            lblPasswordError.Visible = True
+        If lblUsernameError.Visible OrElse lblEmailError.Visible OrElse lblPasswordError.Visible Then
+            MessageBox.Show("Please resolve the indicated errors before proceeding.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        Dim strengthMessage As String = CheckPasswordStrength(txtPass.Text)
-        lblPwStrength.Text = strengthMessage
-        lblPwStrength.Visible = True
-
-        Dim checkUserQuery As String = "SELECT COUNT(*) FROM Users WHERE username = @uname OR email = @email"
-        Dim checkParameters As New Dictionary(Of String, Object) From {
-            {"@uname", txtUsername.Text},
-            {"@email", txtEmail.Text}
-        }
+        Dim hashedPassword As String = HashPassword(txtPass.Text)
+        Dim query As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role) VALUES (@fname, @lname, @uname, @email, @pass, @role)"
+        Dim parameters As New Dictionary(Of String, Object) From {
+        {"@fname", txtFirstName.Text},
+        {"@lname", txtLastName.Text},
+        {"@uname", txtUsername.Text},
+        {"@email", txtEmail.Text},
+        {"@pass", hashedPassword},
+        {"@role", cbRole.SelectedItem.ToString()}
+    }
 
         Try
-            Dim userExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkUserQuery, checkParameters))
-
-            If userExists > 0 Then
-                lblUsernameError.Text = "Username already exists! Try " & txtUsername.Text & "123"
-                lblUsernameError.Visible = True
-                lblEmailError.Visible = True
-                Return
-            End If
-
-            If cbRole.SelectedItem.ToString() = "Admin" Then
-                Dim storedAdminCode As String = GetAdminCodeFromDatabase(txtUsername.Text)
-                If txtAdminCode.Text <> storedAdminCode Then
-                    lblAdminCodeError.Text = "Invalid admin authentication code."
-                    lblAdminCodeError.Visible = True
-                    Return
-                End If
-            End If
-
-            Dim hashedPassword As String = HashPassword(txtPass.Text)
-
-            Dim query As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role) VALUES (@fname, @lname, @uname, @email, @pass, @role)"
-            Dim parameters As New Dictionary(Of String, Object) From {
-                {"@fname", txtFirstName.Text},
-                {"@lname", txtLastName.Text},
-                {"@uname", txtUsername.Text},
-                {"@email", txtEmail.Text},
-                {"@pass", hashedPassword},
-                {"@role", cbRole.SelectedItem.ToString()}
-            }
-
             DBHelper.ExecuteQuery(query, parameters)
             MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
             Me.Hide()
             Dim loginForm As New FormLogIn()
             loginForm.Show()
-
-        Catch ex As MySqlException
-            If ex.Number = 1062 Then
-                lblEmailError.Visible = True
-            Else
-                MessageBox.Show("Database error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End If
         Catch ex As Exception
             MessageBox.Show("Unexpected error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+        If lblUsernameError.Visible OrElse lblEmailError.Visible OrElse lblPasswordError.Visible Then
+            MessageBox.Show("Please resolve the indicated errors before proceeding.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
     End Sub
+
 
     Private Function GetAdminCodeFromDatabase(username As String) As String
         Dim query As String = "SELECT admin_code FROM Users WHERE username = @uname"
@@ -212,25 +216,28 @@ Public Class FormSignUp
     End Function
 
     Private Function CheckPasswordStrength(password As String) As String
-        Dim lengthCriteria As Integer = password.Length
+        Dim lengthCriteria As Boolean = password.Length >= 8
         Dim upperCriteria As Boolean = Regex.IsMatch(password, "[A-Z]")
         Dim lowerCriteria As Boolean = Regex.IsMatch(password, "[a-z]")
         Dim numberCriteria As Boolean = Regex.IsMatch(password, "\d")
         Dim specialCriteria As Boolean = Regex.IsMatch(password, "[^a-zA-Z0-9]")
 
-        If lengthCriteria < 8 Then
-            Return "Weak Password! Use a longer password with mixed characters."
-        End If
+        Dim criteriaMet As Integer = Convert.ToInt32(lengthCriteria) + Convert.ToInt32(upperCriteria) +
+                                 Convert.ToInt32(lowerCriteria) + Convert.ToInt32(numberCriteria) +
+                                 Convert.ToInt32(specialCriteria)
 
-        If lengthCriteria >= 8 AndAlso lengthCriteria < 12 AndAlso (upperCriteria OrElse lowerCriteria OrElse numberCriteria) Then
-            Return "Moderate Password! Consider adding special characters and increasing length."
-        End If
+        Select Case criteriaMet
+            Case 0 To 1
+                Return "Very Weak Password! Increase length and add varied characters."
+            Case 2 To 3
+                Return "Weak Password! Consider adding uppercase, lowercase, numbers, and special characters."
+            Case 4
+                Return "Moderate Password! Almost there—consider making it longer for extra security."
+            Case 5
+                Return "Strong Password! Your password is secure."
+        End Select
 
-        If lengthCriteria >= 12 AndAlso upperCriteria AndAlso lowerCriteria AndAlso numberCriteria AndAlso specialCriteria Then
-            Return "Strong Password! Your password is secure."
-        End If
-
-        Return "Weak Password! Must be at least 8 characters, include uppercase, lowercase, number, and special character."
+        Return "Invalid Password!"
     End Function
 
 
@@ -272,9 +279,9 @@ Public Class FormSignUp
 
     Private Sub btnShowConfPass_Click(sender As Object, e As EventArgs) Handles btnShowConfPass.Click
         If txtConfPass.PasswordChar = "*"c Then
-            txtConfPass.PasswordChar = ControlChars.NullChar ' Reveals text
+            txtConfPass.PasswordChar = ControlChars.NullChar
         Else
-            txtConfPass.PasswordChar = "*"c ' Hides text
+            txtConfPass.PasswordChar = "*"c
         End If
     End Sub
 

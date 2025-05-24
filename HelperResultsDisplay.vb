@@ -1,5 +1,5 @@
 ﻿Imports System.IO
-Imports System.Windows.Forms ' For ToolTip support
+Imports System.Windows.Forms
 
 Public Class HelperResultsDisplay
     Public Shared Sub PopulateResults(flpResults As FlowLayoutPanel, dt As DataTable, btnClickHandler As EventHandler)

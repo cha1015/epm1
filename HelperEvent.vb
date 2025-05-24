@@ -3,25 +3,21 @@
 Public Class HelperEvent
     ' ------------------ Update Event End Date ------------------
     Public Shared Sub UpdateEventEndDate(cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                         cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                         dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                         cbSameDayEvent As CheckBox)
+                                     cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                     dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
+                                     cbSameDayEvent As CheckBox)
 
-        Dim startHour As Integer, startMinutes As Integer, endHour As Integer, endMinutes As Integer
-        If Not Integer.TryParse(cbStartHour.Text, startHour) OrElse Not Integer.TryParse(cbStartMinutes.Text, startMinutes) Then Exit Sub
-        If Not Integer.TryParse(cbEndHour.Text, endHour) OrElse Not Integer.TryParse(cbEndMinutes.Text, endMinutes) Then Exit Sub
+        Dim startTimeStr As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
+        Dim endTimeStr As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
 
-        Dim startAMPM As String = cbStartAMPM.Text
-        Dim endAMPM As String = cbEndAMPM.Text
+        Dim eventStartTime As DateTime
+        Dim eventEndTime As DateTime
 
-        If startAMPM = "PM" AndAlso startHour < 12 Then startHour += 12
-        If startAMPM = "AM" AndAlso startHour = 12 Then startHour = 0
-
-        If endAMPM = "PM" AndAlso endHour < 12 Then endHour += 12
-        If endAMPM = "AM" AndAlso endHour = 12 Then endHour = 0
-
-        Dim eventStartTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, startHour, startMinutes, 0)
-        Dim eventEndTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, endHour, endMinutes, 0)
+        If Not DateTime.TryParseExact(startTimeStr, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) OrElse
+       Not DateTime.TryParseExact(endTimeStr, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
+            MessageBox.Show("Invalid time format. Please select a valid time.", "Format Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
 
         If eventEndTime <= eventStartTime Then
             dtpEventDateEnd.Value = dtpEventDateStart.Value.AddDays(1)
@@ -31,6 +27,7 @@ Public Class HelperEvent
             cbSameDayEvent.Checked = True
         End If
     End Sub
+
 
     ' ------------------ Adjust End Date for Overnight Event ------------------
     Public Shared Sub AdjustEndDateForOvernightEvent(cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
@@ -87,15 +84,15 @@ Public Class HelperEvent
     ' ------------------ Format Available Days ------------------
     Public Shared Function FormatAvailableDays(daysString As String) As String
         Dim days As String() = If(String.IsNullOrWhiteSpace(daysString), New String() {}, daysString.Split(","c).Select(Function(d) d.Trim()).ToArray())
-
         Dim dayNames As String() = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
 
         Dim sortedDays As List(Of String) = days.OrderBy(Function(d) Array.IndexOf(dayNames, d)).ToList()
 
-        If sortedDays.Count <= 1 Then Return String.Join(", ", sortedDays)
+        If sortedDays.Count = 7 Then Return "All Week"
+        If sortedDays.Count = 1 Then Return sortedDays.First()
+        If sortedDays.Count = 2 Then Return $"{sortedDays(0)} & {sortedDays(1)}"
 
-        If sortedDays.SequenceEqual(dayNames.ToList()) Then Return "All Week"
-
-        Return $"{sortedDays.First()} - {sortedDays.Last()}"
+        Return String.Join(", ", sortedDays)
     End Function
+
 End Class

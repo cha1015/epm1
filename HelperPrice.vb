@@ -62,49 +62,69 @@ Public Class HelperPrice
 
     ' ------------------ Compute Outside Hours Fee ------------------
     Public Shared Function ComputeOutsideHoursFee(outsideHoursChecked As Boolean, eventStartTime As DateTime,
-                                                  eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime) As Decimal
+                                              eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime) As Decimal
         If Not outsideHoursChecked Then Return 0D
 
         Dim additionalCharges As Decimal = 0D
         Dim perMinuteRate As Decimal = 17D
+        Dim warningMessage As String = ""
 
         If eventStartTime < openingTime Then
             Dim earlyMinutes As Integer = Math.Max(0, CInt((openingTime - eventStartTime).TotalMinutes))
             additionalCharges += earlyMinutes * perMinuteRate
+            warningMessage &= $"Your event starts {earlyMinutes} minutes before opening. Extra fee: ₱{earlyMinutes * perMinuteRate}" & vbCrLf
         End If
 
         If eventEndTime > closingTime Then
             Dim overtimeMinutes As Integer = Math.Max(0, CInt((eventEndTime - closingTime).TotalMinutes))
             additionalCharges += overtimeMinutes * perMinuteRate
+            warningMessage &= $"Your event ends {overtimeMinutes} minutes past closing. Extra fee: ₱{overtimeMinutes * perMinuteRate}" & vbCrLf
+        End If
+
+        If Not String.IsNullOrEmpty(warningMessage) Then
+            MessageBox.Show(warningMessage, "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
         Return additionalCharges
     End Function
 
+
+
     ' ------------------ Generate Price Breakdown ------------------
     Public Shared Function GeneratePriceBreakdown(numGuests As Integer, eventPlaceCapacity As Integer,
-                                                  basePricePerDay As Decimal, totalDays As Integer, servicesCost As Decimal,
-                                                  additionalCharges As Decimal, voucherDiscount As Decimal, finalTotalPrice As Decimal) As String
+                                              basePricePerDay As Decimal, totalDays As Integer, servicesCost As Decimal,
+                                              additionalCharges As Decimal, voucherDiscount As Decimal, finalTotalPrice As Decimal) As String
         Dim breakdown As New StringBuilder()
-        breakdown.AppendLine($"Base Price ({totalDays} day/s): ₱{basePricePerDay * totalDays:F2}")
+
+        breakdown.AppendLine($"Base Price ({totalDays} day/s): ₱{basePricePerDay * totalDays:F2} - Cost per day for the event place.")
 
         Dim excessGuestCost As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100, 0)
-        If excessGuestCost > 0 Then breakdown.AppendLine($"Guest Capacity Exceeded Fee: ₱{excessGuestCost:F2}")
+        If excessGuestCost > 0 Then
+            breakdown.AppendLine($"Guest Capacity Exceeded Fee: ₱{excessGuestCost:F2} - Additional charge for extra guests.")
+        End If
 
-        If servicesCost > 0 Then breakdown.AppendLine($"Total Services Fee: ₱{servicesCost:F2}")
+        If servicesCost > 0 Then
+            breakdown.AppendLine($"Total Services Fee: ₱{servicesCost:F2} - Includes catering, entertainment, etc.")
+        End If
 
-        If totalDays > 1 Then breakdown.AppendLine($"Multi-Day Fee ({totalDays} days): ₱{basePricePerDay * totalDays:F2}")
+        If totalDays > 1 Then
+            breakdown.AppendLine($"Multi-Day Fee ({totalDays} days): ₱{basePricePerDay * totalDays:F2} - Cost for multiple-day event.")
+        End If
 
-        If additionalCharges > 0 Then breakdown.AppendLine($"Outside Available Hours Fee: ₱{additionalCharges:F2}")
+        If additionalCharges > 0 Then
+            breakdown.AppendLine($"Outside Available Hours Fee: ₱{additionalCharges:F2} - Charges for scheduling beyond normal operating hours.")
+        End If
 
         If voucherDiscount > 0 Then
             Dim discountAmount As Decimal = finalTotalPrice * voucherDiscount
-            breakdown.AppendLine($"Voucher Discount ({voucherDiscount * 100}%): -₱{discountAmount:F2}")
+            breakdown.AppendLine($"Voucher Discount ({voucherDiscount * 100}%): -₱{discountAmount:F2} - Discount applied to total price.")
         End If
 
         breakdown.AppendLine($"Total: ₱{finalTotalPrice:F2}")
+
         Return breakdown.ToString()
     End Function
+
 
     ' ------------------ Time Validation ------------------
     Public Shared Function IsValidTimeSelection(cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox) As Boolean

@@ -356,7 +356,7 @@ Partial Class FormMain
         '
         Me.flpResults.AutoScroll = True
         Me.flpResults.BackColor = System.Drawing.Color.Transparent
-        Me.flpResults.Location = New System.Drawing.Point(10, 107)
+        Me.flpResults.Location = New System.Drawing.Point(11, 107)
         Me.flpResults.Margin = New System.Windows.Forms.Padding(2)
         Me.flpResults.Name = "flpResults"
         Me.flpResults.Size = New System.Drawing.Size(923, 383)

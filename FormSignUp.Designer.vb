@@ -146,7 +146,7 @@ Partial Class FormSignUp
         Me.btnSignUp.Location = New System.Drawing.Point(802, 451)
         Me.btnSignUp.Name = "btnSignUp"
         Me.btnSignUp.Size = New System.Drawing.Size(110, 38)
-        Me.btnSignUp.TabIndex = 37
+        Me.btnSignUp.TabIndex = 8
         Me.btnSignUp.Text = "Sign Up"
         Me.btnSignUp.UseVisualStyleBackColor = False
         '
@@ -196,25 +196,25 @@ Partial Class FormSignUp
         Me.cbRole.Location = New System.Drawing.Point(221, 404)
         Me.cbRole.Name = "cbRole"
         Me.cbRole.Size = New System.Drawing.Size(507, 27)
-        Me.cbRole.TabIndex = 40
+        Me.cbRole.TabIndex = 7
         '
         'txtFirstName
         '
         Me.txtFirstName.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtFirstName.ForeColor = System.Drawing.Color.Black
-        Me.txtFirstName.Location = New System.Drawing.Point(487, 56)
+        Me.txtFirstName.Location = New System.Drawing.Point(225, 52)
         Me.txtFirstName.Name = "txtFirstName"
         Me.txtFirstName.Size = New System.Drawing.Size(240, 24)
-        Me.txtFirstName.TabIndex = 30
+        Me.txtFirstName.TabIndex = 1
         '
         'txtLastName
         '
         Me.txtLastName.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLastName.ForeColor = System.Drawing.Color.Black
-        Me.txtLastName.Location = New System.Drawing.Point(221, 56)
+        Me.txtLastName.Location = New System.Drawing.Point(490, 52)
         Me.txtLastName.Name = "txtLastName"
         Me.txtLastName.Size = New System.Drawing.Size(238, 24)
-        Me.txtLastName.TabIndex = 31
+        Me.txtLastName.TabIndex = 2
         '
         'txtEmail
         '
@@ -223,7 +223,7 @@ Partial Class FormSignUp
         Me.txtEmail.Location = New System.Drawing.Point(221, 192)
         Me.txtEmail.Name = "txtEmail"
         Me.txtEmail.Size = New System.Drawing.Size(507, 24)
-        Me.txtEmail.TabIndex = 33
+        Me.txtEmail.TabIndex = 4
         '
         'txtUsername
         '
@@ -232,7 +232,7 @@ Partial Class FormSignUp
         Me.txtUsername.Location = New System.Drawing.Point(221, 127)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(507, 24)
-        Me.txtUsername.TabIndex = 32
+        Me.txtUsername.TabIndex = 3
         '
         'txtPass
         '
@@ -242,7 +242,7 @@ Partial Class FormSignUp
         Me.txtPass.Name = "txtPass"
         Me.txtPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.txtPass.Size = New System.Drawing.Size(417, 24)
-        Me.txtPass.TabIndex = 34
+        Me.txtPass.TabIndex = 5
         '
         'txtConfPass
         '
@@ -252,13 +252,13 @@ Partial Class FormSignUp
         Me.txtConfPass.Name = "txtConfPass"
         Me.txtConfPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.txtConfPass.Size = New System.Drawing.Size(415, 24)
-        Me.txtConfPass.TabIndex = 35
+        Me.txtConfPass.TabIndex = 6
         '
         'lblUsernameError
         '
         Me.lblUsernameError.AutoSize = True
         Me.lblUsernameError.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblUsernameError.Location = New System.Drawing.Point(581, 105)
+        Me.lblUsernameError.Location = New System.Drawing.Point(582, 102)
         Me.lblUsernameError.Name = "lblUsernameError"
         Me.lblUsernameError.Size = New System.Drawing.Size(146, 19)
         Me.lblUsernameError.TabIndex = 48
@@ -268,7 +268,7 @@ Partial Class FormSignUp
         '
         Me.lblEmailError.AutoSize = True
         Me.lblEmailError.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEmailError.Location = New System.Drawing.Point(607, 170)
+        Me.lblEmailError.Location = New System.Drawing.Point(608, 167)
         Me.lblEmailError.Name = "lblEmailError"
         Me.lblEmailError.Size = New System.Drawing.Size(120, 19)
         Me.lblEmailError.TabIndex = 49
@@ -278,7 +278,7 @@ Partial Class FormSignUp
         '
         Me.lblPwStrength.AutoSize = True
         Me.lblPwStrength.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPwStrength.Location = New System.Drawing.Point(581, 247)
+        Me.lblPwStrength.Location = New System.Drawing.Point(484, 244)
         Me.lblPwStrength.Name = "lblPwStrength"
         Me.lblPwStrength.Size = New System.Drawing.Size(57, 19)
         Me.lblPwStrength.TabIndex = 50
@@ -292,7 +292,7 @@ Partial Class FormSignUp
         Me.txtAdminCode.Name = "txtAdminCode"
         Me.txtAdminCode.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.txtAdminCode.Size = New System.Drawing.Size(152, 24)
-        Me.txtAdminCode.TabIndex = 51
+        Me.txtAdminCode.TabIndex = 8
         '
         'lblAdminCode
         '
