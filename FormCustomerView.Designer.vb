@@ -43,28 +43,31 @@ Partial Class FormCustomerView
         '
         Me.lblPaymentSection.AutoSize = True
         Me.lblPaymentSection.BackColor = System.Drawing.Color.Transparent
-        Me.lblPaymentSection.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPaymentSection.Location = New System.Drawing.Point(1, 226)
+        Me.lblPaymentSection.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPaymentSection.Location = New System.Drawing.Point(1, 278)
+        Me.lblPaymentSection.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPaymentSection.Name = "lblPaymentSection"
-        Me.lblPaymentSection.Size = New System.Drawing.Size(101, 19)
+        Me.lblPaymentSection.Size = New System.Drawing.Size(114, 17)
         Me.lblPaymentSection.TabIndex = 115
         Me.lblPaymentSection.Text = "Payment Section"
         '
         'dgvPaymentHistory
         '
         Me.dgvPaymentHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvPaymentHistory.Location = New System.Drawing.Point(5, 252)
+        Me.dgvPaymentHistory.Location = New System.Drawing.Point(7, 310)
+        Me.dgvPaymentHistory.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.dgvPaymentHistory.Name = "dgvPaymentHistory"
         Me.dgvPaymentHistory.RowHeadersWidth = 51
-        Me.dgvPaymentHistory.Size = New System.Drawing.Size(934, 176)
+        Me.dgvPaymentHistory.Size = New System.Drawing.Size(1245, 217)
         Me.dgvPaymentHistory.TabIndex = 114
         '
         'btnConfirmPayment
         '
-        Me.btnConfirmPayment.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnConfirmPayment.Location = New System.Drawing.Point(821, 465)
+        Me.btnConfirmPayment.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnConfirmPayment.Location = New System.Drawing.Point(1095, 572)
+        Me.btnConfirmPayment.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnConfirmPayment.Name = "btnConfirmPayment"
-        Me.btnConfirmPayment.Size = New System.Drawing.Size(123, 26)
+        Me.btnConfirmPayment.Size = New System.Drawing.Size(164, 32)
         Me.btnConfirmPayment.TabIndex = 113
         Me.btnConfirmPayment.Text = "Confirm Payment"
         Me.btnConfirmPayment.UseVisualStyleBackColor = True
@@ -72,10 +75,11 @@ Partial Class FormCustomerView
         'dgvCurrentBooking
         '
         Me.dgvCurrentBooking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCurrentBooking.Location = New System.Drawing.Point(5, 99)
+        Me.dgvCurrentBooking.Location = New System.Drawing.Point(7, 122)
+        Me.dgvCurrentBooking.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.dgvCurrentBooking.Name = "dgvCurrentBooking"
         Me.dgvCurrentBooking.RowHeadersWidth = 51
-        Me.dgvCurrentBooking.Size = New System.Drawing.Size(934, 124)
+        Me.dgvCurrentBooking.Size = New System.Drawing.Size(1245, 153)
         Me.dgvCurrentBooking.TabIndex = 110
         '
         'btnSelectBooking
@@ -83,31 +87,34 @@ Partial Class FormCustomerView
         Me.btnSelectBooking.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.btnSelectBooking.FlatAppearance.BorderSize = 0
         Me.btnSelectBooking.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSelectBooking.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSelectBooking.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSelectBooking.ForeColor = System.Drawing.Color.WhiteSmoke
-        Me.btnSelectBooking.Location = New System.Drawing.Point(5, 434)
+        Me.btnSelectBooking.Location = New System.Drawing.Point(7, 534)
+        Me.btnSelectBooking.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnSelectBooking.Name = "btnSelectBooking"
-        Me.btnSelectBooking.Size = New System.Drawing.Size(937, 26)
+        Me.btnSelectBooking.Size = New System.Drawing.Size(1249, 32)
         Me.btnSelectBooking.TabIndex = 112
         Me.btnSelectBooking.Text = "Select Booking"
         Me.btnSelectBooking.UseVisualStyleBackColor = False
         '
         'txtPaymentAmount
         '
-        Me.txtPaymentAmount.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPaymentAmount.Location = New System.Drawing.Point(8, 467)
+        Me.txtPaymentAmount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPaymentAmount.Location = New System.Drawing.Point(11, 575)
+        Me.txtPaymentAmount.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtPaymentAmount.Name = "txtPaymentAmount"
-        Me.txtPaymentAmount.Size = New System.Drawing.Size(808, 24)
+        Me.txtPaymentAmount.Size = New System.Drawing.Size(1076, 23)
         Me.txtPaymentAmount.TabIndex = 111
         '
         'lblCurrentBooking
         '
         Me.lblCurrentBooking.AutoSize = True
         Me.lblCurrentBooking.BackColor = System.Drawing.Color.Transparent
-        Me.lblCurrentBooking.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCurrentBooking.Location = New System.Drawing.Point(5, 77)
+        Me.lblCurrentBooking.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCurrentBooking.Location = New System.Drawing.Point(7, 95)
+        Me.lblCurrentBooking.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCurrentBooking.Name = "lblCurrentBooking"
-        Me.lblCurrentBooking.Size = New System.Drawing.Size(97, 19)
+        Me.lblCurrentBooking.Size = New System.Drawing.Size(110, 17)
         Me.lblCurrentBooking.TabIndex = 109
         Me.lblCurrentBooking.Text = "Current Booking"
         '
@@ -116,11 +123,12 @@ Partial Class FormCustomerView
         Me.btnLogOut.BackColor = System.Drawing.Color.Gainsboro
         Me.btnLogOut.FlatAppearance.BorderSize = 0
         Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLogOut.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnLogOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogOut.ForeColor = System.Drawing.Color.Black
-        Me.btnLogOut.Location = New System.Drawing.Point(809, 50)
+        Me.btnLogOut.Location = New System.Drawing.Point(1079, 62)
+        Me.btnLogOut.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnLogOut.Name = "btnLogOut"
-        Me.btnLogOut.Size = New System.Drawing.Size(120, 34)
+        Me.btnLogOut.Size = New System.Drawing.Size(160, 42)
         Me.btnLogOut.TabIndex = 108
         Me.btnLogOut.Text = "Log Out"
         Me.btnLogOut.UseVisualStyleBackColor = False
@@ -129,11 +137,12 @@ Partial Class FormCustomerView
         '
         Me.lblRole.AutoSize = True
         Me.lblRole.BackColor = System.Drawing.Color.Transparent
-        Me.lblRole.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblRole.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRole.ForeColor = System.Drawing.Color.Black
-        Me.lblRole.Location = New System.Drawing.Point(630, 53)
+        Me.lblRole.Location = New System.Drawing.Point(840, 65)
+        Me.lblRole.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(33, 19)
+        Me.lblRole.Size = New System.Drawing.Size(38, 17)
         Me.lblRole.TabIndex = 107
         Me.lblRole.Text = "User"
         '
@@ -142,11 +151,12 @@ Partial Class FormCustomerView
         Me.btnEditInformation.BackColor = System.Drawing.Color.Gainsboro
         Me.btnEditInformation.FlatAppearance.BorderSize = 0
         Me.btnEditInformation.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnEditInformation.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnEditInformation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnEditInformation.ForeColor = System.Drawing.Color.Black
-        Me.btnEditInformation.Location = New System.Drawing.Point(809, 10)
+        Me.btnEditInformation.Location = New System.Drawing.Point(1079, 12)
+        Me.btnEditInformation.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnEditInformation.Name = "btnEditInformation"
-        Me.btnEditInformation.Size = New System.Drawing.Size(120, 34)
+        Me.btnEditInformation.Size = New System.Drawing.Size(160, 42)
         Me.btnEditInformation.TabIndex = 106
         Me.btnEditInformation.Text = "Edit Information"
         Me.btnEditInformation.UseVisualStyleBackColor = False
@@ -155,37 +165,40 @@ Partial Class FormCustomerView
         '
         Me.lblUsername.AutoSize = True
         Me.lblUsername.BackColor = System.Drawing.Color.Transparent
-        Me.lblUsername.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.Black
-        Me.lblUsername.Location = New System.Drawing.Point(630, 22)
+        Me.lblUsername.Location = New System.Drawing.Point(840, 27)
+        Me.lblUsername.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(42, 19)
+        Me.lblUsername.Size = New System.Drawing.Size(46, 17)
         Me.lblUsername.TabIndex = 105
         Me.lblUsername.Text = "Guest"
         '
         'btnNext
         '
-        Me.btnNext.Location = New System.Drawing.Point(57, 18)
+        Me.btnNext.Location = New System.Drawing.Point(76, 22)
+        Me.btnNext.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(42, 23)
+        Me.btnNext.Size = New System.Drawing.Size(56, 28)
         Me.btnNext.TabIndex = 104
         Me.btnNext.Text = "→"
         Me.btnNext.UseVisualStyleBackColor = True
         '
         'btnBack
         '
-        Me.btnBack.Location = New System.Drawing.Point(9, 17)
+        Me.btnBack.Location = New System.Drawing.Point(12, 21)
+        Me.btnBack.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnBack.Name = "btnBack"
-        Me.btnBack.Size = New System.Drawing.Size(42, 23)
+        Me.btnBack.Size = New System.Drawing.Size(56, 28)
         Me.btnBack.TabIndex = 103
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
         '
         'FormCustomerView
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(944, 501)
+        Me.ClientSize = New System.Drawing.Size(1259, 617)
         Me.Controls.Add(Me.lblPaymentSection)
         Me.Controls.Add(Me.dgvPaymentHistory)
         Me.Controls.Add(Me.btnConfirmPayment)
@@ -199,6 +212,7 @@ Partial Class FormCustomerView
         Me.Controls.Add(Me.lblUsername)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormCustomerView"
         Me.Text = "FormCustomerView"
         CType(Me.dgvPaymentHistory, System.ComponentModel.ISupportInitialize).EndInit()
