@@ -460,5 +460,7 @@ Public Class FormMain
             HelperNavigation.GoBack(Me, btnNext, btnBack)
         End Sub
 
+    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
 
+    End Sub
 End Class

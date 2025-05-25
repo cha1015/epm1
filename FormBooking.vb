@@ -254,4 +254,12 @@ Public Class FormBooking
     Private Sub UpdateTotalPrice(sender As Object, e As EventArgs) Handles txtNumGuests.TextChanged, chkVideoke.CheckedChanged, chkSinger.CheckedChanged, chkOutsideAvailableHours.CheckedChanged, chkDancer.CheckedChanged, chkClown.CheckedChanged, chkCatering.CheckedChanged, cbStartMinutes.SelectedIndexChanged, cbStartHour.SelectedIndexChanged, cbStartAMPM.SelectedIndexChanged, cbEndMinutes.SelectedIndexChanged, cbEndHour.SelectedIndexChanged, cbEndAMPM.SelectedIndexChanged
 
     End Sub
+
+    Private Sub pb_Click(sender As Object, e As EventArgs) Handles pb.Click
+
+    End Sub
+
+    Private Sub tpBookingDetails_Click(sender As Object, e As EventArgs) Handles tpBookingDetails.Click
+
+    End Sub
 End Class

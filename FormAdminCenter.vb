@@ -350,4 +350,15 @@ Public Class FormAdminCenter
         HelperNavigation.GoBack(Me, btnNext, btnBack)
     End Sub
 
+    Private Sub Label11_Click(sender As Object, e As EventArgs) Handles Label11.Click
+
+    End Sub
+
+    Private Sub lblErrorOpeningHours_Click(sender As Object, e As EventArgs) Handles lblErrorOpeningHours.Click
+
+    End Sub
+
+    Private Sub lblAvailability_Click(sender As Object, e As EventArgs) Handles lblAvailability.Click
+
+    End Sub
 End Class

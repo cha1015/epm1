@@ -4,6 +4,8 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 
 Public Class FormSignUp
+
+    Private passwordVisible As Boolean = True
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HideErrorLabels()
         txtAdminCode.Visible = False
@@ -211,19 +213,37 @@ Public Class FormSignUp
     End Sub
 
     Private Sub btnShowPass_Click(sender As Object, e As EventArgs) Handles btnShowPass.Click
-        If txtPass.PasswordChar = "*"c Then
+
+        passwordVisible = Not passwordVisible
+        btnShowPass.Image = epm1.My.Resources.Resources.BttnHide
+
+        If passwordVisible Then
+            btnShowPass.Image = Nothing
             txtPass.PasswordChar = ControlChars.NullChar
+            btnShowPass.Image = epm1.My.Resources.Resources.BttnSeek
         Else
             txtPass.PasswordChar = "*"c
+            btnShowPass.Image = Nothing
+            btnShowPass.Image = epm1.My.Resources.Resources.BttnHide
         End If
+
     End Sub
 
     Private Sub btnShowConfPass_Click(sender As Object, e As EventArgs) Handles btnShowConfPass.Click
-        If txtConfPass.PasswordChar = "*"c Then
+
+        passwordVisible = Not passwordVisible
+        btnShowConfPass.Image = epm1.My.Resources.Resources.BttnHide
+
+        If passwordVisible Then
+            btnShowConfPass.Image = Nothing
             txtConfPass.PasswordChar = ControlChars.NullChar
+            btnShowConfPass.Image = epm1.My.Resources.Resources.BttnSeek
         Else
             txtConfPass.PasswordChar = "*"c
+            btnShowConfPass.Image = Nothing
+            btnShowConfPass.Image = epm1.My.Resources.Resources.BttnHide
         End If
+
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click

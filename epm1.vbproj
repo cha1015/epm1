@@ -241,5 +241,101 @@
   <ItemGroup>
     <None Include="Resources\round button.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnAdjustPricing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnApply.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnChinomsOrBackToMain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnClearAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnCreateAccount.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnDelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnHide.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnLogIn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnLogOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnMyAccount.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnNext.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnPrevious.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnProcessPayment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnSearch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnSeek.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnUpdate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Main w_ no panel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bgMain1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MainBG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnSignUpMain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnLogInMain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LogIn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sign Up %28nolbl%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bg Booking %28Updated%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGbooking.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plainbg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGplain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnProceed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bttnPlaceBooking.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGadmin.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
