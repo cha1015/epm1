@@ -4,87 +4,30 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 
 Public Class FormSignUp
-    Private Sub ApplyFieldIndicators()
-        lblFirstName.Text = "First Name"
-        lblLastName.Text = "Last Name"
-        lblUsername.Text = "Username"
-        lblEmail.Text = "Email"
-        lblPassword.Text = "Password"
-        lblConfirmPassword.Text = "Confirm Password"
-        lblRole.Text = "Role"
-    End Sub
-
-    Private Sub ShowAsteriskOnMissedFields()
-        If String.IsNullOrWhiteSpace(txtFirstName.Text) Then lblFirstName.Text = "First Name *"
-        If String.IsNullOrWhiteSpace(txtLastName.Text) Then lblLastName.Text = "Last Name *"
-        If String.IsNullOrWhiteSpace(txtUsername.Text) Then lblUsername.Text = "Username *"
-        If String.IsNullOrWhiteSpace(txtEmail.Text) Then lblEmail.Text = "Email *"
-        If String.IsNullOrWhiteSpace(txtPass.Text) Then lblPassword.Text = "Password *"
-        If String.IsNullOrWhiteSpace(txtConfPass.Text) Then lblConfirmPassword.Text = "Confirm Password *"
-        If cbRole.SelectedItem Is Nothing Then lblRole.Text = "Role *"
-    End Sub
-
-    Private Sub RemoveAsteriskOnInput(sender As Object, e As EventArgs)
-        Dim txtBox As TextBox = CType(sender, TextBox)
-
-        Select Case txtBox.Name
-            Case "txtFirstName" : lblFirstName.Text = "First Name"
-            Case "txtLastName" : lblLastName.Text = "Last Name"
-            Case "txtUsername" : lblUsername.Text = "Username"
-            Case "txtEmail" : lblEmail.Text = "Email"
-            Case "txtPass" : lblPassword.Text = "Password"
-            Case "txtConfPass" : lblConfirmPassword.Text = "Confirm Password"
-        End Select
-    End Sub
-
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HideErrorLabels()
         txtAdminCode.Visible = False
         lblAdminCode.Visible = False
-        ApplyFieldIndicators()
+
+        Dim labels = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole}
+        Dim fields = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass}
+        Dim texts = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role"}
+
+        HelperValidation.ApplyFieldIndicators(labels, texts)
 
         Me.ActiveControl = txtFirstName
         Me.BeginInvoke(Sub() txtFirstName.Select())
 
-        AddHandler txtFirstName.TextChanged, AddressOf ValidateFieldsInRealTime
-        AddHandler txtLastName.TextChanged, AddressOf ValidateFieldsInRealTime
-        AddHandler txtUsername.TextChanged, AddressOf ValidateFieldsInRealTime
+        For Each field In fields
+            AddHandler field.TextChanged, Sub(txtSender, txtEventArgs) HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
+            AddHandler field.Leave, Sub(txtSender, txtEventArgs) HelperValidation.RemoveAsteriskOnInput(txtSender, labels, texts)
+        Next
+
+        AddHandler cbRole.SelectedIndexChanged, Sub() lblRole.Text = If(cbRole.SelectedItem Is Nothing, "Role *", "Role")
+
         AddHandler txtUsername.TextChanged, AddressOf CheckUsernameAvailability
-        AddHandler txtEmail.TextChanged, AddressOf ValidateFieldsInRealTime
         AddHandler txtEmail.TextChanged, AddressOf CheckEmailAvailability
-        AddHandler txtPass.TextChanged, AddressOf ValidateFieldsInRealTime
-        AddHandler txtConfPass.TextChanged, AddressOf ValidateFieldsInRealTime
-        AddHandler cbRole.SelectedIndexChanged, AddressOf ValidateFieldsInRealTime
-
         AddHandler txtPass.TextChanged, AddressOf ShowPasswordStrength
-    End Sub
-
-    Private Sub ValidateFieldsInRealTime(sender As Object, e As EventArgs)
-        Dim txtBox As TextBox = TryCast(sender, TextBox)
-
-        If txtBox IsNot Nothing Then
-            Select Case txtBox.Name
-                Case "txtFirstName"
-                    lblFirstName.Text = If(String.IsNullOrWhiteSpace(txtFirstName.Text), "First Name *", "First Name")
-                Case "txtLastName"
-                    lblLastName.Text = If(String.IsNullOrWhiteSpace(txtLastName.Text), "Last Name *", "Last Name")
-                Case "txtUsername"
-                    lblUsername.Text = If(String.IsNullOrWhiteSpace(txtUsername.Text), "Username *", "Username")
-                Case "txtEmail"
-                    lblEmail.Text = If(String.IsNullOrWhiteSpace(txtEmail.Text), "Email *", "Email")
-                Case "txtPass"
-                    lblPassword.Text = If(String.IsNullOrWhiteSpace(txtPass.Text), "Password *", "Password")
-                Case "txtConfPass"
-                    lblConfirmPassword.Text = If(String.IsNullOrWhiteSpace(txtConfPass.Text), "Confirm Password *", "Confirm Password")
-            End Select
-        End If
-
-        If cbRole.SelectedItem Is Nothing Then
-            lblRole.Text = "Role *"
-        Else
-            lblRole.Text = "Role"
-        End If
-
     End Sub
 
     Private Sub CheckUsernameAvailability(sender As Object, e As EventArgs)
@@ -129,7 +72,6 @@ Public Class FormSignUp
 
     Private Sub btnSignUp_Click(sender As Object, e As EventArgs) Handles btnSignUp.Click
         HideErrorLabels()
-        ShowAsteriskOnMissedFields()
 
         CheckUsernameAvailability(Nothing, Nothing)
         CheckEmailAvailability(Nothing, Nothing)
@@ -167,7 +109,6 @@ Public Class FormSignUp
         End If
 
     End Sub
-
 
     Private Function GetAdminCodeFromDatabase(username As String) As String
         Dim query As String = "SELECT admin_code FROM Users WHERE username = @uname"
@@ -285,12 +226,17 @@ Public Class FormSignUp
         End If
     End Sub
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        GoBack(Me)
-    End Sub
-
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        GoNext(Me)
+        If HelperNavigation.ForwardHistory.Count > 0 Then
+            Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop()
+            HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack)
+        Else
+            btnNext.Enabled = False
+        End If
+
     End Sub
 
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        HelperNavigation.GoBack(Me, btnNext, btnBack)
+    End Sub
 End Class

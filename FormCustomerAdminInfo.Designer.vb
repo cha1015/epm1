@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormCustomerInformation
+Partial Class FormCustomerAdminInfo
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -44,14 +44,14 @@ Partial Class FormCustomerInformation
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
         '
-        'FormCustomerInformation
+        'FormCustomerAdminInfo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
-        Me.Name = "FormCustomerInformation"
+        Me.Name = "FormCustomerAdminInfo"
         Me.Text = "FormCustomerInformation"
         Me.ResumeLayout(False)
 

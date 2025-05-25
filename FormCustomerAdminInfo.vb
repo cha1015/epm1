@@ -1,8 +1,4 @@
-﻿Public Class FormCustomerView
-    Public Sub New(customerId As Integer)
-        ' Store or use customerId
-    End Sub
-
+﻿Public Class FormCustomerAdminInfo
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         If HelperNavigation.ForwardHistory.Count > 0 Then ' ✅ Ensure the right reference
             Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop() ' ✅ Retrieve last undone form
@@ -16,6 +12,4 @@
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
         HelperNavigation.GoBack(Me, btnNext, btnBack)
     End Sub
-
-
 End Class

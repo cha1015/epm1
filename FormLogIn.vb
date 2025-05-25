@@ -34,7 +34,7 @@ Public Class FormLogIn
             Dim storedHash As String = dt.Rows(0)("password_hash").ToString()
 
             If VerifyPassword(txtPass.Text, storedHash) Then
-                ' Store user details securely
+                ' Store user details
                 CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
                 CurrentUser.Username = dt.Rows(0)("username").ToString()
                 CurrentUser.Email = dt.Rows(0)("email").ToString()
@@ -43,16 +43,16 @@ Public Class FormLogIn
                 lblGeneralError.Visible = False
                 MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                ' Redirect based on role
                 Select Case CurrentUser.Role
                     Case "Admin"
-                        Me.Hide()
-                        Dim adminForm As New FormAdminCenter()
-                        adminForm.Show()
+                        ' For Admin, simply set the dialog result and close.
+                        Me.DialogResult = DialogResult.OK
+                        Me.Close()
                     Case "User"
-                        Me.Hide()
-                        Dim mainForm As New FormMain()
-                        mainForm.Show()
+                        ' For Users, make sure to assign CustomerId.
+                        CurrentUser.CustomerId = CurrentUser.UserID ' Or query for a customer id if different.
+                        Me.DialogResult = DialogResult.OK
+                        Me.Close()
                     Case Else
                         lblGeneralError.Text = "Invalid role detected! Contact support."
                         lblGeneralError.Visible = True
@@ -118,12 +118,18 @@ Public Class FormLogIn
         lblGeneralError.Visible = False
     End Sub
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        GoBack(Me)
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        If HelperNavigation.ForwardHistory.Count > 0 Then ' ✅ Ensure the right reference
+            Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop() ' ✅ Retrieve last undone form
+            HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack) ' ✅ Restore previous form
+        Else
+            btnNext.Enabled = False ' Disable next button if no form to redo
+        End If
+
     End Sub
 
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        GoNext(Me)
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        HelperNavigation.GoBack(Me, btnNext, btnBack)
     End Sub
 
 End Class

@@ -1,17 +1,70 @@
 ﻿Imports System.Globalization
 
 Public Class HelperValidation
+
+    ' Set initial labels (removes asterisk)
+    Public Shared Sub ApplyFieldIndicators(labelControls As Label(), labelTexts As String())
+        For i As Integer = 0 To labelControls.Length - 1
+            labelControls(i).Text = labelTexts(i)
+        Next
+    End Sub
+
+    ' Show asterisk if field is empty
+    Public Shared Sub ShowAsteriskOnMissedFields(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
+        For i As Integer = 0 To fieldControls.Length - 1
+            If String.IsNullOrWhiteSpace(fieldControls(i).Text) Then
+                labelControls(i).Text = $"{labelTexts(i)} *"
+            End If
+        Next
+    End Sub
+
+    ' Remove asterisk when input is detected
+    Public Shared Sub RemoveAsteriskOnInput(sender As Object, labelControls As Label(), labelTexts As String())
+        Dim txtBox As TextBox = TryCast(sender, TextBox)
+        If txtBox IsNot Nothing Then
+            Dim index As Integer = Array.IndexOf(labelControls.Select(Function(lbl) lbl.Name).ToArray(), txtBox.Tag?.ToString())
+            If index >= 0 Then labelControls(index).Text = labelTexts(index)
+        End If
+    End Sub
+
+    ' Real-time validation for fields
+    Public Shared Sub ValidateFieldsInRealTime(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
+        For i As Integer = 0 To fieldControls.Length - 1
+            labelControls(i).Text = If(String.IsNullOrWhiteSpace(fieldControls(i).Text), $"{labelTexts(i)} *", labelTexts(i))
+        Next
+    End Sub
     ' ------------------ Helper Method for Validation Messages ------------------
     Private Shared Sub ShowValidationError(targetControl As Control, message As String)
         If targetControl IsNot Nothing AndAlso TypeOf targetControl.Tag Is Label Then
             Dim errorLabel As Label = CType(targetControl.Tag, Label)
             errorLabel.Text = message
             errorLabel.ForeColor = Color.Red
+            errorLabel.Visible = True
         Else
             targetControl.BackColor = Color.LightPink
         End If
     End Sub
 
+    Public Shared Sub HideValidationError(targetControl As Control)
+        If targetControl IsNot Nothing AndAlso TypeOf targetControl.Tag Is Label Then
+            Dim errorLabel As Label = CType(targetControl.Tag, Label)
+            errorLabel.Text = ""
+            errorLabel.Visible = False
+        Else
+            targetControl.BackColor = Color.White
+        End If
+    End Sub
+
+    ' ------------------ Validate Numeric Fields ------------------
+    Public Shared Function IsValidNumericField(txtControl As TextBox, errorLabel As Label, errorMessage As String) As Boolean
+        If String.IsNullOrWhiteSpace(txtControl.Text) OrElse Not IsNumeric(txtControl.Text) Then
+            ShowValidationError(txtControl, errorMessage)
+            Return False
+        End If
+
+        HideValidationError(txtControl)
+        Return True
+    End Function
 
     ' ------------------ Validate Date Selection ------------------
     Public Shared Function IsValidDateSelection(eventStartDate As DateTimePicker, eventEndDate As DateTimePicker) As Boolean
@@ -52,6 +105,13 @@ Public Class HelperValidation
 
         Return True
     End Function
+
+    ' ------------------ Validate Numeric Input in KeyPress ------------------
+    Public Shared Sub NumericOnly_KeyPress(sender As Object, e As KeyPressEventArgs)
+        If Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsDigit(e.KeyChar) Then
+            e.Handled = True
+        End If
+    End Sub
 
     ' ------------------ Validate Time Selection ------------------
     Public Shared Function IsValidTimeSelection(cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
@@ -113,13 +173,11 @@ Public Class HelperValidation
                                       chkOutsideAvailableHours As CheckBox, txtCustomerName As TextBox, dtpBirthday As DateTimePicker, cmbSex As ComboBox,
                                       txtAddress As TextBox, openingHours As String, closingHours As String, placeId As Integer)
 
-        ' Validate Time Formatting (Remove redundancy)
         If Not IsValidTimeSelection(cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, openingHours, closingHours) Then
             e.Cancel = True
             Exit Sub
         End If
 
-        ' Validate Event and Customer Details Based on the Selected Tab
         If e.TabPage Is tpCustomerDetails Then
             If String.IsNullOrWhiteSpace(cbEventType.Text) OrElse String.IsNullOrWhiteSpace(txtNumGuests.Text) OrElse Not IsNumeric(txtNumGuests.Text) OrElse
                dtpEventDateStart.Value.Date < Date.Today OrElse dtpEventDateEnd.Value.Date < dtpEventDateStart.Value.Date Then
@@ -128,7 +186,6 @@ Public Class HelperValidation
                 Exit Sub
             End If
 
-            ' Outside Available Hours Check
             Dim eventStartTime As DateTime = DateTime.ParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", "h:mm tt", CultureInfo.InvariantCulture)
             Dim eventEndTime As DateTime = DateTime.ParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", "h:mm tt", CultureInfo.InvariantCulture)
             Dim openingTime As DateTime = DateTime.Parse(openingHours)
@@ -151,5 +208,35 @@ Public Class HelperValidation
             End If
         End If
     End Sub
+
+    Public Shared Function FormatTime(inputTime As String) As String
+        Try
+            Dim formattedTime As DateTime = DateTime.ParseExact(inputTime, "hh:mm tt", CultureInfo.InvariantCulture)
+            Return formattedTime.ToString("HH:mm:ss")
+        Catch ex As FormatException
+            Return String.Empty
+        End Try
+    End Function
+
+    Public Shared Function ValidateOpeningClosingHours(openingTime As String, closingTime As String) As Boolean
+        Dim openingHours As String = FormatTime(openingTime)
+        Dim closingHours As String = FormatTime(closingTime)
+
+        If String.IsNullOrEmpty(openingHours) OrElse String.IsNullOrEmpty(closingHours) Then
+            MessageBox.Show("Invalid time format. Ensure both opening and closing hours are set correctly.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        Dim open As DateTime = DateTime.ParseExact(openingHours, "HH:mm:ss", CultureInfo.InvariantCulture)
+        Dim close As DateTime = DateTime.ParseExact(closingHours, "HH:mm:ss", CultureInfo.InvariantCulture)
+
+        If close <= open Then
+            MessageBox.Show("Closing time must be later than opening time.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        Return True
+    End Function
+
 
 End Class

@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.epm1.FormSignUp
+            Me.MainForm = Global.epm1.FormMain
         End Sub
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
