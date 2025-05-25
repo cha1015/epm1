@@ -32,25 +32,34 @@ Public Class FormLogIn
 
         If dt.Rows.Count > 0 Then
             Dim storedHash As String = dt.Rows(0)("password_hash").ToString()
-
             If VerifyPassword(txtPass.Text, storedHash) Then
-                ' Store user details
+                ' Store user details from the Users table.
                 CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
                 CurrentUser.Username = dt.Rows(0)("username").ToString()
                 CurrentUser.Email = dt.Rows(0)("email").ToString()
                 CurrentUser.Role = dt.Rows(0)("role").ToString()
 
                 lblGeneralError.Visible = False
-                MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
 
                 Select Case CurrentUser.Role
                     Case "Admin"
-                        ' For Admin, simply set the dialog result and close.
+                        ' Prompt for admin authentication code.
+                        Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
+                        If String.Compare(adminCode.Trim(), "SECURE123", True) <> 0 Then
+                            lblGeneralError.Text = "Invalid admin authentication code."
+                            lblGeneralError.Visible = True
+                            Exit Sub
+                        End If
+                        ' Assign a dummy nonzero value since the admin won't have a corresponding customer record.
+                        CurrentUser.CustomerId = -1
+                        MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
                     Case "User"
-                        ' For Users, make sure to assign CustomerId.
-                        CurrentUser.CustomerId = CurrentUser.UserID ' Or query for a customer id if different.
+                        ' For Users, assign a valid customer id.
+                        ' Here we simply set it equal to the user id, or you could perform a query if needed.
+                        CurrentUser.CustomerId = CurrentUser.UserID ' Or query the Customers table as required.
+                        MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
                     Case Else
@@ -66,6 +75,7 @@ Public Class FormLogIn
             lblGeneralError.Visible = True
         End If
     End Sub
+
 
     Private Function VerifyPassword(inputPassword As String, storedHash As String) As Boolean
         Using sha256 As SHA256 = SHA256.Create()

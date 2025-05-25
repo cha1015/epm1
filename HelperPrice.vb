@@ -98,7 +98,6 @@ Public Class HelperPrice
     End Function
 
 
-
     ' ------------------ Generate Price Breakdown ------------------
     Public Shared Function GeneratePriceBreakdown(numGuests As Integer, eventPlaceCapacity As Integer,
                                               basePricePerDay As Decimal, totalDays As Integer, servicesCost As Decimal,

@@ -45,8 +45,6 @@ Partial Class FormSignUp
         Me.tpAccountDetails = New System.Windows.Forms.TabPage()
         Me.lblAdminCodeError = New System.Windows.Forms.Label()
         Me.lblPasswordError = New System.Windows.Forms.Label()
-        Me.lblAdminCode = New System.Windows.Forms.Label()
-        Me.txtAdminCode = New System.Windows.Forms.TextBox()
         Me.lblPwStrength = New System.Windows.Forms.Label()
         Me.lblEmailError = New System.Windows.Forms.Label()
         Me.lblUsernameError = New System.Windows.Forms.Label()
@@ -284,8 +282,6 @@ Partial Class FormSignUp
         '
         Me.tpAccountDetails.Controls.Add(Me.lblAdminCodeError)
         Me.tpAccountDetails.Controls.Add(Me.lblPasswordError)
-        Me.tpAccountDetails.Controls.Add(Me.lblAdminCode)
-        Me.tpAccountDetails.Controls.Add(Me.txtAdminCode)
         Me.tpAccountDetails.Controls.Add(Me.btnSignUp)
         Me.tpAccountDetails.Controls.Add(Me.lblPwStrength)
         Me.tpAccountDetails.Controls.Add(Me.lblEmailError)
@@ -331,28 +327,6 @@ Partial Class FormSignUp
         Me.lblPasswordError.Size = New System.Drawing.Size(147, 19)
         Me.lblPasswordError.TabIndex = 77
         Me.lblPasswordError.Text = "Passwords do not match!"
-        '
-        'lblAdminCode
-        '
-        Me.lblAdminCode.AutoSize = True
-        Me.lblAdminCode.BackColor = System.Drawing.Color.Transparent
-        Me.lblAdminCode.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAdminCode.ForeColor = System.Drawing.Color.Black
-        Me.lblAdminCode.Location = New System.Drawing.Point(179, 283)
-        Me.lblAdminCode.Name = "lblAdminCode"
-        Me.lblAdminCode.Size = New System.Drawing.Size(76, 19)
-        Me.lblAdminCode.TabIndex = 76
-        Me.lblAdminCode.Text = "Admin Code"
-        '
-        'txtAdminCode
-        '
-        Me.txtAdminCode.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAdminCode.ForeColor = System.Drawing.Color.Black
-        Me.txtAdminCode.Location = New System.Drawing.Point(179, 305)
-        Me.txtAdminCode.Name = "txtAdminCode"
-        Me.txtAdminCode.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtAdminCode.Size = New System.Drawing.Size(152, 24)
-        Me.txtAdminCode.TabIndex = 63
         '
         'lblPwStrength
         '
@@ -553,8 +527,6 @@ Partial Class FormSignUp
     Friend WithEvents tpAccountDetails As TabPage
     Friend WithEvents lblAdminCodeError As Label
     Friend WithEvents lblPasswordError As Label
-    Friend WithEvents lblAdminCode As Label
-    Friend WithEvents txtAdminCode As TextBox
     Friend WithEvents lblPwStrength As Label
     Friend WithEvents lblEmailError As Label
     Friend WithEvents lblUsernameError As Label

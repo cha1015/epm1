@@ -52,6 +52,7 @@ Partial Class FormCustomerAdminInfo
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Name = "FormCustomerAdminInfo"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormCustomerAdminInfo"
         Me.ResumeLayout(False)
 

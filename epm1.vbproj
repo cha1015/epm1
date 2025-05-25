@@ -126,6 +126,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormCustomerView.Designer.vb">
+      <DependentUpon>FormCustomerView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCustomerView.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="HelperBooking.vb" />
     <Compile Include="CurrentUser.vb" />
     <Compile Include="CustomerResult.vb" />
@@ -148,12 +154,6 @@
       <DependentUpon>FormCustomerAdminInfo.vb</DependentUpon>
     </Compile>
     <Compile Include="FormCustomerAdminInfo.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormCustomerView.Designer.vb">
-      <DependentUpon>FormCustomerView.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FormCustomerView.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormLogIn.Designer.vb">

@@ -6,9 +6,6 @@ Imports System.Text.RegularExpressions
 Public Class FormSignUp
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HideErrorLabels()
-        txtAdminCode.Visible = False
-        lblAdminCode.Visible = False
-
 
         Dim labels As Label() = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole, lblAge, lblAddress}
         Dim fields As TextBox() = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
@@ -27,9 +24,6 @@ Public Class FormSignUp
                                         HelperValidation.RemoveAsteriskOnInput(ctrl, labels, texts)
                                     End Sub
         Next
-
-        AddHandler cbRole.SelectedIndexChanged, Sub(x, y) _
-        lblRole.Text = If(cbRole.SelectedItem Is Nothing, "Role *", "Role")
 
         AddHandler txtUsername.TextChanged, AddressOf CheckUsernameAvailability
         AddHandler txtEmail.TextChanged, AddressOf CheckEmailAvailability
@@ -70,15 +64,6 @@ Public Class FormSignUp
         lblPwStrength.Text = CheckPasswordStrength(txtPass.Text)
         lblPwStrength.Visible = True
     End Sub
-    Private Sub ValidateAdminCode()
-        Dim predefinedAdminCode As String = "SECURE123"
-
-        If txtAdminCode.Text <> predefinedAdminCode Then
-            lblAdminCodeError.Text = "Invalid admin authentication code."
-            lblAdminCodeError.Visible = True
-            Return
-        End If
-    End Sub
 
     Private Sub txtConfPass_Leave(sender As Object, e As EventArgs)
         lblPasswordError.Text = If(txtPass.Text <> txtConfPass.Text, "Passwords do not match!", "")
@@ -97,10 +82,19 @@ Public Class FormSignUp
             Return
         End If
 
+        ' For Admin registrations, prompt for the admin authentication code.
+        If cbRole.SelectedItem.ToString() = "Admin" Then
+            Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
+            If adminCode <> "SECURE123" Then
+                MessageBox.Show("Invalid admin authentication code. Please try again.", "Authentication Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+        End If
+
         Dim hashedPassword As String = HashPassword(txtPass.Text)
-        Dim query As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role, birthday, age, sex, address) " &
-                              "VALUES (@fname, @lname, @uname, @email, @pass, @role, @birthday, @age, @sex, @address)"
-        Dim parameters As New Dictionary(Of String, Object) From {
+        Dim userQuery As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role, birthday, age, sex, address) " &
+                                 "VALUES (@fname, @lname, @uname, @email, @pass, @role, @birthday, @age, @sex, @address); SELECT LAST_INSERT_ID();"
+        Dim userParams As New Dictionary(Of String, Object) From {
             {"@fname", txtFirstName.Text},
             {"@lname", txtLastName.Text},
             {"@uname", txtUsername.Text},
@@ -114,7 +108,29 @@ Public Class FormSignUp
         }
 
         Try
-            DBHelper.ExecuteQuery(query, parameters)
+            Dim newUserIdObj As Object = DBHelper.ExecuteScalarQuery(userQuery, userParams)
+            Dim newUserId As Integer = If(newUserIdObj IsNot Nothing, Convert.ToInt32(newUserIdObj), -1)
+
+            If newUserId <= 0 Then
+                MessageBox.Show("Account creation failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            ' Only insert into the Customers table if the role is NOT Admin.
+            If cbRole.SelectedItem.ToString() <> "Admin" Then
+                Dim customerQuery As String = "INSERT INTO Customers (user_id, name, birthday, age, sex, address) " &
+                                              "VALUES (@user_id, @name, @birthday, @age, @sex, @address)"
+                Dim customerParams As New Dictionary(Of String, Object) From {
+                    {"@user_id", newUserId},
+                    {"@name", txtFirstName.Text & " " & txtLastName.Text},
+                    {"@birthday", dtpBirthday.Value.Date},
+                    {"@age", Convert.ToInt32(lblAgeContainer.Text)},
+                    {"@sex", cmbSex.SelectedItem.ToString()},
+                    {"@address", txtAddress.Text}
+                }
+                DBHelper.ExecuteQuery(customerQuery, customerParams)
+            End If
+
             MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Me.Hide()
             Dim loginForm As New FormLogIn()
@@ -122,11 +138,6 @@ Public Class FormSignUp
         Catch ex As Exception
             MessageBox.Show("Unexpected error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-
-        If lblUsernameError.Visible OrElse lblEmailError.Visible OrElse lblPasswordError.Visible Then
-            MessageBox.Show("Please resolve the indicated errors before proceeding.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
     End Sub
 
     Private Function GetAdminCodeFromDatabase(username As String) As String
@@ -197,17 +208,6 @@ Public Class FormSignUp
         Return "Invalid Password!"
     End Function
 
-
-    Private Sub cbRole_SelectedIndexChanged(sender As Object, e As EventArgs)
-        lblRole.Text = "Role"
-        If cbRole.SelectedItem.ToString() = "Admin" Then
-            txtAdminCode.Visible = True
-            lblAdminCode.Visible = True
-        Else
-            txtAdminCode.Visible = False
-            lblAdminCode.Visible = False
-        End If
-    End Sub
 
     Private Sub lnklblLogIn_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklblLogIn.LinkClicked
         Dim loginForm As New FormLogIn()
