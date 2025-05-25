@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormCustomerAdminInfo
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class FormCustomerAdminInfo
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
@@ -31,7 +31,7 @@ Partial Class FormCustomerAdminInfo
         Me.btnNext.Location = New System.Drawing.Point(60, 13)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(42, 23)
-        Me.btnNext.TabIndex = 91
+        Me.btnNext.TabIndex = 106
         Me.btnNext.Text = "→"
         Me.btnNext.UseVisualStyleBackColor = True
         '
@@ -40,7 +40,7 @@ Partial Class FormCustomerAdminInfo
         Me.btnBack.Location = New System.Drawing.Point(12, 12)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(42, 23)
-        Me.btnBack.TabIndex = 90
+        Me.btnBack.TabIndex = 105
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
         '
@@ -52,7 +52,7 @@ Partial Class FormCustomerAdminInfo
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Name = "FormCustomerAdminInfo"
-        Me.Text = "FormCustomerInformation"
+        Me.Text = "FormCustomerAdminInfo"
         Me.ResumeLayout(False)
 
     End Sub
