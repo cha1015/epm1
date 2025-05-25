@@ -5,6 +5,8 @@ Imports System.Text.RegularExpressions
 
 Public Class FormSignUp
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        HelperNavigation.RegisterNewForm(Me)
+
         HideErrorLabels()
         txtAdminCode.Visible = False
         lblAdminCode.Visible = False
@@ -226,17 +228,11 @@ Public Class FormSignUp
         End If
     End Sub
 
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        If HelperNavigation.ForwardHistory.Count > 0 Then
-            Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop()
-            HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack)
-        Else
-            btnNext.Enabled = False
-        End If
-
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        HelperNavigation.GoBack(Me)
     End Sub
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        HelperNavigation.GoBack(Me, btnNext, btnBack)
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        HelperNavigation.GoNext(Me)
     End Sub
 End Class

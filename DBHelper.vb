@@ -2,7 +2,7 @@
 Imports MySql.Data.MySqlClient
 
 Module DBHelper
-    Private ReadOnly connectionString As String = "Server=localhost;Database=event_management;User ID=root;Password=MySQLRootPassword123;Pooling=True;"
+    Private ReadOnly connectionString As String = "Server=localhost;Database=event_management;User ID=root;Password=044221;Pooling=True;"
 
     Public Function GetConnection() As MySqlConnection
         Return New MySqlConnection(connectionString)
