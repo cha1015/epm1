@@ -11,9 +11,19 @@ Public Class HelperPrice
                                              openingHours As String, closingHours As String,
                                              chkCatering As CheckBox, chkClown As CheckBox, chkSinger As CheckBox,
                                              chkDancer As CheckBox, chkVideoke As CheckBox) As Decimal
-        If Not Integer.TryParse(numGuests.ToString(), numGuests) Then numGuests = 0
-        Dim eventStartTime As DateTime = DateTime.Parse($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}")
-        Dim eventEndTime As DateTime = DateTime.Parse($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}")
+        Dim timeFormat As String = "h:mm tt"
+        Dim eventStartTime As DateTime
+        If Not DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}",
+                                      timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) Then
+            Return 0
+        End If
+
+        Dim eventEndTime As DateTime
+        If Not DateTime.TryParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}",
+                                      timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
+            Return 0
+        End If
+
         Dim openingTime As DateTime = DateTime.Parse(openingHours)
         Dim closingTime As DateTime = DateTime.Parse(closingHours)
 
@@ -25,7 +35,6 @@ Public Class HelperPrice
         If Not isOutsideHours Then chkOutsideAvailableHours.Checked = False
 
         Dim additionalCharges As Decimal = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, eventStartTime, eventEndTime, openingTime, closingTime)
-
         Dim servicesCost As Decimal = ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
 
         Dim totalDays As Integer = (dtpEventDateEnd.Value - dtpEventDateStart.Value).Days + 1
@@ -143,12 +152,12 @@ Public Class HelperPrice
     End Function
 
     Public Shared Sub UpdateTotalPrice(txtNumGuests As TextBox, chkCatering As CheckBox, chkClown As CheckBox,
-                                   chkSinger As CheckBox, chkDancer As CheckBox, chkVideoke As CheckBox, chkOutsideAvailableHours As CheckBox,
-                                   cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                   cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                   openingHours As String, closingHours As String, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                   eventPlaceCapacity As Integer, basePricePerDay As Decimal, voucherDiscount As Decimal,
-                                   lblTotalPricePaymentContainer As Label, lblPriceBreakdown As Label, txtTotalPrice As TextBox)
+                                      chkSinger As CheckBox, chkDancer As CheckBox, chkVideoke As CheckBox, chkOutsideAvailableHours As CheckBox,
+                                      cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
+                                      cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                      openingHours As String, closingHours As String, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
+                                      eventPlaceCapacity As Integer, basePricePerDay As Decimal, voucherDiscount As Decimal,
+                                      lblTotalPricePaymentContainer As Label, lblPriceBreakdown As Label, txtTotalPrice As TextBox)
 
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then numGuests = 0
@@ -163,12 +172,29 @@ Public Class HelperPrice
         lblTotalPricePaymentContainer.Text = txtTotalPrice.Text
         lblTotalPricePaymentContainer.Tag = finalTotalPrice
 
+        Dim timeFormat As String = "h:mm tt"
+        Dim eventStartTime As DateTime
+        Dim eventEndTime As DateTime
+
+        Dim startInput As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
+        If Not DateTime.TryParseExact(startInput, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) Then
+            Return
+        End If
+
+        Dim endInput As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
+        If Not DateTime.TryParseExact(endInput, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
+            Return
+        End If
+
+        Dim parsedOpeningTime As DateTime = DateTime.Parse(openingHours)
+        Dim parsedClosingTime As DateTime = DateTime.Parse(closingHours)
+
+        Dim outsideFees As Decimal = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, eventStartTime, eventEndTime, parsedOpeningTime, parsedClosingTime)
+
         lblPriceBreakdown.Text = GeneratePriceBreakdown(numGuests, eventPlaceCapacity, basePricePerDay,
-                                                    (dtpEventDateEnd.Value - dtpEventDateStart.Value).Days + 1,
-                                                    ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked),
-                                                    ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, DateTime.Parse($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"),
-                                                                           DateTime.Parse($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"), DateTime.Parse(openingHours), DateTime.Parse(closingHours)),
-                                                    voucherDiscount, finalTotalPrice)
+                                                     (dtpEventDateEnd.Value - dtpEventDateStart.Value).Days + 1,
+                                                     ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked),
+                                                     outsideFees, voucherDiscount, finalTotalPrice)
     End Sub
 
 End Class

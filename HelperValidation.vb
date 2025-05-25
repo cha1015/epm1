@@ -2,14 +2,12 @@
 
 Public Class HelperValidation
 
-    ' Set initial labels (removes asterisk)
     Public Shared Sub ApplyFieldIndicators(labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To labelControls.Length - 1
             labelControls(i).Text = labelTexts(i)
         Next
     End Sub
 
-    ' Show asterisk if field is empty
     Public Shared Sub ShowAsteriskOnMissedFields(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To fieldControls.Length - 1
             If String.IsNullOrWhiteSpace(fieldControls(i).Text) Then
@@ -18,7 +16,6 @@ Public Class HelperValidation
         Next
     End Sub
 
-    ' Remove asterisk when input is detected
     Public Shared Sub RemoveAsteriskOnInput(sender As Object, labelControls As Label(), labelTexts As String())
         Dim txtBox As TextBox = TryCast(sender, TextBox)
         If txtBox IsNot Nothing Then
@@ -27,7 +24,6 @@ Public Class HelperValidation
         End If
     End Sub
 
-    ' Real-time validation for fields
     Public Shared Sub ValidateFieldsInRealTime(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To fieldControls.Length - 1
             labelControls(i).Text = If(String.IsNullOrWhiteSpace(fieldControls(i).Text), $"{labelTexts(i)} *", labelTexts(i))
@@ -115,31 +111,53 @@ Public Class HelperValidation
 
     ' ------------------ Validate Time Selection ------------------
     Public Shared Function IsValidTimeSelection(cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                            cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                            openingHours As String, closingHours As String) As Boolean
+                                              cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                              openingHours As String, closingHours As String) As Boolean
+        Dim timeFormat As String = "h:mm tt"
         Dim eventStartTime As DateTime
         Dim eventEndTime As DateTime
-        Dim openingTime As DateTime = DateTime.Parse(openingHours)
-        Dim closingTime As DateTime = DateTime.Parse(closingHours)
 
-        If Not DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) OrElse
-       Not DateTime.TryParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
-            ShowValidationError(cbEndHour, "Invalid time format. Use HH:MM AM/PM.")
+        If String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbStartAMPM.Text) Then
+            ShowValidationError(cbStartHour, "Start time is required.")
+            Return False
+        End If
+
+        If String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
+            ShowValidationError(cbEndHour, "End time is required.")
+            Return False
+        End If
+
+        Dim startInput As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
+        Dim endInput As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
+        If Not DateTime.TryParseExact(startInput, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) Then
+            ShowValidationError(cbStartHour, "Invalid start time format. Use h:mm AM/PM.")
+            Return False
+        End If
+        If Not DateTime.TryParseExact(endInput, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
+            ShowValidationError(cbEndHour, "Invalid end time format. Use h:mm AM/PM.")
             Return False
         End If
 
         If eventEndTime < eventStartTime Then
-            ShowValidationError(cbEndHour, "End time must be later than start time.")
+            eventEndTime = eventEndTime.AddDays(1)
+        End If
+
+        Dim openingTime As DateTime, closingTime As DateTime
+        If Not DateTime.TryParse(openingHours, openingTime) Then
+            ShowValidationError(cbStartHour, "Invalid opening hours format.")
+            Return False
+        End If
+        If Not DateTime.TryParse(closingHours, closingTime) Then
+            ShowValidationError(cbEndHour, "Invalid closing hours format.")
             Return False
         End If
 
         If eventStartTime < openingTime Then
-            ShowValidationError(cbStartHour, $"Opening hours start at {openingTime.ToString("h:mm tt")}. Adjust your start time.")
+            ShowValidationError(cbStartHour, $"Opening hours start at {openingTime.ToString("h:mm tt")}.")
             Return False
         End If
-
         If eventEndTime > closingTime Then
-            ShowValidationError(cbEndHour, $"Closing hours end at {closingTime.ToString("h:mm tt")}. Adjust your end time.")
+            ShowValidationError(cbEndHour, $"Closing hours end at {closingTime.ToString("h:mm tt")}.")
             Return False
         End If
 
@@ -211,12 +229,15 @@ Public Class HelperValidation
 
     Public Shared Function FormatTime(inputTime As String) As String
         Try
-            Dim formattedTime As DateTime = DateTime.ParseExact(inputTime, "hh:mm tt", CultureInfo.InvariantCulture)
-            Return formattedTime.ToString("HH:mm:ss")
+            ' Expect input in the format "h:mm tt", e.g., "9:30 AM" or "12:45 PM".
+            Dim parsedTime As DateTime = DateTime.ParseExact(inputTime, "h:mm tt", CultureInfo.InvariantCulture)
+            ' Convert to 24-hour format string, e.g., "09:30:00".
+            Return parsedTime.ToString("HH:mm:ss")
         Catch ex As FormatException
             Return String.Empty
         End Try
     End Function
+
 
     Public Shared Function ValidateOpeningClosingHours(openingTime As String, closingTime As String) As Boolean
         Dim openingHours As String = FormatTime(openingTime)

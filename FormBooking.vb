@@ -43,12 +43,10 @@ Public Class FormBooking
                 End While
                 picker.Value = nextAvailableDate
             Else
-                picker.Value = Date.Today ' Keep focus on picker without overriding
+                picker.Value = Date.Today
             End If
         End If
     End Sub
-
-
 
     ' ------------------ Form Load ------------------
     Private Sub FormBooking_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -112,7 +110,13 @@ Public Class FormBooking
             MessageBox.Show("Customer information not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
-
+    Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs) Handles dtpBirthday.ValueChanged
+        Dim birthDate As Date = dtpBirthday.Value
+        Dim today As Date = Date.Today
+        Dim age As Integer = today.Year - birthDate.Year
+        If birthDate > today.AddYears(-age) Then age -= 1
+        txtAge.Text = age.ToString()
+    End Sub
     Private Sub btnBookingProceed_Click(sender As Object, e As EventArgs)
         HelperValidation.ValidateBooking(Nothing, tcDetails, tpCustomerDetails, tpPaymentDetails, cbEventType, txtNumGuests,
                                      dtpEventDateStart, dtpEventDateEnd, cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
@@ -124,6 +128,16 @@ Public Class FormBooking
         If Not HelperValidation.IsValidCustomerInfo(txtCustomerName, dtpBirthday, cmbSex, txtAddress) Then Exit Sub
         PopulatePaymentDetails()
         tcDetails.SelectedTab = tpPaymentDetails
+        Dim birthDate As Date = dtpBirthday.Value
+        Dim today As Date = Date.Today
+        Dim age As Integer = today.Year - birthDate.Year
+
+        If birthDate > today.AddYears(-age) Then age -= 1
+
+        If age < 18 Then
+            MessageBox.Show("Only individuals aged 18 or older can book. A parent or guardian must handle the booking.", "Age Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
     End Sub
 
     Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs) Handles btnPlaceBooking.Click
@@ -157,7 +171,7 @@ Public Class FormBooking
             End If
 
         Else
-            MessageBox.Show("Booking failed! Possible reasons:\n- Venue unavailable for selected date\n- Capacity exceeded\n- Payment issue\n\nTry:\n✔ Selecting a different date\n✔ Lowering the number of guests\n✔ Checking payment details before retrying.",
+            MessageBox.Show("Booking failed!",
                             "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
 
         End If
@@ -253,5 +267,136 @@ Public Class FormBooking
 
     Private Sub UpdateTotalPrice(sender As Object, e As EventArgs) Handles txtNumGuests.TextChanged, chkVideoke.CheckedChanged, chkSinger.CheckedChanged, chkOutsideAvailableHours.CheckedChanged, chkDancer.CheckedChanged, chkClown.CheckedChanged, chkCatering.CheckedChanged, cbStartMinutes.SelectedIndexChanged, cbStartHour.SelectedIndexChanged, cbStartAMPM.SelectedIndexChanged, cbEndMinutes.SelectedIndexChanged, cbEndHour.SelectedIndexChanged, cbEndAMPM.SelectedIndexChanged
 
+    End Sub
+
+    Private Sub cbSameDayEvent_CheckedChanged(sender As Object, e As EventArgs) Handles cbSameDayEvent.CheckedChanged
+        If cbSameDayEvent.Checked Then
+            dtpEventDateEnd.Value = dtpEventDateStart.Value
+            dtpEventDateEnd.Enabled = False ' Prevent user modification
+
+            lblEventDatePaymentContainer.Text = dtpEventDateStart.Value.ToShortDateString()
+        Else
+            dtpEventDateEnd.Enabled = True
+            lblEventDatePaymentContainer.Text = $"{dtpEventDateStart.Value.ToShortDateString()} - {dtpEventDateEnd.Value.ToShortDateString()}"
+        End If
+        UpdateEventEndDate()
+    End Sub
+
+    Private Sub UpdateEventEndDate()
+
+        Dim startHour As Integer, startMinutes As Integer, endHour As Integer, endMinutes As Integer
+        If Not Integer.TryParse(cbStartHour.Text, startHour) OrElse Not Integer.TryParse(cbStartMinutes.Text, startMinutes) Then Exit Sub
+        If Not Integer.TryParse(cbEndHour.Text, endHour) OrElse Not Integer.TryParse(cbEndMinutes.Text, endMinutes) Then Exit Sub
+
+        Dim startAMPM As String = cbStartAMPM.Text
+        Dim endAMPM As String = cbEndAMPM.Text
+
+        If startAMPM = "PM" AndAlso startHour < 12 Then startHour += 12
+        If startAMPM = "AM" AndAlso startHour = 12 Then startHour = 0
+
+        If endAMPM = "PM" AndAlso endHour < 12 Then endHour += 12
+        If endAMPM = "AM" AndAlso endHour = 12 Then endHour = 0
+
+        Dim eventStartTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, startHour, startMinutes, 0)
+        Dim eventEndTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, endHour, endMinutes, 0)
+
+        If eventEndTime <= eventStartTime Then
+            dtpEventDateEnd.Value = dtpEventDateStart.Value.AddDays(1)
+            cbSameDayEvent.Checked = False
+        Else
+            dtpEventDateEnd.Value = dtpEventDateStart.Value
+            cbSameDayEvent.Checked = True
+        End If
+
+    End Sub
+
+    Private Sub btBookingProceed_Click(sender As Object, e As EventArgs) Handles btBookingProceed.Click
+        If String.IsNullOrWhiteSpace(cbEventType.Text) Then
+            MessageBox.Show("Please select an event type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        If dtpEventDateStart.Value.Date < Date.Today Then
+            MessageBox.Show("Event start date cannot be in the past.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        If dtpEventDateEnd.Value.Date < dtpEventDateStart.Value.Date Then
+            MessageBox.Show("Event end date must be after the start date.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        If String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbStartAMPM.Text) OrElse
+       String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
+            MessageBox.Show("Please complete the event time selection.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        ' Validate booking availability for single or multi-day events
+        Dim checkQuery As String = "SELECT COUNT(*) FROM Bookings WHERE place_id = @PlaceId AND 
+                            (event_date BETWEEN @EventDateStart AND @EventDateEnd)"
+        Dim checkParams As New Dictionary(Of String, Object) From {
+    {"@PlaceId", PlaceId},
+    {"@EventDateStart", dtpEventDateStart.Value.Date},
+    {"@EventDateEnd", dtpEventDateEnd.Value.Date}
+}
+        Dim existingBookings As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkQuery, checkParams))
+
+
+        If existingBookings > 0 Then
+            MessageBox.Show("This event place is already booked during your selected date range. Please choose a different date or venue.",
+                    "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        Dim eventStartTime As DateTime
+        Dim eventEndTime As DateTime
+        Dim openingTime As DateTime
+        Dim closingTime As DateTime
+        Dim timeFormat As String = "h:mm tt"
+
+        If Not DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", timeFormat,
+                                  System.Globalization.CultureInfo.InvariantCulture,
+                                  System.Globalization.DateTimeStyles.None, eventStartTime) OrElse
+       Not DateTime.TryParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", timeFormat,
+                                  System.Globalization.CultureInfo.InvariantCulture,
+                                  System.Globalization.DateTimeStyles.None, eventEndTime) OrElse
+       Not DateTime.TryParse(OpeningHours, openingTime) OrElse
+       Not DateTime.TryParse(ClosingHours, closingTime) Then
+            MessageBox.Show("Invalid time format. Please select a valid time.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        If (eventStartTime < openingTime OrElse eventEndTime > closingTime) AndAlso Not chkOutsideAvailableHours.Checked Then
+            MessageBox.Show("Your selected time is outside the venue's available hours. To proceed, either adjust your time or check 'Book outside available hours' to accept the extra charge.",
+                        "Time Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        Dim finalTotalPrice As Decimal = Convert.ToDecimal(lblTotalPricePaymentContainer.Tag)
+
+        Dim confirmProceed As DialogResult = MessageBox.Show($"Total Price Updated: ₱{finalTotalPrice:F2}. Do you want to proceed to customer details?",
+                                             "Price Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+
+        If confirmProceed = DialogResult.Yes Then
+            tcDetails.SelectedTab = tpCustomerDetails
+        End If
+
+        If chkOutsideAvailableHours.Checked Then
+            Dim perMinuteRate As Decimal = 17D
+            Dim additionalCharges As Decimal = 0D
+
+            If eventStartTime < openingTime Then
+                Dim earlyMinutes As Integer = Math.Max(0, CInt((openingTime - eventStartTime).TotalMinutes))
+                additionalCharges += earlyMinutes * perMinuteRate
+            End If
+
+            If eventEndTime > closingTime Then
+                Dim overtimeMinutes As Integer = Math.Max(0, CInt((eventEndTime - closingTime).TotalMinutes))
+                additionalCharges += overtimeMinutes * perMinuteRate
+            End If
+
+            finalTotalPrice += additionalCharges
+        End If
     End Sub
 End Class

@@ -9,25 +9,40 @@ Public Class FormSignUp
         txtAdminCode.Visible = False
         lblAdminCode.Visible = False
 
-        Dim labels = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole}
-        Dim fields = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass}
-        Dim texts = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role"}
+
+        Dim labels As Label() = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole, lblAge, lblAddress}
+        Dim fields As TextBox() = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
+        Dim texts As String() = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role", "Age", "Address"}
 
         HelperValidation.ApplyFieldIndicators(labels, texts)
 
         Me.ActiveControl = txtFirstName
         Me.BeginInvoke(Sub() txtFirstName.Select())
 
-        For Each field In fields
-            AddHandler field.TextChanged, Sub(txtSender, txtEventArgs) HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
-            AddHandler field.Leave, Sub(txtSender, txtEventArgs) HelperValidation.RemoveAsteriskOnInput(txtSender, labels, texts)
+        For Each field As TextBox In fields
+            AddHandler field.TextChanged, Sub(ctrl As Object, evArgs As EventArgs)
+                                              HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
+                                          End Sub
+            AddHandler field.Leave, Sub(ctrl As Object, evArgs As EventArgs)
+                                        HelperValidation.RemoveAsteriskOnInput(ctrl, labels, texts)
+                                    End Sub
         Next
 
-        AddHandler cbRole.SelectedIndexChanged, Sub() lblRole.Text = If(cbRole.SelectedItem Is Nothing, "Role *", "Role")
+        AddHandler cbRole.SelectedIndexChanged, Sub(x, y) _
+        lblRole.Text = If(cbRole.SelectedItem Is Nothing, "Role *", "Role")
 
         AddHandler txtUsername.TextChanged, AddressOf CheckUsernameAvailability
         AddHandler txtEmail.TextChanged, AddressOf CheckEmailAvailability
         AddHandler txtPass.TextChanged, AddressOf ShowPasswordStrength
+
+        AddHandler dtpBirthday.ValueChanged, AddressOf dtpBirthday_ValueChanged
+    End Sub
+    Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs)
+        Dim birthday As Date = dtpBirthday.Value
+        Dim today As Date = Date.Today
+        Dim age As Integer = today.Year - birthday.Year
+        If birthday > today.AddYears(-age) Then age -= 1
+        lblAgeContainer.Text = age.ToString()
     End Sub
 
     Private Sub CheckUsernameAvailability(sender As Object, e As EventArgs)
@@ -65,7 +80,7 @@ Public Class FormSignUp
         End If
     End Sub
 
-    Private Sub txtConfPass_Leave(sender As Object, e As EventArgs) Handles txtConfPass.Leave
+    Private Sub txtConfPass_Leave(sender As Object, e As EventArgs)
         lblPasswordError.Text = If(txtPass.Text <> txtConfPass.Text, "Passwords do not match!", "")
         lblPasswordError.Visible = txtPass.Text <> txtConfPass.Text
     End Sub
@@ -83,15 +98,21 @@ Public Class FormSignUp
         End If
 
         Dim hashedPassword As String = HashPassword(txtPass.Text)
-        Dim query As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role) VALUES (@fname, @lname, @uname, @email, @pass, @role)"
+        ' Modified query to include additional personal information fields.
+        Dim query As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role, birthday, age, sex, address) " &
+                              "VALUES (@fname, @lname, @uname, @email, @pass, @role, @birthday, @age, @sex, @address)"
         Dim parameters As New Dictionary(Of String, Object) From {
-        {"@fname", txtFirstName.Text},
-        {"@lname", txtLastName.Text},
-        {"@uname", txtUsername.Text},
-        {"@email", txtEmail.Text},
-        {"@pass", hashedPassword},
-        {"@role", cbRole.SelectedItem.ToString()}
-    }
+            {"@fname", txtFirstName.Text},
+            {"@lname", txtLastName.Text},
+            {"@uname", txtUsername.Text},
+            {"@email", txtEmail.Text},
+            {"@pass", hashedPassword},
+            {"@role", cbRole.SelectedItem.ToString()},
+            {"@birthday", dtpBirthday.Value.Date},
+            {"@age", Convert.ToInt32(lblAgeContainer.Text)},
+            {"@sex", cmbSex.SelectedItem.ToString()},
+            {"@address", txtAddress.Text}
+        }
 
         Try
             DBHelper.ExecuteQuery(query, parameters)
@@ -107,17 +128,13 @@ Public Class FormSignUp
             MessageBox.Show("Please resolve the indicated errors before proceeding.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-
     End Sub
 
     Private Function GetAdminCodeFromDatabase(username As String) As String
         Dim query As String = "SELECT admin_code FROM Users WHERE username = @uname"
-        Dim parameters As New Dictionary(Of String, Object) From {
-            {"@uname", username}
-        }
+        Dim parameters As New Dictionary(Of String, Object) From {{"@uname", username}}
         Return Convert.ToString(DBHelper.ExecuteScalarQuery(query, parameters))
     End Function
-
     Private Sub SetMissingFieldIndicator(txtBox As TextBox)
         txtBox.Text = "Required"
         txtBox.ForeColor = Color.Gray
@@ -182,7 +199,7 @@ Public Class FormSignUp
     End Function
 
 
-    Private Sub cbRole_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbRole.SelectedIndexChanged
+    Private Sub cbRole_SelectedIndexChanged(sender As Object, e As EventArgs)
         lblRole.Text = "Role"
         If cbRole.SelectedItem.ToString() = "Admin" Then
             txtAdminCode.Visible = True
@@ -199,7 +216,7 @@ Public Class FormSignUp
         Me.Hide()
     End Sub
 
-    Private Sub MoveToNextControl(sender As Object, e As KeyEventArgs) Handles txtFirstName.KeyDown, txtLastName.KeyDown, txtUsername.KeyDown, txtEmail.KeyDown, txtPass.KeyDown, txtConfPass.KeyDown, cbRole.KeyDown
+    Private Sub MoveToNextControl(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Enter Then
             e.SuppressKeyPress = True
             If sender Is cbRole Then
@@ -210,7 +227,7 @@ Public Class FormSignUp
         End If
     End Sub
 
-    Private Sub btnShowPass_Click(sender As Object, e As EventArgs) Handles btnShowPass.Click
+    Private Sub btnShowPass_Click(sender As Object, e As EventArgs)
         If txtPass.PasswordChar = "*"c Then
             txtPass.PasswordChar = ControlChars.NullChar
         Else
@@ -218,7 +235,7 @@ Public Class FormSignUp
         End If
     End Sub
 
-    Private Sub btnShowConfPass_Click(sender As Object, e As EventArgs) Handles btnShowConfPass.Click
+    Private Sub btnShowConfPass_Click(sender As Object, e As EventArgs)
         If txtConfPass.PasswordChar = "*"c Then
             txtConfPass.PasswordChar = ControlChars.NullChar
         Else
