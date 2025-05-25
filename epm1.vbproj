@@ -337,5 +337,32 @@
   <ItemGroup>
     <None Include="Resources\BGadmin.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGadmin%28updated%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGadmin2%28updated%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGCustomerView.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bttnEditInfo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bttnSelectBooking.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BttnConfPayment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGAdminInfo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGinfoPlain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGinfoPlain1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

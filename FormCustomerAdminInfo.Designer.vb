@@ -28,26 +28,34 @@ Partial Class FormCustomerAdminInfo
         '
         'btnNext
         '
-        Me.btnNext.Location = New System.Drawing.Point(60, 13)
+        Me.btnNext.BackgroundImage = Global.epm1.My.Resources.Resources.BttnNext
+        Me.btnNext.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnNext.FlatAppearance.BorderSize = 0
+        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNext.Location = New System.Drawing.Point(198, 33)
         Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(42, 23)
+        Me.btnNext.Size = New System.Drawing.Size(21, 21)
         Me.btnNext.TabIndex = 106
-        Me.btnNext.Text = "→"
         Me.btnNext.UseVisualStyleBackColor = True
         '
         'btnBack
         '
-        Me.btnBack.Location = New System.Drawing.Point(12, 12)
+        Me.btnBack.BackgroundImage = Global.epm1.My.Resources.Resources.BttnPrevious
+        Me.btnBack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnBack.FlatAppearance.BorderSize = 0
+        Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnBack.Location = New System.Drawing.Point(173, 33)
         Me.btnBack.Name = "btnBack"
-        Me.btnBack.Size = New System.Drawing.Size(42, 23)
+        Me.btnBack.Size = New System.Drawing.Size(21, 21)
         Me.btnBack.TabIndex = 105
-        Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
         '
         'FormCustomerAdminInfo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BGinfoPlain1
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
