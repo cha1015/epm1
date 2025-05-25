@@ -127,6 +127,9 @@
   <data name="BttnSignUpMain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BttnSignUpMain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Welcome" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Welcome.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="round button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\round button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -183,6 +186,9 @@
   </data>
   <data name="BttnDelete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BttnDelete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BGinfoPlain1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BGinfoPlain1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BttnAdd" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BttnAdd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -244,7 +250,7 @@
   <data name="BttnMyAccount" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BttnMyAccount.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BGinfoPlain1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BGinfoPlain1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="LOADING (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LOADING (1).gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -433,6 +433,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property LOADING__1_() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("LOADING (1)", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property LogIn() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("LogIn", resourceCulture)
@@ -486,6 +496,16 @@ Namespace My.Resources
         Friend ReadOnly Property Sign_Up__nolbl_() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Sign Up (nolbl)", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property Welcome() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Welcome", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
