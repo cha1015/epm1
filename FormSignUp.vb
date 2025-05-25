@@ -98,7 +98,6 @@ Public Class FormSignUp
         End If
 
         Dim hashedPassword As String = HashPassword(txtPass.Text)
-        ' Modified query to include additional personal information fields.
         Dim query As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role, birthday, age, sex, address) " &
                               "VALUES (@fname, @lname, @uname, @email, @pass, @role, @birthday, @age, @sex, @address)"
         Dim parameters As New Dictionary(Of String, Object) From {

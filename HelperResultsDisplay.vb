@@ -91,17 +91,17 @@ Public Class HelperResultsDisplay
                                                          toolTip.SetToolTip(lblEventType, fullEventTypesText)
 
                                                          ' Label for booking status
-                                                         Dim lblStatus As New Label()
-                                                         lblStatus.AutoSize = False
-                                                         lblStatus.Size = New Size(panelWidth - 20, 20)
-                                                         lblStatus.Location = New Point(5, 225)
-                                                         Dim colName As String = dt.Columns.Cast(Of DataColumn)() _
-                                                         .FirstOrDefault(Function(c) String.Equals(c.ColumnName, "status", StringComparison.OrdinalIgnoreCase))?.ColumnName
-                                                         If Not String.IsNullOrEmpty(colName) Then
-                                                             lblStatus.Text = If(row(colName).ToString() = "Booked", "Status: 🔴 Booked", "Status: 🟢 Available")
-                                                         Else
-                                                             lblStatus.Text = "Status: Unknown"
-                                                         End If
+                                                         'Dim lblStatus As New Label()
+                                                         'lblStatus.AutoSize = False
+                                                         'lblStatus.Size = New Size(panelWidth - 20, 20)
+                                                         'lblStatus.Location = New Point(5, 225)
+                                                         'Dim colName As String = dt.Columns.Cast(Of DataColumn)() _
+                                                         '.FirstOrDefault(Function(c) String.Equals(c.ColumnName, "status", StringComparison.OrdinalIgnoreCase))?.ColumnName
+                                                         'If Not String.IsNullOrEmpty(colName) Then
+                                                         '    lblStatus.Text = If(row(colName).ToString() = "Booked", "Status: Booked", "Status: Available")
+                                                         'Else
+                                                         '    lblStatus.Text = "Status: Unknown"
+                                                         'End If
 
                                                          ' Action Button(s): either Book or Update/Delete buttons
                                                          If Not isAdmin Then
@@ -138,7 +138,7 @@ Public Class HelperResultsDisplay
                                                          panel.Controls.Add(lblCapacity)
                                                          panel.Controls.Add(lblPrice)
                                                          panel.Controls.Add(lblEventType)
-                                                         panel.Controls.Add(lblStatus)
+                                                         'panel.Controls.Add(lblStatus)
 
                                                          Return panel
                                                      End Function

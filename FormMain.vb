@@ -7,7 +7,7 @@ Public Class FormMain
     Private WithEvents TimerShow As New Timer
 
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        pnlFilter.Left = Me.Width 
+        pnlFilter.Left = Me.Width
         pnlFilter.Visible = False
 
         TimerHide.Interval = 5
@@ -447,18 +447,18 @@ Public Class FormMain
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-            If HelperNavigation.ForwardHistory.Count > 0 Then
-                Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop()
-                HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack)
-            Else
-                btnNext.Enabled = False
-            End If
+        If HelperNavigation.ForwardHistory.Count > 0 Then
+            Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop()
+            HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack)
+        Else
+            btnNext.Enabled = False
+        End If
 
-        End Sub
+    End Sub
 
-        Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-            HelperNavigation.GoBack(Me, btnNext, btnBack)
-        End Sub
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        HelperNavigation.GoBack(Me, btnNext, btnBack)
+    End Sub
 
 
 End Class
