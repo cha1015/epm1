@@ -1,13 +1,25 @@
 ﻿Imports System.Globalization
+Imports System.Data
 
 Public Class HelperValidation
-
+    ' ------------------ Utility Helper ------------------
+    Private Shared Function GetDefaultLabelText(control As Control) As String
+        Dim lbl As Label = TryCast(control.Tag, Label)
+        If lbl IsNot Nothing Then
+            Return lbl.Text
+        End If
+        Return ""
+    End Function
+    ' ------------------ Field Indicator Setup ------------------
+    ' This section sets the default labels for required fields.
     Public Shared Sub ApplyFieldIndicators(labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To labelControls.Length - 1
             labelControls(i).Text = labelTexts(i)
+            labelControls(i).ForeColor = SystemColors.ControlText
         Next
     End Sub
 
+    ' Show an asterisk (or add it if missing) on required fields in real time.
     Public Shared Sub ShowAsteriskOnMissedFields(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To fieldControls.Length - 1
             If String.IsNullOrWhiteSpace(fieldControls(i).Text) Then
@@ -16,6 +28,7 @@ Public Class HelperValidation
         Next
     End Sub
 
+    ' Remove the asterisk when the user enters input.
     Public Shared Sub RemoveAsteriskOnInput(sender As Object, labelControls As Label(), labelTexts As String())
         Dim txtBox As TextBox = TryCast(sender, TextBox)
         If txtBox IsNot Nothing Then
@@ -24,81 +37,105 @@ Public Class HelperValidation
         End If
     End Sub
 
+    ' Update the labels in real time as fields are filled or left empty.
     Public Shared Sub ValidateFieldsInRealTime(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To fieldControls.Length - 1
-            labelControls(i).Text = If(String.IsNullOrWhiteSpace(fieldControls(i).Text), $"{labelTexts(i)} *", labelTexts(i))
+            labelControls(i).Text = If(String.IsNullOrWhiteSpace(fieldControls(i).Text),
+                                         $"{labelTexts(i)} *",
+                                         labelTexts(i))
         Next
     End Sub
-    ' ------------------ Helper Method for Validation Messages ------------------
-    Private Shared Sub ShowValidationError(targetControl As Control, message As String)
-        If targetControl IsNot Nothing AndAlso TypeOf targetControl.Tag Is Label Then
-            Dim errorLabel As Label = CType(targetControl.Tag, Label)
-            errorLabel.Text = message
-            errorLabel.ForeColor = Color.Red
-            errorLabel.Visible = True
-        Else
-            targetControl.BackColor = Color.LightPink
+
+    ' ------------------ Combined Validation Error Handling ------------------
+    ' Combines an asterisk (indicating a required field) with a red highlight on the control.
+    Private Shared Sub MarkFieldInvalid(targetControl As Control, defaultLabelText As String, Optional errorMsg As String = "")
+        Dim labelIndicator As Label = TryCast(targetControl.Tag, Label)
+        If labelIndicator IsNot Nothing Then
+            labelIndicator.Text = $"{defaultLabelText} *"
+            labelIndicator.ForeColor = Color.Red
+            labelIndicator.Visible = True
         End If
+        targetControl.BackColor = Color.LightPink
     End Sub
 
-    Public Shared Sub HideValidationError(targetControl As Control)
-        If targetControl IsNot Nothing AndAlso TypeOf targetControl.Tag Is Label Then
-            Dim errorLabel As Label = CType(targetControl.Tag, Label)
-            errorLabel.Text = ""
-            errorLabel.Visible = False
-        Else
-            targetControl.BackColor = Color.White
+    ' Clears the red highlight and restores the original label text.
+    Public Shared Sub ClearFieldError(targetControl As Control, defaultLabelText As String)
+        Dim labelIndicator As Label = TryCast(targetControl.Tag, Label)
+        If labelIndicator IsNot Nothing Then
+            labelIndicator.Text = defaultLabelText
+            labelIndicator.ForeColor = SystemColors.ControlText
+            labelIndicator.Visible = True
         End If
+        targetControl.BackColor = Color.White
     End Sub
 
     ' ------------------ Validate Numeric Fields ------------------
     Public Shared Function IsValidNumericField(txtControl As TextBox, errorLabel As Label, errorMessage As String) As Boolean
+        ' Retrieve the default text from the error label.
+        Dim defaultText As String = errorLabel.Text
+
         If String.IsNullOrWhiteSpace(txtControl.Text) OrElse Not IsNumeric(txtControl.Text) Then
-            ShowValidationError(txtControl, errorMessage)
+            MarkFieldInvalid(txtControl, defaultText, errorMessage)
             Return False
         End If
 
-        HideValidationError(txtControl)
+        ClearFieldError(txtControl, defaultText)
         Return True
     End Function
 
+
     ' ------------------ Validate Date Selection ------------------
     Public Shared Function IsValidDateSelection(eventStartDate As DateTimePicker, eventEndDate As DateTimePicker) As Boolean
+        ' Ensure the event start date is not in the past.
         If eventStartDate.Value.Date < Date.Today Then
-            ShowValidationError(eventStartDate, "Event start date cannot be in the past.")
+            MarkFieldInvalid(eventStartDate, eventStartDate.Tag?.ToString() & "", "Start date cannot be in the past.")
             Return False
         End If
 
+        ' Ensure the event end date comes after the start date.
         If eventEndDate.Value.Date < eventStartDate.Value.Date Then
-            ShowValidationError(eventEndDate, "Event end date must be after the start date.")
+            MarkFieldInvalid(eventEndDate, eventEndDate.Tag?.ToString() & "", "End date must follow the start date.")
             Return False
         End If
 
+        ClearFieldError(eventStartDate, eventStartDate.Tag?.ToString() & "")
+        ClearFieldError(eventEndDate, eventEndDate.Tag?.ToString() & "")
         Return True
     End Function
 
     ' ------------------ Validate Customer Information ------------------
-    Public Shared Function IsValidCustomerInfo(txtName As TextBox, dtpBirthday As DateTimePicker, cmbSex As ComboBox, txtAddress As TextBox) As Boolean
+    Public Shared Function IsValidCustomerInfo(txtName As TextBox, dtpBirthday As DateTimePicker, cmbSex As ComboBox,
+                                               txtAddress As TextBox, Optional nameDefault As String = "", Optional birthdayDefault As String = "",
+                                               Optional sexDefault As String = "", Optional addressDefault As String = "") As Boolean
+        If nameDefault = "" Then nameDefault = GetDefaultLabelText(txtName)
+        If birthdayDefault = "" Then birthdayDefault = GetDefaultLabelText(dtpBirthday)
+        If sexDefault = "" Then sexDefault = GetDefaultLabelText(cmbSex)
+        If addressDefault = "" Then addressDefault = GetDefaultLabelText(txtAddress)
+
         If String.IsNullOrWhiteSpace(txtName.Text) Then
-            ShowValidationError(txtName, "Customer name is required.")
+            MarkFieldInvalid(txtName, nameDefault, "Customer name is required.")
             Return False
         End If
 
         If dtpBirthday.Value.Date > Date.Today Then
-            ShowValidationError(dtpBirthday, "Birthday cannot be in the future.")
+            MarkFieldInvalid(dtpBirthday, birthdayDefault, "Birthday cannot be in the future.")
             Return False
         End If
 
         If String.IsNullOrWhiteSpace(cmbSex.Text) Then
-            ShowValidationError(cmbSex, "Please select a gender.")
+            MarkFieldInvalid(cmbSex, sexDefault, "Please select a gender.")
             Return False
         End If
 
         If String.IsNullOrWhiteSpace(txtAddress.Text) Then
-            ShowValidationError(txtAddress, "Address is required.")
+            MarkFieldInvalid(txtAddress, addressDefault, "Address is required.")
             Return False
         End If
 
+        ClearFieldError(txtName, nameDefault)
+        ClearFieldError(dtpBirthday, birthdayDefault)
+        ClearFieldError(cmbSex, sexDefault)
+        ClearFieldError(txtAddress, addressDefault)
         Return True
     End Function
 
@@ -111,101 +148,112 @@ Public Class HelperValidation
 
     ' ------------------ Validate Time Selection ------------------
     Public Shared Function IsValidTimeSelection(cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                              cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                              openingHours As String, closingHours As String) As Boolean
+                                                  cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                                  openingHours As String, closingHours As String) As Boolean
         Dim timeFormat As String = "h:mm tt"
         Dim eventStartTime As DateTime
         Dim eventEndTime As DateTime
 
+        ' Check for complete start time selection.
         If String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbStartAMPM.Text) Then
-            ShowValidationError(cbStartHour, "Start time is required.")
+            MarkFieldInvalid(cbStartHour, cbStartHour.Tag?.ToString() & "", "Start time is required.")
             Return False
         End If
 
+        ' Check for complete end time selection.
         If String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
-            ShowValidationError(cbEndHour, "End time is required.")
+            MarkFieldInvalid(cbEndHour, cbEndHour.Tag?.ToString() & "", "End time is required.")
             Return False
         End If
 
         Dim startInput As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
         Dim endInput As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
         If Not DateTime.TryParseExact(startInput, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) Then
-            ShowValidationError(cbStartHour, "Invalid start time format. Use h:mm AM/PM.")
+            MarkFieldInvalid(cbStartHour, cbStartHour.Tag?.ToString() & "", "Invalid start time. Use h:mm AM/PM.")
             Return False
         End If
         If Not DateTime.TryParseExact(endInput, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
-            ShowValidationError(cbEndHour, "Invalid end time format. Use h:mm AM/PM.")
+            MarkFieldInvalid(cbEndHour, cbEndHour.Tag?.ToString() & "", "Invalid end time. Use h:mm AM/PM.")
             Return False
         End If
 
+        ' Assume events spanning midnight.
         If eventEndTime < eventStartTime Then
             eventEndTime = eventEndTime.AddDays(1)
         End If
 
         Dim openingTime As DateTime, closingTime As DateTime
         If Not DateTime.TryParse(openingHours, openingTime) Then
-            ShowValidationError(cbStartHour, "Invalid opening hours format.")
+            MarkFieldInvalid(cbStartHour, cbStartHour.Tag?.ToString() & "", "Invalid opening hours format.")
             Return False
         End If
         If Not DateTime.TryParse(closingHours, closingTime) Then
-            ShowValidationError(cbEndHour, "Invalid closing hours format.")
+            MarkFieldInvalid(cbEndHour, cbEndHour.Tag?.ToString() & "", "Invalid closing hours format.")
             Return False
         End If
 
+        ' Ensure event time is within operating hours.
         If eventStartTime < openingTime Then
-            ShowValidationError(cbStartHour, $"Opening hours start at {openingTime.ToString("h:mm tt")}.")
+            MarkFieldInvalid(cbStartHour, cbStartHour.Tag?.ToString() & "", $"Opens at {openingTime.ToString("h:mm tt")}.")
             Return False
         End If
         If eventEndTime > closingTime Then
-            ShowValidationError(cbEndHour, $"Closing hours end at {closingTime.ToString("h:mm tt")}.")
+            MarkFieldInvalid(cbEndHour, cbEndHour.Tag?.ToString() & "", $"Closes at {closingTime.ToString("h:mm tt")}.")
             Return False
         End If
 
+        ClearFieldError(cbStartHour, cbStartHour.Tag?.ToString() & "")
+        ClearFieldError(cbEndHour, cbEndHour.Tag?.ToString() & "")
         Return True
     End Function
 
-
-    ' ------------------ Check for Booking Date Conflicts ------------------
+    ' ------------------ Validate Booking Date Conflicts ------------------
     Public Shared Function IsDateConflict(placeId As Integer, eventStart As Date, eventEnd As Date, dtpEventDateStart As DateTimePicker) As Boolean
         Dim query As String = "SELECT event_date FROM Bookings WHERE place_id = @PlaceId AND (event_date BETWEEN @EventDateStart AND @EventDateEnd)"
         Dim params As New Dictionary(Of String, Object) From {
-        {"@PlaceId", placeId},
-        {"@EventDateStart", eventStart},
-        {"@EventDateEnd", eventEnd}
-    }
+            {"@PlaceId", placeId},
+            {"@EventDateStart", eventStart},
+            {"@EventDateEnd", eventEnd}
+        }
 
         Dim conflictDates As DataTable = DBHelper.GetDataTable(query, params)
         If conflictDates.Rows.Count > 0 Then
-            ShowValidationError(dtpEventDateStart, "This date range is unavailable. Please select another date.")
+            MarkFieldInvalid(dtpEventDateStart, dtpEventDateStart.Tag?.ToString() & "", "Selected date range is unavailable.")
             Return True
         End If
 
+        ClearFieldError(dtpEventDateStart, dtpEventDateStart.Tag?.ToString() & "")
         Return False
     End Function
 
     ' ------------------ Validate Booking Details with Tab Selection Logic ------------------
-    Public Shared Sub ValidateBooking(e As TabControlCancelEventArgs, tcDetails As TabControl, tpCustomerDetails As TabPage, tpPaymentDetails As TabPage,
-                                      cbEventType As ComboBox, txtNumGuests As TextBox, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                      cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                      cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                      chkOutsideAvailableHours As CheckBox, txtCustomerName As TextBox, dtpBirthday As DateTimePicker, cmbSex As ComboBox,
-                                      txtAddress As TextBox, openingHours As String, closingHours As String, placeId As Integer)
-
+    Public Shared Sub ValidateBooking(e As TabControlCancelEventArgs, tcDetails As TabControl,
+                                        tpCustomerDetails As TabPage, tpPaymentDetails As TabPage,
+                                        cbEventType As ComboBox, txtNumGuests As TextBox,
+                                        dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
+                                        cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
+                                        cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                        chkOutsideAvailableHours As CheckBox, txtCustomerName As TextBox,
+                                        dtpBirthday As DateTimePicker, cmbSex As ComboBox, txtAddress As TextBox,
+                                        openingHours As String, closingHours As String, placeId As Integer)
+        ' Validate time selection first.
         If Not IsValidTimeSelection(cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, openingHours, closingHours) Then
             e.Cancel = True
             Exit Sub
         End If
 
+        ' ------------------ Booking Tab - Customer Details ------------------
         If e.TabPage Is tpCustomerDetails Then
             If String.IsNullOrWhiteSpace(cbEventType.Text) OrElse String.IsNullOrWhiteSpace(txtNumGuests.Text) OrElse Not IsNumeric(txtNumGuests.Text) OrElse
                dtpEventDateStart.Value.Date < Date.Today OrElse dtpEventDateEnd.Value.Date < dtpEventDateStart.Value.Date Then
-                ShowValidationError(txtNumGuests, "Please complete all fields before proceeding.")
+                MarkFieldInvalid(txtNumGuests, txtNumGuests.Tag?.ToString() & "", "Complete all fields before proceeding.")
                 e.Cancel = True
                 Exit Sub
             End If
 
-            Dim eventStartTime As DateTime = DateTime.ParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", "h:mm tt", CultureInfo.InvariantCulture)
-            Dim eventEndTime As DateTime = DateTime.ParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", "h:mm tt", CultureInfo.InvariantCulture)
+            Dim timeFormat As String = "h:mm tt"
+            Dim eventStartTime As DateTime = DateTime.ParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", timeFormat, CultureInfo.InvariantCulture)
+            Dim eventEndTime As DateTime = DateTime.ParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", timeFormat, CultureInfo.InvariantCulture)
             Dim openingTime As DateTime = DateTime.Parse(openingHours)
             Dim closingTime As DateTime = DateTime.Parse(closingHours)
 
@@ -213,20 +261,27 @@ Public Class HelperValidation
             If eventEndTime < eventStartTime Then eventEndTime = eventEndTime.AddDays(1)
 
             If (eventStartTime < openingTime OrElse eventEndTime > closingTime) AndAlso Not chkOutsideAvailableHours.Checked Then
-                ShowValidationError(chkOutsideAvailableHours, "Your selected time is outside available hours. Adjust your schedule or check 'Book outside available hours' to proceed.")
+                MarkFieldInvalid(chkOutsideAvailableHours, chkOutsideAvailableHours.Tag?.ToString() & "",
+                                 "Selected time is outside available hours.")
                 e.Cancel = True
                 Exit Sub
             End If
         End If
 
+        ' ------------------ Payment Tab - Customer Information ------------------
         If e.TabPage Is tpPaymentDetails Then
-            If Not IsValidCustomerInfo(txtCustomerName, dtpBirthday, cmbSex, txtAddress) Then
+            If Not IsValidCustomerInfo(txtCustomerName, dtpBirthday, cmbSex, txtAddress,
+                                        txtCustomerName.Tag?.ToString() & "",
+                                        dtpBirthday.Tag?.ToString() & "",
+                                        cmbSex.Tag?.ToString() & "",
+                                        txtAddress.Tag?.ToString() & "") Then
                 e.Cancel = True
                 Exit Sub
             End If
         End If
     End Sub
 
+    ' ------------------ Time Format Conversion ------------------
     Public Shared Function FormatTime(inputTime As String) As String
         Try
             Dim parsedTime As DateTime = DateTime.ParseExact(inputTime, "h:mm tt", CultureInfo.InvariantCulture)
@@ -236,54 +291,65 @@ Public Class HelperValidation
         End Try
     End Function
 
+    ' ------------------ Validate Opening and Closing Hours ------------------
+    Public Shared Function ValidateOpeningClosingHours(openingTimeStr As String, closingTimeStr As String) As Boolean
+        Dim openingHours As String = FormatTime(openingTimeStr)
+        Dim closingHours As String = FormatTime(closingTimeStr)
 
-    Public Shared Function ValidateOpeningClosingHours(openingTime As String, closingTime As String) As Boolean
-        Dim openingHours As String = FormatTime(openingTime)
-        Dim closingHours As String = FormatTime(closingTime)
-
+        ' Inline error indications could be added here instead of MessageBox.
         If String.IsNullOrEmpty(openingHours) OrElse String.IsNullOrEmpty(closingHours) Then
-            MessageBox.Show("Invalid time format. Ensure both opening and closing hours are set correctly.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return False
         End If
 
-        Dim open As DateTime = DateTime.ParseExact(openingHours, "HH:mm:ss", CultureInfo.InvariantCulture)
-        Dim close As DateTime = DateTime.ParseExact(closingHours, "HH:mm:ss", CultureInfo.InvariantCulture)
+        Dim openDt As DateTime = DateTime.ParseExact(openingHours, "HH:mm:ss", CultureInfo.InvariantCulture)
+        Dim closeDt As DateTime = DateTime.ParseExact(closingHours, "HH:mm:ss", CultureInfo.InvariantCulture)
 
-        If close <= open Then
-            MessageBox.Show("Closing time must be later than opening time.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        If closeDt <= openDt Then
             Return False
         End If
 
         Return True
     End Function
 
-    Public Shared Function ValidateBookingInputs(ByVal cbEventType As ComboBox, ByVal dtpEventDateStart As DateTimePicker, ByVal dtpEventDateEnd As DateTimePicker,
-                                               ByVal cbStartHour As ComboBox, ByVal cbStartMinutes As ComboBox, ByVal cbStartAMPM As ComboBox,
-                                               ByVal cbEndHour As ComboBox, ByVal cbEndMinutes As ComboBox, ByVal cbEndAMPM As ComboBox,
-                                               ByVal chkOutsideAvailableHours As CheckBox, ByVal OpeningHours As String, ByVal ClosingHours As String,
-                                               ByVal PlaceId As Integer) As Boolean
+    ' ------------------ Validate Booking Inputs (Standalone) ------------------
+    Public Shared Function ValidateBookingInputs(cbEventType As ComboBox, dtpEventDateStart As DateTimePicker,
+                                                   dtpEventDateEnd As DateTimePicker,
+                                                   cbStartHour As ComboBox, cbStartMinutes As ComboBox,
+                                                   cbStartAMPM As ComboBox, cbEndHour As ComboBox,
+                                                   cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                                   chkOutsideAvailableHours As CheckBox, OpeningHours As String,
+                                                   ClosingHours As String, PlaceId As Integer) As Boolean
+        Dim isValid As Boolean = True
 
         If String.IsNullOrWhiteSpace(cbEventType.Text) Then
-            MessageBox.Show("Please select an event type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
+            MarkFieldInvalid(cbEventType, cbEventType.Tag?.ToString() & "", "Event type is required.")
+            isValid = False
+        Else
+            ClearFieldError(cbEventType, cbEventType.Tag?.ToString() & "")
         End If
 
         If dtpEventDateStart.Value.Date < Date.Today Then
-            MessageBox.Show("Event start date cannot be in the past.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
+            MarkFieldInvalid(dtpEventDateStart, dtpEventDateStart.Tag?.ToString() & "", "Start date is in the past.")
+            isValid = False
+        Else
+            ClearFieldError(dtpEventDateStart, dtpEventDateStart.Tag?.ToString() & "")
         End If
 
         If dtpEventDateEnd.Value.Date < dtpEventDateStart.Value.Date Then
-            MessageBox.Show("Event end date must be after the start date.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
+            MarkFieldInvalid(dtpEventDateEnd, dtpEventDateEnd.Tag?.ToString() & "", "End date must follow start date.")
+            isValid = False
+        Else
+            ClearFieldError(dtpEventDateEnd, dtpEventDateEnd.Tag?.ToString() & "")
         End If
 
         If String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbStartAMPM.Text) OrElse
            String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
-
-            MessageBox.Show("Please complete the event time selection.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
+            MarkFieldInvalid(cbStartHour, cbStartHour.Tag?.ToString() & "", "Complete time selection is required.")
+            isValid = False
+        Else
+            ClearFieldError(cbStartHour, cbStartHour.Tag?.ToString() & "")
         End If
+
         Dim checkQuery As String = "SELECT COUNT(*) FROM Bookings WHERE place_id = @PlaceId AND (event_date BETWEEN @EventDateStart AND @EventDateEnd)"
         Dim checkParams As New Dictionary(Of String, Object) From {
             {"@PlaceId", PlaceId},
@@ -292,8 +358,10 @@ Public Class HelperValidation
         }
         Dim existingBookings As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkQuery, checkParams))
         If existingBookings > 0 Then
-            MessageBox.Show("This event place is already booked during your selected date range. Please choose a different date or venue.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
+            MarkFieldInvalid(dtpEventDateStart, dtpEventDateStart.Tag?.ToString() & "", "Venue booked for selected dates.")
+            isValid = False
+        Else
+            ClearFieldError(dtpEventDateStart, dtpEventDateStart.Tag?.ToString() & "")
         End If
 
         Dim eventStartTime As DateTime, eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime
@@ -306,52 +374,51 @@ Public Class HelperValidation
            Not DateTime.TryParse(OpeningHours, openingTime) OrElse
            Not DateTime.TryParse(ClosingHours, closingTime) Then
 
-            MessageBox.Show("Invalid time format. Please select a valid time.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
+            MarkFieldInvalid(cbStartHour, cbStartHour.Tag?.ToString() & "", "Invalid time format.")
+            isValid = False
+        Else
+            ClearFieldError(cbStartHour, cbStartHour.Tag?.ToString() & "")
         End If
 
         If (eventStartTime < openingTime OrElse eventEndTime > closingTime) AndAlso Not chkOutsideAvailableHours.Checked Then
-            MessageBox.Show("Your selected time is outside the venue's available hours. To proceed, either adjust your time or check 'Book outside available hours' to accept the extra charge.", "Time Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
+            MarkFieldInvalid(chkOutsideAvailableHours, chkOutsideAvailableHours.Tag?.ToString() & "", "Time outside available hours.")
+            isValid = False
+        Else
+            ClearFieldError(chkOutsideAvailableHours, chkOutsideAvailableHours.Tag?.ToString() & "")
         End If
 
-        Return True
+        Return isValid
     End Function
 
-    Public Shared Sub PreventBookedDate(ByVal picker As DateTimePicker, ByVal bookedDates As List(Of Date), ByVal lblDateWarning As Label)
+    ' ------------------ Prevent Booked Date in Date Picker ------------------
+    Public Shared Sub PreventBookedDate(picker As DateTimePicker, bookedDates As List(Of Date), lblDateWarning As Label)
         If bookedDates.Contains(picker.Value.Date) Then
             lblDateWarning.Text = "Oops! That date is unavailable. Please choose another."
             lblDateWarning.Visible = True
 
-            Dim result As DialogResult = MessageBox.Show($"The selected date ({picker.Value.ToShortDateString()}) is unavailable. Would you like to select the next available date?",
-                                                      "Booking Conflict", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-            If result = DialogResult.Yes Then
-                Dim nextAvailableDate As Date = picker.Value.AddDays(1)
-                While bookedDates.Contains(nextAvailableDate)
-                    nextAvailableDate = nextAvailableDate.AddDays(1)
-                End While
-                picker.Value = nextAvailableDate
-            Else
-                picker.Value = Date.Today
-            End If
-
+            Dim nextAvailableDate As Date = picker.Value.AddDays(1)
+            While bookedDates.Contains(nextAvailableDate)
+                nextAvailableDate = nextAvailableDate.AddDays(1)
+            End While
+            picker.Value = nextAvailableDate
             lblDateWarning.Visible = False
         End If
     End Sub
 
-    Public Shared Function ValidateCustomerAge(ByVal dtpBirthday As DateTimePicker) As Boolean
+    ' ------------------ Validate Customer Age ------------------
+    Public Shared Function ValidateCustomerAge(dtpBirthday As DateTimePicker) As Boolean
         Dim birthDate As Date = dtpBirthday.Value
         Dim today As Date = Date.Today
         Dim age As Integer = today.Year - birthDate.Year
         If birthDate > today.AddYears(-age) Then age -= 1
 
         If age < 18 Then
-            MessageBox.Show("Only individuals aged 18 or older can book. If you're below 18, a parent or guardian must handle the booking.",
-                        "Age Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MarkFieldInvalid(dtpBirthday, dtpBirthday.Tag?.ToString() & "", "Must be 18 or older to book.")
             Return False
         End If
+
+        ClearFieldError(dtpBirthday, dtpBirthday.Tag?.ToString() & "")
         Return True
     End Function
-
 
 End Class

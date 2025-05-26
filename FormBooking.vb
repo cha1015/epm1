@@ -56,18 +56,17 @@ Public Class FormBooking
         dtpEventDateEnd.Enabled = False
         lblEventDatePaymentContainer.Text = dtpEventDateStart.Value.ToShortDateString()
 
-        lblPricePerDayContainer.AutoSize = False
-        lblPricePerDayContainer.MaximumSize = New Size(pnlEventInfo.Width - 20, 0)
-        lblPricePerDayContainer.Width = pnlEventInfo.Width - 20
+        'lblPricePerDayContainer.AutoSize = False
+        'lblPricePerDayContainer.MaximumSize = New Size(pnlEventInfo.Width - 5, 0)
+        'lblPricePerDayContainer.Width = pnlEventInfo.Width - 5
 
-        lblAvailableDaysContainer.AutoSize = False
-        lblAvailableDaysContainer.MaximumSize = New Size(pnlEventInfo.Width - 20, 0)
-        lblAvailableDaysContainer.Width = pnlEventInfo.Width - 20
+        'lblAvailableDaysContainer.AutoSize = False
+        'lblAvailableDaysContainer.MaximumSize = New Size(pnlEventInfo.Width - 5, 0)
+        'lblAvailableDaysContainer.Width = pnlEventInfo.Width - 5
 
-        lblDescriptionContainer.AutoSize = False
-        lblDescriptionContainer.Size = New Size(pnlEventInfo.Width - 20, 0)
-        lblDescriptionContainer.MaximumSize = New Size(pnlEventInfo.Width - 20, 0)
-
+        'lblDescriptionContainer.AutoSize = False
+        'lblDescriptionContainer.Size = New Size(pnlEventInfo.Width - 5, 0)
+        'lblDescriptionContainer.MaximumSize = New Size(pnlEventInfo.Width - 5, 0)
 
         HelperDatabase.PopulateEventTypeCombo(EventPlaceName, cbEventType)
         bookedDates = HelperDatabase.LoadBookedDates(PlaceId)
@@ -110,7 +109,11 @@ Public Class FormBooking
                                                        HelperValidation.PreventBookedDate(dtpEventDateStart, bookedDates, lblDateWarning)
                                                    End Sub
 
-
+        HelperPrice.UpdateTotalPrice(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
+                      chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
+                      cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
+                      dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity, BasePricePerDay,
+                      lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
     End Sub
     Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs) Handles dtpBirthday.ValueChanged
         Dim birthDate As Date = dtpBirthday.Value
