@@ -12,4 +12,8 @@
     Private Sub btnBack_Click(sender As Object, e As EventArgs)
         HelperNavigation.GoBack(Me, btnNext, btnBack)
     End Sub
+
+    Private Sub FormCustomerAdminInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
 End Class

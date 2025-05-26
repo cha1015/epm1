@@ -6,6 +6,7 @@ Imports System.Text.RegularExpressions
 Public Class FormSignUp
 
     Private passwordVisible As Boolean = True
+
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HideErrorLabels()
         txtAdminCode.Visible = False
