@@ -400,4 +400,12 @@ Public Class FormBooking
             finalTotalPrice += additionalCharges
         End If
     End Sub
+
+    Private Sub tpBookingDetails_Click(sender As Object, e As EventArgs) Handles tpBookingDetails.Click
+
+    End Sub
+
+    Private Sub tpPaymentDetails_Click(sender As Object, e As EventArgs) Handles tpPaymentDetails.Click
+
+    End Sub
 End Class

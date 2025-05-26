@@ -41,6 +41,7 @@ Partial Class FormBooking
         Me.lblDescription = New System.Windows.Forms.Label()
         Me.tcDetails = New System.Windows.Forms.TabControl()
         Me.tpBookingDetails = New System.Windows.Forms.TabPage()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.lblDateWarning = New System.Windows.Forms.Label()
         Me.lblBeyondAvailabilityFee = New System.Windows.Forms.Label()
         Me.lblCapacityExceedanceFee = New System.Windows.Forms.Label()
@@ -56,6 +57,7 @@ Partial Class FormBooking
         Me.cbEventType = New System.Windows.Forms.ComboBox()
         Me.lblNumGuests = New System.Windows.Forms.Label()
         Me.lblEventTimeEnd = New System.Windows.Forms.Label()
+        Me.txtTotalPrice = New System.Windows.Forms.TextBox()
         Me.lblEventTimeStart = New System.Windows.Forms.Label()
         Me.lblEventDateStart = New System.Windows.Forms.Label()
         Me.lblTime = New System.Windows.Forms.Label()
@@ -102,8 +104,6 @@ Partial Class FormBooking
         Me.lblCustomerContainer = New System.Windows.Forms.Label()
         Me.lblCustomerName = New System.Windows.Forms.Label()
         Me.pb = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtTotalPrice = New System.Windows.Forms.TextBox()
         Me.Panel1.SuspendLayout()
         Me.tcDetails.SuspendLayout()
         Me.tpBookingDetails.SuspendLayout()
@@ -114,18 +114,20 @@ Partial Class FormBooking
         '
         'btnNext
         '
-        Me.btnNext.Location = New System.Drawing.Point(60, 13)
+        Me.btnNext.Location = New System.Drawing.Point(271, 38)
+        Me.btnNext.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(42, 23)
+        Me.btnNext.Size = New System.Drawing.Size(56, 28)
         Me.btnNext.TabIndex = 89
         Me.btnNext.Text = "→"
         Me.btnNext.UseVisualStyleBackColor = True
         '
         'btnBack
         '
-        Me.btnBack.Location = New System.Drawing.Point(12, 12)
+        Me.btnBack.Location = New System.Drawing.Point(207, 37)
+        Me.btnBack.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnBack.Name = "btnBack"
-        Me.btnBack.Size = New System.Drawing.Size(42, 23)
+        Me.btnBack.Size = New System.Drawing.Size(56, 28)
         Me.btnBack.TabIndex = 88
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
@@ -147,148 +149,163 @@ Partial Class FormBooking
         Me.Panel1.Controls.Add(Me.lblFeaturesContainer)
         Me.Panel1.Controls.Add(Me.lblDescriptionContainer)
         Me.Panel1.Controls.Add(Me.lblDescription)
-        Me.Panel1.Location = New System.Drawing.Point(24, 227)
+        Me.Panel1.Location = New System.Drawing.Point(32, 308)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(321, 250)
+        Me.Panel1.Size = New System.Drawing.Size(375, 280)
         Me.Panel1.TabIndex = 91
         '
         'lblAvailableDaysContainer
         '
         Me.lblAvailableDaysContainer.AutoSize = True
-        Me.lblAvailableDaysContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAvailableDaysContainer.Location = New System.Drawing.Point(184, 107)
+        Me.lblAvailableDaysContainer.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAvailableDaysContainer.Location = New System.Drawing.Point(192, 134)
+        Me.lblAvailableDaysContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblAvailableDaysContainer.Name = "lblAvailableDaysContainer"
-        Me.lblAvailableDaysContainer.Size = New System.Drawing.Size(61, 19)
+        Me.lblAvailableDaysContainer.Size = New System.Drawing.Size(73, 16)
         Me.lblAvailableDaysContainer.TabIndex = 38
         Me.lblAvailableDaysContainer.Text = "Available:"
         '
         'lblPlaceIDContainer
         '
         Me.lblPlaceIDContainer.AutoSize = True
-        Me.lblPlaceIDContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPlaceIDContainer.Location = New System.Drawing.Point(285, 3)
+        Me.lblPlaceIDContainer.Font = New System.Drawing.Font("Poppins", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPlaceIDContainer.Location = New System.Drawing.Point(327, 24)
+        Me.lblPlaceIDContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPlaceIDContainer.Name = "lblPlaceIDContainer"
-        Me.lblPlaceIDContainer.Size = New System.Drawing.Size(16, 19)
+        Me.lblPlaceIDContainer.Size = New System.Drawing.Size(18, 23)
         Me.lblPlaceIDContainer.TabIndex = 16
         Me.lblPlaceIDContainer.Text = "0"
         '
         'lblEventPlace
         '
         Me.lblEventPlace.AutoSize = True
-        Me.lblEventPlace.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventPlace.Location = New System.Drawing.Point(3, 7)
+        Me.lblEventPlace.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventPlace.Location = New System.Drawing.Point(19, 26)
+        Me.lblEventPlace.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventPlace.Name = "lblEventPlace"
-        Me.lblEventPlace.Size = New System.Drawing.Size(72, 19)
+        Me.lblEventPlace.Size = New System.Drawing.Size(87, 16)
         Me.lblEventPlace.TabIndex = 9
         Me.lblEventPlace.Text = "Event Place"
         '
         'lblPlaceID
         '
         Me.lblPlaceID.AutoSize = True
-        Me.lblPlaceID.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPlaceID.Location = New System.Drawing.Point(184, 6)
+        Me.lblPlaceID.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPlaceID.Location = New System.Drawing.Point(192, 24)
+        Me.lblPlaceID.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPlaceID.Name = "lblPlaceID"
-        Me.lblPlaceID.Size = New System.Drawing.Size(53, 19)
+        Me.lblPlaceID.Size = New System.Drawing.Size(63, 16)
         Me.lblPlaceID.TabIndex = 8
         Me.lblPlaceID.Text = "Place ID"
         '
         'lblCapacity
         '
         Me.lblCapacity.AutoSize = True
-        Me.lblCapacity.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCapacity.Location = New System.Drawing.Point(3, 44)
+        Me.lblCapacity.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCapacity.Location = New System.Drawing.Point(19, 76)
+        Me.lblCapacity.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCapacity.Name = "lblCapacity"
-        Me.lblCapacity.Size = New System.Drawing.Size(58, 19)
+        Me.lblCapacity.Size = New System.Drawing.Size(65, 16)
         Me.lblCapacity.TabIndex = 11
         Me.lblCapacity.Text = "Capacity"
         '
         'lblHoursContainer
         '
         Me.lblHoursContainer.AutoSize = True
-        Me.lblHoursContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblHoursContainer.Location = New System.Drawing.Point(3, 107)
+        Me.lblHoursContainer.Font = New System.Drawing.Font("Poppins", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblHoursContainer.Location = New System.Drawing.Point(19, 147)
+        Me.lblHoursContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblHoursContainer.Name = "lblHoursContainer"
-        Me.lblHoursContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblHoursContainer.Size = New System.Drawing.Size(17, 23)
         Me.lblHoursContainer.TabIndex = 36
         Me.lblHoursContainer.Text = "-"
         '
         'lblPricePerDayContainer
         '
         Me.lblPricePerDayContainer.AutoSize = True
-        Me.lblPricePerDayContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPricePerDayContainer.Location = New System.Drawing.Point(285, 44)
+        Me.lblPricePerDayContainer.Font = New System.Drawing.Font("Poppins", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPricePerDayContainer.Location = New System.Drawing.Point(327, 61)
+        Me.lblPricePerDayContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPricePerDayContainer.Name = "lblPricePerDayContainer"
-        Me.lblPricePerDayContainer.Size = New System.Drawing.Size(16, 19)
+        Me.lblPricePerDayContainer.Size = New System.Drawing.Size(18, 23)
         Me.lblPricePerDayContainer.TabIndex = 18
         Me.lblPricePerDayContainer.Text = "0"
         '
         'lblCapacityContainer
         '
         Me.lblCapacityContainer.AutoSize = True
-        Me.lblCapacityContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCapacityContainer.Location = New System.Drawing.Point(75, 44)
+        Me.lblCapacityContainer.Font = New System.Drawing.Font("Poppins", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCapacityContainer.Location = New System.Drawing.Point(115, 61)
+        Me.lblCapacityContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCapacityContainer.Name = "lblCapacityContainer"
-        Me.lblCapacityContainer.Size = New System.Drawing.Size(16, 19)
+        Me.lblCapacityContainer.Size = New System.Drawing.Size(18, 23)
         Me.lblCapacityContainer.TabIndex = 17
         Me.lblCapacityContainer.Text = "0"
         '
         'lblPricePerDay
         '
         Me.lblPricePerDay.AutoSize = True
-        Me.lblPricePerDay.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPricePerDay.Location = New System.Drawing.Point(184, 44)
+        Me.lblPricePerDay.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPricePerDay.Location = New System.Drawing.Point(192, 61)
+        Me.lblPricePerDay.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPricePerDay.Name = "lblPricePerDay"
-        Me.lblPricePerDay.Size = New System.Drawing.Size(81, 19)
+        Me.lblPricePerDay.Size = New System.Drawing.Size(95, 16)
         Me.lblPricePerDay.TabIndex = 12
         Me.lblPricePerDay.Text = "Price per Day"
         '
         'lblFeatures
         '
         Me.lblFeatures.AutoSize = True
-        Me.lblFeatures.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblFeatures.Location = New System.Drawing.Point(3, 138)
+        Me.lblFeatures.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFeatures.Location = New System.Drawing.Point(19, 176)
+        Me.lblFeatures.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFeatures.Name = "lblFeatures"
-        Me.lblFeatures.Size = New System.Drawing.Size(57, 19)
+        Me.lblFeatures.Size = New System.Drawing.Size(64, 16)
         Me.lblFeatures.TabIndex = 15
         Me.lblFeatures.Text = "Features"
         '
         'lblAvailability
         '
         Me.lblAvailability.AutoSize = True
-        Me.lblAvailability.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAvailability.Location = New System.Drawing.Point(3, 84)
+        Me.lblAvailability.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAvailability.Location = New System.Drawing.Point(20, 126)
+        Me.lblAvailability.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblAvailability.Name = "lblAvailability"
-        Me.lblAvailability.Size = New System.Drawing.Size(68, 19)
+        Me.lblAvailability.Size = New System.Drawing.Size(86, 16)
         Me.lblAvailability.TabIndex = 33
         Me.lblAvailability.Text = "Availability"
         '
         'lblFeaturesContainer
         '
         Me.lblFeaturesContainer.AutoSize = True
-        Me.lblFeaturesContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblFeaturesContainer.Location = New System.Drawing.Point(3, 157)
+        Me.lblFeaturesContainer.Font = New System.Drawing.Font("Poppins", 7.2!)
+        Me.lblFeaturesContainer.Location = New System.Drawing.Point(19, 194)
+        Me.lblFeaturesContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFeaturesContainer.Name = "lblFeaturesContainer"
-        Me.lblFeaturesContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblFeaturesContainer.Size = New System.Drawing.Size(17, 23)
         Me.lblFeaturesContainer.TabIndex = 19
         Me.lblFeaturesContainer.Text = "-"
         '
         'lblDescriptionContainer
         '
         Me.lblDescriptionContainer.AutoSize = True
-        Me.lblDescriptionContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDescriptionContainer.Location = New System.Drawing.Point(3, 210)
+        Me.lblDescriptionContainer.Font = New System.Drawing.Font("Poppins", 7.2!)
+        Me.lblDescriptionContainer.Location = New System.Drawing.Point(19, 253)
+        Me.lblDescriptionContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDescriptionContainer.Name = "lblDescriptionContainer"
-        Me.lblDescriptionContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblDescriptionContainer.Size = New System.Drawing.Size(17, 23)
         Me.lblDescriptionContainer.TabIndex = 32
         Me.lblDescriptionContainer.Text = "-"
         '
         'lblDescription
         '
         Me.lblDescription.AutoSize = True
-        Me.lblDescription.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDescription.Location = New System.Drawing.Point(3, 187)
+        Me.lblDescription.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDescription.Location = New System.Drawing.Point(19, 226)
+        Me.lblDescription.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDescription.Name = "lblDescription"
-        Me.lblDescription.Size = New System.Drawing.Size(72, 19)
+        Me.lblDescription.Size = New System.Drawing.Size(86, 16)
         Me.lblDescription.TabIndex = 31
         Me.lblDescription.Text = "Description"
         '
@@ -297,15 +314,17 @@ Partial Class FormBooking
         Me.tcDetails.Controls.Add(Me.tpBookingDetails)
         Me.tcDetails.Controls.Add(Me.tpCustomerDetails)
         Me.tcDetails.Controls.Add(Me.tpPaymentDetails)
-        Me.tcDetails.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tcDetails.Location = New System.Drawing.Point(351, 42)
+        Me.tcDetails.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tcDetails.Location = New System.Drawing.Point(415, 89)
+        Me.tcDetails.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tcDetails.Name = "tcDetails"
         Me.tcDetails.SelectedIndex = 0
-        Me.tcDetails.Size = New System.Drawing.Size(569, 435)
+        Me.tcDetails.Size = New System.Drawing.Size(808, 495)
         Me.tcDetails.TabIndex = 92
         '
         'tpBookingDetails
         '
+        Me.tpBookingDetails.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpBookingDetails.Controls.Add(Me.Label1)
         Me.tpBookingDetails.Controls.Add(Me.lblDateWarning)
         Me.tpBookingDetails.Controls.Add(Me.lblBeyondAvailabilityFee)
@@ -340,22 +359,33 @@ Partial Class FormBooking
         Me.tpBookingDetails.Controls.Add(Me.chkSinger)
         Me.tpBookingDetails.Controls.Add(Me.chkVideoke)
         Me.tpBookingDetails.Controls.Add(Me.chkDancer)
-        Me.tpBookingDetails.Location = New System.Drawing.Point(4, 28)
+        Me.tpBookingDetails.Location = New System.Drawing.Point(4, 27)
+        Me.tpBookingDetails.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tpBookingDetails.Name = "tpBookingDetails"
-        Me.tpBookingDetails.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpBookingDetails.Size = New System.Drawing.Size(561, 403)
+        Me.tpBookingDetails.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tpBookingDetails.Size = New System.Drawing.Size(800, 464)
         Me.tpBookingDetails.TabIndex = 0
         Me.tpBookingDetails.Text = "Booking Details"
         Me.tpBookingDetails.UseVisualStyleBackColor = True
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(177, 450)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(0, 18)
+        Me.Label1.TabIndex = 81
         '
         'lblDateWarning
         '
         Me.lblDateWarning.AutoSize = True
         Me.lblDateWarning.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDateWarning.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.lblDateWarning.Location = New System.Drawing.Point(353, 118)
+        Me.lblDateWarning.Location = New System.Drawing.Point(471, 145)
+        Me.lblDateWarning.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDateWarning.Name = "lblDateWarning"
-        Me.lblDateWarning.Size = New System.Drawing.Size(201, 38)
+        Me.lblDateWarning.Size = New System.Drawing.Size(254, 50)
         Me.lblDateWarning.TabIndex = 80
         Me.lblDateWarning.Text = "The selected date - is unavailable. " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Auto-selected:"
         '
@@ -364,9 +394,10 @@ Partial Class FormBooking
         Me.lblBeyondAvailabilityFee.AutoSize = True
         Me.lblBeyondAvailabilityFee.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblBeyondAvailabilityFee.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.lblBeyondAvailabilityFee.Location = New System.Drawing.Point(349, 171)
+        Me.lblBeyondAvailabilityFee.Location = New System.Drawing.Point(465, 210)
+        Me.lblBeyondAvailabilityFee.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblBeyondAvailabilityFee.Name = "lblBeyondAvailabilityFee"
-        Me.lblBeyondAvailabilityFee.Size = New System.Drawing.Size(138, 38)
+        Me.lblBeyondAvailabilityFee.Size = New System.Drawing.Size(174, 50)
         Me.lblBeyondAvailabilityFee.TabIndex = 79
         Me.lblBeyondAvailabilityFee.Text = "Beyond Availability Fee " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(₱17 per minute)"
         '
@@ -375,9 +406,10 @@ Partial Class FormBooking
         Me.lblCapacityExceedanceFee.AutoSize = True
         Me.lblCapacityExceedanceFee.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCapacityExceedanceFee.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.lblCapacityExceedanceFee.Location = New System.Drawing.Point(353, 47)
+        Me.lblCapacityExceedanceFee.Location = New System.Drawing.Point(471, 58)
+        Me.lblCapacityExceedanceFee.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCapacityExceedanceFee.Name = "lblCapacityExceedanceFee"
-        Me.lblCapacityExceedanceFee.Size = New System.Drawing.Size(154, 38)
+        Me.lblCapacityExceedanceFee.Size = New System.Drawing.Size(195, 50)
         Me.lblCapacityExceedanceFee.TabIndex = 78
         Me.lblCapacityExceedanceFee.Text = "Capacity Exceedance Fee " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(₱100 per additional)"
         '
@@ -385,9 +417,11 @@ Partial Class FormBooking
         '
         Me.chkOutsideAvailableHours.AutoSize = True
         Me.chkOutsideAvailableHours.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOutsideAvailableHours.Location = New System.Drawing.Point(353, 210)
+        Me.chkOutsideAvailableHours.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.chkOutsideAvailableHours.Location = New System.Drawing.Point(471, 258)
+        Me.chkOutsideAvailableHours.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkOutsideAvailableHours.Name = "chkOutsideAvailableHours"
-        Me.chkOutsideAvailableHours.Size = New System.Drawing.Size(186, 42)
+        Me.chkOutsideAvailableHours.Size = New System.Drawing.Size(232, 54)
         Me.chkOutsideAvailableHours.TabIndex = 77
         Me.chkOutsideAvailableHours.Text = "Book outside available hours" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(+ extra fee)"
         Me.chkOutsideAvailableHours.UseVisualStyleBackColor = True
@@ -395,10 +429,12 @@ Partial Class FormBooking
         'cbSameDayEvent
         '
         Me.cbSameDayEvent.AutoSize = True
-        Me.cbSameDayEvent.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbSameDayEvent.Location = New System.Drawing.Point(244, 80)
+        Me.cbSameDayEvent.Font = New System.Drawing.Font("Poppins", 7.0!)
+        Me.cbSameDayEvent.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.cbSameDayEvent.Location = New System.Drawing.Point(325, 98)
+        Me.cbSameDayEvent.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbSameDayEvent.Name = "cbSameDayEvent"
-        Me.cbSameDayEvent.Size = New System.Drawing.Size(116, 23)
+        Me.cbSameDayEvent.Size = New System.Drawing.Size(127, 25)
         Me.cbSameDayEvent.TabIndex = 76
         Me.cbSameDayEvent.Text = "Same Day Event"
         Me.cbSameDayEvent.UseVisualStyleBackColor = True
@@ -408,9 +444,10 @@ Partial Class FormBooking
         Me.cbEndAMPM.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbEndAMPM.FormattingEnabled = True
         Me.cbEndAMPM.Items.AddRange(New Object() {"AM", "PM"})
-        Me.cbEndAMPM.Location = New System.Drawing.Point(277, 195)
+        Me.cbEndAMPM.Location = New System.Drawing.Point(369, 240)
+        Me.cbEndAMPM.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbEndAMPM.Name = "cbEndAMPM"
-        Me.cbEndAMPM.Size = New System.Drawing.Size(66, 27)
+        Me.cbEndAMPM.Size = New System.Drawing.Size(87, 33)
         Me.cbEndAMPM.TabIndex = 75
         '
         'cbEndMinutes
@@ -418,9 +455,10 @@ Partial Class FormBooking
         Me.cbEndMinutes.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbEndMinutes.FormattingEnabled = True
         Me.cbEndMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
-        Me.cbEndMinutes.Location = New System.Drawing.Point(205, 195)
+        Me.cbEndMinutes.Location = New System.Drawing.Point(273, 240)
+        Me.cbEndMinutes.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbEndMinutes.Name = "cbEndMinutes"
-        Me.cbEndMinutes.Size = New System.Drawing.Size(66, 27)
+        Me.cbEndMinutes.Size = New System.Drawing.Size(87, 33)
         Me.cbEndMinutes.TabIndex = 74
         '
         'cbEndHour
@@ -428,9 +466,10 @@ Partial Class FormBooking
         Me.cbEndHour.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbEndHour.FormattingEnabled = True
         Me.cbEndHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
-        Me.cbEndHour.Location = New System.Drawing.Point(133, 195)
+        Me.cbEndHour.Location = New System.Drawing.Point(177, 240)
+        Me.cbEndHour.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbEndHour.Name = "cbEndHour"
-        Me.cbEndHour.Size = New System.Drawing.Size(66, 27)
+        Me.cbEndHour.Size = New System.Drawing.Size(87, 33)
         Me.cbEndHour.TabIndex = 73
         '
         'cbStartAMPM
@@ -438,9 +477,10 @@ Partial Class FormBooking
         Me.cbStartAMPM.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbStartAMPM.FormattingEnabled = True
         Me.cbStartAMPM.Items.AddRange(New Object() {"AM", "PM"})
-        Me.cbStartAMPM.Location = New System.Drawing.Point(277, 167)
+        Me.cbStartAMPM.Location = New System.Drawing.Point(369, 206)
+        Me.cbStartAMPM.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbStartAMPM.Name = "cbStartAMPM"
-        Me.cbStartAMPM.Size = New System.Drawing.Size(66, 27)
+        Me.cbStartAMPM.Size = New System.Drawing.Size(87, 33)
         Me.cbStartAMPM.TabIndex = 72
         '
         'cbStartMinutes
@@ -448,9 +488,10 @@ Partial Class FormBooking
         Me.cbStartMinutes.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbStartMinutes.FormattingEnabled = True
         Me.cbStartMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
-        Me.cbStartMinutes.Location = New System.Drawing.Point(205, 167)
+        Me.cbStartMinutes.Location = New System.Drawing.Point(273, 206)
+        Me.cbStartMinutes.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbStartMinutes.Name = "cbStartMinutes"
-        Me.cbStartMinutes.Size = New System.Drawing.Size(66, 27)
+        Me.cbStartMinutes.Size = New System.Drawing.Size(87, 33)
         Me.cbStartMinutes.TabIndex = 71
         '
         'cbStartHour
@@ -458,18 +499,21 @@ Partial Class FormBooking
         Me.cbStartHour.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbStartHour.FormattingEnabled = True
         Me.cbStartHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
-        Me.cbStartHour.Location = New System.Drawing.Point(133, 167)
+        Me.cbStartHour.Location = New System.Drawing.Point(177, 206)
+        Me.cbStartHour.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbStartHour.Name = "cbStartHour"
-        Me.cbStartHour.Size = New System.Drawing.Size(66, 27)
+        Me.cbStartHour.Size = New System.Drawing.Size(87, 33)
         Me.cbStartHour.TabIndex = 70
         '
         'lblEventType
         '
         Me.lblEventType.AutoSize = True
-        Me.lblEventType.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventType.Location = New System.Drawing.Point(6, 17)
+        Me.lblEventType.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventType.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblEventType.Location = New System.Drawing.Point(8, 21)
+        Me.lblEventType.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventType.Name = "lblEventType"
-        Me.lblEventType.Size = New System.Drawing.Size(68, 19)
+        Me.lblEventType.Size = New System.Drawing.Size(84, 18)
         Me.lblEventType.TabIndex = 69
         Me.lblEventType.Text = "Event Type"
         '
@@ -477,132 +521,166 @@ Partial Class FormBooking
         '
         Me.cbEventType.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbEventType.FormattingEnabled = True
-        Me.cbEventType.Location = New System.Drawing.Point(133, 9)
+        Me.cbEventType.Location = New System.Drawing.Point(177, 11)
+        Me.cbEventType.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbEventType.Name = "cbEventType"
-        Me.cbEventType.Size = New System.Drawing.Size(210, 27)
+        Me.cbEventType.Size = New System.Drawing.Size(279, 33)
         Me.cbEventType.TabIndex = 68
         '
         'lblNumGuests
         '
         Me.lblNumGuests.AutoSize = True
-        Me.lblNumGuests.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblNumGuests.Location = New System.Drawing.Point(6, 47)
+        Me.lblNumGuests.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNumGuests.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblNumGuests.Location = New System.Drawing.Point(8, 58)
+        Me.lblNumGuests.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblNumGuests.Name = "lblNumGuests"
-        Me.lblNumGuests.Size = New System.Drawing.Size(109, 19)
+        Me.lblNumGuests.Size = New System.Drawing.Size(135, 18)
         Me.lblNumGuests.TabIndex = 50
         Me.lblNumGuests.Text = "Number of Guests"
         '
         'lblEventTimeEnd
         '
         Me.lblEventTimeEnd.AutoSize = True
-        Me.lblEventTimeEnd.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventTimeEnd.Location = New System.Drawing.Point(76, 201)
+        Me.lblEventTimeEnd.Font = New System.Drawing.Font("Poppins", 7.0!)
+        Me.lblEventTimeEnd.ForeColor = System.Drawing.Color.Gray
+        Me.lblEventTimeEnd.Location = New System.Drawing.Point(111, 246)
+        Me.lblEventTimeEnd.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventTimeEnd.Name = "lblEventTimeEnd"
-        Me.lblEventTimeEnd.Size = New System.Drawing.Size(29, 19)
+        Me.lblEventTimeEnd.Size = New System.Drawing.Size(32, 21)
         Me.lblEventTimeEnd.TabIndex = 67
         Me.lblEventTimeEnd.Text = "End"
+        '
+        'txtTotalPrice
+        '
+        Me.txtTotalPrice.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTotalPrice.Location = New System.Drawing.Point(177, 391)
+        Me.txtTotalPrice.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtTotalPrice.Name = "txtTotalPrice"
+        Me.txtTotalPrice.ReadOnly = True
+        Me.txtTotalPrice.Size = New System.Drawing.Size(300, 28)
+        Me.txtTotalPrice.TabIndex = 49
         '
         'lblEventTimeStart
         '
         Me.lblEventTimeStart.AutoSize = True
-        Me.lblEventTimeStart.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventTimeStart.Location = New System.Drawing.Point(76, 171)
+        Me.lblEventTimeStart.Font = New System.Drawing.Font("Poppins", 7.0!)
+        Me.lblEventTimeStart.ForeColor = System.Drawing.Color.Gray
+        Me.lblEventTimeStart.Location = New System.Drawing.Point(111, 209)
+        Me.lblEventTimeStart.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventTimeStart.Name = "lblEventTimeStart"
-        Me.lblEventTimeStart.Size = New System.Drawing.Size(34, 19)
+        Me.lblEventTimeStart.Size = New System.Drawing.Size(37, 21)
         Me.lblEventTimeStart.TabIndex = 66
         Me.lblEventTimeStart.Text = "Start"
         '
         'lblEventDateStart
         '
         Me.lblEventDateStart.AutoSize = True
-        Me.lblEventDateStart.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventDateStart.Location = New System.Drawing.Point(76, 113)
+        Me.lblEventDateStart.Font = New System.Drawing.Font("Poppins", 7.0!)
+        Me.lblEventDateStart.ForeColor = System.Drawing.Color.Gray
+        Me.lblEventDateStart.Location = New System.Drawing.Point(111, 138)
+        Me.lblEventDateStart.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventDateStart.Name = "lblEventDateStart"
-        Me.lblEventDateStart.Size = New System.Drawing.Size(34, 19)
+        Me.lblEventDateStart.Size = New System.Drawing.Size(37, 21)
         Me.lblEventDateStart.TabIndex = 51
         Me.lblEventDateStart.Text = "Start"
         '
         'lblTime
         '
         Me.lblTime.AutoSize = True
-        Me.lblTime.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTime.Location = New System.Drawing.Point(38, 153)
+        Me.lblTime.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTime.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblTime.Location = New System.Drawing.Point(51, 188)
+        Me.lblTime.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblTime.Name = "lblTime"
-        Me.lblTime.Size = New System.Drawing.Size(36, 19)
+        Me.lblTime.Size = New System.Drawing.Size(40, 18)
         Me.lblTime.TabIndex = 65
         Me.lblTime.Text = "Time"
         '
         'lblServicesAvailed
         '
         Me.lblServicesAvailed.AutoSize = True
-        Me.lblServicesAvailed.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblServicesAvailed.Location = New System.Drawing.Point(12, 243)
+        Me.lblServicesAvailed.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblServicesAvailed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblServicesAvailed.Location = New System.Drawing.Point(16, 299)
+        Me.lblServicesAvailed.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblServicesAvailed.Name = "lblServicesAvailed"
-        Me.lblServicesAvailed.Size = New System.Drawing.Size(98, 19)
+        Me.lblServicesAvailed.Size = New System.Drawing.Size(123, 18)
         Me.lblServicesAvailed.TabIndex = 52
         Me.lblServicesAvailed.Text = "Services Availed"
         '
         'lblDate
         '
         Me.lblDate.AutoSize = True
-        Me.lblDate.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDate.Location = New System.Drawing.Point(38, 94)
+        Me.lblDate.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDate.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblDate.Location = New System.Drawing.Point(51, 116)
+        Me.lblDate.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDate.Name = "lblDate"
-        Me.lblDate.Size = New System.Drawing.Size(35, 19)
+        Me.lblDate.Size = New System.Drawing.Size(40, 18)
         Me.lblDate.TabIndex = 64
         Me.lblDate.Text = "Date"
         '
         'lblTotalPrice
         '
         Me.lblTotalPrice.AutoSize = True
-        Me.lblTotalPrice.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotalPrice.Location = New System.Drawing.Point(12, 321)
+        Me.lblTotalPrice.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalPrice.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblTotalPrice.Location = New System.Drawing.Point(16, 395)
+        Me.lblTotalPrice.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblTotalPrice.Name = "lblTotalPrice"
-        Me.lblTotalPrice.Size = New System.Drawing.Size(66, 19)
+        Me.lblTotalPrice.Size = New System.Drawing.Size(90, 18)
         Me.lblTotalPrice.TabIndex = 53
         Me.lblTotalPrice.Text = "Total Price"
         '
         'dtpEventDateEnd
         '
         Me.dtpEventDateEnd.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtpEventDateEnd.Location = New System.Drawing.Point(133, 134)
+        Me.dtpEventDateEnd.Location = New System.Drawing.Point(177, 165)
+        Me.dtpEventDateEnd.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.dtpEventDateEnd.Name = "dtpEventDateEnd"
-        Me.dtpEventDateEnd.Size = New System.Drawing.Size(210, 24)
+        Me.dtpEventDateEnd.Size = New System.Drawing.Size(279, 28)
         Me.dtpEventDateEnd.TabIndex = 63
         '
         'txtNumGuests
         '
         Me.txtNumGuests.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtNumGuests.Location = New System.Drawing.Point(133, 47)
+        Me.txtNumGuests.Location = New System.Drawing.Point(177, 58)
+        Me.txtNumGuests.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtNumGuests.Name = "txtNumGuests"
-        Me.txtNumGuests.Size = New System.Drawing.Size(210, 24)
+        Me.txtNumGuests.Size = New System.Drawing.Size(279, 28)
         Me.txtNumGuests.TabIndex = 48
         '
         'lblEnd
         '
         Me.lblEnd.AutoSize = True
-        Me.lblEnd.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEnd.Location = New System.Drawing.Point(76, 137)
+        Me.lblEnd.Font = New System.Drawing.Font("Poppins", 7.0!)
+        Me.lblEnd.ForeColor = System.Drawing.Color.Gray
+        Me.lblEnd.Location = New System.Drawing.Point(111, 168)
+        Me.lblEnd.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEnd.Name = "lblEnd"
-        Me.lblEnd.Size = New System.Drawing.Size(29, 19)
+        Me.lblEnd.Size = New System.Drawing.Size(32, 21)
         Me.lblEnd.TabIndex = 62
         Me.lblEnd.Text = "End"
         '
         'dtpEventDateStart
         '
         Me.dtpEventDateStart.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtpEventDateStart.Location = New System.Drawing.Point(133, 108)
+        Me.dtpEventDateStart.Location = New System.Drawing.Point(177, 133)
+        Me.dtpEventDateStart.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.dtpEventDateStart.Name = "dtpEventDateStart"
-        Me.dtpEventDateStart.Size = New System.Drawing.Size(210, 24)
+        Me.dtpEventDateStart.Size = New System.Drawing.Size(279, 28)
         Me.dtpEventDateStart.TabIndex = 54
         '
         'chkCatering
         '
         Me.chkCatering.AutoSize = True
         Me.chkCatering.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCatering.Location = New System.Drawing.Point(133, 243)
+        Me.chkCatering.ForeColor = System.Drawing.Color.Gray
+        Me.chkCatering.Location = New System.Drawing.Point(177, 299)
+        Me.chkCatering.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkCatering.Name = "chkCatering"
-        Me.chkCatering.Size = New System.Drawing.Size(172, 23)
+        Me.chkCatering.Size = New System.Drawing.Size(218, 29)
         Me.chkCatering.TabIndex = 55
         Me.chkCatering.Text = "Catering (₱400 per guest)"
         Me.chkCatering.UseVisualStyleBackColor = True
@@ -610,10 +688,12 @@ Partial Class FormBooking
         'lblEventSchedule
         '
         Me.lblEventSchedule.AutoSize = True
-        Me.lblEventSchedule.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventSchedule.Location = New System.Drawing.Point(6, 71)
+        Me.lblEventSchedule.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventSchedule.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblEventSchedule.Location = New System.Drawing.Point(8, 87)
+        Me.lblEventSchedule.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventSchedule.Name = "lblEventSchedule"
-        Me.lblEventSchedule.Size = New System.Drawing.Size(93, 19)
+        Me.lblEventSchedule.Size = New System.Drawing.Size(119, 18)
         Me.lblEventSchedule.TabIndex = 61
         Me.lblEventSchedule.Text = "Event Schedule"
         '
@@ -621,33 +701,39 @@ Partial Class FormBooking
         '
         Me.chkClown.AutoSize = True
         Me.chkClown.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkClown.Location = New System.Drawing.Point(133, 265)
+        Me.chkClown.ForeColor = System.Drawing.Color.Gray
+        Me.chkClown.Location = New System.Drawing.Point(177, 326)
+        Me.chkClown.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkClown.Name = "chkClown"
-        Me.chkClown.Size = New System.Drawing.Size(158, 23)
+        Me.chkClown.Size = New System.Drawing.Size(200, 29)
         Me.chkClown.TabIndex = 56
         Me.chkClown.Text = "Clown (₱200 per guest)"
         Me.chkClown.UseVisualStyleBackColor = True
         '
         'btBookingProceed
         '
-        Me.btBookingProceed.BackColor = System.Drawing.Color.Gainsboro
+        Me.btBookingProceed.BackColor = System.Drawing.Color.Transparent
+        Me.btBookingProceed.BackgroundImage = Global.epm1.My.Resources.Resources.BttnProceed
+        Me.btBookingProceed.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btBookingProceed.FlatAppearance.BorderSize = 0
         Me.btBookingProceed.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btBookingProceed.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btBookingProceed.Location = New System.Drawing.Point(430, 344)
+        Me.btBookingProceed.Location = New System.Drawing.Point(605, 405)
+        Me.btBookingProceed.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btBookingProceed.Name = "btBookingProceed"
-        Me.btBookingProceed.Size = New System.Drawing.Size(124, 36)
+        Me.btBookingProceed.Size = New System.Drawing.Size(160, 35)
         Me.btBookingProceed.TabIndex = 60
-        Me.btBookingProceed.Text = "Proceed"
         Me.btBookingProceed.UseVisualStyleBackColor = False
         '
         'chkSinger
         '
         Me.chkSinger.AutoSize = True
         Me.chkSinger.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkSinger.Location = New System.Drawing.Point(133, 288)
+        Me.chkSinger.ForeColor = System.Drawing.Color.Gray
+        Me.chkSinger.Location = New System.Drawing.Point(177, 354)
+        Me.chkSinger.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkSinger.Name = "chkSinger"
-        Me.chkSinger.Size = New System.Drawing.Size(156, 23)
+        Me.chkSinger.Size = New System.Drawing.Size(196, 29)
         Me.chkSinger.TabIndex = 57
         Me.chkSinger.Text = "Singer (₱140 per guest)"
         Me.chkSinger.UseVisualStyleBackColor = True
@@ -656,9 +742,11 @@ Partial Class FormBooking
         '
         Me.chkVideoke.AutoSize = True
         Me.chkVideoke.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkVideoke.Location = New System.Drawing.Point(353, 276)
+        Me.chkVideoke.ForeColor = System.Drawing.Color.Gray
+        Me.chkVideoke.Location = New System.Drawing.Point(471, 340)
+        Me.chkVideoke.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkVideoke.Name = "chkVideoke"
-        Me.chkVideoke.Size = New System.Drawing.Size(161, 23)
+        Me.chkVideoke.Size = New System.Drawing.Size(203, 29)
         Me.chkVideoke.TabIndex = 59
         Me.chkVideoke.Text = "Videoke (₱20 per guest)"
         Me.chkVideoke.UseVisualStyleBackColor = True
@@ -667,15 +755,18 @@ Partial Class FormBooking
         '
         Me.chkDancer.AutoSize = True
         Me.chkDancer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkDancer.Location = New System.Drawing.Point(353, 255)
+        Me.chkDancer.ForeColor = System.Drawing.Color.Gray
+        Me.chkDancer.Location = New System.Drawing.Point(471, 314)
+        Me.chkDancer.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkDancer.Name = "chkDancer"
-        Me.chkDancer.Size = New System.Drawing.Size(162, 23)
+        Me.chkDancer.Size = New System.Drawing.Size(203, 29)
         Me.chkDancer.TabIndex = 58
         Me.chkDancer.Text = "Dancer (₱140 per guest)"
         Me.chkDancer.UseVisualStyleBackColor = True
         '
         'tpCustomerDetails
         '
+        Me.tpCustomerDetails.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpCustomerDetails.Controls.Add(Me.btnCustomerProceed)
         Me.tpCustomerDetails.Controls.Add(Me.lblName)
         Me.tpCustomerDetails.Controls.Add(Me.dtpBirthday)
@@ -687,55 +778,64 @@ Partial Class FormBooking
         Me.tpCustomerDetails.Controls.Add(Me.txtAddress)
         Me.tpCustomerDetails.Controls.Add(Me.lblAge)
         Me.tpCustomerDetails.Controls.Add(Me.txtAge)
-        Me.tpCustomerDetails.Location = New System.Drawing.Point(4, 28)
+        Me.tpCustomerDetails.Location = New System.Drawing.Point(4, 27)
+        Me.tpCustomerDetails.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tpCustomerDetails.Name = "tpCustomerDetails"
-        Me.tpCustomerDetails.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpCustomerDetails.Size = New System.Drawing.Size(561, 403)
+        Me.tpCustomerDetails.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tpCustomerDetails.Size = New System.Drawing.Size(800, 464)
         Me.tpCustomerDetails.TabIndex = 1
         Me.tpCustomerDetails.Text = "Customer Details"
         Me.tpCustomerDetails.UseVisualStyleBackColor = True
         '
         'btnCustomerProceed
         '
-        Me.btnCustomerProceed.BackColor = System.Drawing.Color.Gainsboro
+        Me.btnCustomerProceed.BackColor = System.Drawing.Color.Transparent
+        Me.btnCustomerProceed.BackgroundImage = Global.epm1.My.Resources.Resources.BttnProceed
+        Me.btnCustomerProceed.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnCustomerProceed.FlatAppearance.BorderSize = 0
         Me.btnCustomerProceed.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCustomerProceed.Location = New System.Drawing.Point(433, 352)
+        Me.btnCustomerProceed.Location = New System.Drawing.Point(605, 405)
+        Me.btnCustomerProceed.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnCustomerProceed.Name = "btnCustomerProceed"
-        Me.btnCustomerProceed.Size = New System.Drawing.Size(110, 34)
+        Me.btnCustomerProceed.Size = New System.Drawing.Size(160, 35)
         Me.btnCustomerProceed.TabIndex = 21
-        Me.btnCustomerProceed.Text = "Proceed"
         Me.btnCustomerProceed.UseVisualStyleBackColor = False
         '
         'lblName
         '
         Me.lblName.AutoSize = True
-        Me.lblName.Location = New System.Drawing.Point(17, 21)
+        Me.lblName.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblName.Location = New System.Drawing.Point(23, 26)
+        Me.lblName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblName.Name = "lblName"
-        Me.lblName.Size = New System.Drawing.Size(42, 19)
+        Me.lblName.Size = New System.Drawing.Size(45, 18)
         Me.lblName.TabIndex = 8
         Me.lblName.Text = "Name"
         '
         'dtpBirthday
         '
-        Me.dtpBirthday.Location = New System.Drawing.Point(87, 51)
+        Me.dtpBirthday.Location = New System.Drawing.Point(116, 63)
+        Me.dtpBirthday.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.dtpBirthday.Name = "dtpBirthday"
-        Me.dtpBirthday.Size = New System.Drawing.Size(454, 24)
+        Me.dtpBirthday.Size = New System.Drawing.Size(604, 25)
         Me.dtpBirthday.TabIndex = 4
         '
         'txtCustomerName
         '
-        Me.txtCustomerName.Location = New System.Drawing.Point(87, 21)
+        Me.txtCustomerName.Location = New System.Drawing.Point(116, 26)
+        Me.txtCustomerName.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtCustomerName.Name = "txtCustomerName"
-        Me.txtCustomerName.Size = New System.Drawing.Size(454, 24)
+        Me.txtCustomerName.Size = New System.Drawing.Size(604, 25)
         Me.txtCustomerName.TabIndex = 0
         '
         'lblBirthday
         '
         Me.lblBirthday.AutoSize = True
-        Me.lblBirthday.Location = New System.Drawing.Point(17, 53)
+        Me.lblBirthday.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblBirthday.Location = New System.Drawing.Point(23, 65)
+        Me.lblBirthday.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblBirthday.Name = "lblBirthday"
-        Me.lblBirthday.Size = New System.Drawing.Size(54, 19)
+        Me.lblBirthday.Size = New System.Drawing.Size(74, 18)
         Me.lblBirthday.TabIndex = 10
         Me.lblBirthday.Text = "Birthday"
         '
@@ -743,55 +843,65 @@ Partial Class FormBooking
         '
         Me.cmbSex.FormattingEnabled = True
         Me.cmbSex.Items.AddRange(New Object() {"Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"})
-        Me.cmbSex.Location = New System.Drawing.Point(87, 111)
+        Me.cmbSex.Location = New System.Drawing.Point(116, 137)
+        Me.cmbSex.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmbSex.Name = "cmbSex"
-        Me.cmbSex.Size = New System.Drawing.Size(454, 27)
+        Me.cmbSex.Size = New System.Drawing.Size(604, 26)
         Me.cmbSex.TabIndex = 5
         '
         'lblAddress
         '
         Me.lblAddress.AutoSize = True
-        Me.lblAddress.Location = New System.Drawing.Point(17, 149)
+        Me.lblAddress.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblAddress.Location = New System.Drawing.Point(23, 183)
+        Me.lblAddress.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblAddress.Name = "lblAddress"
-        Me.lblAddress.Size = New System.Drawing.Size(53, 19)
+        Me.lblAddress.Size = New System.Drawing.Size(67, 18)
         Me.lblAddress.TabIndex = 12
         Me.lblAddress.Text = "Address"
         '
         'lblSex
         '
         Me.lblSex.AutoSize = True
-        Me.lblSex.Location = New System.Drawing.Point(17, 117)
+        Me.lblSex.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblSex.Location = New System.Drawing.Point(23, 144)
+        Me.lblSex.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblSex.Name = "lblSex"
-        Me.lblSex.Size = New System.Drawing.Size(27, 19)
+        Me.lblSex.Size = New System.Drawing.Size(31, 18)
         Me.lblSex.TabIndex = 11
         Me.lblSex.Text = "Sex"
         '
         'txtAddress
         '
-        Me.txtAddress.Location = New System.Drawing.Point(87, 145)
+        Me.txtAddress.Location = New System.Drawing.Point(116, 178)
+        Me.txtAddress.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtAddress.Name = "txtAddress"
-        Me.txtAddress.Size = New System.Drawing.Size(456, 24)
+        Me.txtAddress.Size = New System.Drawing.Size(607, 25)
         Me.txtAddress.TabIndex = 6
         '
         'lblAge
         '
         Me.lblAge.AutoSize = True
-        Me.lblAge.Location = New System.Drawing.Point(17, 85)
+        Me.lblAge.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblAge.Location = New System.Drawing.Point(23, 105)
+        Me.lblAge.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblAge.Name = "lblAge"
-        Me.lblAge.Size = New System.Drawing.Size(30, 19)
+        Me.lblAge.Size = New System.Drawing.Size(33, 18)
         Me.lblAge.TabIndex = 9
         Me.lblAge.Text = "Age"
         '
         'txtAge
         '
-        Me.txtAge.Location = New System.Drawing.Point(87, 81)
+        Me.txtAge.Location = New System.Drawing.Point(116, 100)
+        Me.txtAge.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtAge.Name = "txtAge"
         Me.txtAge.ReadOnly = True
-        Me.txtAge.Size = New System.Drawing.Size(454, 24)
+        Me.txtAge.Size = New System.Drawing.Size(604, 25)
         Me.txtAge.TabIndex = 1
         '
         'tpPaymentDetails
         '
+        Me.tpPaymentDetails.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpPaymentDetails.Controls.Add(Me.btnPlaceBooking)
         Me.tpPaymentDetails.Controls.Add(Me.lblPriceBreakdown)
         Me.tpPaymentDetails.Controls.Add(Me.lblTotalPricePaymentContainer)
@@ -807,34 +917,39 @@ Partial Class FormBooking
         Me.tpPaymentDetails.Controls.Add(Me.lblEventPlacePayment)
         Me.tpPaymentDetails.Controls.Add(Me.lblCustomerContainer)
         Me.tpPaymentDetails.Controls.Add(Me.lblCustomerName)
-        Me.tpPaymentDetails.Location = New System.Drawing.Point(4, 28)
+        Me.tpPaymentDetails.Location = New System.Drawing.Point(4, 27)
+        Me.tpPaymentDetails.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tpPaymentDetails.Name = "tpPaymentDetails"
-        Me.tpPaymentDetails.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpPaymentDetails.Size = New System.Drawing.Size(561, 403)
+        Me.tpPaymentDetails.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tpPaymentDetails.Size = New System.Drawing.Size(800, 464)
         Me.tpPaymentDetails.TabIndex = 2
         Me.tpPaymentDetails.Text = "Payment Details"
         Me.tpPaymentDetails.UseVisualStyleBackColor = True
         '
         'btnPlaceBooking
         '
-        Me.btnPlaceBooking.BackColor = System.Drawing.Color.Gainsboro
+        Me.btnPlaceBooking.BackColor = System.Drawing.Color.Transparent
+        Me.btnPlaceBooking.BackgroundImage = Global.epm1.My.Resources.Resources.BttnProceed
+        Me.btnPlaceBooking.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnPlaceBooking.FlatAppearance.BorderSize = 0
         Me.btnPlaceBooking.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnPlaceBooking.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPlaceBooking.Location = New System.Drawing.Point(406, 344)
+        Me.btnPlaceBooking.Location = New System.Drawing.Point(605, 405)
+        Me.btnPlaceBooking.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnPlaceBooking.Name = "btnPlaceBooking"
-        Me.btnPlaceBooking.Size = New System.Drawing.Size(124, 36)
+        Me.btnPlaceBooking.Size = New System.Drawing.Size(160, 35)
         Me.btnPlaceBooking.TabIndex = 61
-        Me.btnPlaceBooking.Text = "Proceed"
         Me.btnPlaceBooking.UseVisualStyleBackColor = False
         '
         'lblPriceBreakdown
         '
         Me.lblPriceBreakdown.AutoSize = True
         Me.lblPriceBreakdown.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPriceBreakdown.Location = New System.Drawing.Point(355, 12)
+        Me.lblPriceBreakdown.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblPriceBreakdown.Location = New System.Drawing.Point(473, 15)
+        Me.lblPriceBreakdown.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPriceBreakdown.Name = "lblPriceBreakdown"
-        Me.lblPriceBreakdown.Size = New System.Drawing.Size(100, 19)
+        Me.lblPriceBreakdown.Size = New System.Drawing.Size(126, 25)
         Me.lblPriceBreakdown.TabIndex = 48
         Me.lblPriceBreakdown.Text = "Price Breakdown"
         '
@@ -842,9 +957,11 @@ Partial Class FormBooking
         '
         Me.lblTotalPricePaymentContainer.AutoSize = True
         Me.lblTotalPricePaymentContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotalPricePaymentContainer.Location = New System.Drawing.Point(349, 304)
+        Me.lblTotalPricePaymentContainer.ForeColor = System.Drawing.Color.Gray
+        Me.lblTotalPricePaymentContainer.Location = New System.Drawing.Point(411, 357)
+        Me.lblTotalPricePaymentContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblTotalPricePaymentContainer.Name = "lblTotalPricePaymentContainer"
-        Me.lblTotalPricePaymentContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblTotalPricePaymentContainer.Size = New System.Drawing.Size(20, 25)
         Me.lblTotalPricePaymentContainer.TabIndex = 15
         Me.lblTotalPricePaymentContainer.Text = "-"
         '
@@ -852,19 +969,23 @@ Partial Class FormBooking
         '
         Me.lblEventTimePaymentContainer.AutoSize = True
         Me.lblEventTimePaymentContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventTimePaymentContainer.Location = New System.Drawing.Point(172, 224)
+        Me.lblEventTimePaymentContainer.ForeColor = System.Drawing.Color.Gray
+        Me.lblEventTimePaymentContainer.Location = New System.Drawing.Point(229, 276)
+        Me.lblEventTimePaymentContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventTimePaymentContainer.Name = "lblEventTimePaymentContainer"
-        Me.lblEventTimePaymentContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblEventTimePaymentContainer.Size = New System.Drawing.Size(20, 25)
         Me.lblEventTimePaymentContainer.TabIndex = 11
         Me.lblEventTimePaymentContainer.Text = "-"
         '
         'lblEventTimePayment
         '
         Me.lblEventTimePayment.AutoSize = True
-        Me.lblEventTimePayment.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventTimePayment.Location = New System.Drawing.Point(16, 224)
+        Me.lblEventTimePayment.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventTimePayment.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblEventTimePayment.Location = New System.Drawing.Point(21, 276)
+        Me.lblEventTimePayment.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventTimePayment.Name = "lblEventTimePayment"
-        Me.lblEventTimePayment.Size = New System.Drawing.Size(69, 19)
+        Me.lblEventTimePayment.Size = New System.Drawing.Size(84, 18)
         Me.lblEventTimePayment.TabIndex = 10
         Me.lblEventTimePayment.Text = "Event Time"
         '
@@ -872,19 +993,23 @@ Partial Class FormBooking
         '
         Me.lblEventDatePaymentContainer.AutoSize = True
         Me.lblEventDatePaymentContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventDatePaymentContainer.Location = New System.Drawing.Point(172, 178)
+        Me.lblEventDatePaymentContainer.ForeColor = System.Drawing.Color.Gray
+        Me.lblEventDatePaymentContainer.Location = New System.Drawing.Point(229, 219)
+        Me.lblEventDatePaymentContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventDatePaymentContainer.Name = "lblEventDatePaymentContainer"
-        Me.lblEventDatePaymentContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblEventDatePaymentContainer.Size = New System.Drawing.Size(20, 25)
         Me.lblEventDatePaymentContainer.TabIndex = 9
         Me.lblEventDatePaymentContainer.Text = "-"
         '
         'lblEventDatePayment
         '
         Me.lblEventDatePayment.AutoSize = True
-        Me.lblEventDatePayment.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventDatePayment.Location = New System.Drawing.Point(16, 178)
+        Me.lblEventDatePayment.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventDatePayment.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblEventDatePayment.Location = New System.Drawing.Point(21, 219)
+        Me.lblEventDatePayment.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventDatePayment.Name = "lblEventDatePayment"
-        Me.lblEventDatePayment.Size = New System.Drawing.Size(68, 19)
+        Me.lblEventDatePayment.Size = New System.Drawing.Size(84, 18)
         Me.lblEventDatePayment.TabIndex = 8
         Me.lblEventDatePayment.Text = "Event Date"
         '
@@ -892,19 +1017,23 @@ Partial Class FormBooking
         '
         Me.lblNumGuestsPaymentContainer.AutoSize = True
         Me.lblNumGuestsPaymentContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblNumGuestsPaymentContainer.Location = New System.Drawing.Point(172, 132)
+        Me.lblNumGuestsPaymentContainer.ForeColor = System.Drawing.Color.Gray
+        Me.lblNumGuestsPaymentContainer.Location = New System.Drawing.Point(229, 162)
+        Me.lblNumGuestsPaymentContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblNumGuestsPaymentContainer.Name = "lblNumGuestsPaymentContainer"
-        Me.lblNumGuestsPaymentContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblNumGuestsPaymentContainer.Size = New System.Drawing.Size(20, 25)
         Me.lblNumGuestsPaymentContainer.TabIndex = 7
         Me.lblNumGuestsPaymentContainer.Text = "-"
         '
         'lblNumGuestsPayment
         '
         Me.lblNumGuestsPayment.AutoSize = True
-        Me.lblNumGuestsPayment.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblNumGuestsPayment.Location = New System.Drawing.Point(16, 132)
+        Me.lblNumGuestsPayment.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNumGuestsPayment.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblNumGuestsPayment.Location = New System.Drawing.Point(21, 162)
+        Me.lblNumGuestsPayment.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblNumGuestsPayment.Name = "lblNumGuestsPayment"
-        Me.lblNumGuestsPayment.Size = New System.Drawing.Size(109, 19)
+        Me.lblNumGuestsPayment.Size = New System.Drawing.Size(135, 18)
         Me.lblNumGuestsPayment.TabIndex = 6
         Me.lblNumGuestsPayment.Text = "Number of Guests"
         '
@@ -912,19 +1041,23 @@ Partial Class FormBooking
         '
         Me.lblEventTypePaymentContainer.AutoSize = True
         Me.lblEventTypePaymentContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventTypePaymentContainer.Location = New System.Drawing.Point(172, 91)
+        Me.lblEventTypePaymentContainer.ForeColor = System.Drawing.Color.Gray
+        Me.lblEventTypePaymentContainer.Location = New System.Drawing.Point(229, 112)
+        Me.lblEventTypePaymentContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventTypePaymentContainer.Name = "lblEventTypePaymentContainer"
-        Me.lblEventTypePaymentContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblEventTypePaymentContainer.Size = New System.Drawing.Size(20, 25)
         Me.lblEventTypePaymentContainer.TabIndex = 5
         Me.lblEventTypePaymentContainer.Text = "-"
         '
         'lblEventTypePayment
         '
         Me.lblEventTypePayment.AutoSize = True
-        Me.lblEventTypePayment.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventTypePayment.Location = New System.Drawing.Point(16, 91)
+        Me.lblEventTypePayment.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventTypePayment.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblEventTypePayment.Location = New System.Drawing.Point(21, 112)
+        Me.lblEventTypePayment.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventTypePayment.Name = "lblEventTypePayment"
-        Me.lblEventTypePayment.Size = New System.Drawing.Size(68, 19)
+        Me.lblEventTypePayment.Size = New System.Drawing.Size(84, 18)
         Me.lblEventTypePayment.TabIndex = 4
         Me.lblEventTypePayment.Text = "Event Type"
         '
@@ -932,19 +1065,23 @@ Partial Class FormBooking
         '
         Me.lblEventPlacePaymentContainer.AutoSize = True
         Me.lblEventPlacePaymentContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventPlacePaymentContainer.Location = New System.Drawing.Point(172, 45)
+        Me.lblEventPlacePaymentContainer.ForeColor = System.Drawing.Color.Gray
+        Me.lblEventPlacePaymentContainer.Location = New System.Drawing.Point(229, 55)
+        Me.lblEventPlacePaymentContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventPlacePaymentContainer.Name = "lblEventPlacePaymentContainer"
-        Me.lblEventPlacePaymentContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblEventPlacePaymentContainer.Size = New System.Drawing.Size(20, 25)
         Me.lblEventPlacePaymentContainer.TabIndex = 3
         Me.lblEventPlacePaymentContainer.Text = "-"
         '
         'lblEventPlacePayment
         '
         Me.lblEventPlacePayment.AutoSize = True
-        Me.lblEventPlacePayment.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEventPlacePayment.Location = New System.Drawing.Point(16, 45)
+        Me.lblEventPlacePayment.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventPlacePayment.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblEventPlacePayment.Location = New System.Drawing.Point(21, 55)
+        Me.lblEventPlacePayment.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventPlacePayment.Name = "lblEventPlacePayment"
-        Me.lblEventPlacePayment.Size = New System.Drawing.Size(72, 19)
+        Me.lblEventPlacePayment.Size = New System.Drawing.Size(92, 18)
         Me.lblEventPlacePayment.TabIndex = 2
         Me.lblEventPlacePayment.Text = "Event Place"
         '
@@ -952,57 +1089,48 @@ Partial Class FormBooking
         '
         Me.lblCustomerContainer.AutoSize = True
         Me.lblCustomerContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCustomerContainer.Location = New System.Drawing.Point(172, 12)
+        Me.lblCustomerContainer.ForeColor = System.Drawing.Color.Gray
+        Me.lblCustomerContainer.Location = New System.Drawing.Point(229, 15)
+        Me.lblCustomerContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCustomerContainer.Name = "lblCustomerContainer"
-        Me.lblCustomerContainer.Size = New System.Drawing.Size(15, 19)
+        Me.lblCustomerContainer.Size = New System.Drawing.Size(20, 25)
         Me.lblCustomerContainer.TabIndex = 1
         Me.lblCustomerContainer.Text = "-"
         '
         'lblCustomerName
         '
         Me.lblCustomerName.AutoSize = True
-        Me.lblCustomerName.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCustomerName.Location = New System.Drawing.Point(16, 12)
+        Me.lblCustomerName.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCustomerName.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblCustomerName.Location = New System.Drawing.Point(21, 15)
+        Me.lblCustomerName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCustomerName.Name = "lblCustomerName"
-        Me.lblCustomerName.Size = New System.Drawing.Size(63, 19)
+        Me.lblCustomerName.Size = New System.Drawing.Size(79, 18)
         Me.lblCustomerName.TabIndex = 0
         Me.lblCustomerName.Text = "Customer"
         '
         'pb
         '
-        Me.pb.Location = New System.Drawing.Point(24, 42)
+        Me.pb.Location = New System.Drawing.Point(32, 117)
+        Me.pb.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pb.Name = "pb"
-        Me.pb.Size = New System.Drawing.Size(321, 179)
+        Me.pb.Size = New System.Drawing.Size(375, 183)
         Me.pb.TabIndex = 90
         Me.pb.TabStop = False
         '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(133, 366)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(0, 19)
-        Me.Label1.TabIndex = 81
-        '
-        'txtTotalPrice
-        '
-        Me.txtTotalPrice.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalPrice.Location = New System.Drawing.Point(133, 318)
-        Me.txtTotalPrice.Name = "txtTotalPrice"
-        Me.txtTotalPrice.ReadOnly = True
-        Me.txtTotalPrice.Size = New System.Drawing.Size(226, 24)
-        Me.txtTotalPrice.TabIndex = 49
-        '
         'FormBooking
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(944, 501)
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BGbooking
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.ClientSize = New System.Drawing.Size(1259, 617)
         Me.Controls.Add(Me.tcDetails)
         Me.Controls.Add(Me.pb)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormBooking"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormBookingDetails"

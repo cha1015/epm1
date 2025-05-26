@@ -460,5 +460,7 @@ Public Class FormMain
         HelperNavigation.GoBack(Me, btnNext, btnBack)
     End Sub
 
+    Private Sub pnlFilter_Paint(sender As Object, e As PaintEventArgs) Handles pnlFilter.Paint
 
+    End Sub
 End Class

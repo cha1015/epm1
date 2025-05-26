@@ -3,6 +3,8 @@ Imports System.Security.Cryptography
 Imports System.Text
 
 Public Class FormLogIn
+    Private passwordVisible As Boolean = True
+
     Private Sub FormLogIn_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HideErrorLabels()
         ResetFieldIndicators()
@@ -104,7 +106,21 @@ Public Class FormLogIn
     End Sub
 
     Private Sub btnShowPass_Click(sender As Object, e As EventArgs) Handles btnShowPass.Click
-        txtPass.PasswordChar = If(txtPass.PasswordChar = "*"c, ControlChars.NullChar, "*"c)
+
+        passwordVisible = Not passwordVisible
+        btnShowPass.Image = epm1.My.Resources.Resources.BttnHide
+
+        If passwordVisible Then
+            btnShowPass.Image = Nothing
+            txtPass.PasswordChar = ControlChars.NullChar
+            btnShowPass.Image = epm1.My.Resources.Resources.BttnSeek
+        Else
+            txtPass.PasswordChar = "*"c
+            btnShowPass.Image = Nothing
+            btnShowPass.Image = epm1.My.Resources.Resources.BttnHide
+        End If
+
+
     End Sub
 
     Private Sub lnklblSignUp_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklblSignUp.LinkClicked
@@ -142,4 +158,7 @@ Public Class FormLogIn
         HelperNavigation.GoBack(Me, btnNext, btnBack)
     End Sub
 
+    Private Sub lblEmail_Click(sender As Object, e As EventArgs) Handles lblEmail.Click
+
+    End Sub
 End Class
