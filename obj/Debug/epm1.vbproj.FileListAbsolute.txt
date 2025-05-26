@@ -38,7 +38,6 @@ C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.vbproj.AssemblyReference.cac
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormAdminCenter.resources
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormBooking.resources
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormCustomerAdminInfo.resources
-C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormCustomerView.resources
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormLogIn.resources
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormMain.resources
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormSignUp.resources
