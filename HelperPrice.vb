@@ -5,7 +5,7 @@ Public Class HelperPrice
     ' ------------------ Compute Final Price ------------------
     Public Shared Function ComputeFinalPrice(numGuests As Integer, eventPlaceCapacity As Integer, basePricePerDay As Decimal,
                                              dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                             voucherDiscount As Decimal, chkOutsideAvailableHours As CheckBox,
+                                             chkOutsideAvailableHours As CheckBox,
                                              cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
                                              cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
                                              openingHours As String, closingHours As String,
@@ -41,10 +41,6 @@ Public Class HelperPrice
 
         Dim excessGuestCost As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100, 0)
         Dim totalPrice As Decimal = basePricePerDay * totalDays + excessGuestCost + servicesCost + additionalCharges
-
-        If voucherDiscount > 0 Then
-            totalPrice -= totalPrice * voucherDiscount
-        End If
 
         Return totalPrice
     End Function
@@ -101,7 +97,7 @@ Public Class HelperPrice
     ' ------------------ Generate Price Breakdown ------------------
     Public Shared Function GeneratePriceBreakdown(numGuests As Integer, eventPlaceCapacity As Integer,
                                               basePricePerDay As Decimal, totalDays As Integer, servicesCost As Decimal,
-                                              additionalCharges As Decimal, voucherDiscount As Decimal, finalTotalPrice As Decimal) As String
+                                              additionalCharges As Decimal, finalTotalPrice As Decimal) As String
         Dim breakdown As New StringBuilder()
 
         breakdown.AppendLine($"Base Price ({totalDays} day/s): ₱{basePricePerDay * totalDays:F2} - Cost per day for the event place.")
@@ -121,11 +117,6 @@ Public Class HelperPrice
 
         If additionalCharges > 0 Then
             breakdown.AppendLine($"Outside Available Hours Fee: ₱{additionalCharges:F2} - Charges for scheduling beyond normal operating hours.")
-        End If
-
-        If voucherDiscount > 0 Then
-            Dim discountAmount As Decimal = finalTotalPrice * voucherDiscount
-            breakdown.AppendLine($"Voucher Discount ({voucherDiscount * 100}%): -₱{discountAmount:F2} - Discount applied to total price.")
         End If
 
         breakdown.AppendLine($"Total: ₱{finalTotalPrice:F2}")
@@ -155,14 +146,14 @@ Public Class HelperPrice
                                       cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
                                       cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
                                       openingHours As String, closingHours As String, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                      eventPlaceCapacity As Integer, basePricePerDay As Decimal, voucherDiscount As Decimal,
+                                      eventPlaceCapacity As Integer, basePricePerDay As Decimal,
                                       lblTotalPricePaymentContainer As Label, lblPriceBreakdown As Label, txtTotalPrice As TextBox)
 
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then numGuests = 0
 
         Dim finalTotalPrice As Decimal = ComputeFinalPrice(numGuests, eventPlaceCapacity, basePricePerDay,
-                                                       dtpEventDateStart, dtpEventDateEnd, voucherDiscount,
+                                                       dtpEventDateStart, dtpEventDateEnd,
                                                        chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
                                                        cbEndHour, cbEndMinutes, cbEndAMPM, openingHours, closingHours,
                                                        chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
@@ -193,7 +184,7 @@ Public Class HelperPrice
         lblPriceBreakdown.Text = GeneratePriceBreakdown(numGuests, eventPlaceCapacity, basePricePerDay,
                                                      (dtpEventDateEnd.Value - dtpEventDateStart.Value).Days + 1,
                                                      ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked),
-                                                     outsideFees, voucherDiscount, finalTotalPrice)
+                                                     outsideFees, finalTotalPrice)
     End Sub
 
 End Class

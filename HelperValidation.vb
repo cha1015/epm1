@@ -229,9 +229,7 @@ Public Class HelperValidation
 
     Public Shared Function FormatTime(inputTime As String) As String
         Try
-            ' Expect input in the format "h:mm tt", e.g., "9:30 AM" or "12:45 PM".
             Dim parsedTime As DateTime = DateTime.ParseExact(inputTime, "h:mm tt", CultureInfo.InvariantCulture)
-            ' Convert to 24-hour format string, e.g., "09:30:00".
             Return parsedTime.ToString("HH:mm:ss")
         Catch ex As FormatException
             Return String.Empty
@@ -256,6 +254,102 @@ Public Class HelperValidation
             Return False
         End If
 
+        Return True
+    End Function
+
+    Public Shared Function ValidateBookingInputs(ByVal cbEventType As ComboBox, ByVal dtpEventDateStart As DateTimePicker, ByVal dtpEventDateEnd As DateTimePicker,
+                                               ByVal cbStartHour As ComboBox, ByVal cbStartMinutes As ComboBox, ByVal cbStartAMPM As ComboBox,
+                                               ByVal cbEndHour As ComboBox, ByVal cbEndMinutes As ComboBox, ByVal cbEndAMPM As ComboBox,
+                                               ByVal chkOutsideAvailableHours As CheckBox, ByVal OpeningHours As String, ByVal ClosingHours As String,
+                                               ByVal PlaceId As Integer) As Boolean
+
+        If String.IsNullOrWhiteSpace(cbEventType.Text) Then
+            MessageBox.Show("Please select an event type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        If dtpEventDateStart.Value.Date < Date.Today Then
+            MessageBox.Show("Event start date cannot be in the past.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        If dtpEventDateEnd.Value.Date < dtpEventDateStart.Value.Date Then
+            MessageBox.Show("Event end date must be after the start date.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        If String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbStartAMPM.Text) OrElse
+           String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
+
+            MessageBox.Show("Please complete the event time selection.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+        Dim checkQuery As String = "SELECT COUNT(*) FROM Bookings WHERE place_id = @PlaceId AND (event_date BETWEEN @EventDateStart AND @EventDateEnd)"
+        Dim checkParams As New Dictionary(Of String, Object) From {
+            {"@PlaceId", PlaceId},
+            {"@EventDateStart", dtpEventDateStart.Value.Date},
+            {"@EventDateEnd", dtpEventDateEnd.Value.Date}
+        }
+        Dim existingBookings As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkQuery, checkParams))
+        If existingBookings > 0 Then
+            MessageBox.Show("This event place is already booked during your selected date range. Please choose a different date or venue.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        Dim eventStartTime As DateTime, eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime
+        Dim timeFormat As String = "h:mm tt"
+
+        If Not DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", timeFormat,
+                                      CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) OrElse
+           Not DateTime.TryParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", timeFormat,
+                                      CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) OrElse
+           Not DateTime.TryParse(OpeningHours, openingTime) OrElse
+           Not DateTime.TryParse(ClosingHours, closingTime) Then
+
+            MessageBox.Show("Invalid time format. Please select a valid time.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        If (eventStartTime < openingTime OrElse eventEndTime > closingTime) AndAlso Not chkOutsideAvailableHours.Checked Then
+            MessageBox.Show("Your selected time is outside the venue's available hours. To proceed, either adjust your time or check 'Book outside available hours' to accept the extra charge.", "Time Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
+
+        Return True
+    End Function
+
+    Public Shared Sub PreventBookedDate(ByVal picker As DateTimePicker, ByVal bookedDates As List(Of Date), ByVal lblDateWarning As Label)
+        If bookedDates.Contains(picker.Value.Date) Then
+            lblDateWarning.Text = "Oops! That date is unavailable. Please choose another."
+            lblDateWarning.Visible = True
+
+            Dim result As DialogResult = MessageBox.Show($"The selected date ({picker.Value.ToShortDateString()}) is unavailable. Would you like to select the next available date?",
+                                                      "Booking Conflict", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+            If result = DialogResult.Yes Then
+                Dim nextAvailableDate As Date = picker.Value.AddDays(1)
+                While bookedDates.Contains(nextAvailableDate)
+                    nextAvailableDate = nextAvailableDate.AddDays(1)
+                End While
+                picker.Value = nextAvailableDate
+            Else
+                picker.Value = Date.Today
+            End If
+
+            lblDateWarning.Visible = False
+        End If
+    End Sub
+
+    Public Shared Function ValidateCustomerAge(ByVal dtpBirthday As DateTimePicker) As Boolean
+        Dim birthDate As Date = dtpBirthday.Value
+        Dim today As Date = Date.Today
+        Dim age As Integer = today.Year - birthDate.Year
+        If birthDate > today.AddYears(-age) Then age -= 1
+
+        If age < 18 Then
+            MessageBox.Show("Only individuals aged 18 or older can book. If you're below 18, a parent or guardian must handle the booking.",
+                        "Age Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End If
         Return True
     End Function
 
