@@ -1,7 +1,8 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.Globalization
+﻿Imports System
 Imports System.Text
+Imports System.Globalization
 Imports System.IO
+Imports MySql.Data.MySqlClient
 
 Public Class FormBooking
     ' ------------------ Properties ------------------
@@ -205,8 +206,8 @@ Public Class FormBooking
                                                                    cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
                                                                    chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
 
-        Label1.Text = "₱" & finalTotalPrice.ToString("F2")
-        lblTotalPricePaymentContainer.Text = Label1.Text
+        txtTotalPrice.Text = "₱" & finalTotalPrice.ToString("F2")
+        lblTotalPricePaymentContainer.Text = txtTotalPrice.Text
 
         Dim breakdown As New StringBuilder()
         breakdown.AppendLine($"Base Price: ₱{BasePricePerDay:F2}")
@@ -217,7 +218,7 @@ Public Class FormBooking
         If extraServicesCost > 0 Then breakdown.AppendLine($"Extra Services: ₱{extraServicesCost:F2}")
         If outsideHoursFee > 0 Then breakdown.AppendLine($"Outside Available Hours Fee: ₱{outsideHoursFee:F2}")
 
-        breakdown.AppendLine($"Final Total Price: {Label1.Text}")
+        breakdown.AppendLine($"Final Total Price: {txtTotalPrice.Text}")
 
         lblPriceBreakdown.Text = breakdown.ToString()
     End Sub
