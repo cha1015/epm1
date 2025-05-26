@@ -205,8 +205,8 @@ Public Class FormBooking
                                                                    cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
                                                                    chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
 
-        txtTotalPrice.Text = "₱" & finalTotalPrice.ToString("F2")
-        lblTotalPricePaymentContainer.Text = txtTotalPrice.Text
+        Label1.Text = "₱" & finalTotalPrice.ToString("F2")
+        lblTotalPricePaymentContainer.Text = Label1.Text
 
         Dim breakdown As New StringBuilder()
         breakdown.AppendLine($"Base Price: ₱{BasePricePerDay:F2}")
@@ -217,7 +217,7 @@ Public Class FormBooking
         If extraServicesCost > 0 Then breakdown.AppendLine($"Extra Services: ₱{extraServicesCost:F2}")
         If outsideHoursFee > 0 Then breakdown.AppendLine($"Outside Available Hours Fee: ₱{outsideHoursFee:F2}")
 
-        breakdown.AppendLine($"Final Total Price: {txtTotalPrice.Text}")
+        breakdown.AppendLine($"Final Total Price: {Label1.Text}")
 
         lblPriceBreakdown.Text = breakdown.ToString()
     End Sub
@@ -247,7 +247,7 @@ Public Class FormBooking
         HelperPrice.UpdateTotalPrice(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke, chkOutsideAvailableHours, cbStartHour,
                                    cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
                                    dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity, BasePricePerDay, VoucherDiscount,
-                                   lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
+                                   lblTotalPricePaymentContainer, lblPriceBreakdown, Label1)
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click

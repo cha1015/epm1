@@ -24,7 +24,6 @@ Partial Class FormBooking
     Private Sub InitializeComponent()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
-        Me.pb = New System.Windows.Forms.PictureBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.lblAvailableDaysContainer = New System.Windows.Forms.Label()
         Me.lblPlaceIDContainer = New System.Windows.Forms.Label()
@@ -57,7 +56,6 @@ Partial Class FormBooking
         Me.cbEventType = New System.Windows.Forms.ComboBox()
         Me.lblNumGuests = New System.Windows.Forms.Label()
         Me.lblEventTimeEnd = New System.Windows.Forms.Label()
-        Me.txtTotalPrice = New System.Windows.Forms.TextBox()
         Me.lblEventTimeStart = New System.Windows.Forms.Label()
         Me.lblEventDateStart = New System.Windows.Forms.Label()
         Me.lblTime = New System.Windows.Forms.Label()
@@ -103,12 +101,15 @@ Partial Class FormBooking
         Me.lblEventPlacePayment = New System.Windows.Forms.Label()
         Me.lblCustomerContainer = New System.Windows.Forms.Label()
         Me.lblCustomerName = New System.Windows.Forms.Label()
-        CType(Me.pb, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pb = New System.Windows.Forms.PictureBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txtTotalPrice = New System.Windows.Forms.TextBox()
         Me.Panel1.SuspendLayout()
         Me.tcDetails.SuspendLayout()
         Me.tpBookingDetails.SuspendLayout()
         Me.tpCustomerDetails.SuspendLayout()
         Me.tpPaymentDetails.SuspendLayout()
+        CType(Me.pb, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btnNext
@@ -128,14 +129,6 @@ Partial Class FormBooking
         Me.btnBack.TabIndex = 88
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
-        '
-        'pb
-        '
-        Me.pb.Location = New System.Drawing.Point(24, 42)
-        Me.pb.Name = "pb"
-        Me.pb.Size = New System.Drawing.Size(321, 179)
-        Me.pb.TabIndex = 90
-        Me.pb.TabStop = False
         '
         'Panel1
         '
@@ -313,6 +306,7 @@ Partial Class FormBooking
         '
         'tpBookingDetails
         '
+        Me.tpBookingDetails.Controls.Add(Me.Label1)
         Me.tpBookingDetails.Controls.Add(Me.lblDateWarning)
         Me.tpBookingDetails.Controls.Add(Me.lblBeyondAvailabilityFee)
         Me.tpBookingDetails.Controls.Add(Me.lblCapacityExceedanceFee)
@@ -507,15 +501,6 @@ Partial Class FormBooking
         Me.lblEventTimeEnd.Size = New System.Drawing.Size(29, 19)
         Me.lblEventTimeEnd.TabIndex = 67
         Me.lblEventTimeEnd.Text = "End"
-        '
-        'txtTotalPrice
-        '
-        Me.txtTotalPrice.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalPrice.Location = New System.Drawing.Point(133, 318)
-        Me.txtTotalPrice.Name = "txtTotalPrice"
-        Me.txtTotalPrice.ReadOnly = True
-        Me.txtTotalPrice.Size = New System.Drawing.Size(226, 24)
-        Me.txtTotalPrice.TabIndex = 49
         '
         'lblEventTimeStart
         '
@@ -983,6 +968,31 @@ Partial Class FormBooking
         Me.lblCustomerName.TabIndex = 0
         Me.lblCustomerName.Text = "Customer"
         '
+        'pb
+        '
+        Me.pb.Location = New System.Drawing.Point(24, 42)
+        Me.pb.Name = "pb"
+        Me.pb.Size = New System.Drawing.Size(321, 179)
+        Me.pb.TabIndex = 90
+        Me.pb.TabStop = False
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(133, 366)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(0, 19)
+        Me.Label1.TabIndex = 81
+        '
+        'txtTotalPrice
+        '
+        Me.txtTotalPrice.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTotalPrice.Location = New System.Drawing.Point(133, 318)
+        Me.txtTotalPrice.Name = "txtTotalPrice"
+        Me.txtTotalPrice.ReadOnly = True
+        Me.txtTotalPrice.Size = New System.Drawing.Size(226, 24)
+        Me.txtTotalPrice.TabIndex = 49
+        '
         'FormBooking
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -996,7 +1006,6 @@ Partial Class FormBooking
         Me.Name = "FormBooking"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormBookingDetails"
-        CType(Me.pb, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.tcDetails.ResumeLayout(False)
@@ -1006,6 +1015,7 @@ Partial Class FormBooking
         Me.tpCustomerDetails.PerformLayout()
         Me.tpPaymentDetails.ResumeLayout(False)
         Me.tpPaymentDetails.PerformLayout()
+        CType(Me.pb, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1044,7 +1054,6 @@ Partial Class FormBooking
     Friend WithEvents cbEventType As ComboBox
     Friend WithEvents lblNumGuests As Label
     Friend WithEvents lblEventTimeEnd As Label
-    Friend WithEvents txtTotalPrice As TextBox
     Friend WithEvents lblEventTimeStart As Label
     Friend WithEvents lblEventDateStart As Label
     Friend WithEvents lblTime As Label
@@ -1091,4 +1100,6 @@ Partial Class FormBooking
     Friend WithEvents lblCustomerName As Label
     Friend WithEvents btnCustomerProceed As Button
     Friend WithEvents lblDateWarning As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents txtTotalPrice As TextBox
 End Class
