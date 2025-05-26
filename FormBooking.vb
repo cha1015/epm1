@@ -247,7 +247,7 @@ Public Class FormBooking
         HelperPrice.UpdateTotalPrice(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke, chkOutsideAvailableHours, cbStartHour,
                                    cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
                                    dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity, BasePricePerDay, VoucherDiscount,
-                                   lblTotalPricePaymentContainer, lblPriceBreakdown, Label1)
+                                   lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
