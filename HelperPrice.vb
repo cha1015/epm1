@@ -187,4 +187,33 @@ Public Class HelperPrice
                                                      outsideFees, finalTotalPrice)
     End Sub
 
+    Public Shared Function GeneratePriceBreakdown(numGuests As Integer, eventPlaceCapacity As Integer,
+                                              basePricePerDay As Decimal, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
+                                              chkOutsideAvailableHours As CheckBox, cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
+                                              cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox, OpeningHours As String, ClosingHours As String,
+                                              chkCatering As CheckBox, chkClown As CheckBox, chkSinger As CheckBox, chkDancer As CheckBox, chkVideoke As CheckBox,
+                                              finalTotalPrice As Decimal) As String
+
+        Dim excessGuestFee As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100, 0)
+        Dim extraServicesCost As Decimal = ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
+
+        Dim outsideHoursFee As Decimal = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked,
+                                                        DateTime.Parse($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"),
+                                                        DateTime.Parse($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"),
+                                                        DateTime.Parse(OpeningHours), DateTime.Parse(ClosingHours))
+
+        Dim breakdown As New StringBuilder()
+        breakdown.AppendLine($"Base Price: ₱{basePricePerDay:F2}")
+        breakdown.AppendLine($"Guests: {numGuests} (Capacity: {eventPlaceCapacity})")
+
+        If excessGuestFee > 0 Then breakdown.AppendLine($"Excess Guest Fee: ₱{excessGuestFee:F2}")
+        If extraServicesCost > 0 Then breakdown.AppendLine($"Extra Services: ₱{extraServicesCost:F2}")
+        If outsideHoursFee > 0 Then breakdown.AppendLine($"Outside Available Hours Fee: ₱{outsideHoursFee:F2}")
+
+        breakdown.AppendLine($"Final Total Price: ₱{finalTotalPrice:F2}")
+
+        Return breakdown.ToString()
+    End Function
+
+
 End Class

@@ -56,18 +56,6 @@ Public Class FormBooking
         dtpEventDateEnd.Enabled = False
         lblEventDatePaymentContainer.Text = dtpEventDateStart.Value.ToShortDateString()
 
-        'lblPricePerDayContainer.AutoSize = False
-        'lblPricePerDayContainer.MaximumSize = New Size(pnlEventInfo.Width - 5, 0)
-        'lblPricePerDayContainer.Width = pnlEventInfo.Width - 5
-
-        'lblAvailableDaysContainer.AutoSize = False
-        'lblAvailableDaysContainer.MaximumSize = New Size(pnlEventInfo.Width - 5, 0)
-        'lblAvailableDaysContainer.Width = pnlEventInfo.Width - 5
-
-        'lblDescriptionContainer.AutoSize = False
-        'lblDescriptionContainer.Size = New Size(pnlEventInfo.Width - 5, 0)
-        'lblDescriptionContainer.MaximumSize = New Size(pnlEventInfo.Width - 5, 0)
-
         HelperDatabase.PopulateEventTypeCombo(EventPlaceName, cbEventType)
         bookedDates = HelperDatabase.LoadBookedDates(PlaceId)
 
@@ -108,6 +96,26 @@ Public Class FormBooking
         AddHandler dtpEventDateStart.ValueChanged, Sub(s, evt)
                                                        HelperValidation.PreventBookedDate(dtpEventDateStart, bookedDates, lblDateWarning)
                                                    End Sub
+
+        ' Parse Opening Hours
+        If Not String.IsNullOrWhiteSpace(OpeningHours) Then
+            Dim parsedOpening As DateTime = DateTime.Parse(OpeningHours)
+            cbStartHour.Text = parsedOpening.ToString("h") ' Extract hour
+            cbStartMinutes.Text = parsedOpening.ToString("mm") ' Extract minutes
+            cbStartAMPM.Text = parsedOpening.ToString("tt") ' Extract AM/PM
+        End If
+
+        ' Parse Closing Hours
+        If Not String.IsNullOrWhiteSpace(ClosingHours) Then
+            Dim parsedClosing As DateTime = DateTime.Parse(ClosingHours)
+            cbEndHour.Text = parsedClosing.ToString("h") ' Extract hour
+            cbEndMinutes.Text = parsedClosing.ToString("mm") ' Extract minutes
+            cbEndAMPM.Text = parsedClosing.ToString("tt") ' Extract AM/PM
+        End If
+
+        If String.IsNullOrWhiteSpace(txtNumGuests.Text) Then
+            txtNumGuests.Text = "1" ' Default to 1 guest so price calculation works
+        End If
 
         HelperPrice.UpdateTotalPrice(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
                       chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
@@ -179,45 +187,27 @@ Public Class FormBooking
         lblEventPlacePaymentContainer.Text = lblEventPlace.Text
         lblEventTypePaymentContainer.Text = cbEventType.Text
         lblNumGuestsPaymentContainer.Text = txtNumGuests.Text
-
         lblEventDatePaymentContainer.Text = If(cbSameDayEvent.Checked, dtpEventDateStart.Value.ToShortDateString(),
-                                           $"{dtpEventDateStart.Value.ToShortDateString()} - {dtpEventDateEnd.Value.ToShortDateString()}")
-
+                                       $"{dtpEventDateStart.Value.ToShortDateString()} - {dtpEventDateEnd.Value.ToShortDateString()}")
         lblEventTimePaymentContainer.Text = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text} - {cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
 
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then numGuests = 0
 
-        Dim excessGuestFee As Decimal = If(numGuests > EventPlaceCapacity, (numGuests - EventPlaceCapacity) * 100, 0)
-        Dim extraServicesCost As Decimal = HelperPrice.ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
-
-        Dim outsideHoursFee As Decimal = HelperPrice.ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked,
-                                                                        DateTime.Parse($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"),
-                                                                        DateTime.Parse($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"),
-                                                                        DateTime.Parse(OpeningHours), DateTime.Parse(ClosingHours))
-
         Dim finalTotalPrice As Decimal = HelperPrice.ComputeFinalPrice(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                                                   dtpEventDateStart, dtpEventDateEnd,
-                                                                   chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                                                                   cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                                                   chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
+                                                               dtpEventDateStart, dtpEventDateEnd,
+                                                               chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
+                                                               cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
+                                                               chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
 
         txtTotalPrice.Text = "₱" & finalTotalPrice.ToString("F2")
         lblTotalPricePaymentContainer.Text = txtTotalPrice.Text
 
-        Dim breakdown As New StringBuilder()
-        breakdown.AppendLine($"Base Price: ₱{BasePricePerDay:F2}")
-        breakdown.AppendLine($"Guests: {numGuests} (Capacity: {EventPlaceCapacity})")
-
-        If excessGuestFee > 0 Then breakdown.AppendLine($"Excess Guest Fee: ₱{excessGuestFee:F2}")
-        If extraServicesCost > 0 Then breakdown.AppendLine($"Extra Services: ₱{extraServicesCost:F2}")
-        If outsideHoursFee > 0 Then breakdown.AppendLine($"Outside Available Hours Fee: ₱{outsideHoursFee:F2}")
-
-        breakdown.AppendLine($"Final Total Price: {txtTotalPrice.Text}")
-
-        lblPriceBreakdown.Text = breakdown.ToString()
+        lblPriceBreakdown.Text = HelperPrice.GeneratePriceBreakdown(numGuests, EventPlaceCapacity, BasePricePerDay,
+                                                                dtpEventDateStart, dtpEventDateEnd, chkOutsideAvailableHours,
+                                                                cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
+                                                                OpeningHours, ClosingHours, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke, finalTotalPrice)
     End Sub
-
 
     Private Sub tcDetails_Selecting(sender As Object, e As TabControlCancelEventArgs) Handles tcDetails.Selecting
         HelperValidation.ValidateBooking(e, tcDetails, tpCustomerDetails, tpPaymentDetails,

@@ -394,7 +394,7 @@ Public Class FormMain
         pnlAccount.Visible = False
         btnSignUp.Visible = True
         btnLogIn.Visible = True
-        btnCustomerView.Visible = False
+        'btnCustomerView.Visible = False
 
         UpdatePanelVisibility()
         Me.Refresh()

@@ -48,7 +48,7 @@ Public Class HelperValidation
 
     ' ------------------ Combined Validation Error Handling ------------------
     ' Combines an asterisk (indicating a required field) with a red highlight on the control.
-    Private Shared Sub MarkFieldInvalid(targetControl As Control, defaultLabelText As String, Optional errorMsg As String = "")
+    Public Shared Sub MarkFieldInvalid(targetControl As Control, defaultLabelText As String, Optional errorMsg As String = "")
         Dim labelIndicator As Label = TryCast(targetControl.Tag, Label)
         If labelIndicator IsNot Nothing Then
             labelIndicator.Text = $"{defaultLabelText} *"

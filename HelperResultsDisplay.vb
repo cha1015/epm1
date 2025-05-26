@@ -68,6 +68,7 @@ Public Class HelperResultsDisplay
                                                          lblCapacity.Size = New Size(panelWidth - 20, 20)
                                                          lblCapacity.Location = New Point(5, 165)
                                                          lblCapacity.Text = "Capacity: " & row("capacity").ToString()
+                                                         lblCapacity.Font = New Font("Poppins", 8)
 
                                                          ' Label for price per day
                                                          Dim lblPrice As New Label()
@@ -75,6 +76,7 @@ Public Class HelperResultsDisplay
                                                          lblPrice.Size = New Size(panelWidth - 20, 20)
                                                          lblPrice.Location = New Point(5, 185)
                                                          lblPrice.Text = "Price per Day: " & row("price_per_day").ToString()
+                                                         lblPrice.Font = New Font("Poppins", 8)
 
                                                          ' Label for event types
                                                          Dim fullEventTypesText As String = row("event_type").ToString()
@@ -89,6 +91,7 @@ Public Class HelperResultsDisplay
                                                          lblEventType.Location = New Point(5, 205)
                                                          lblEventType.Text = "Event Types: " & displayEventTypes
                                                          toolTip.SetToolTip(lblEventType, fullEventTypesText)
+                                                         lblEventType.Font = New Font("Poppins", 8)
 
                                                          ' Label for booking status
                                                          'Dim lblStatus As New Label()
@@ -112,6 +115,8 @@ Public Class HelperResultsDisplay
                                                              btnBook.Tag = row
                                                              AddHandler btnBook.Click, btnBookHandler
                                                              panel.Controls.Add(btnBook)
+                                                             btnBook.FlatStyle = FlatStyle.Flat
+                                                             btnBook.Font = New Font("Poppins", 8)
                                                          Else
                                                              ' Create update and delete buttons for admin
                                                              Dim btnUpdate As New Button()
