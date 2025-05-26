@@ -42,7 +42,7 @@ Partial Class FormCustomerView
         Me.lblPaymentSection.AutoSize = True
         Me.lblPaymentSection.BackColor = System.Drawing.Color.Transparent
         Me.lblPaymentSection.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPaymentSection.Location = New System.Drawing.Point(8, 231)
+        Me.lblPaymentSection.Location = New System.Drawing.Point(39, 231)
         Me.lblPaymentSection.Name = "lblPaymentSection"
         Me.lblPaymentSection.Size = New System.Drawing.Size(101, 19)
         Me.lblPaymentSection.TabIndex = 58
@@ -51,7 +51,7 @@ Partial Class FormCustomerView
         'dgvPaymentHistory
         '
         Me.dgvPaymentHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvPaymentHistory.Location = New System.Drawing.Point(12, 257)
+        Me.dgvPaymentHistory.Location = New System.Drawing.Point(43, 257)
         Me.dgvPaymentHistory.Name = "dgvPaymentHistory"
         Me.dgvPaymentHistory.RowHeadersWidth = 51
         Me.dgvPaymentHistory.Size = New System.Drawing.Size(863, 176)
@@ -60,7 +60,7 @@ Partial Class FormCustomerView
         'btnConfirmPayment
         '
         Me.btnConfirmPayment.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnConfirmPayment.Location = New System.Drawing.Point(821, 471)
+        Me.btnConfirmPayment.Location = New System.Drawing.Point(783, 471)
         Me.btnConfirmPayment.Name = "btnConfirmPayment"
         Me.btnConfirmPayment.Size = New System.Drawing.Size(123, 26)
         Me.btnConfirmPayment.TabIndex = 56
@@ -70,7 +70,7 @@ Partial Class FormCustomerView
         'dgvCurrentBooking
         '
         Me.dgvCurrentBooking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCurrentBooking.Location = New System.Drawing.Point(12, 104)
+        Me.dgvCurrentBooking.Location = New System.Drawing.Point(43, 104)
         Me.dgvCurrentBooking.Name = "dgvCurrentBooking"
         Me.dgvCurrentBooking.RowHeadersWidth = 51
         Me.dgvCurrentBooking.Size = New System.Drawing.Size(863, 124)
@@ -83,7 +83,7 @@ Partial Class FormCustomerView
         Me.btnSelectBooking.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSelectBooking.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSelectBooking.ForeColor = System.Drawing.Color.WhiteSmoke
-        Me.btnSelectBooking.Location = New System.Drawing.Point(12, 439)
+        Me.btnSelectBooking.Location = New System.Drawing.Point(43, 439)
         Me.btnSelectBooking.Name = "btnSelectBooking"
         Me.btnSelectBooking.Size = New System.Drawing.Size(863, 26)
         Me.btnSelectBooking.TabIndex = 55
@@ -93,9 +93,9 @@ Partial Class FormCustomerView
         'txtPaymentAmount
         '
         Me.txtPaymentAmount.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPaymentAmount.Location = New System.Drawing.Point(15, 472)
+        Me.txtPaymentAmount.Location = New System.Drawing.Point(46, 472)
         Me.txtPaymentAmount.Name = "txtPaymentAmount"
-        Me.txtPaymentAmount.Size = New System.Drawing.Size(808, 25)
+        Me.txtPaymentAmount.Size = New System.Drawing.Size(731, 25)
         Me.txtPaymentAmount.TabIndex = 54
         '
         'lblCurrentBooking
@@ -103,7 +103,7 @@ Partial Class FormCustomerView
         Me.lblCurrentBooking.AutoSize = True
         Me.lblCurrentBooking.BackColor = System.Drawing.Color.Transparent
         Me.lblCurrentBooking.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCurrentBooking.Location = New System.Drawing.Point(12, 82)
+        Me.lblCurrentBooking.Location = New System.Drawing.Point(43, 82)
         Me.lblCurrentBooking.Name = "lblCurrentBooking"
         Me.lblCurrentBooking.Size = New System.Drawing.Size(97, 19)
         Me.lblCurrentBooking.TabIndex = 52
