@@ -33,8 +33,6 @@ Partial Class FormCustomerView
         Me.lblRole = New System.Windows.Forms.Label()
         Me.btnEditInformation = New System.Windows.Forms.Button()
         Me.lblUsername = New System.Windows.Forms.Label()
-        Me.btnNext = New System.Windows.Forms.Button()
-        Me.btnPrevious = New System.Windows.Forms.Button()
         Me.btnSwitchView = New System.Windows.Forms.Button()
         CType(Me.dgvPaymentHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCurrentBooking, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -164,26 +162,6 @@ Partial Class FormCustomerView
         Me.lblUsername.TabIndex = 48
         Me.lblUsername.Text = "Guest"
         '
-        'btnNext
-        '
-        Me.btnNext.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!)
-        Me.btnNext.Location = New System.Drawing.Point(783, 228)
-        Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(59, 22)
-        Me.btnNext.TabIndex = 59
-        Me.btnNext.Text = "Next"
-        Me.btnNext.UseVisualStyleBackColor = True
-        '
-        'btnPrevious
-        '
-        Me.btnPrevious.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!)
-        Me.btnPrevious.Location = New System.Drawing.Point(718, 228)
-        Me.btnPrevious.Name = "btnPrevious"
-        Me.btnPrevious.Size = New System.Drawing.Size(59, 22)
-        Me.btnPrevious.TabIndex = 60
-        Me.btnPrevious.Text = "Previous"
-        Me.btnPrevious.UseVisualStyleBackColor = True
-        '
         'btnSwitchView
         '
         Me.btnSwitchView.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!)
@@ -200,8 +178,6 @@ Partial Class FormCustomerView
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.Controls.Add(Me.btnSwitchView)
-        Me.Controls.Add(Me.btnPrevious)
-        Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.lblPaymentSection)
         Me.Controls.Add(Me.dgvPaymentHistory)
         Me.Controls.Add(Me.btnConfirmPayment)
@@ -233,7 +209,5 @@ Partial Class FormCustomerView
     Friend WithEvents lblRole As Label
     Friend WithEvents btnEditInformation As Button
     Friend WithEvents lblUsername As Label
-    Friend WithEvents btnNext As Button
-    Friend WithEvents btnPrevious As Button
     Friend WithEvents btnSwitchView As Button
 End Class

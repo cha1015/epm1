@@ -14,6 +14,12 @@ Public Class FormCustomerView
     Private lblPlaceDetails As Label
     Private btnPrevPlace As Button
     Private btnNextPlace As Button
+    Private lblPaymentId As Label
+    Private lblAmountToPay As Label
+    Private lblAmountPaid As Label
+    Private lblPaymentDate As Label
+    Private lblPaymentStatus As Label
+
 
     ' Place names array
     Private placeNames As String() = {
@@ -43,37 +49,66 @@ Public Class FormCustomerView
         ' Create navigation buttons
         btnPrevPlace = New Button()
         btnPrevPlace.Text = "◀"
-        btnPrevPlace.Size = New Size(50, 122)
-        btnPrevPlace.Location = New Point(0, 1)
+        btnPrevPlace.Size = New Size(40, 40)
+        btnPrevPlace.Location = New Point(10, 42)
         btnPrevPlace.BackColor = Color.LightGray
         btnPrevPlace.FlatStyle = FlatStyle.Flat
+        btnPrevPlace.FlatAppearance.BorderSize = 0
         AddHandler btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
+        AddHandler btnPrevPlace.Paint, AddressOf MakeButtonRound
 
         btnNextPlace = New Button()
         btnNextPlace.Text = "▶"
-        btnNextPlace.Size = New Size(50, 122)
-        btnNextPlace.Location = New Point(811, 1)
+        btnNextPlace.Size = New Size(40, 40)
+        btnNextPlace.Location = New Point(813, 42)
         btnNextPlace.BackColor = Color.LightGray
         btnNextPlace.FlatStyle = FlatStyle.Flat
+        btnNextPlace.FlatAppearance.BorderSize = 0
         AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
+        AddHandler btnNextPlace.Paint, AddressOf MakeButtonRound
 
-        ' Create place name label
-        lblPlaceName = New Label()
-        lblPlaceName.Font = New Font("Arial", 16, FontStyle.Bold)
-        lblPlaceName.ForeColor = Color.White
-        lblPlaceName.BackColor = Color.FromArgb(100, 0, 0, 0) ' Semi-transparent background
-        lblPlaceName.Size = New Size(300, 30)
-        lblPlaceName.Location = New Point(60, 10)
-        lblPlaceName.TextAlign = ContentAlignment.MiddleCenter
+        ' Payment info labels
+        lblPaymentId = New Label()
+        lblPaymentId.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblPaymentId.ForeColor = Color.Black
+        lblPaymentId.BackColor = Color.Transparent
+        lblPaymentId.Size = New Size(300, 20)
+        lblPaymentId.Location = New Point(60, 10)
 
-        ' Create place details label
-        lblPlaceDetails = New Label()
-        lblPlaceDetails.Font = New Font("Arial", 10, FontStyle.Regular)
-        lblPlaceDetails.ForeColor = Color.White
-        lblPlaceDetails.BackColor = Color.FromArgb(100, 0, 0, 0) ' Semi-transparent background
-        lblPlaceDetails.Size = New Size(700, 60)
-        lblPlaceDetails.Location = New Point(60, 50)
-        lblPlaceDetails.TextAlign = ContentAlignment.TopLeft
+        lblAmountToPay = New Label()
+        lblAmountToPay.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblAmountToPay.ForeColor = Color.Black
+        lblAmountToPay.BackColor = Color.Transparent
+        lblAmountToPay.Size = New Size(300, 20)
+        lblAmountToPay.Location = New Point(60, 35)
+
+        lblAmountPaid = New Label()
+        lblAmountPaid.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblAmountPaid.ForeColor = Color.Black
+        lblAmountPaid.BackColor = Color.Transparent
+        lblAmountPaid.Size = New Size(300, 20)
+        lblAmountPaid.Location = New Point(60, 60)
+
+        lblPaymentDate = New Label()
+        lblPaymentDate.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblPaymentDate.ForeColor = Color.Black
+        lblPaymentDate.BackColor = Color.Transparent
+        lblPaymentDate.Size = New Size(300, 20)
+        lblPaymentDate.Location = New Point(400, 10)
+
+        lblPaymentStatus = New Label()
+        lblPaymentStatus.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblPaymentStatus.ForeColor = Color.Black
+        lblPaymentStatus.BackColor = Color.Transparent
+        lblPaymentStatus.Size = New Size(300, 20)
+        lblPaymentStatus.Location = New Point(400, 35)
+
+        pnlPlaceBrowser.Controls.Add(lblPaymentId)
+        pnlPlaceBrowser.Controls.Add(lblAmountToPay)
+        pnlPlaceBrowser.Controls.Add(lblAmountPaid)
+        pnlPlaceBrowser.Controls.Add(lblPaymentDate)
+        pnlPlaceBrowser.Controls.Add(lblPaymentStatus)
+
 
         ' Add controls to panel
         pnlPlaceBrowser.Controls.Add(btnPrevPlace)
@@ -124,12 +159,33 @@ Public Class FormCustomerView
         If currentPlaceIndex > 25 Then currentPlaceIndex = 1
 
         ' Update place name
-        lblPlaceName.Text = $"{currentPlaceIndex}. {placeNames(currentPlaceIndex - 1)}"
 
-        ' Update place details
-        lblPlaceDetails.Text = $"Place ID: {currentPlaceIndex}" & vbCrLf &
-                          $"Venue Type: {placeNames(currentPlaceIndex - 1)}" & vbCrLf &
-                          "Click to view booking options and payment details."
+
+        ' Query for the latest payment for the current place and customer
+        Dim query As String = "SELECT payment_id, amount_to_pay, amount_paid, payment_date, payment_status " &
+                      "FROM payments WHERE customer_id = @customer_id AND place_id = @place_id " &
+                      "ORDER BY payment_date DESC LIMIT 1"
+        Dim parameters As New Dictionary(Of String, Object) From {
+    {"@customer_id", customerId},
+    {"@place_id", currentPlaceIndex}
+}
+        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+
+        If dt.Rows.Count > 0 Then
+            Dim row = dt.Rows(0)
+            lblPaymentId.Text = $"Payment ID: {row("payment_id")}"
+            lblAmountToPay.Text = $"Amount To Pay: {row("amount_to_pay"):C2}"
+            lblAmountPaid.Text = $"Amount Paid: {row("amount_paid"):C2}"
+            lblPaymentDate.Text = $"Payment Date: {If(IsDBNull(row("payment_date")), "-", row("payment_date"))}"
+            lblPaymentStatus.Text = $"Payment Status: {row("payment_status")}"
+        Else
+            lblPaymentId.Text = "Payment ID: -"
+            lblAmountToPay.Text = "Amount To Pay: -"
+            lblAmountPaid.Text = "Amount Paid: -"
+            lblPaymentDate.Text = "Payment Date: -"
+            lblPaymentStatus.Text = "Payment Status: -"
+        End If
+
 
         ' Set background image from resources and stretch it
         Try
@@ -353,6 +409,13 @@ Public Class FormCustomerView
         If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
             e.Handled = True
         End If
+    End Sub
+
+    Private Sub MakeButtonRound(sender As Object, e As PaintEventArgs)
+        Dim btn As Button = CType(sender, Button)
+        Dim path As New Drawing2D.GraphicsPath()
+        path.AddEllipse(0, 0, btn.Width, btn.Height)
+        btn.Region = New Region(path)
     End Sub
 
 End Class
