@@ -78,11 +78,14 @@ Public Class FormSignUp
     Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
         If Not ValidatePersonalInformation() Then
             MessageBox.Show("Please complete all required personal information and ensure you meet the age requirement.",
-                            "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
-        HelperNavigation.GoNext(Me)
+
+        ' Ensure navigation moves to the next tab page upon successful validation
+        tcSignUp.SelectedTab = tpAccountDetails
     End Sub
+
 
     Private Function ValidatePersonalInformation() As Boolean
         Dim isValid As Boolean = True
@@ -113,12 +116,9 @@ Public Class FormSignUp
     Private Sub btnSignUp_Click(sender As Object, e As EventArgs) Handles btnSignUp.Click
         HideErrorLabels()
 
-        If cbRole.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(cbRole.SelectedItem.ToString()) Then
-            HelperValidation.MarkFieldInvalid(cbRole, "Role", "Role is required.")
-            MessageBox.Show("Role is a required field. Please select a role.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        ' Run validation before proceeding
+        If Not ValidateSignUpFields() Then
             Exit Sub
-        Else
-            HelperValidation.ClearFieldError(cbRole, "Role")
         End If
 
         CheckUsernameAvailability(Nothing, Nothing)
@@ -197,12 +197,6 @@ Public Class FormSignUp
         End Try
     End Sub
 
-    Private Function GetAdminCodeFromDatabase(username As String) As String
-        Dim query As String = "SELECT admin_code FROM Users WHERE username = @uname"
-        Dim parameters As New Dictionary(Of String, Object) From {{"@uname", username}}
-        Return Convert.ToString(DBHelper.ExecuteScalarQuery(query, parameters))
-    End Function
-
     Private Sub SetMissingFieldIndicator(txtBox As TextBox)
         txtBox.Text = "Required"
         txtBox.ForeColor = Color.Gray
@@ -240,6 +234,86 @@ Public Class FormSignUp
             Dim hashedBytes As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(password))
             Return Convert.ToBase64String(hashedBytes)
         End Using
+    End Function
+
+    Private Function ValidateSignUpFields() As Boolean
+        Dim isValid As Boolean = True
+
+        ' Validate Personal Information Fields
+        If String.IsNullOrWhiteSpace(txtFirstName.Text) Then
+            HelperValidation.MarkFieldInvalid(txtFirstName, "First Name", "First Name is required.")
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(txtFirstName, "First Name")
+        End If
+
+        If String.IsNullOrWhiteSpace(txtLastName.Text) Then
+            HelperValidation.MarkFieldInvalid(txtLastName, "Last Name", "Last Name is required.")
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(txtLastName, "Last Name")
+        End If
+
+        If String.IsNullOrWhiteSpace(txtAddress.Text) Then
+            HelperValidation.MarkFieldInvalid(txtAddress, "Address", "Address is required.")
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(txtAddress, "Address")
+        End If
+
+        If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then
+            isValid = False
+        End If
+
+        ' Validate Account Details Fields
+        If String.IsNullOrWhiteSpace(txtUsername.Text) Then
+            HelperValidation.MarkFieldInvalid(txtUsername, "Username", "Username is required.")
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(txtUsername, "Username")
+        End If
+
+        If String.IsNullOrWhiteSpace(txtEmail.Text) Then
+            HelperValidation.MarkFieldInvalid(txtEmail, "Email", "Email is required.")
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(txtEmail, "Email")
+        End If
+
+        If String.IsNullOrWhiteSpace(txtPass.Text) Then
+            HelperValidation.MarkFieldInvalid(txtPass, "Password", "Password is required.")
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(txtPass, "Password")
+        End If
+
+        If String.IsNullOrWhiteSpace(txtConfPass.Text) OrElse txtPass.Text <> txtConfPass.Text Then
+            HelperValidation.MarkFieldInvalid(txtConfPass, "Confirm Password", "Passwords must match.")
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(txtConfPass, "Confirm Password")
+        End If
+
+        ' Ensure password meets strength requirements
+        Dim passwordStrength As String = CheckPasswordStrength(txtPass.Text)
+        If passwordStrength.StartsWith("Very Weak") OrElse passwordStrength.StartsWith("Weak Password") Then
+            MessageBox.Show("Your password is not strong enough. Please choose a stronger password.",
+                        "Weak Password", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            lblPwStrength.Text = passwordStrength
+            lblPwStrength.Visible = True
+            isValid = False
+        End If
+
+        ' Validate Role Selection
+        If cbRole.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(cbRole.SelectedItem.ToString()) Then
+            HelperValidation.MarkFieldInvalid(cbRole, "Role", "Role is required.")
+            MessageBox.Show("Role is a required field. Please select a role.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            isValid = False
+        Else
+            HelperValidation.ClearFieldError(cbRole, "Role")
+        End If
+
+        Return isValid
     End Function
 
 

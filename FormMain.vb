@@ -383,22 +383,28 @@ Public Class FormMain
     End Sub
 
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
-        CurrentUser.UserID = -1
-        CurrentUser.Username = String.Empty
-        CurrentUser.Email = String.Empty
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
-        CurrentUser.Role = String.Empty
-        CurrentUser.CustomerId = -1
+        If result = DialogResult.Yes Then
+            CurrentUser.UserID = -1
+            CurrentUser.Username = String.Empty
+            CurrentUser.Email = String.Empty
+            CurrentUser.Role = String.Empty
+            CurrentUser.CustomerId = -1
 
-        pnlSignUpLogIn.Visible = True
-        pnlAccount.Visible = False
-        btnSignUp.Visible = True
-        btnLogIn.Visible = True
-        'btnCustomerView.Visible = False
+            pnlSignUpLogIn.Visible = True
+            pnlAccount.Visible = False
+            btnSignUp.Visible = True
+            btnLogIn.Visible = True
 
-        UpdatePanelVisibility()
-        Me.Refresh()
-        Application.DoEvents()
+            UpdatePanelVisibility()
+            Me.Refresh()
+            Application.DoEvents()
+
+            Dim mainForm As New FormMain()
+            mainForm.Show()
+            Me.Hide() '
+        End If
     End Sub
 
 

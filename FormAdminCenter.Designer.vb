@@ -217,7 +217,7 @@ Partial Class FormAdminCenter
         'lblPendingBookings
         '
         Me.lblPendingBookings.AutoSize = True
-        Me.lblPendingBookings.Location = New System.Drawing.Point(310, 10)
+        Me.lblPendingBookings.Location = New System.Drawing.Point(553, 10)
         Me.lblPendingBookings.Name = "lblPendingBookings"
         Me.lblPendingBookings.Size = New System.Drawing.Size(106, 19)
         Me.lblPendingBookings.TabIndex = 3
@@ -241,9 +241,9 @@ Partial Class FormAdminCenter
         '
         'flpPendingBookings
         '
-        Me.flpPendingBookings.Location = New System.Drawing.Point(314, 32)
+        Me.flpPendingBookings.Location = New System.Drawing.Point(557, 32)
         Me.flpPendingBookings.Name = "flpPendingBookings"
-        Me.flpPendingBookings.Size = New System.Drawing.Size(593, 385)
+        Me.flpPendingBookings.Size = New System.Drawing.Size(350, 385)
         Me.flpPendingBookings.TabIndex = 0
         '
         'tpInvoicesAndPayments

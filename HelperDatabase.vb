@@ -73,7 +73,6 @@ Public Class HelperDatabase
     End Sub
 
 
-
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
         Dim bookedDates As New List(Of Date)
@@ -164,6 +163,24 @@ Public Class HelperDatabase
         Dim query As String = "SELECT event_type, num_guests FROM Bookings WHERE customer_id = @userId ORDER BY booking_id DESC LIMIT 1"
         Dim params As New Dictionary(Of String, Object) From {{"@userId", userId}}
         Return DBHelper.GetDataTable(query, params)
+    End Function
+
+    ' Fetch detailed booking information for the admin view
+    Public Shared Function GetBookingDetails(bookingId As Integer) As DataTable
+        Dim query As String = "SELECT b.booking_id, b.customer_id, e.event_place, et.event_type, b.num_guests, b.event_date, 
+                           b.event_time, b.event_end_time, b.total_price, b.status, b.services_availed, p.payment_status, 
+                           GROUP_CONCAT(bs.service_name) AS services_availed
+                           FROM bookings b
+                           JOIN customers c ON b.customer_id = c.customer_id
+                           JOIN eventplace e ON b.place_id = e.place_id
+                           JOIN eventtypes et ON e.event_type_id = et.event_type_id
+                           LEFT JOIN payments p ON b.booking_id = p.booking_id
+                           LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
+                           WHERE b.booking_id = @booking_id
+                           GROUP BY b.booking_id"
+
+        Dim parameters As New Dictionary(Of String, Object) From {{"@booking_id", bookingId}}
+        Return DBHelper.GetDataTable(query, parameters)
     End Function
 
 

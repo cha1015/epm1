@@ -48,3 +48,4 @@ C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.vbproj.Up2Date
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.exe
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.xml
 C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.pdb
+C:\Users\lenovo-pc\source\repos\epm1\obj\Debug\epm1.FormBookingDetails.resources
