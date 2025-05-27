@@ -564,20 +564,19 @@ Public Class FormCustomerView
 
         Dim row = dgvCurrentBooking.CurrentRow
 
-        ' Defensive: check if columns exist
-        Dim placeName As String = If(row.Cells.Contains("event_place"), row.Cells("event_place").Value?.ToString(), "")
-        Dim bookingId As String = If(row.Cells.Contains("booking_id"), row.Cells("booking_id").Value?.ToString(), "-")
-        Dim eventDate As String = If(row.Cells.Contains("event_date"), row.Cells("event_date").Value?.ToString(), "-")
-        Dim eventTime As String = If(row.Cells.Contains("event_time"), row.Cells("event_time").Value?.ToString(), "-")
-        Dim eventEndTime As String = If(row.Cells.Contains("event_end_time"), row.Cells("event_end_time").Value?.ToString(), "-")
-        Dim status As String = If(row.Cells.Contains("status"), row.Cells("status").Value?.ToString(), "-")
+        Dim placeName As String = If(dgvCurrentBooking.Columns.Contains("event_place"), row.Cells("event_place").Value?.ToString(), "")
+        Dim bookingId As String = If(dgvCurrentBooking.Columns.Contains("booking_id"), row.Cells("booking_id").Value?.ToString(), "-")
+        Dim eventDate As String = If(dgvCurrentBooking.Columns.Contains("event_date"), row.Cells("event_date").Value?.ToString(), "-")
+        Dim eventTime As String = If(dgvCurrentBooking.Columns.Contains("event_time"), row.Cells("event_time").Value?.ToString(), "-")
+        Dim eventEndTime As String = If(dgvCurrentBooking.Columns.Contains("event_end_time"), row.Cells("event_end_time").Value?.ToString(), "-")
+        Dim status As String = If(dgvCurrentBooking.Columns.Contains("status"), row.Cells("status").Value?.ToString(), "-")
 
         lblPlaceName.Text = placeName
         lblPaymentId.Text = $"Booking ID: {bookingId}"
         lblAmountToPay.Text = $"Event Date: {eventDate}"
         lblAmountPaid.Text = $"Time: {eventTime} - {eventEndTime}"
         lblPaymentDate.Text = $"Status: {status}"
-        lblPaymentStatus.Text = "" ' Or use for something else if needed
+        lblPaymentStatus.Text = ""
 
         ' Optionally set the background image as before
         Dim idx As Integer = Array.IndexOf(placeNames, placeName)
@@ -599,6 +598,7 @@ Public Class FormCustomerView
             End Try
         End If
     End Sub
+
 
     Private Sub dgvCurrentBooking_SelectionChanged(sender As Object, e As EventArgs) Handles dgvCurrentBooking.SelectionChanged
         UpdatePanelFromCurrentBooking()
