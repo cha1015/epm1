@@ -139,13 +139,19 @@ Public Class FormCustomerView
 
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        dgvCurrentBooking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        dgvCurrentBooking.Visible = False
+        dgvCurrentBooking.Enabled = False
+
+
+        pnlPlaceBrowser.Visible = True
+
         dgvPaymentHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         customerId = CurrentUser.CustomerId
 
         LoadPaymentHistory()
         SetInitialPlace()
     End Sub
+
 
     Private Sub SetInitialPlace()
         ' Check if customer has any current bookings and set the place accordingly

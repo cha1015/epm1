@@ -51,7 +51,6 @@ Partial Class FormMain
         Me.btnFilter = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.pnlSignUpLogIn.SuspendLayout()
         Me.pnlAccount.SuspendLayout()
         Me.pnlFilter.SuspendLayout()
@@ -75,7 +74,7 @@ Partial Class FormMain
         Me.txtMaxCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxCapacity.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.txtMaxCapacity.Location = New System.Drawing.Point(143, 229)
-        Me.txtMaxCapacity.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtMaxCapacity.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMaxCapacity.Name = "txtMaxCapacity"
         Me.txtMaxCapacity.Size = New System.Drawing.Size(50, 20)
         Me.txtMaxCapacity.TabIndex = 61
@@ -87,7 +86,7 @@ Partial Class FormMain
         Me.pnlSignUpLogIn.Controls.Add(Me.btnLogIn)
         Me.pnlSignUpLogIn.Controls.Add(Me.btnSignUp)
         Me.pnlSignUpLogIn.Location = New System.Drawing.Point(833, 4)
-        Me.pnlSignUpLogIn.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.pnlSignUpLogIn.Margin = New System.Windows.Forms.Padding(2)
         Me.pnlSignUpLogIn.Name = "pnlSignUpLogIn"
         Me.pnlSignUpLogIn.Size = New System.Drawing.Size(100, 63)
         Me.pnlSignUpLogIn.TabIndex = 69
@@ -99,7 +98,7 @@ Partial Class FormMain
         Me.btnLogIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogIn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogIn.Location = New System.Drawing.Point(3, 33)
-        Me.btnLogIn.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnLogIn.Margin = New System.Windows.Forms.Padding(2)
         Me.btnLogIn.Name = "btnLogIn"
         Me.btnLogIn.Size = New System.Drawing.Size(94, 27)
         Me.btnLogIn.TabIndex = 1
@@ -113,7 +112,7 @@ Partial Class FormMain
         Me.btnSignUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSignUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSignUp.Location = New System.Drawing.Point(3, 3)
-        Me.btnSignUp.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnSignUp.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSignUp.Name = "btnSignUp"
         Me.btnSignUp.Size = New System.Drawing.Size(94, 25)
         Me.btnSignUp.TabIndex = 0
@@ -167,7 +166,7 @@ Partial Class FormMain
         Me.btnClearFilters.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClearFilters.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.btnClearFilters.Location = New System.Drawing.Point(9, 344)
-        Me.btnClearFilters.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnClearFilters.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClearFilters.Name = "btnClearFilters"
         Me.btnClearFilters.Size = New System.Drawing.Size(74, 27)
         Me.btnClearFilters.TabIndex = 64
@@ -182,9 +181,9 @@ Partial Class FormMain
         Me.clbAvailableOn.FormattingEnabled = True
         Me.clbAvailableOn.Items.AddRange(New Object() {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"})
         Me.clbAvailableOn.Location = New System.Drawing.Point(8, 126)
-        Me.clbAvailableOn.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.clbAvailableOn.Margin = New System.Windows.Forms.Padding(2)
         Me.clbAvailableOn.Name = "clbAvailableOn"
-        Me.clbAvailableOn.Size = New System.Drawing.Size(183, 61)
+        Me.clbAvailableOn.Size = New System.Drawing.Size(183, 49)
         Me.clbAvailableOn.TabIndex = 67
         '
         'txtMaxPrice
@@ -192,7 +191,7 @@ Partial Class FormMain
         Me.txtMaxPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxPrice.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.txtMaxPrice.Location = New System.Drawing.Point(141, 276)
-        Me.txtMaxPrice.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtMaxPrice.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMaxPrice.Name = "txtMaxPrice"
         Me.txtMaxPrice.Size = New System.Drawing.Size(50, 20)
         Me.txtMaxPrice.TabIndex = 63
@@ -206,7 +205,7 @@ Partial Class FormMain
         Me.btnApply.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnApply.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.btnApply.Location = New System.Drawing.Point(128, 344)
-        Me.btnApply.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnApply.Margin = New System.Windows.Forms.Padding(2)
         Me.btnApply.Name = "btnApply"
         Me.btnApply.Size = New System.Drawing.Size(70, 27)
         Me.btnApply.TabIndex = 58
@@ -219,7 +218,7 @@ Partial Class FormMain
         Me.cbSort.FormattingEnabled = True
         Me.cbSort.Items.AddRange(New Object() {"Alphabetical (A-Z)", "Alphabetical (Z-A)", "Capacity (Lowest to Highest)", "Capacity (Highest to Lowest)", "Price (Lowest to Highest)", "Price (Highest to Lowest)"})
         Me.cbSort.Location = New System.Drawing.Point(69, 73)
-        Me.cbSort.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.cbSort.Margin = New System.Windows.Forms.Padding(2)
         Me.cbSort.Name = "cbSort"
         Me.cbSort.Size = New System.Drawing.Size(224, 21)
         Me.cbSort.TabIndex = 56
@@ -229,7 +228,7 @@ Partial Class FormMain
         Me.txtMinPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMinPrice.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.txtMinPrice.Location = New System.Drawing.Point(8, 276)
-        Me.txtMinPrice.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtMinPrice.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMinPrice.Name = "txtMinPrice"
         Me.txtMinPrice.Size = New System.Drawing.Size(50, 20)
         Me.txtMinPrice.TabIndex = 62
@@ -240,7 +239,7 @@ Partial Class FormMain
         Me.txtMinCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMinCapacity.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.txtMinCapacity.Location = New System.Drawing.Point(9, 229)
-        Me.txtMinCapacity.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtMinCapacity.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMinCapacity.Name = "txtMinCapacity"
         Me.txtMinCapacity.Size = New System.Drawing.Size(50, 20)
         Me.txtMinCapacity.TabIndex = 60
@@ -254,9 +253,9 @@ Partial Class FormMain
         Me.clbEventType.FormattingEnabled = True
         Me.clbEventType.Items.AddRange(New Object() {"Classes & Workshops", "    Coffee Workshop", "    Cooking", "    Fitness", "    Tea Workshop", "Corporate Event", "    Dining", "    Party", "Formal Meetings & Team Gatherings", "    Conference", "    Interview", "    Sales Meeting", "    Team Bonding", "    Training", "Parties & Celebrations", "    Anniversary", "    Baby Shower", "    Birthday Party", "    Holiday & Festive Celebrations", "        Deepavali", "        Hari Raya", "        Year-End Party", "    Graduation Party", "    Lunch/Dinner", "    Prom", "Shoots & Productions", "    Green Screen Shoot", "    Live Webinar", "    Video Production", "Weddings & Related Events", "    Bridal Shower", "    Ceremony", "    Engagement", "    Proposal", "    Reception", "    Solemnization", "    Wedding"})
         Me.clbEventType.Location = New System.Drawing.Point(8, 24)
-        Me.clbEventType.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.clbEventType.Margin = New System.Windows.Forms.Padding(2)
         Me.clbEventType.Name = "clbEventType"
-        Me.clbEventType.Size = New System.Drawing.Size(185, 61)
+        Me.clbEventType.Size = New System.Drawing.Size(185, 49)
         Me.clbEventType.TabIndex = 57
         '
         'pnlAccount
@@ -269,7 +268,7 @@ Partial Class FormMain
         Me.pnlAccount.Controls.Add(Me.lblUser)
         Me.pnlAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlAccount.Location = New System.Drawing.Point(720, 4)
-        Me.pnlAccount.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.pnlAccount.Margin = New System.Windows.Forms.Padding(2)
         Me.pnlAccount.Name = "pnlAccount"
         Me.pnlAccount.Size = New System.Drawing.Size(213, 63)
         Me.pnlAccount.TabIndex = 68
@@ -282,7 +281,7 @@ Partial Class FormMain
         Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogOut.Location = New System.Drawing.Point(112, 33)
-        Me.btnLogOut.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnLogOut.Margin = New System.Windows.Forms.Padding(2)
         Me.btnLogOut.Name = "btnLogOut"
         Me.btnLogOut.Size = New System.Drawing.Size(98, 28)
         Me.btnLogOut.TabIndex = 40
@@ -309,7 +308,7 @@ Partial Class FormMain
         Me.btnCustomerView.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCustomerView.ForeColor = System.Drawing.SystemColors.ControlText
         Me.btnCustomerView.Location = New System.Drawing.Point(112, 2)
-        Me.btnCustomerView.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnCustomerView.Margin = New System.Windows.Forms.Padding(2)
         Me.btnCustomerView.Name = "btnCustomerView"
         Me.btnCustomerView.Size = New System.Drawing.Size(98, 28)
         Me.btnCustomerView.TabIndex = 2
@@ -335,7 +334,7 @@ Partial Class FormMain
         Me.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSearch.Location = New System.Drawing.Point(528, 24)
-        Me.btnSearch.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Size = New System.Drawing.Size(88, 30)
         Me.btnSearch.TabIndex = 66
@@ -348,7 +347,7 @@ Partial Class FormMain
         Me.txtSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.txtSearch.Location = New System.Drawing.Point(110, 30)
-        Me.txtSearch.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.Size = New System.Drawing.Size(414, 17)
         Me.txtSearch.TabIndex = 65
@@ -358,7 +357,7 @@ Partial Class FormMain
         Me.flpResults.AutoScroll = True
         Me.flpResults.BackColor = System.Drawing.Color.Transparent
         Me.flpResults.Location = New System.Drawing.Point(11, 107)
-        Me.flpResults.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.flpResults.Margin = New System.Windows.Forms.Padding(2)
         Me.flpResults.Name = "flpResults"
         Me.flpResults.Size = New System.Drawing.Size(923, 383)
         Me.flpResults.TabIndex = 59
@@ -402,7 +401,7 @@ Partial Class FormMain
         Me.btnFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnFilter.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnFilter.Location = New System.Drawing.Point(620, 23)
-        Me.btnFilter.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnFilter.Margin = New System.Windows.Forms.Padding(2)
         Me.btnFilter.Name = "btnFilter"
         Me.btnFilter.Size = New System.Drawing.Size(88, 30)
         Me.btnFilter.TabIndex = 83
@@ -427,21 +426,11 @@ Partial Class FormMain
         Me.btnNext.Text = "→"
         Me.btnNext.UseVisualStyleBackColor = True
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(487, 71)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 86
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'FormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(944, 501)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.btnFilter)
@@ -494,5 +483,4 @@ Partial Class FormMain
     Friend WithEvents btnFilter As Button
     Friend WithEvents btnBack As Button
     Friend WithEvents btnNext As Button
-    Friend WithEvents Button1 As Button
 End Class

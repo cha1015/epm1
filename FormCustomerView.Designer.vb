@@ -31,7 +31,6 @@ Partial Class FormCustomerView
         Me.lblRole = New System.Windows.Forms.Label()
         Me.btnEdit = New System.Windows.Forms.Button()
         Me.lblUsername = New System.Windows.Forms.Label()
-        Me.btnSwitchView = New System.Windows.Forms.Button()
         Me.txtPaymentAmount = New System.Windows.Forms.TextBox()
         CType(Me.dgvPaymentHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCurrentBooking, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -113,6 +112,13 @@ Partial Class FormCustomerView
         Me.lblRole.TabIndex = 50
         Me.lblRole.Text = "User"
         '
+        'btnEdit
+        '
+        Me.btnEdit.Location = New System.Drawing.Point(0, 0)
+        Me.btnEdit.Name = "btnEdit"
+        Me.btnEdit.Size = New System.Drawing.Size(75, 23)
+        Me.btnEdit.TabIndex = 63
+        '
         'lblUsername
         '
         Me.lblUsername.AutoSize = True
@@ -124,16 +130,6 @@ Partial Class FormCustomerView
         Me.lblUsername.Size = New System.Drawing.Size(35, 13)
         Me.lblUsername.TabIndex = 48
         Me.lblUsername.Text = "Guest"
-        '
-        'btnSwitchView
-        '
-        Me.btnSwitchView.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!)
-        Me.btnSwitchView.Location = New System.Drawing.Point(847, 228)
-        Me.btnSwitchView.Name = "btnSwitchView"
-        Me.btnSwitchView.Size = New System.Drawing.Size(59, 22)
-        Me.btnSwitchView.TabIndex = 61
-        Me.btnSwitchView.Text = "View"
-        Me.btnSwitchView.UseVisualStyleBackColor = True
         '
         'txtPaymentAmount
         '
@@ -148,7 +144,6 @@ Partial Class FormCustomerView
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.Controls.Add(Me.txtPaymentAmount)
-        Me.Controls.Add(Me.btnSwitchView)
         Me.Controls.Add(Me.lblPaymentSection)
         Me.Controls.Add(Me.dgvPaymentHistory)
         Me.Controls.Add(Me.btnConfirmPayment)
@@ -176,6 +171,5 @@ Partial Class FormCustomerView
     Friend WithEvents lblRole As Label
     Friend WithEvents btnEdit As Button
     Friend WithEvents lblUsername As Label
-    Friend WithEvents btnSwitchView As Button
     Friend WithEvents txtPaymentAmount As TextBox
 End Class

@@ -112,24 +112,20 @@ Public Class FormBooking
                                                    End Sub
 
         ' Define possible time formats
+        Dim parsedOpening As DateTime
         Dim timeFormats As String() = {"h:mm tt", "hh:mm tt", "H:mm", "HH:mm", "HH:mm:ss"}
-
-        ' Parse Opening Hours
-        If Not String.IsNullOrWhiteSpace(OpeningHours) Then
-            Dim parsedOpening As DateTime
-            If DateTime.TryParseExact(OpeningHours, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedOpening) Then
-                Dim hourStr = parsedOpening.ToString("h")
-                If cbStartHour.Items.Contains(hourStr) Then
-                    cbStartHour.Text = hourStr
-                End If
-                cbStartMinutes.Text = parsedOpening.ToString("mm")
-                cbStartAMPM.Text = parsedOpening.ToString("tt")
-            Else
-                cbStartHour.Text = ""
-                cbStartMinutes.Text = ""
-                cbStartAMPM.Text = ""
-            End If
+        If Not String.IsNullOrWhiteSpace(OpeningHours) AndAlso
+   DateTime.TryParseExact(OpeningHours, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedOpening) Then
+            cbStartHour.Text = parsedOpening.ToString("h")
+            cbStartMinutes.Text = parsedOpening.ToString("mm")
+            cbStartAMPM.Text = parsedOpening.ToString("tt")
+        Else
+            cbStartHour.Text = ""
+            cbStartMinutes.Text = ""
+            cbStartAMPM.Text = ""
         End If
+
+
 
 
         ' Parse Closing Hours
