@@ -387,15 +387,6 @@ Public Class FormMain
 
         HelperResultsDisplay.PopulateEventPlaces(flpResults, dt, AddressOf btnBook_Click, Nothing, Nothing, False)
 
-        'Dim autoCompleteList As New AutoCompleteStringCollection()
-        'autoCompleteList.AddRange(New String() {"Auditorium", "Ballroom", "Banquet", "Bar", "Cafe", "Club", "Conference Hall", "Country Club", "Event Space", "Function Room",
-        '"Gallery", "Halal Venue", "Hotel", "Kids Friendly Venue", "Meeting Room", "Museum", "Outdoor Venue", "Private Estate", "Restaurant", "Rooftop Venue", "Seminar Room",
-        '"Studio", "Theater", "Training Room", "Yacht"})
-
-        'txtSearch.AutoCompleteMode = AutoCompleteMode.SuggestAppend
-        'txtSearch.AutoCompleteSource = AutoCompleteSource.CustomSource
-        'txtSearch.AutoCompleteCustomSource = autoCompleteList
-
     End Sub
 
     Private Sub txtSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearch.KeyDown

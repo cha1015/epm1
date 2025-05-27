@@ -288,6 +288,12 @@ Public Class FormSignUp
 
     Private passwordVisible As Boolean = True
 
+    Private hasAttemptedSubmit As Boolean = False
+
+
+    Private labels As Label()
+    Private fields As TextBox()
+    Private texts As String()
 
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -300,29 +306,94 @@ Public Class FormSignUp
 
         tpAccountDetails.Enabled = False ' Disable tab until user proceeds
 
-        Dim labels As Label() = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole, lblAge, lblAddress}
-        Dim fields As TextBox() = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
-        Dim texts As String() = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role", "Age", "Address"}
+
+
+        labels = New Label() {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblAddress}
+        fields = New TextBox() {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
+        texts = New String() {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Address"}
+
+
+        'Dim labels As Label() = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole, lblAge, lblAddress}
+        'Dim fields As TextBox() = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
+        'Dim texts As String() = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role", "Age", "Address"}
 
         HelperValidation.ApplyFieldIndicators(labels, texts)
+
+        txtFirstName.Tag = lblFirstName
+        txtLastName.Tag = lblLastName
+        dtpBirthday.Tag = lblBirthday
+        cmbSex.Tag = lblSex
+        txtAddress.Tag = lblAddress
 
         Me.ActiveControl = txtFirstName
         Me.BeginInvoke(Sub() txtFirstName.Select())
 
+
         For Each field As TextBox In fields
             AddHandler field.TextChanged, Sub(ctrl As Object, evArgs As EventArgs)
-                                              HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
+                                              If hasAttemptedSubmit Then
+                                                  HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
+                                              Else
+                                                  ' Before submit, do not show asterisks automatically as user types
+                                                  ' You can comment this out if you want no asterisks before proceed
+                                                  ' HelperValidation.ShowAsteriskOnMissedFields(fields, labels, texts)
+                                              End If
                                           End Sub
             AddHandler field.Leave, Sub(ctrl As Object, evArgs As EventArgs)
-                                        HelperValidation.RemoveAsteriskOnInput(ctrl, labels, texts)
+                                        If hasAttemptedSubmit Then
+                                            HelperValidation.RemoveAsteriskOnInput(ctrl, labels, texts)
+                                        End If
                                     End Sub
         Next
+
 
         AddHandler txtUsername.TextChanged, AddressOf CheckUsernameAvailability
         AddHandler txtEmail.TextChanged, AddressOf CheckEmailAvailability
         AddHandler txtPass.TextChanged, AddressOf ShowPasswordStrength
         AddHandler dtpBirthday.ValueChanged, AddressOf dtpBirthday_ValueChanged
+
+        AddHandler cmbSex.SelectedIndexChanged, AddressOf cmbSex_SelectedIndexChanged
+        AddHandler txtAddress.TextChanged, AddressOf txtAddress_TextChanged
     End Sub
+
+    'Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs)
+    '    Dim birthday As Date = dtpBirthday.Value
+    '    Dim today As Date = Date.Today
+    '    Dim age As Integer = today.Year - birthday.Year
+    '    If birthday > today.AddYears(-age) Then age -= 1
+    '    lblAgeContainer.Text = age.ToString()
+    'End Sub
+
+
+    'Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs)
+    '    Dim birthday As Date = dtpBirthday.Value
+    '    Dim today As Date = Date.Today
+    '    Dim age As Integer = today.Year - birthday.Year
+    '    If birthday > today.AddYears(-age) Then age -= 1
+    '    lblAgeContainer.Text = age.ToString()
+
+    '    ' Validate birthday is not default (today)
+    '    Dim birthdayIsValid As Boolean = (birthday.Date <> today)
+
+    '    ' Validate age is >= 18
+    '    Dim ageIsValid As Boolean = (age >= 18)
+
+    '    If birthdayIsValid Then
+    '        lblBirthday.Text = "Birthday"
+    '        lblBirthday.ForeColor = SystemColors.ControlText
+    '    Else
+    '        lblBirthday.Text = "Birthday *"
+    '        lblBirthday.ForeColor = Color.Red
+    '    End If
+
+    '    If ageIsValid Then
+    '        lblAge.Text = "Age"
+    '        lblAge.ForeColor = SystemColors.ControlText
+    '    Else
+    '        lblAge.Text = "Age *"
+    '        lblAge.ForeColor = Color.Red
+    '    End If
+    'End Sub
 
     Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs)
         Dim birthday As Date = dtpBirthday.Value
@@ -330,6 +401,22 @@ Public Class FormSignUp
         Dim age As Integer = today.Year - birthday.Year
         If birthday > today.AddYears(-age) Then age -= 1
         lblAgeContainer.Text = age.ToString()
+
+        Dim birthdayIsValid As Boolean = (birthday.Date <> today)
+        Dim ageIsValid As Boolean = (age >= 18)
+
+        ' Use the same validity for both labels:
+        If birthdayIsValid AndAlso ageIsValid Then
+            lblBirthday.Text = "Birthday"
+            lblBirthday.ForeColor = SystemColors.ControlText
+            lblAge.Text = "Age"
+            lblAge.ForeColor = SystemColors.ControlText
+        Else
+            lblBirthday.Text = "Birthday *"
+            lblBirthday.ForeColor = Color.Red
+            lblAge.Text = "Age *"
+            lblAge.ForeColor = Color.Red
+        End If
     End Sub
 
     Private Sub CheckUsernameAvailability(sender As Object, e As EventArgs)
@@ -363,62 +450,252 @@ Public Class FormSignUp
     End Sub
 
 
-    Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
-        lblRequiredMessage.Visible = False
 
-        ' Calculate age
+
+
+
+    'Private Function ValidatePersonalInformation() As Boolean
+    '    Dim isValid As Boolean = True
+
+    '    Dim birthdayNotChanged As Boolean = (dtpBirthday.Value.Date = Date.Today)
+
+    '    ' Validate First Name
+    '    HelperValidation.MarkFieldInvalidIfEmpty(txtFirstName, "First Name")
+    '    If String.IsNullOrWhiteSpace(txtFirstName.Text) Then isValid = False
+
+    '    ' Validate Last Name
+    '    HelperValidation.MarkFieldInvalidIfEmpty(txtLastName, "Last Name")
+    '    If String.IsNullOrWhiteSpace(txtLastName.Text) Then isValid = False
+
+    '    ' Validate Birthday (DateTimePicker default today is invalid)
+    '    HelperValidation.MarkFieldInvalidIfDefault(dtpBirthday, "Birthday")
+    '    If dtpBirthday.Value.Date = Date.Today Then isValid = False
+
+    '    ' Validate Age (must be >= 18)
+    '    If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then
+    '        isValid = False
+    '    End If
+
+    '    ' Manually handle Age label asterisk and color
+    '    If birthdayNotChanged Then
+    '        lblAge.Text = "Age *"
+    '        lblAge.ForeColor = Color.Red
+    '    Else
+    '        lblAge.Text = "Age"
+    '        lblAge.ForeColor = SystemColors.ControlText
+    '    End If
+
+    '    ' Validate Sex (ComboBox)
+    '    HelperValidation.MarkFieldInvalidIfEmpty(cmbSex, "Sex")
+    '    If cmbSex.SelectedIndex = -1 Then isValid = False
+
+    '    ' Validate Address
+    '    HelperValidation.MarkFieldInvalidIfEmpty(txtAddress, "Address")
+    '    If String.IsNullOrWhiteSpace(txtAddress.Text) Then isValid = False
+
+    '    Return isValid
+    'End Function
+
+
+    Private Function ValidatePersonalInformation() As Boolean
+        Dim isValid As Boolean = True
+
         Dim birthday As Date = dtpBirthday.Value
         Dim today As Date = Date.Today
         Dim age As Integer = today.Year - birthday.Year
         If birthday > today.AddYears(-age) Then age -= 1
-        lblAgeContainer.Text = age.ToString()
 
-        ' Check age restriction first
-        If age < 18 Then
-            MessageBox.Show("You must be 18 years old or above to proceed.", "Age Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
+        Dim birthdayNotChanged As Boolean = (birthday.Date = today)
+        Dim ageNotValid As Boolean = (age < 18)
+
+        ' Validate First Name
+        HelperValidation.MarkFieldInvalidIfEmpty(txtFirstName, "First Name")
+        If String.IsNullOrWhiteSpace(txtFirstName.Text) Then isValid = False
+
+        ' Validate Last Name
+        HelperValidation.MarkFieldInvalidIfEmpty(txtLastName, "Last Name")
+        If String.IsNullOrWhiteSpace(txtLastName.Text) Then isValid = False
+
+        ' Validate Birthday (DateTimePicker default today is invalid)
+        HelperValidation.MarkFieldInvalidIfDefault(dtpBirthday, "Birthday")
+        If birthdayNotChanged Then isValid = False
+
+        ' Validate Age (must be >= 18)
+        If ageNotValid Then
+            isValid = False
         End If
 
-        ' Arrays for fields and labels for HelperValidation
-        Dim labels As Label() = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole, lblAge, lblAddress}
-        Dim fields As TextBox() = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
-        Dim texts As String() = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role", "Age", "Address"}
-
-        ' Run your helper to show asterisks on empty textbox fields
-        HelperValidation.ApplyFieldIndicators(labels, texts)
-        HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
-
-        ' Manually check ComboBox cmbSex (since HelperValidation probably does not handle it)
-        Dim missingFields As Boolean = False
-        If cmbSex.SelectedIndex = -1 Then
-            lblSex.Text = "Sex *"
-            missingFields = True
+        ' Set Birthday and Age labels together consistently
+        If birthdayNotChanged Or ageNotValid Then
+            lblBirthday.Text = "Birthday *"
+            lblBirthday.ForeColor = Color.Red
+            lblAge.Text = "Age *"
+            lblAge.ForeColor = Color.Red
         Else
-            lblSex.Text = "Sex"
+            lblBirthday.Text = "Birthday"
+            lblBirthday.ForeColor = SystemColors.ControlText
+            lblAge.Text = "Age"
+            lblAge.ForeColor = SystemColors.ControlText
         End If
 
-        ' Check if any of the textbox required fields are empty (using fields you want required)
-        If String.IsNullOrWhiteSpace(txtFirstName.Text) OrElse
-       String.IsNullOrWhiteSpace(txtLastName.Text) OrElse
-       String.IsNullOrWhiteSpace(txtAddress.Text) OrElse
-       cmbSex.SelectedIndex = -1 Then
+        ' Validate Sex (ComboBox)
+        HelperValidation.MarkFieldInvalidIfEmpty(cmbSex, "Sex")
+        If cmbSex.SelectedIndex = -1 Then isValid = False
 
-            missingFields = True
+        ' Validate Address
+        HelperValidation.MarkFieldInvalidIfEmpty(txtAddress, "Address")
+        If String.IsNullOrWhiteSpace(txtAddress.Text) Then isValid = False
+
+        Return isValid
+    End Function
+
+
+
+
+    Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
+        hasAttemptedSubmit = True
+        If Not ValidatePersonalInformation() Then
+            MessageBox.Show("Please complete all required personal information and ensure you meet the age requirement of 18 years old.",
+                        "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
         End If
 
-        If missingFields Then
-            lblRequiredMessage.Text = "Fields marked with * are required."
-            lblRequiredMessage.Visible = True
-            Return
-        End If
+        ResetAccountDetailsLabels() 'Reset labels to default 
 
-        ' If all validations passed, enable and switch tab
         tpAccountDetails.Enabled = True
         tcSignUp.SelectedTab = tpAccountDetails
+        lblRequiredMessage.Visible = False
     End Sub
 
 
 
+    'Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
+
+
+    '    If Not ValidatePersonalInformation() Then
+    '        MessageBox.Show("Please complete all required personal information and ensure you meet the age requirement of 18 years old.",
+    '                    "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    '        'ValidateSignUpFields()
+
+    '        Exit Sub
+    '    End If
+
+    '    ' Ensure navigation moves to the next tab page upon successful validation
+    '    tcSignUp.SelectedTab = tpAccountDetails
+
+    '    lblRequiredMessage.Visible = False
+
+    '    ' ' Calculate age
+    '    ' Dim birthday As Date = dtpBirthday.Value
+    '    ' Dim today As Date = Date.Today
+    '    ' Dim age As Integer = today.Year - birthday.Year
+    '    ' If birthday > today.AddYears(-age) Then age -= 1
+    '    ' lblAgeContainer.Text = age.ToString()
+
+    '    ' ' Check age restriction first
+    '    ' If age < 18 Then
+    '    '     MessageBox.Show("You must be 18 years old or above to proceed.", "Age Restriction", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    '    '     Return
+    '    ' End If
+
+    '    ' ' Arrays for fields and labels for HelperValidation
+    '    ' Dim labels As Label() = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole, lblAge, lblAddress}
+    '    ' Dim fields As TextBox() = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
+    '    ' Dim texts As String() = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role", "Age", "Address"}
+
+    '    ' ' Run your helper to show asterisks on empty textbox fields
+    '    ' HelperValidation.ApplyFieldIndicators(labels, texts)
+    '    ' HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
+
+    '    ' ' Manually check ComboBox cmbSex (since HelperValidation probably does not handle it)
+    '    ' Dim missingFields As Boolean = False
+    '    ' If cmbSex.SelectedIndex = -1 Then
+    '    '     lblSex.Text = "Sex *"
+    '    '     missingFields = True
+    '    ' Else
+    '    '     lblSex.Text = "Sex"
+    '    ' End If
+
+    '    ' ' Check if any of the textbox required fields are empty (using fields you want required)
+    '    ' If String.IsNullOrWhiteSpace(txtFirstName.Text) OrElse
+    '    'String.IsNullOrWhiteSpace(txtLastName.Text) OrElse
+    '    'String.IsNullOrWhiteSpace(txtAddress.Text) OrElse
+    '    'cmbSex.SelectedIndex = -1 Then
+
+    '    '     missingFields = True
+    '    ' End If
+
+    '    ' If missingFields Then
+    '    '     lblRequiredMessage.Text = "Fields marked with * are required."
+    '    '     lblRequiredMessage.Visible = True
+    '    '     Return
+    '    ' End If
+
+    '    ' If all validations passed, enable and switch tab
+    '    tpAccountDetails.Enabled = True
+    '    tcSignUp.SelectedTab = tpAccountDetails
+    'End Sub
+
+
+
+
+    'Private Function ValidatePersonalInformation() As Boolean
+    '    Dim isValid As Boolean = True
+    '    If String.IsNullOrWhiteSpace(txtFirstName.Text) Then
+    '        HelperValidation.MarkFieldInvalid(txtFirstName, "First Name", "First Name is required.")
+    '        isValid = False
+    '    Else
+    '        HelperValidation.ClearFieldError(txtFirstName, "First Name")
+    '    End If
+    '    If String.IsNullOrWhiteSpace(txtLastName.Text) Then
+    '        HelperValidation.MarkFieldInvalid(txtLastName, "Last Name", "Last Name is required.")
+    '        isValid = False
+    '    Else
+    '        HelperValidation.ClearFieldError(txtLastName, "Last Name")
+    '    End If
+    '    If String.IsNullOrWhiteSpace(txtAddress.Text) Then
+    '        HelperValidation.MarkFieldInvalid(txtAddress, "Address", "Address is required.")
+    '        isValid = False
+    '    Else
+    '        HelperValidation.ClearFieldError(txtAddress, "Address")
+    '    End If
+    '    If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then
+    '        isValid = False
+    '    End If
+    '    Return isValid
+    'End Function
+
+
+
+    Private Sub cmbSex_SelectedIndexChanged(sender As Object, e As EventArgs)
+        If cmbSex.SelectedIndex <> -1 Then
+            lblSex.Text = "Sex"
+            lblSex.ForeColor = SystemColors.ControlText
+        Else
+            lblSex.Text = "Sex *"
+            lblSex.ForeColor = Color.Red
+        End If
+    End Sub
+
+    Private Sub txtAddress_TextChanged(sender As Object, e As EventArgs)
+        If Not String.IsNullOrWhiteSpace(txtAddress.Text) Then
+            lblAddress.Text = "Address"
+            lblAddress.ForeColor = SystemColors.ControlText
+        Else
+            lblAddress.Text = "Address *"
+            lblAddress.ForeColor = Color.Red
+        End If
+    End Sub
+
+    Private Sub ResetAccountDetailsLabels()
+        Dim labels As Label() = {lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole}
+        Dim defaultTexts As String() = {"Username", "Email", "Password", "Confirm Password", "Role"}
+
+        For i As Integer = 0 To labels.Length - 1
+            labels(i).Text = defaultTexts(i)
+            labels(i).ForeColor = SystemColors.ControlText
+        Next
+    End Sub
 
 
 
@@ -598,6 +875,8 @@ Public Class FormSignUp
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
     End Sub
+
+
 End Class
 
 
