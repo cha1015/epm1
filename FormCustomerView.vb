@@ -16,25 +16,19 @@ Public Class FormCustomerView
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dgvCurrentBooking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         dgvPaymentHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        'MessageBox.Show($"Debug: CurrentUser.CustomerId = {CurrentUser.CustomerId}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
         customerId = CurrentUser.CustomerId
-        'MessageBox.Show($"Debug: Assigned customerId = {customerId}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-        'Debug.WriteLine($"FormCustomerView loaded with CustomerId: {customerId}")
 
         lblUsername.Text = CurrentUser.Username
         LoadBookings()
         LoadPaymentHistory()
     End Sub
 
-    ' ✅ Load only current customer bookings
     Private Sub LoadBookings()
         Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
-        'MessageBox.Show($"Executing query for CustomerId: {customerId}", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
         dgvPaymentHistory.ClearSelection()
 
-        'MessageBox.Show($"Loading bookings for CustomerId: {customerId}", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
         Dim query As String = $"SELECT b.booking_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status 
                        FROM bookings b
@@ -42,13 +36,11 @@ Public Class FormCustomerView
                        WHERE b.customer_id = {customerId}
                        ORDER BY b.event_date DESC"
 
-        'MessageBox.Show($"Running SQL: {query}", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
         Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
 
         Try
             Dim dtBookings As DataTable = DBHelper.GetDataTable(query, parameters)
-            'MessageBox.Show($"Debug: Retrieved {dtBookings.Rows.Count} bookings", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
 
             If dtBookings.Rows.Count > 0 Then
@@ -56,25 +48,22 @@ Public Class FormCustomerView
                 btnSelectBooking.Enabled = True
                 btnConfirmPayment.Enabled = True
             Else
-                ' Create a temporary placeholder row when no bookings exist
                 Dim dtPlaceholder As New DataTable()
 
                 dtPlaceholder.Columns.Add("Message", GetType(String))
                 dtPlaceholder.Rows.Add("No bookings found. Start by booking an event!")
                 dgvCurrentBooking.DataSource = dtPlaceholder
-                btnSelectBooking.Enabled = False ' 🚫 Disable button when no bookings exist
-                btnConfirmPayment.Enabled = False ' 🚫 Disable button when no bookings exist
-                dgvCurrentBooking.Refresh() ' 🚀 Force UI update
+                btnSelectBooking.Enabled = False
+                btnConfirmPayment.Enabled = False
+                dgvCurrentBooking.Refresh()
             End If
 
         Catch ex As MySqlException
-            'MessageBox.Show("Error loading bookings: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
 
 
-    ' ✅ Load payment history correctly
     Private Sub LoadPaymentHistory()
         Dim query As String = "SELECT payment_id, amount_to_pay, amount_paid, payment_date, payment_status 
                            FROM payments WHERE customer_id = @customer_id"
@@ -90,11 +79,10 @@ Public Class FormCustomerView
             Else
                 dgvPaymentHistory.DataSource = Nothing
                 dgvPaymentHistory.ClearSelection()
-                'MessageBox.Show("No payment records found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
 
         Catch ex As MySqlException
-            'MessageBox.Show("Error loading payment history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading payment history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -103,31 +91,40 @@ Public Class FormCustomerView
         btnColumn.Name = "btnSelectBooking"
         btnColumn.HeaderText = "Action"
         btnColumn.Text = "Pay Now"
-        btnColumn.UseColumnTextForButtonValue = True  ' Show button text
+        btnColumn.UseColumnTextForButtonValue = True
         dgvPaymentHistory.Columns.Add(btnColumn)
     End Sub
 
-    ' Button to edit customer information
-    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEditInformation.Click
-        Dim editForm As New FormCustomerAdminInfo
+    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
         editForm.ShowDialog()
     End Sub
 
-    ' Button to return to the main screen
+
     Private Sub btnMain_Click(sender As Object, e As EventArgs)
         Dim mainForm As New FormMain()
         mainForm.Show()
         Me.Hide()
     End Sub
 
-    ' Button to log out
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
-        Dim loginForm As New FormLogIn()
-        loginForm.Show()
-        Me.Hide()
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If result = DialogResult.Yes Then
+            CurrentUser.UserID = -1
+            CurrentUser.Username = String.Empty
+            CurrentUser.Email = String.Empty
+            CurrentUser.Role = String.Empty
+            CurrentUser.CustomerId = -1
+
+            Me.Refresh()
+            Application.DoEvents()
+
+            Dim mainForm As New FormMain()
+            mainForm.Show()
+            Me.Hide()
+        End If
     End Sub
-
-
     Private Sub btnSelectBooking_Click_1(sender As Object, e As EventArgs) Handles btnSelectBooking.Click
         If dgvPaymentHistory.SelectedRows.Count = 0 Then
             MessageBox.Show("Please select a payment to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -154,24 +151,20 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub btnConfirmPayment_Click_1(sender As Object, e As EventArgs) Handles btnConfirmPayment.Click
-        ' Ensure a booking is selected
         If dgvPaymentHistory.SelectedRows.Count = 0 Then
             MessageBox.Show("Please select a booking to pay.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        ' Get payment details from the selected row
         Dim paymentStatus As String = dgvPaymentHistory.SelectedRows(0).Cells("payment_status").Value.ToString()
         Dim amountDue As Decimal = Convert.ToDecimal(dgvPaymentHistory.SelectedRows(0).Cells("amount_to_pay").Value)
         Dim amountPaid As Decimal
 
-        ' Validate cash amount (ensure correct payment)
         If Not Decimal.TryParse(txtPaymentAmount.Text, amountPaid) OrElse amountPaid < amountDue Then
             MessageBox.Show("Invalid amount. You must pay at least the due amount.", "Payment Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        ' Allow payment only if booking is approved
         If paymentStatus = "Approved" Then
             Dim paymentId As Integer = Convert.ToInt32(dgvPaymentHistory.SelectedRows(0).Cells("payment_id").Value)
 
@@ -184,7 +177,7 @@ Public Class FormCustomerView
             Try
                 DBHelper.ExecuteQuery(query, parameters)
                 MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadPaymentHistory() ' Refresh payment history
+                LoadPaymentHistory()
             Catch ex As MySqlException
                 MessageBox.Show("Payment processing error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -202,7 +195,6 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub txtPaymentAmount_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtPaymentAmount.KeyPress
-        ' Allow only numbers and control keys (like backspace)
         If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
             e.Handled = True
         End If

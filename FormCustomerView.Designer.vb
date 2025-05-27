@@ -31,7 +31,7 @@ Partial Class FormCustomerView
         Me.lblCurrentBooking = New System.Windows.Forms.Label()
         Me.btnLogOut = New System.Windows.Forms.Button()
         Me.lblRole = New System.Windows.Forms.Label()
-        Me.btnEditInformation = New System.Windows.Forms.Button()
+        Me.btnEdit = New System.Windows.Forms.Button()
         Me.lblUsername = New System.Windows.Forms.Label()
         CType(Me.dgvPaymentHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCurrentBooking, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -44,7 +44,7 @@ Partial Class FormCustomerView
         Me.lblPaymentSection.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPaymentSection.Location = New System.Drawing.Point(39, 231)
         Me.lblPaymentSection.Name = "lblPaymentSection"
-        Me.lblPaymentSection.Size = New System.Drawing.Size(101, 19)
+        Me.lblPaymentSection.Size = New System.Drawing.Size(130, 25)
         Me.lblPaymentSection.TabIndex = 58
         Me.lblPaymentSection.Text = "Payment Section"
         '
@@ -95,7 +95,7 @@ Partial Class FormCustomerView
         Me.txtPaymentAmount.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPaymentAmount.Location = New System.Drawing.Point(46, 472)
         Me.txtPaymentAmount.Name = "txtPaymentAmount"
-        Me.txtPaymentAmount.Size = New System.Drawing.Size(731, 25)
+        Me.txtPaymentAmount.Size = New System.Drawing.Size(731, 30)
         Me.txtPaymentAmount.TabIndex = 54
         '
         'lblCurrentBooking
@@ -105,7 +105,7 @@ Partial Class FormCustomerView
         Me.lblCurrentBooking.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCurrentBooking.Location = New System.Drawing.Point(43, 82)
         Me.lblCurrentBooking.Name = "lblCurrentBooking"
-        Me.lblCurrentBooking.Size = New System.Drawing.Size(97, 19)
+        Me.lblCurrentBooking.Size = New System.Drawing.Size(124, 25)
         Me.lblCurrentBooking.TabIndex = 52
         Me.lblCurrentBooking.Text = "Current Booking"
         '
@@ -131,23 +131,23 @@ Partial Class FormCustomerView
         Me.lblRole.ForeColor = System.Drawing.Color.Black
         Me.lblRole.Location = New System.Drawing.Point(598, 36)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(33, 19)
+        Me.lblRole.Size = New System.Drawing.Size(42, 25)
         Me.lblRole.TabIndex = 50
         Me.lblRole.Text = "User"
         '
-        'btnEditInformation
+        'btnEdit
         '
-        Me.btnEditInformation.BackColor = System.Drawing.Color.Gainsboro
-        Me.btnEditInformation.FlatAppearance.BorderSize = 0
-        Me.btnEditInformation.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnEditInformation.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnEditInformation.ForeColor = System.Drawing.Color.Black
-        Me.btnEditInformation.Location = New System.Drawing.Point(816, 5)
-        Me.btnEditInformation.Name = "btnEditInformation"
-        Me.btnEditInformation.Size = New System.Drawing.Size(120, 34)
-        Me.btnEditInformation.TabIndex = 49
-        Me.btnEditInformation.Text = "Edit Information"
-        Me.btnEditInformation.UseVisualStyleBackColor = False
+        Me.btnEdit.BackColor = System.Drawing.Color.Gainsboro
+        Me.btnEdit.FlatAppearance.BorderSize = 0
+        Me.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnEdit.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnEdit.ForeColor = System.Drawing.Color.Black
+        Me.btnEdit.Location = New System.Drawing.Point(816, 5)
+        Me.btnEdit.Name = "btnEdit"
+        Me.btnEdit.Size = New System.Drawing.Size(120, 34)
+        Me.btnEdit.TabIndex = 49
+        Me.btnEdit.Text = "Edit Information"
+        Me.btnEdit.UseVisualStyleBackColor = False
         '
         'lblUsername
         '
@@ -157,7 +157,7 @@ Partial Class FormCustomerView
         Me.lblUsername.ForeColor = System.Drawing.Color.Black
         Me.lblUsername.Location = New System.Drawing.Point(598, 5)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(42, 19)
+        Me.lblUsername.Size = New System.Drawing.Size(53, 25)
         Me.lblUsername.TabIndex = 48
         Me.lblUsername.Text = "Guest"
         '
@@ -175,7 +175,7 @@ Partial Class FormCustomerView
         Me.Controls.Add(Me.lblCurrentBooking)
         Me.Controls.Add(Me.btnLogOut)
         Me.Controls.Add(Me.lblRole)
-        Me.Controls.Add(Me.btnEditInformation)
+        Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.lblUsername)
         Me.Name = "FormCustomerView"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -195,6 +195,6 @@ Partial Class FormCustomerView
     Friend WithEvents lblCurrentBooking As Label
     Friend WithEvents btnLogOut As Button
     Friend WithEvents lblRole As Label
-    Friend WithEvents btnEditInformation As Button
+    Friend WithEvents btnEdit As Button
     Friend WithEvents lblUsername As Label
 End Class

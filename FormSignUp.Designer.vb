@@ -45,12 +45,10 @@ Partial Class FormSignUp
         Me.tpAccountDetails = New System.Windows.Forms.TabPage()
         Me.lblAdminCodeError = New System.Windows.Forms.Label()
         Me.lblPasswordError = New System.Windows.Forms.Label()
-        Me.lblPwStrength = New System.Windows.Forms.Label()
         Me.lblEmailError = New System.Windows.Forms.Label()
         Me.lblUsernameError = New System.Windows.Forms.Label()
         Me.lblRole = New System.Windows.Forms.Label()
         Me.lblConfirmPassword = New System.Windows.Forms.Label()
-        Me.lblPassword = New System.Windows.Forms.Label()
         Me.lblEmail = New System.Windows.Forms.Label()
         Me.lblUsername = New System.Windows.Forms.Label()
         Me.btnShowPass = New System.Windows.Forms.Button()
@@ -58,8 +56,10 @@ Partial Class FormSignUp
         Me.cmbRole = New System.Windows.Forms.ComboBox()
         Me.txtEmail = New System.Windows.Forms.TextBox()
         Me.txtUsername = New System.Windows.Forms.TextBox()
-        Me.txtPass = New System.Windows.Forms.TextBox()
         Me.txtConfPass = New System.Windows.Forms.TextBox()
+        Me.lblPwStrength = New System.Windows.Forms.Label()
+        Me.txtPass = New System.Windows.Forms.TextBox()
+        Me.lblPassword = New System.Windows.Forms.Label()
         Me.tcSignUp.SuspendLayout()
         Me.tpPersonalInfo.SuspendLayout()
         Me.tpAccountDetails.SuspendLayout()
@@ -96,7 +96,7 @@ Partial Class FormSignUp
         '
         Me.lblRequiredMessage.AutoSize = True
         Me.lblRequiredMessage.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblRequiredMessage.Location = New System.Drawing.Point(715, 448)
+        Me.lblRequiredMessage.Location = New System.Drawing.Point(661, 451)
         Me.lblRequiredMessage.Name = "lblRequiredMessage"
         Me.lblRequiredMessage.Size = New System.Drawing.Size(242, 25)
         Me.lblRequiredMessage.TabIndex = 53
@@ -170,7 +170,7 @@ Partial Class FormSignUp
         Me.btnProceed.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnProceed.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnProceed.ForeColor = System.Drawing.Color.Black
-        Me.btnProceed.Location = New System.Drawing.Point(745, 317)
+        Me.btnProceed.Location = New System.Drawing.Point(745, 311)
         Me.btnProceed.Name = "btnProceed"
         Me.btnProceed.Size = New System.Drawing.Size(110, 38)
         Me.btnProceed.TabIndex = 80
@@ -328,16 +328,6 @@ Partial Class FormSignUp
         Me.lblPasswordError.TabIndex = 77
         Me.lblPasswordError.Text = "Passwords do not match!"
         '
-        'lblPwStrength
-        '
-        Me.lblPwStrength.AutoSize = True
-        Me.lblPwStrength.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPwStrength.Location = New System.Drawing.Point(441, 133)
-        Me.lblPwStrength.Name = "lblPwStrength"
-        Me.lblPwStrength.Size = New System.Drawing.Size(74, 25)
-        Me.lblPwStrength.TabIndex = 75
-        Me.lblPwStrength.Text = "Strength:"
-        '
         'lblEmailError
         '
         Me.lblEmailError.AutoSize = True
@@ -381,18 +371,6 @@ Partial Class FormSignUp
         Me.lblConfirmPassword.Size = New System.Drawing.Size(137, 25)
         Me.lblConfirmPassword.TabIndex = 71
         Me.lblConfirmPassword.Text = "Confirm Password"
-        '
-        'lblPassword
-        '
-        Me.lblPassword.AutoSize = True
-        Me.lblPassword.BackColor = System.Drawing.Color.Transparent
-        Me.lblPassword.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPassword.ForeColor = System.Drawing.Color.Black
-        Me.lblPassword.Location = New System.Drawing.Point(179, 133)
-        Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.Size = New System.Drawing.Size(77, 25)
-        Me.lblPassword.TabIndex = 70
-        Me.lblPassword.Text = "Password"
         '
         'lblEmail
         '
@@ -471,6 +449,26 @@ Partial Class FormSignUp
         Me.txtUsername.Size = New System.Drawing.Size(507, 28)
         Me.txtUsername.TabIndex = 58
         '
+        'txtConfPass
+        '
+        Me.txtConfPass.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtConfPass.ForeColor = System.Drawing.Color.Black
+        Me.txtConfPass.Location = New System.Drawing.Point(179, 204)
+        Me.txtConfPass.Name = "txtConfPass"
+        Me.txtConfPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.txtConfPass.Size = New System.Drawing.Size(415, 28)
+        Me.txtConfPass.TabIndex = 61
+        '
+        'lblPwStrength
+        '
+        Me.lblPwStrength.AutoSize = True
+        Me.lblPwStrength.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPwStrength.Location = New System.Drawing.Point(441, 133)
+        Me.lblPwStrength.Name = "lblPwStrength"
+        Me.lblPwStrength.Size = New System.Drawing.Size(74, 25)
+        Me.lblPwStrength.TabIndex = 75
+        Me.lblPwStrength.Text = "Strength:"
+        '
         'txtPass
         '
         Me.txtPass.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -481,15 +479,17 @@ Partial Class FormSignUp
         Me.txtPass.Size = New System.Drawing.Size(417, 28)
         Me.txtPass.TabIndex = 60
         '
-        'txtConfPass
+        'lblPassword
         '
-        Me.txtConfPass.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtConfPass.ForeColor = System.Drawing.Color.Black
-        Me.txtConfPass.Location = New System.Drawing.Point(179, 204)
-        Me.txtConfPass.Name = "txtConfPass"
-        Me.txtConfPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtConfPass.Size = New System.Drawing.Size(415, 28)
-        Me.txtConfPass.TabIndex = 61
+        Me.lblPassword.AutoSize = True
+        Me.lblPassword.BackColor = System.Drawing.Color.Transparent
+        Me.lblPassword.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPassword.ForeColor = System.Drawing.Color.Black
+        Me.lblPassword.Location = New System.Drawing.Point(179, 133)
+        Me.lblPassword.Name = "lblPassword"
+        Me.lblPassword.Size = New System.Drawing.Size(77, 25)
+        Me.lblPassword.TabIndex = 70
+        Me.lblPassword.Text = "Password"
         '
         'FormSignUp
         '
@@ -527,12 +527,10 @@ Partial Class FormSignUp
     Friend WithEvents tpAccountDetails As TabPage
     Friend WithEvents lblAdminCodeError As Label
     Friend WithEvents lblPasswordError As Label
-    Friend WithEvents lblPwStrength As Label
     Friend WithEvents lblEmailError As Label
     Friend WithEvents lblUsernameError As Label
     Friend WithEvents lblRole As Label
     Friend WithEvents lblConfirmPassword As Label
-    Friend WithEvents lblPassword As Label
     Friend WithEvents lblEmail As Label
     Friend WithEvents lblUsername As Label
     Friend WithEvents btnShowPass As Button
@@ -540,7 +538,6 @@ Partial Class FormSignUp
     Friend WithEvents cmbRole As ComboBox
     Friend WithEvents txtEmail As TextBox
     Friend WithEvents txtUsername As TextBox
-    Friend WithEvents txtPass As TextBox
     Friend WithEvents txtConfPass As TextBox
     Friend WithEvents dtpBirthday As DateTimePicker
     Friend WithEvents lblBirthday As Label
@@ -551,4 +548,7 @@ Partial Class FormSignUp
     Friend WithEvents lblAge As Label
     Friend WithEvents lblAgeContainer As Label
     Friend WithEvents btnProceed As Button
+    Friend WithEvents lblPwStrength As Label
+    Friend WithEvents lblPassword As Label
+    Friend WithEvents txtPass As TextBox
 End Class

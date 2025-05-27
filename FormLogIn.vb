@@ -7,9 +7,28 @@ Public Class FormLogIn
         HideErrorLabels()
         ResetFieldIndicators()
 
-        AddHandler txtEmail.TextChanged, AddressOf RemoveAsteriskOnInput
-        AddHandler txtPass.TextChanged, AddressOf RemoveAsteriskOnInput
+        txtEmail.Text = ""
+        txtPass.Text = ""
+
+        AddHandler txtEmail.TextChanged, AddressOf DetectEmailAndPromptPassword
     End Sub
+
+    Private Sub DetectEmailAndPromptPassword(sender As Object, e As EventArgs)
+        Dim enteredEmail = txtEmail.Text
+
+        If Not String.IsNullOrWhiteSpace(enteredEmail) Then
+            If My.Settings.RememberMe AndAlso enteredEmail.ToLower().StartsWith(My.Settings.RememberedEmail.ToLower()) Then
+                Dim result = MessageBox.Show($"We detected that {My.Settings.RememberedEmail} is associated with this email. Would you like to auto-fill your password?",
+                                         "Auto-fill Password", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+                If result = DialogResult.Yes Then
+                    txtPass.Text = My.Settings.RememberedPassword
+                    cbRememberMe.Checked = True
+                End If
+            End If
+        End If
+    End Sub
+
 
     Private Sub btnLogIn_Click(sender As Object, e As EventArgs) Handles btnLogIn.Click
         HideErrorLabels()
@@ -31,14 +50,26 @@ Public Class FormLogIn
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
         If dt.Rows.Count > 0 Then
-            Dim storedPassword As String = dt.Rows(0)("password").ToString() ' Get the plain-text password from the database
-            If txtPass.Text = storedPassword Then ' Directly compare the passwords
+            Dim storedPassword As String = dt.Rows(0)("password").ToString()
+            If txtPass.Text = storedPassword Then
                 CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
                 CurrentUser.Username = dt.Rows(0)("username").ToString()
                 CurrentUser.Email = dt.Rows(0)("email").ToString()
                 CurrentUser.Role = dt.Rows(0)("role").ToString()
 
                 lblGeneralError.Visible = False
+
+                If cbRememberMe.Checked Then
+                    My.Settings.RememberMe = True
+                    My.Settings.RememberedEmail = txtEmail.Text
+                    My.Settings.RememberedPassword = txtPass.Text
+                    My.Settings.Save()
+                Else
+                    My.Settings.RememberMe = False
+                    My.Settings.RememberedEmail = String.Empty
+                    My.Settings.RememberedPassword = String.Empty
+                    My.Settings.Save()
+                End If
 
                 Select Case CurrentUser.Role
                     Case "Admin"
@@ -70,7 +101,6 @@ Public Class FormLogIn
             lblGeneralError.Visible = True
         End If
     End Sub
-
 
     Private Sub ResetFieldIndicators()
         lblEmail.Text = "Email"
@@ -122,6 +152,20 @@ Public Class FormLogIn
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
+    End Sub
+
+    Private Sub cbRememberMe_CheckedChanged(sender As Object, e As EventArgs) Handles cbRememberMe.CheckedChanged
+        If cbRememberMe.Checked Then
+            My.Settings.RememberMe = True
+            My.Settings.RememberedEmail = txtEmail.Text
+            My.Settings.RememberedPassword = txtPass.Text
+        Else
+            My.Settings.RememberMe = False
+            My.Settings.RememberedEmail = String.Empty
+            My.Settings.RememberedPassword = String.Empty
+        End If
+
+        My.Settings.Save()
     End Sub
 
 End Class

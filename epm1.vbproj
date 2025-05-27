@@ -216,6 +216,9 @@
     <EmbeddedResource Include="FormCustomerAdminInfo.resx">
       <DependentUpon>FormCustomerAdminInfo.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormCustomerView.resx">
+      <DependentUpon>FormCustomerView.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormLogIn.resx">
       <DependentUpon>FormLogIn.vb</DependentUpon>
     </EmbeddedResource>

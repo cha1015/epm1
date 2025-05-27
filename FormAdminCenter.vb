@@ -381,5 +381,8 @@ Public Class FormAdminCenter
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
     End Sub
-
+    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
+        editForm.ShowDialog()
+    End Sub
 End Class

@@ -32,7 +32,7 @@ Partial Class FormLogIn
         Me.lblGeneralError = New System.Windows.Forms.Label()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
-        Me.btnRememberMe = New System.Windows.Forms.CheckBox()
+        Me.cbRememberMe = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'lblPassword
@@ -82,7 +82,7 @@ Partial Class FormLogIn
         Me.btnShowPass.ForeColor = System.Drawing.Color.Black
         Me.btnShowPass.Location = New System.Drawing.Point(641, 229)
         Me.btnShowPass.Name = "btnShowPass"
-        Me.btnShowPass.Size = New System.Drawing.Size(86, 24)
+        Me.btnShowPass.Size = New System.Drawing.Size(86, 28)
         Me.btnShowPass.TabIndex = 38
         Me.btnShowPass.Text = "Show"
         Me.btnShowPass.UseVisualStyleBackColor = False
@@ -147,23 +147,23 @@ Partial Class FormLogIn
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
         '
-        'btnRememberMe
+        'cbRememberMe
         '
-        Me.btnRememberMe.AutoSize = True
-        Me.btnRememberMe.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnRememberMe.Location = New System.Drawing.Point(217, 264)
-        Me.btnRememberMe.Name = "btnRememberMe"
-        Me.btnRememberMe.Size = New System.Drawing.Size(126, 27)
-        Me.btnRememberMe.TabIndex = 90
-        Me.btnRememberMe.Text = "Remember Me"
-        Me.btnRememberMe.UseVisualStyleBackColor = True
+        Me.cbRememberMe.AutoSize = True
+        Me.cbRememberMe.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbRememberMe.Location = New System.Drawing.Point(217, 264)
+        Me.cbRememberMe.Name = "cbRememberMe"
+        Me.cbRememberMe.Size = New System.Drawing.Size(126, 27)
+        Me.cbRememberMe.TabIndex = 90
+        Me.cbRememberMe.Text = "Remember Me"
+        Me.cbRememberMe.UseVisualStyleBackColor = True
         '
         'FormLogIn
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(944, 501)
-        Me.Controls.Add(Me.btnRememberMe)
+        Me.Controls.Add(Me.cbRememberMe)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.lblGeneralError)
@@ -191,5 +191,5 @@ Partial Class FormLogIn
     Friend WithEvents lblGeneralError As Label
     Friend WithEvents btnNext As Button
     Friend WithEvents btnBack As Button
-    Friend WithEvents btnRememberMe As CheckBox
+    Friend WithEvents cbRememberMe As CheckBox
 End Class
