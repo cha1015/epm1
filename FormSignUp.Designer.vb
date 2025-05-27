@@ -222,6 +222,9 @@ Partial Class FormSignUp
         '
         'cmbSex
         '
+        Me.cmbSex.AutoCompleteCustomSource.AddRange(New String() {"Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"})
+        Me.cmbSex.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.cmbSex.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.cmbSex.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbSex.FormattingEnabled = True
         Me.cmbSex.Items.AddRange(New Object() {"Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"})
@@ -509,6 +512,9 @@ Partial Class FormSignUp
         '
         'cbRole
         '
+        Me.cbRole.AutoCompleteCustomSource.AddRange(New String() {"User", "Admin"})
+        Me.cbRole.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.cbRole.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.cbRole.Font = New System.Drawing.Font("Cinzel", 7.2!)
         Me.cbRole.ForeColor = System.Drawing.Color.Black
         Me.cbRole.FormattingEnabled = True

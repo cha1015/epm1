@@ -423,6 +423,7 @@ Public Class FormMain
         txtMinPrice.Text = "Min"
         txtMaxPrice.Text = "Max"
         cbSort.SelectedIndex = -1
+        txtSearch.Text = ""
     End Sub
 
     Private Sub btnClearFilters_Click(sender As Object, e As EventArgs) Handles btnClearFilters.Click

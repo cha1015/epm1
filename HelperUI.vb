@@ -34,23 +34,23 @@ Public Class HelperUI
         Dim defaultImagePath As String = "C:\event images\No Image.png"
         Dim fullImagePath As String = If(String.IsNullOrWhiteSpace(imgPath), defaultImagePath, imgPath.Trim())
 
-        Try
-            If File.Exists(fullImagePath) Then
-                pb.Image = Image.FromFile(fullImagePath)
-            Else
-                pb.Image = Image.FromFile(defaultImagePath)
-                MessageBox.Show($"File not found: {fullImagePath}. Using fallback image.", "Image Load Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
-        Catch ex As OutOfMemoryException
-            MessageBox.Show("Error: The image file format is not supported.", "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            pb.Image = Image.FromFile(defaultImagePath)
-        Catch ex As FileNotFoundException
-            MessageBox.Show("Error: The specified image file does not exist.", "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            pb.Image = Image.FromFile(defaultImagePath)
-        Catch ex As Exception
-            MessageBox.Show("Error loading image: " & ex.Message, "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            pb.Image = Image.FromFile(defaultImagePath)
-        End Try
+        'Try
+        '    If File.Exists(fullImagePath) Then
+        '        pb.Image = Image.FromFile(fullImagePath)
+        '    Else
+        '        pb.Image = Image.FromFile(defaultImagePath)
+        '        MessageBox.Show($"File not found: {fullImagePath}. Using fallback image.", "Image Load Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        '    End If
+        'Catch ex As OutOfMemoryException
+        '    MessageBox.Show("Error: The image file format is not supported.", "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '    pb.Image = Image.FromFile(defaultImagePath)
+        'Catch ex As FileNotFoundException
+        '    MessageBox.Show("Error: The specified image file does not exist.", "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '    pb.Image = Image.FromFile(defaultImagePath)
+        'Catch ex As Exception
+        '    MessageBox.Show("Error loading image: " & ex.Message, "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '    pb.Image = Image.FromFile(defaultImagePath)
+        'End Try
     End Sub
 End Class
 

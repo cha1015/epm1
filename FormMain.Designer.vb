@@ -216,6 +216,9 @@ Partial Class FormMain
         '
         'cbSort
         '
+        Me.cbSort.AutoCompleteCustomSource.AddRange(New String() {"Alphabetical (A-Z)", "Alphabetical (Z-A)", "Capacity (Lowest to Highest)", "Capacity (Highest to Lowest)", "Price (Lowest to Highest)", "Price (Highest to Lowest)"})
+        Me.cbSort.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+        Me.cbSort.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.cbSort.Font = New System.Drawing.Font("Poppins", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbSort.ForeColor = System.Drawing.Color.DimGray
         Me.cbSort.FormattingEnabled = True
@@ -398,7 +401,7 @@ Partial Class FormMain
         Me.pnlFilter.Controls.Add(Me.txtMinPrice)
         Me.pnlFilter.ForeColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.pnlFilter.Location = New System.Drawing.Point(1251, 134)
-        Me.pnlFilter.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.pnlFilter.Margin = New System.Windows.Forms.Padding(4)
         Me.pnlFilter.Name = "pnlFilter"
         Me.pnlFilter.Size = New System.Drawing.Size(267, 470)
         Me.pnlFilter.TabIndex = 82
@@ -426,7 +429,7 @@ Partial Class FormMain
         Me.btnBack.FlatAppearance.BorderSize = 0
         Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnBack.Location = New System.Drawing.Point(225, 39)
-        Me.btnBack.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnBack.Margin = New System.Windows.Forms.Padding(4)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(24, 25)
         Me.btnBack.TabIndex = 84
@@ -439,7 +442,7 @@ Partial Class FormMain
         Me.btnNext.FlatAppearance.BorderSize = 0
         Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnNext.Location = New System.Drawing.Point(257, 39)
-        Me.btnNext.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnNext.Margin = New System.Windows.Forms.Padding(4)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(24, 25)
         Me.btnNext.TabIndex = 85
@@ -475,7 +478,7 @@ Partial Class FormMain
         Me.Controls.Add(Me.flpResults)
         Me.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Main"
