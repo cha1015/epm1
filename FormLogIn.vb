@@ -3,7 +3,9 @@ Imports System.Security.Cryptography
 Imports System.Text
 
 Public Class FormLogIn
+
     Private Sub FormLogIn_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         HideErrorLabels()
         ResetFieldIndicators()
 
@@ -21,44 +23,69 @@ Public Class FormLogIn
         If String.IsNullOrWhiteSpace(txtPass.Text) Then MarkFieldAsMissing(lblPassword) : missingFields = True
 
         If missingFields Then Return
+        txtEmail.Text = txtEmail.Text.Trim()
+        txtPass.Text = txtPass.Text.Trim()
 
-        ValidateUserLogin()
+        Try
+            ValidateUserLogin()
+        Catch ex As Exception
+            lblGeneralError.Text = "An error occurred during login."
+            lblGeneralError.Visible = True
+        End Try
     End Sub
 
     Private Sub ValidateUserLogin()
-        Dim query As String = "SELECT user_id, username, email, password_hash, role FROM Users WHERE BINARY email = @email"
+        Dim query As String = "SELECT user_id, username, email, password_hash, role FROM users WHERE BINARY email = @email"
         Dim parameters As New Dictionary(Of String, Object) From {{"@email", txtEmail.Text}}
-        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+        Dim dt As DataTable
+
+        Try
+            dt = DBHelper.GetDataTable(query, parameters)
+        Catch ex As Exception
+            lblGeneralError.Text = "Database error. Please try again."
+            lblGeneralError.Visible = True
+            Exit Sub
+        End Try
 
         If dt.Rows.Count > 0 Then
             Dim storedHash As String = dt.Rows(0)("password_hash").ToString()
-            If VerifyPassword(txtPass.Text, storedHash) Then
-                ' Store user details from the Users table.
-                CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
-                CurrentUser.Username = dt.Rows(0)("username").ToString()
-                CurrentUser.Email = dt.Rows(0)("email").ToString()
-                CurrentUser.Role = dt.Rows(0)("role").ToString()
+            Dim passwordValid As Boolean
+            Try
+                passwordValid = VerifyPassword(txtPass.Text, storedHash)
+            Catch ex As Exception
+                lblGeneralError.Text = "Password verification failed."
+                lblGeneralError.Visible = True
+                Exit Sub
+            End Try
+
+            If passwordValid Then
+                Try
+                    CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
+                    CurrentUser.Username = dt.Rows(0)("username").ToString()
+                    CurrentUser.Email = dt.Rows(0)("email").ToString()
+                    CurrentUser.Role = dt.Rows(0)("role").ToString()
+                Catch ex As Exception
+                    lblGeneralError.Text = "User data error."
+                    lblGeneralError.Visible = True
+                    Exit Sub
+                End Try
 
                 lblGeneralError.Visible = False
 
                 Select Case CurrentUser.Role
                     Case "Admin"
-                        ' Prompt for admin authentication code.
                         Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
                         If String.Compare(adminCode.Trim(), "SECURE123", True) <> 0 Then
                             lblGeneralError.Text = "Invalid admin authentication code."
                             lblGeneralError.Visible = True
                             Exit Sub
                         End If
-                        ' Assign a dummy nonzero value since the admin won't have a corresponding customer record.
                         CurrentUser.CustomerId = -1
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
                     Case "User"
-                        ' For Users, assign a valid customer id.
-                        ' Here we simply set it equal to the user id, or you could perform a query if needed.
-                        CurrentUser.CustomerId = CurrentUser.UserID ' Or query the Customers table as required.
+                        CurrentUser.CustomerId = CurrentUser.UserID
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
@@ -76,12 +103,15 @@ Public Class FormLogIn
         End If
     End Sub
 
-
     Private Function VerifyPassword(inputPassword As String, storedHash As String) As Boolean
-        Using sha256 As SHA256 = SHA256.Create()
-            Dim inputHash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(inputPassword))
-            Return Convert.ToBase64String(inputHash) = storedHash
-        End Using
+        Try
+            Using sha256 As SHA256 = SHA256.Create()
+                Dim inputHash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(inputPassword))
+                Return Convert.ToBase64String(inputHash) = storedHash
+            End Using
+        Catch
+            Return False
+        End Try
     End Function
 
     Private Sub ResetFieldIndicators()

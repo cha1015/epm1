@@ -31,6 +31,7 @@ Public Class FormSignUp
 
         AddHandler dtpBirthday.ValueChanged, AddressOf dtpBirthday_ValueChanged
     End Sub
+
     Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs)
         Dim birthday As Date = dtpBirthday.Value
         Dim today As Date = Date.Today
@@ -42,8 +43,15 @@ Public Class FormSignUp
     Private Sub CheckUsernameAvailability(sender As Object, e As EventArgs)
         Dim query As String = "SELECT COUNT(*) FROM Users WHERE username = @uname"
         Dim parameters As New Dictionary(Of String, Object) From {{"@uname", txtUsername.Text}}
+        Dim userExists As Integer = 0
 
-        Dim userExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+        Try
+            userExists = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+        Catch ex As Exception
+            lblUsernameError.Text = "Error checking username."
+            lblUsernameError.Visible = True
+            Return
+        End Try
 
         lblUsernameError.Text = If(userExists > 0, $"Username already exists! Try {txtUsername.Text}123", "")
         lblUsernameError.Visible = userExists > 0
@@ -52,13 +60,19 @@ Public Class FormSignUp
     Private Sub CheckEmailAvailability(sender As Object, e As EventArgs)
         Dim query As String = "SELECT COUNT(*) FROM Users WHERE email = @email"
         Dim parameters As New Dictionary(Of String, Object) From {{"@email", txtEmail.Text}}
+        Dim emailExists As Integer = 0
 
-        Dim emailExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+        Try
+            emailExists = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+        Catch ex As Exception
+            lblEmailError.Text = "Error checking email."
+            lblEmailError.Visible = True
+            Return
+        End Try
 
         lblEmailError.Text = If(emailExists > 0, "Email already registered. Try a different one.", "")
         lblEmailError.Visible = emailExists > 0
     End Sub
-
 
     Private Sub ShowPasswordStrength(sender As Object, e As EventArgs)
         lblPwStrength.Text = CheckPasswordStrength(txtPass.Text)
@@ -82,7 +96,11 @@ Public Class FormSignUp
             Return
         End If
 
-        ' For Admin registrations, prompt for the admin authentication code.
+        If cbRole.SelectedItem Is Nothing OrElse cmbSex.SelectedItem Is Nothing Then
+            MessageBox.Show("Please select a role and sex.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
         If cbRole.SelectedItem.ToString() = "Admin" Then
             Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
             If adminCode <> "SECURE123" Then
@@ -91,7 +109,14 @@ Public Class FormSignUp
             End If
         End If
 
-        Dim hashedPassword As String = HashPassword(txtPass.Text)
+        Dim hashedPassword As String
+        Try
+            hashedPassword = HashPassword(txtPass.Text)
+        Catch ex As Exception
+            MessageBox.Show("Error hashing password.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End Try
+
         Dim userQuery As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role, birthday, age, sex, address) " &
                                  "VALUES (@fname, @lname, @uname, @email, @pass, @role, @birthday, @age, @sex, @address); SELECT LAST_INSERT_ID();"
         Dim userParams As New Dictionary(Of String, Object) From {
@@ -116,7 +141,6 @@ Public Class FormSignUp
                 Return
             End If
 
-            ' Only insert into the Customers table if the role is NOT Admin.
             If cbRole.SelectedItem.ToString() <> "Admin" Then
                 Dim customerQuery As String = "INSERT INTO Customers (user_id, name, birthday, age, sex, address) " &
                                               "VALUES (@user_id, @name, @birthday, @age, @sex, @address)"
@@ -128,7 +152,11 @@ Public Class FormSignUp
                     {"@sex", cmbSex.SelectedItem.ToString()},
                     {"@address", txtAddress.Text}
                 }
-                DBHelper.ExecuteQuery(customerQuery, customerParams)
+                Try
+                    DBHelper.ExecuteQuery(customerQuery, customerParams)
+                Catch ex As Exception
+                    MessageBox.Show("User created, but failed to create customer record.", "Partial Success", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                End Try
             End If
 
             MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -143,8 +171,13 @@ Public Class FormSignUp
     Private Function GetAdminCodeFromDatabase(username As String) As String
         Dim query As String = "SELECT admin_code FROM Users WHERE username = @uname"
         Dim parameters As New Dictionary(Of String, Object) From {{"@uname", username}}
-        Return Convert.ToString(DBHelper.ExecuteScalarQuery(query, parameters))
+        Try
+            Return Convert.ToString(DBHelper.ExecuteScalarQuery(query, parameters))
+        Catch
+            Return ""
+        End Try
     End Function
+
     Private Sub SetMissingFieldIndicator(txtBox As TextBox)
         txtBox.Text = "Required"
         txtBox.ForeColor = Color.Gray
@@ -178,9 +211,13 @@ Public Class FormSignUp
     End Sub
 
     Private Function HashPassword(password As String) As String
-        Dim sha256 As SHA256 = SHA256.Create()
-        Dim hashedBytes As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(password))
-        Return Convert.ToBase64String(hashedBytes)
+        Try
+            Dim sha256 As SHA256 = SHA256.Create()
+            Dim hashedBytes As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(password))
+            Return Convert.ToBase64String(hashedBytes)
+        Catch
+            Return ""
+        End Try
     End Function
 
     Private Function CheckPasswordStrength(password As String) As String
@@ -207,7 +244,6 @@ Public Class FormSignUp
 
         Return "Invalid Password!"
     End Function
-
 
     Private Sub lnklblLogIn_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklblLogIn.LinkClicked
         Dim loginForm As New FormLogIn()
