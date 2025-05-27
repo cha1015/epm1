@@ -386,7 +386,7 @@ Public Class FormCustomerView
         Me.Hide()
     End Sub
 
-    Private Sub btnSelectBooking_Click_1(sender As Object, e As EventArgs) Handles btnSelectBooking.Click
+    Private Sub btnSelectBooking_Click_1(sender As Object, e As EventArgs)
         If dgvPaymentHistory.SelectedRows.Count = 0 Then
             MessageBox.Show("Please select a payment to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
@@ -463,7 +463,7 @@ Public Class FormCustomerView
         End If
     End Sub
 
-    Private Sub txtPaymentAmount_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtPaymentAmount.KeyPress
+    Private Sub txtPaymentAmount_KeyPress(sender As Object, e As KeyPressEventArgs)
         ' Allow only numbers and control keys (like backspace)
         If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
             e.Handled = True

@@ -26,8 +26,6 @@ Partial Class FormCustomerView
         Me.dgvPaymentHistory = New System.Windows.Forms.DataGridView()
         Me.btnConfirmPayment = New System.Windows.Forms.Button()
         Me.dgvCurrentBooking = New System.Windows.Forms.DataGridView()
-        Me.btnSelectBooking = New System.Windows.Forms.Button()
-        Me.txtPaymentAmount = New System.Windows.Forms.TextBox()
         Me.lblCurrentBooking = New System.Windows.Forms.Label()
         Me.btnLogOut = New System.Windows.Forms.Button()
         Me.lblRole = New System.Windows.Forms.Label()
@@ -76,28 +74,6 @@ Partial Class FormCustomerView
         Me.dgvCurrentBooking.RowHeadersWidth = 51
         Me.dgvCurrentBooking.Size = New System.Drawing.Size(863, 124)
         Me.dgvCurrentBooking.TabIndex = 53
-        '
-        'btnSelectBooking
-        '
-        Me.btnSelectBooking.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnSelectBooking.FlatAppearance.BorderSize = 0
-        Me.btnSelectBooking.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSelectBooking.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSelectBooking.ForeColor = System.Drawing.Color.WhiteSmoke
-        Me.btnSelectBooking.Location = New System.Drawing.Point(43, 436)
-        Me.btnSelectBooking.Name = "btnSelectBooking"
-        Me.btnSelectBooking.Size = New System.Drawing.Size(863, 29)
-        Me.btnSelectBooking.TabIndex = 55
-        Me.btnSelectBooking.Text = "Select Booking"
-        Me.btnSelectBooking.UseVisualStyleBackColor = False
-        '
-        'txtPaymentAmount
-        '
-        Me.txtPaymentAmount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPaymentAmount.Location = New System.Drawing.Point(46, 472)
-        Me.txtPaymentAmount.Name = "txtPaymentAmount"
-        Me.txtPaymentAmount.Size = New System.Drawing.Size(731, 21)
-        Me.txtPaymentAmount.TabIndex = 54
         '
         'lblCurrentBooking
         '
@@ -182,8 +158,6 @@ Partial Class FormCustomerView
         Me.Controls.Add(Me.dgvPaymentHistory)
         Me.Controls.Add(Me.btnConfirmPayment)
         Me.Controls.Add(Me.dgvCurrentBooking)
-        Me.Controls.Add(Me.btnSelectBooking)
-        Me.Controls.Add(Me.txtPaymentAmount)
         Me.Controls.Add(Me.lblCurrentBooking)
         Me.Controls.Add(Me.btnLogOut)
         Me.Controls.Add(Me.lblRole)
@@ -202,8 +176,6 @@ Partial Class FormCustomerView
     Friend WithEvents dgvPaymentHistory As DataGridView
     Friend WithEvents btnConfirmPayment As Button
     Friend WithEvents dgvCurrentBooking As DataGridView
-    Friend WithEvents btnSelectBooking As Button
-    Friend WithEvents txtPaymentAmount As TextBox
     Friend WithEvents lblCurrentBooking As Label
     Friend WithEvents btnLogOut As Button
     Friend WithEvents lblRole As Label
