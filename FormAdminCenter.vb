@@ -7,6 +7,8 @@ Imports System.Windows.Forms.DataVisualization.Charting
 Public Class FormAdminCenter
 
     Private Sub FormAdminCenter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        HelperNavigation.RegisterNewForm(Me)
+
         lblUsername.Text = CurrentUser.Username
 
         ' Load all datasets into FlowLayoutPanels and Chart:
@@ -335,19 +337,12 @@ Public Class FormAdminCenter
         End Using
     End Sub
 
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        If HelperNavigation.ForwardHistory.Count > 0 Then ' ✅ Ensure the right reference
-            Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop() ' ✅ Retrieve last undone form
-            HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack) ' ✅ Restore previous form
-        Else
-            'MessageBox.Show("No next form to redo!")
-            btnNext.Enabled = False ' Disable next button if no form to redo
-        End If
-
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        HelperNavigation.GoBack(Me)
     End Sub
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        HelperNavigation.GoBack(Me, btnNext, btnBack)
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        HelperNavigation.GoNext(Me)
     End Sub
 
 End Class

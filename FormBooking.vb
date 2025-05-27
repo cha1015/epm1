@@ -51,6 +51,8 @@ Public Class FormBooking
 
     ' ------------------ Form Load ------------------
     Private Sub FormBooking_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        HelperNavigation.RegisterNewForm(Me)
+
         AddHandler dtpEventDateStart.ValueChanged, AddressOf PreventBookedDates
         AddHandler dtpEventDateEnd.ValueChanged, AddressOf PreventBookedDates
 
@@ -251,19 +253,12 @@ Public Class FormBooking
                                    lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
     End Sub
 
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        If HelperNavigation.ForwardHistory.Count > 0 Then ' ✅ Ensure the right reference
-            Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop() ' ✅ Retrieve last undone form
-            HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack) ' ✅ Restore previous form
-        Else
-            'MessageBox.Show("No next form to redo!")
-            btnNext.Enabled = False ' Disable next button if no form to redo
-        End If
-
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        HelperNavigation.GoBack(Me)
     End Sub
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        HelperNavigation.GoBack(Me, btnNext, btnBack)
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        HelperNavigation.GoNext(Me)
     End Sub
 
     Private Sub UpdateTotalPrice(sender As Object, e As EventArgs) Handles txtNumGuests.TextChanged, chkVideoke.CheckedChanged, chkSinger.CheckedChanged, chkOutsideAvailableHours.CheckedChanged, chkDancer.CheckedChanged, chkClown.CheckedChanged, chkCatering.CheckedChanged, cbStartMinutes.SelectedIndexChanged, cbStartHour.SelectedIndexChanged, cbStartAMPM.SelectedIndexChanged, cbEndMinutes.SelectedIndexChanged, cbEndHour.SelectedIndexChanged, cbEndAMPM.SelectedIndexChanged

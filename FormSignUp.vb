@@ -290,6 +290,12 @@ Public Class FormSignUp
 
 
     Private Sub FormSignUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        btnShowConfPass.Image = epm1.My.Resources.Resources.BttnHide
+        btnShowPass.Image = epm1.My.Resources.Resources.BttnHide
+
+        HelperNavigation.RegisterNewForm(Me)
+
         HideErrorLabels()
 
         tpAccountDetails.Enabled = False ' Disable tab until user proceeds
@@ -551,7 +557,6 @@ Public Class FormSignUp
     Private Sub btnShowPass_Click(sender As Object, e As EventArgs) Handles btnShowPass.Click
 
         passwordVisible = Not passwordVisible
-        btnShowPass.Image = epm1.My.Resources.Resources.BttnHide
 
         If passwordVisible Then
             btnShowPass.Image = Nothing
@@ -569,7 +574,6 @@ Public Class FormSignUp
     Private Sub btnShowConfPass_Click(sender As Object, e As EventArgs) Handles btnShowConfPass.Click
 
         passwordVisible = Not passwordVisible
-        btnShowConfPass.Image = epm1.My.Resources.Resources.BttnHide
 
         If passwordVisible Then
             btnShowConfPass.Image = Nothing
@@ -584,12 +588,17 @@ Public Class FormSignUp
     End Sub
 
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        HelperNavigation.GoBack(Me, btnNext, btnBack)
-    End Sub
 
     Private Sub btnShowPass_Click_1(sender As Object, e As EventArgs) Handles btnShowPass.Click
 
+    End Sub
+
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        HelperNavigation.GoBack(Me)
+    End Sub
+
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        HelperNavigation.GoNext(Me)
     End Sub
 End Class
 
