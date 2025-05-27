@@ -22,6 +22,7 @@ Partial Class FormLogIn
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormLogIn))
         Me.lblPassword = New System.Windows.Forms.Label()
         Me.lblEmail = New System.Windows.Forms.Label()
         Me.btnLogIn = New System.Windows.Forms.Button()
@@ -176,6 +177,7 @@ Partial Class FormLogIn
         Me.Controls.Add(Me.txtEmail)
         Me.Controls.Add(Me.lnklblSignUp)
         Me.Controls.Add(Me.txtPass)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "FormLogIn"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormLogIn"

@@ -127,7 +127,7 @@ Partial Class FormAdminCenter
         Me.btnLogOut.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogOut.ForeColor = System.Drawing.Color.Black
         Me.btnLogOut.Location = New System.Drawing.Point(856, 43)
-        Me.btnLogOut.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnLogOut.Margin = New System.Windows.Forms.Padding(2)
         Me.btnLogOut.Name = "btnLogOut"
         Me.btnLogOut.Size = New System.Drawing.Size(66, 19)
         Me.btnLogOut.TabIndex = 93
@@ -143,7 +143,7 @@ Partial Class FormAdminCenter
         Me.btnCustomerView.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCustomerView.ForeColor = System.Drawing.Color.Black
         Me.btnCustomerView.Location = New System.Drawing.Point(856, 20)
-        Me.btnCustomerView.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnCustomerView.Margin = New System.Windows.Forms.Padding(2)
         Me.btnCustomerView.Name = "btnCustomerView"
         Me.btnCustomerView.Size = New System.Drawing.Size(66, 19)
         Me.btnCustomerView.TabIndex = 92
@@ -200,7 +200,7 @@ Partial Class FormAdminCenter
         Me.tpBookings.Controls.Add(Me.flpPendingBookings)
         Me.tpBookings.Location = New System.Drawing.Point(4, 23)
         Me.tpBookings.Name = "tpBookings"
-        Me.tpBookings.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tpBookings.Padding = New System.Windows.Forms.Padding(3)
         Me.tpBookings.Size = New System.Drawing.Size(892, 378)
         Me.tpBookings.TabIndex = 6
         Me.tpBookings.Text = "Bookings"
@@ -260,7 +260,7 @@ Partial Class FormAdminCenter
         Me.tpInvoicesAndPayments.Controls.Add(Me.flpInvoices)
         Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 23)
         Me.tpInvoicesAndPayments.Name = "tpInvoicesAndPayments"
-        Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(3)
         Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(892, 378)
         Me.tpInvoicesAndPayments.TabIndex = 5
         Me.tpInvoicesAndPayments.Text = "Invoices and Payments"
@@ -281,7 +281,7 @@ Partial Class FormAdminCenter
         Me.tpReports.Controls.Add(Me.flpRevenueReports)
         Me.tpReports.Location = New System.Drawing.Point(4, 23)
         Me.tpReports.Name = "tpReports"
-        Me.tpReports.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tpReports.Padding = New System.Windows.Forms.Padding(3)
         Me.tpReports.Size = New System.Drawing.Size(892, 378)
         Me.tpReports.TabIndex = 7
         Me.tpReports.Text = "Reports"
@@ -332,7 +332,7 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.Controls.Add(Me.GroupBox1)
         Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 23)
         Me.tpEventPlaceMgmt.Name = "tpEventPlaceMgmt"
-        Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(3)
         Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(892, 378)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
@@ -342,7 +342,7 @@ Partial Class FormAdminCenter
         Me.flpEventPlaces.AutoScroll = True
         Me.flpEventPlaces.BackColor = System.Drawing.Color.Transparent
         Me.flpEventPlaces.Location = New System.Drawing.Point(11, 5)
-        Me.flpEventPlaces.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.flpEventPlaces.Margin = New System.Windows.Forms.Padding(2)
         Me.flpEventPlaces.Name = "flpEventPlaces"
         Me.flpEventPlaces.Size = New System.Drawing.Size(316, 224)
         Me.flpEventPlaces.TabIndex = 95
@@ -723,7 +723,7 @@ Partial Class FormAdminCenter
         Me.tpCustomerRecords.Controls.Add(Me.flpCustomerRecords)
         Me.tpCustomerRecords.Location = New System.Drawing.Point(4, 23)
         Me.tpCustomerRecords.Name = "tpCustomerRecords"
-        Me.tpCustomerRecords.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tpCustomerRecords.Padding = New System.Windows.Forms.Padding(3)
         Me.tpCustomerRecords.Size = New System.Drawing.Size(892, 378)
         Me.tpCustomerRecords.TabIndex = 4
         Me.tpCustomerRecords.Text = "Customer Records"
@@ -782,6 +782,7 @@ Partial Class FormAdminCenter
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.tcAdminCenter)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "FormAdminCenter"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormAdminCenter"

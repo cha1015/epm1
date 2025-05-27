@@ -22,6 +22,7 @@ Partial Class FormSignUp
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormSignUp))
         Me.btnSignUp = New System.Windows.Forms.Button()
         Me.lnklblLogIn = New System.Windows.Forms.LinkLabel()
         Me.lblRequiredMessage = New System.Windows.Forms.Label()
@@ -161,7 +162,7 @@ Partial Class FormSignUp
         Me.tpPersonalInfo.Controls.Add(Me.txtLastName)
         Me.tpPersonalInfo.Location = New System.Drawing.Point(4, 23)
         Me.tpPersonalInfo.Name = "tpPersonalInfo"
-        Me.tpPersonalInfo.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tpPersonalInfo.Padding = New System.Windows.Forms.Padding(3)
         Me.tpPersonalInfo.Size = New System.Drawing.Size(582, 325)
         Me.tpPersonalInfo.TabIndex = 0
         Me.tpPersonalInfo.Text = "Personal Information"
@@ -325,7 +326,7 @@ Partial Class FormSignUp
         Me.tpAccountDetails.Controls.Add(Me.txtConfPass)
         Me.tpAccountDetails.Location = New System.Drawing.Point(4, 23)
         Me.tpAccountDetails.Name = "tpAccountDetails"
-        Me.tpAccountDetails.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tpAccountDetails.Padding = New System.Windows.Forms.Padding(3)
         Me.tpAccountDetails.Size = New System.Drawing.Size(582, 325)
         Me.tpAccountDetails.TabIndex = 1
         Me.tpAccountDetails.Text = "Account Details"
@@ -534,6 +535,7 @@ Partial Class FormSignUp
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.lblRequiredMessage)
         Me.Controls.Add(Me.lnklblLogIn)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "FormSignUp"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormSignUp"
