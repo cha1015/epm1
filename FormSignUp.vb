@@ -77,7 +77,7 @@ Public Class FormSignUp
 
     Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
         If Not ValidatePersonalInformation() Then
-            MessageBox.Show("Please complete all required personal information and ensure you meet the age requirement.",
+            MessageBox.Show("Please complete all required personal information and ensure you meet the age requirement of 18 years old.",
                         "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If

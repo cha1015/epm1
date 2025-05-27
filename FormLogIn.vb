@@ -26,12 +26,12 @@ Public Class FormLogIn
     End Sub
 
     Private Sub ValidateUserLogin()
-        Dim query As String = "SELECT user_id, username, email, password_hash, role FROM Users WHERE BINARY email = @email"
+        Dim query As String = "SELECT user_id, username, email, password, role FROM Users WHERE BINARY email = @email"
         Dim parameters As New Dictionary(Of String, Object) From {{"@email", txtEmail.Text}}
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
         If dt.Rows.Count > 0 Then
-            Dim storedPassword As String = dt.Rows(0)("password").ToString() ' Get the plain-text password
+            Dim storedPassword As String = dt.Rows(0)("password").ToString() ' Get the plain-text password from the database
             If txtPass.Text = storedPassword Then ' Directly compare the passwords
                 CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
                 CurrentUser.Username = dt.Rows(0)("username").ToString()
@@ -70,6 +70,7 @@ Public Class FormLogIn
             lblGeneralError.Visible = True
         End If
     End Sub
+
 
     Private Sub ResetFieldIndicators()
         lblEmail.Text = "Email"

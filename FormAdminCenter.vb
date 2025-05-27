@@ -356,7 +356,6 @@ Public Class FormAdminCenter
         End If
     End Sub
 
-
     '--- Additional Legend (optional)
     Private Sub AddLegend()
         Dim legend As New Label With {
