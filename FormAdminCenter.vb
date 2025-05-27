@@ -2,6 +2,7 @@
 Imports System.Data
 Imports System.Globalization
 Imports System.IO
+Imports System.Security.Principal
 Imports System.Windows.Forms.DataVisualization.Charting
 
 Public Class FormAdminCenter
@@ -65,17 +66,15 @@ Public Class FormAdminCenter
     End Sub
 
     Private Sub LoadPendingBookings()
-        Try
-            Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.total_price, b.status " &
-                                  "FROM bookings b " &
-                                  "JOIN customers c ON b.customer_id = c.customer_id " &
-                                  "JOIN eventplace e ON b.place_id = e.place_id " &
-                                  "WHERE b.status='Pending' ORDER BY b.event_date ASC"
-            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-            HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click)
-        Catch ex As Exception
-            MessageBox.Show("Error loading pending bookings: " & ex.Message)
-        End Try
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.total_price, b.status " &
+                              "FROM bookings b " &
+                              "JOIN customers c ON b.customer_id = c.customer_id " &
+                              "JOIN eventplace e ON b.place_id = e.place_id " &
+                              "WHERE b.status='Pending' ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+        ' In FormAdminCenter_Load or wherever you're calling PopulatePendingBookings:
+        HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
+
     End Sub
 
     Private Sub LoadAvailability()
@@ -357,13 +356,250 @@ Public Class FormAdminCenter
 
 #End Region
 
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    '--- Log Out ---
+    '--- Log Out ---
+    '--- Log Out ---
+    '--- Log Out ---
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
+    '--- Log Out ---
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
-        LogError($"User {CurrentUser.UserID} logged out.")
-        CurrentUser.Username = String.Empty
-        CurrentUser.UserID = 0
-        CurrentUser.Email = String.Empty
-        Me.Hide()
-        FormLogIn.Show()
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If result = DialogResult.Yes Then
+            CurrentUser.UserID = -1
+            CurrentUser.Username = String.Empty
+            CurrentUser.Email = String.Empty
+            CurrentUser.Role = String.Empty
+            CurrentUser.CustomerId = -1
+
+            Me.Refresh()
+            Application.DoEvents()
+
+            Dim mainForm As New FormMain()
+            mainForm.Show()
+            Me.Hide()
+        End If
     End Sub
 
     Private Sub AddLegend()
@@ -390,5 +626,8 @@ Public Class FormAdminCenter
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
     End Sub
-
+    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
+        editForm.ShowDialog()
+    End Sub
 End Class

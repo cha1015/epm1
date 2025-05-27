@@ -6,8 +6,6 @@ Imports System.Text.RegularExpressions
 
 Public Class HelperResultsDisplay
 
-    ' Generic method to populate any FlowLayoutPanel from a DataTable,
-    ' using a delegate to create each Panel.
     Public Shared Sub PopulateFlowPanel(ByVal flp As FlowLayoutPanel, ByVal dt As DataTable, ByVal panelCreator As Func(Of DataRow, Panel))
         flp.WrapContents = True
         flp.AutoScroll = True
@@ -68,6 +66,7 @@ Public Class HelperResultsDisplay
                                                          lblCapacity.Size = New Size(panelWidth - 20, 20)
                                                          lblCapacity.Location = New Point(5, 165)
                                                          lblCapacity.Text = "Capacity: " & row("capacity").ToString()
+                                                         lblCapacity.Font = New Font("Poppins", 8)
 
                                                          ' Label for price per day
                                                          Dim lblPrice As New Label()
@@ -75,6 +74,7 @@ Public Class HelperResultsDisplay
                                                          lblPrice.Size = New Size(panelWidth - 20, 20)
                                                          lblPrice.Location = New Point(5, 185)
                                                          lblPrice.Text = "Price per Day: " & row("price_per_day").ToString()
+                                                         lblPrice.Font = New Font("Poppins", 8)
 
                                                          ' Label for event types
                                                          Dim fullEventTypesText As String = row("event_type").ToString()
@@ -89,6 +89,7 @@ Public Class HelperResultsDisplay
                                                          lblEventType.Location = New Point(5, 205)
                                                          lblEventType.Text = "Event Types: " & displayEventTypes
                                                          toolTip.SetToolTip(lblEventType, fullEventTypesText)
+                                                         lblEventType.Font = New Font("Poppins", 8)
 
                                                          ' Label for booking status
                                                          'Dim lblStatus As New Label()
@@ -112,6 +113,8 @@ Public Class HelperResultsDisplay
                                                              btnBook.Tag = row
                                                              AddHandler btnBook.Click, btnBookHandler
                                                              panel.Controls.Add(btnBook)
+                                                             btnBook.FlatStyle = FlatStyle.Flat
+                                                             btnBook.Font = New Font("Poppins", 8)
                                                          Else
                                                              ' Create update and delete buttons for admin
                                                              Dim btnUpdate As New Button()
@@ -148,7 +151,8 @@ Public Class HelperResultsDisplay
 
     '--- Specialized method for Pending Bookings (with Approve and Reject handlers) ---
     Public Shared Sub PopulatePendingBookings(ByVal flpPendingBookings As FlowLayoutPanel, ByVal dt As DataTable,
-                                                ByVal approveHandler As EventHandler, ByVal rejectHandler As EventHandler)
+                                            ByVal approveHandler As EventHandler, ByVal rejectHandler As EventHandler,
+                                            ByVal adminForm As FormAdminCenter)
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
                                                          Dim panel As New Panel()
                                                          panel.Size = New Size(300, 80)
@@ -156,20 +160,20 @@ Public Class HelperResultsDisplay
                                                          panel.Margin = New Padding(10)
 
                                                          Dim lblName As New Label With {
-                                                             .Text = "Customer: " & row("name").ToString(),
-                                                             .Location = New Point(5, 5),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = "Customer: " & row("name").ToString(),
+                                                         .Location = New Point(5, 5),
+                                                         .AutoSize = True
+                                                     }
                                                          Dim lblEvent As New Label With {
-                                                             .Text = "Event: " & row("event_place").ToString(),
-                                                             .Location = New Point(5, 25),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = "Event: " & row("event_place").ToString(),
+                                                         .Location = New Point(5, 25),
+                                                         .AutoSize = True
+                                                     }
                                                          Dim lblDate As New Label With {
-                                                             .Text = "Date: " & row("event_date").ToString(),
-                                                             .Location = New Point(5, 45),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = "Date: " & row("event_date").ToString(),
+                                                         .Location = New Point(5, 45),
+                                                         .AutoSize = True
+                                                     }
                                                          panel.Controls.Add(lblName)
                                                          panel.Controls.Add(lblEvent)
                                                          panel.Controls.Add(lblDate)
@@ -180,6 +184,7 @@ Public Class HelperResultsDisplay
                                                          btnApprove.Size = New Size(75, 25)
                                                          btnApprove.Location = New Point(200, 5)
                                                          btnApprove.Tag = row
+                                                         btnApprove.FlatStyle = FlatStyle.Flat
                                                          AddHandler btnApprove.Click, approveHandler
                                                          panel.Controls.Add(btnApprove)
 
@@ -189,6 +194,7 @@ Public Class HelperResultsDisplay
                                                          btnReject.Size = New Size(75, 25)
                                                          btnReject.Location = New Point(200, 35)
                                                          btnReject.Tag = row
+                                                         btnReject.FlatStyle = FlatStyle.Flat
                                                          AddHandler btnReject.Click, rejectHandler
                                                          panel.Controls.Add(btnReject)
 
@@ -207,10 +213,26 @@ Public Class HelperResultsDisplay
                                                              panel.BackColor = Color.LightGray
                                                          End If
 
+                                                         ' Add the MouseDown and MouseUp events to show/hide FormBookingDetails
+                                                         AddHandler panel.MouseDown, Sub(sender, e)
+                                                                                         If e.Button = MouseButtons.Left Then
+                                                                                             ' Show FormBookingDetails when left mouse button is pressed
+                                                                                             adminForm.ShowBookingDetails(row)
+                                                                                         End If
+                                                                                     End Sub
+
+                                                         AddHandler panel.MouseUp, Sub(sender, e)
+                                                                                       ' Hide FormBookingDetails when mouse button is released
+                                                                                       adminForm.HideBookingDetails()
+                                                                                   End Sub
+
                                                          Return panel
                                                      End Function
         PopulateFlowPanel(flpPendingBookings, dt, createPanel)
     End Sub
+
+
+
 
     '--- Specialized method for Event Place Availability ---
     Public Shared Sub PopulateAvailability(ByVal flpAvailability As FlowLayoutPanel, ByVal dt As DataTable)

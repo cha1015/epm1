@@ -48,7 +48,7 @@ Public Class HelperValidation
 
     ' ------------------ Combined Validation Error Handling ------------------
     ' Combines an asterisk (indicating a required field) with a red highlight on the control.
-    Private Shared Sub MarkFieldInvalid(targetControl As Control, defaultLabelText As String, Optional errorMsg As String = "")
+    Public Shared Sub MarkFieldInvalid(targetControl As Control, defaultLabelText As String, Optional errorMsg As String = "")
         Dim labelIndicator As Label = TryCast(targetControl.Tag, Label)
         If labelIndicator IsNot Nothing Then
             labelIndicator.Text = $"{defaultLabelText} *"
@@ -148,8 +148,8 @@ Public Class HelperValidation
 
     ' ------------------ Validate Time Selection ------------------
     Public Shared Function IsValidTimeSelection(cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                                  cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                                  openingHours As String, closingHours As String) As Boolean
+                                                cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                                openingHours As String, closingHours As String) As Boolean
         Dim timeFormat As String = "h:mm tt"
         Dim eventStartTime As DateTime
         Dim eventEndTime As DateTime
@@ -168,6 +168,8 @@ Public Class HelperValidation
 
         Dim startInput As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
         Dim endInput As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
+
+        ' Parse the time input
         If Not DateTime.TryParseExact(startInput, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) Then
             MarkFieldInvalid(cbStartHour, cbStartHour.Tag?.ToString() & "", "Invalid start time. Use h:mm AM/PM.")
             Return False
@@ -206,6 +208,7 @@ Public Class HelperValidation
         ClearFieldError(cbEndHour, cbEndHour.Tag?.ToString() & "")
         Return True
     End Function
+
 
     ' ------------------ Validate Booking Date Conflicts ------------------
     Public Shared Function IsDateConflict(placeId As Integer, eventStart As Date, eventEnd As Date, dtpEventDateStart As DateTimePicker) As Boolean

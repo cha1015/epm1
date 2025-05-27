@@ -146,11 +146,7 @@ Public Class FormCustomerView
         dgvCurrentBooking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         dgvPaymentHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         customerId = CurrentUser.CustomerId
-        lblUsername.Text = CurrentUser.Username
 
-        '-------MY SQL DATABASE CONNECTION-------
-        'LoadBookings()
-        '----------------------------------------
 
         LoadPaymentHistory()
         SetInitialPlace()
@@ -178,114 +174,19 @@ Public Class FormCustomerView
 
     End Sub
 
-    Private Sub UpdatePlaceDisplay()
-        If relevantPlaceIndices.Count = 0 Then
-            ShowNoBookingPanel()
-            Return
-        End If
-
-        If Not relevantPlaceIndices.Contains(currentPlaceIndex) Then
-            currentPlaceIndex = relevantPlaceIndices(0)
-        End If
-
-        If currentPlaceIndex < 1 Then currentPlaceIndex = 25
-        If currentPlaceIndex > 25 Then currentPlaceIndex = 1
-
-        ' Update place name
-        lblPlaceName.Text = $"{placeNames(currentPlaceIndex - 1)}"
-
-
-        ' Query for the latest payment for the current place and customer
-        Dim query As String = "SELECT payment_id, amount_to_pay, amount_paid, payment_date, payment_status " &
-                      "FROM payments WHERE customer_id = @customer_id AND place_id = @place_id " &
-                      "ORDER BY payment_date DESC LIMIT 1"
-        Dim parameters As New Dictionary(Of String, Object) From {
-    {"@customer_id", customerId},
-    {"@place_id", currentPlaceIndex}
-}
-        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
-
-        If dt.Rows.Count > 0 Then
-            Dim row = dt.Rows(0)
-            lblPaymentId.Text = $"Payment ID: {row("payment_id")}"
-            lblAmountToPay.Text = $"Amount To Pay: {row("amount_to_pay"):C2}"
-            lblAmountPaid.Text = $"Amount Paid: {row("amount_paid"):C2}"
-            lblPaymentDate.Text = $"Payment Date: {If(IsDBNull(row("payment_date")), "-", row("payment_date"))}"
-            lblPaymentStatus.Text = $"Payment Status: {row("payment_status")}"
-        Else
-            lblPaymentId.Text = "Payment ID: -"
-            lblAmountToPay.Text = "Amount To Pay: -"
-            lblAmountPaid.Text = "Amount Paid: -"
-            lblPaymentDate.Text = "Payment Date: -"
-            lblPaymentStatus.Text = "Payment Status: -"
-        End If
-
-
-        ' Set background image from resources and stretch it
-        Try
-
-            Dim resourceName As String = $"_{currentPlaceIndex}"
-            Dim img As Image = CType(My.Resources.ResourceManager.GetObject(resourceName), Image)
-
-
-            If img IsNot Nothing Then
-                pnlPlaceBrowser.BackgroundImage = img
-                pnlPlaceBrowser.BackgroundImageLayout = ImageLayout.Stretch
-                pnlPlaceBrowser.BackColor = Color.Transparent
-            Else
-                pnlPlaceBrowser.BackgroundImage = Nothing
-                pnlPlaceBrowser.BackColor = Color.SandyBrown
-                Debug.WriteLine($"Image resource '{resourceName}' not found.")
-            End If
-        Catch ex As Exception
-            pnlPlaceBrowser.BackgroundImage = Nothing
-            pnlPlaceBrowser.BackColor = Color.SandyBrown
-            Debug.WriteLine($"Error loading image for place {currentPlaceIndex}: {ex.Message}")
-        End Try
-
-    End Sub
-
-    Private Sub BtnPrevPlace_Click(sender As Object, e As EventArgs)
-        If relevantPlaceIndices.Count = 0 Then
-            ShowNoBookingPanel()
-            Return
-        End If
-        Dim idx = GetCurrentRelevantIndex()
-        If idx <= 0 Then
-            currentPlaceIndex = relevantPlaceIndices(relevantPlaceIndices.Count - 1)
-        Else
-            currentPlaceIndex = relevantPlaceIndices(idx - 1)
-        End If
-        UpdatePlaceDisplay()
-    End Sub
-
-    Private Sub BtnNextPlace_Click(sender As Object, e As EventArgs)
-        If relevantPlaceIndices.Count = 0 Then
-            ShowNoBookingPanel()
-            Return
-        End If
-        Dim idx = GetCurrentRelevantIndex()
-        If idx = -1 OrElse idx >= relevantPlaceIndices.Count - 1 Then
-            currentPlaceIndex = relevantPlaceIndices(0)
-        Else
-            currentPlaceIndex = relevantPlaceIndices(idx + 1)
-        End If
-        UpdatePlaceDisplay()
-    End Sub
-
-
-    ' ✅ Load only current customer bookings
     Private Sub LoadBookings()
-        LoadRelevantPlaceIndices()
+        Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
 
         Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
         dgvPaymentHistory.ClearSelection()
+
 
         Dim query As String = $"SELECT b.booking_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status 
                        FROM bookings b
                        JOIN eventplace p ON b.place_id = p.place_id 
                        WHERE b.customer_id = {customerId}
                        ORDER BY b.event_date DESC"
+
 
         Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
 
@@ -296,21 +197,20 @@ Public Class FormCustomerView
                 dgvCurrentBooking.DataSource = dtBookings
                 btnConfirmPayment.Enabled = True
             Else
-                ' Create a temporary placeholder row when no bookings exist
                 Dim dtPlaceholder As New DataTable()
                 dtPlaceholder.Columns.Add("Message", GetType(String))
                 dtPlaceholder.Rows.Add("No bookings found. Start by booking an event!")
                 dgvCurrentBooking.DataSource = dtPlaceholder
+                btnSelectBooking.Enabled = False
                 btnConfirmPayment.Enabled = False
                 dgvCurrentBooking.Refresh()
             End If
 
         Catch ex As MySqlException
-            'MessageBox.Show("Error loading bookings: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    ' ✅ Load payment history correctly
+
     Private Sub LoadPaymentHistory()
         Dim query As String = "SELECT payment_id, amount_to_pay, amount_paid, payment_date, payment_status 
                            FROM payments WHERE customer_id = @customer_id"
@@ -329,7 +229,7 @@ Public Class FormCustomerView
             End If
 
         Catch ex As MySqlException
-            'MessageBox.Show("Error loading payment history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading payment history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -342,49 +242,37 @@ Public Class FormCustomerView
         dgvPaymentHistory.Columns.Add(btnColumn)
     End Sub
 
-    ' Button to switch between grid view and place browser view
-    Private Sub btnSwitchView_Click(sender As Object, e As EventArgs) Handles btnSwitchView.Click
-        isGridView = Not isGridView
-
-        If isGridView Then
-            ' Show grid view, hide panel
-            dgvCurrentBooking.Visible = True
-            pnlPlaceBrowser.Visible = False
-            btnSwitchView.Text = "Browse"
-        Else
-            ' Show panel view, hide grid
-            dgvCurrentBooking.Visible = False
-            pnlPlaceBrowser.Visible = True
-            btnSwitchView.Text = "Show"
-            UpdatePlaceDisplay()
-        End If
-
-        '--------SAMPLE DATA---------
-        UpdatePanelFromCurrentBooking()
-        '----------------------------
-    End Sub
-
-    ' Button to edit customer information
-    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEditInformation.Click
-        Dim editForm As New FormCustomerAdminInfo
+    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
         editForm.ShowDialog()
     End Sub
 
-    ' Button to return to the main screen
+
     Private Sub btnMain_Click(sender As Object, e As EventArgs)
         Dim mainForm As New FormMain()
         mainForm.Show()
         Me.Hide()
     End Sub
 
-    ' Button to log out
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
-        Dim loginForm As New FormLogIn()
-        loginForm.Show()
-        Me.Hide()
-    End Sub
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
-    Private Sub btnSelectBooking_Click_1(sender As Object, e As EventArgs)
+        If result = DialogResult.Yes Then
+            CurrentUser.UserID = -1
+            CurrentUser.Username = String.Empty
+            CurrentUser.Email = String.Empty
+            CurrentUser.Role = String.Empty
+            CurrentUser.CustomerId = -1
+
+            Me.Refresh()
+            Application.DoEvents()
+
+            Dim mainForm As New FormMain()
+            mainForm.Show()
+            Me.Hide()
+        End If
+    End Sub
+    Private Sub btnSelectBooking_Click_1(sender As Object, e As EventArgs) Handles btnSelectBooking.Click
         If dgvPaymentHistory.SelectedRows.Count = 0 Then
             MessageBox.Show("Please select a payment to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
@@ -410,24 +298,20 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub btnConfirmPayment_Click_1(sender As Object, e As EventArgs) Handles btnConfirmPayment.Click
-        ' Ensure a booking is selected
         If dgvPaymentHistory.SelectedRows.Count = 0 Then
             MessageBox.Show("Please select a booking to pay.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        ' Get payment details from the selected row
         Dim paymentStatus As String = dgvPaymentHistory.SelectedRows(0).Cells("payment_status").Value.ToString()
         Dim amountDue As Decimal = Convert.ToDecimal(dgvPaymentHistory.SelectedRows(0).Cells("amount_to_pay").Value)
         Dim amountPaid As Decimal
 
-        ' Validate cash amount (ensure correct payment)
         If Not Decimal.TryParse(txtPaymentAmount.Text, amountPaid) OrElse amountPaid < amountDue Then
             MessageBox.Show("Invalid amount. You must pay at least the due amount.", "Payment Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        ' Allow payment only if booking is approved
         If paymentStatus = "Approved" Then
             Dim paymentId As Integer = Convert.ToInt32(dgvPaymentHistory.SelectedRows(0).Cells("payment_id").Value)
 
@@ -440,7 +324,7 @@ Public Class FormCustomerView
             Try
                 DBHelper.ExecuteQuery(query, parameters)
                 MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadPaymentHistory() ' Refresh payment history
+                LoadPaymentHistory()
             Catch ex As MySqlException
                 MessageBox.Show("Payment processing error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -461,8 +345,7 @@ Public Class FormCustomerView
         End If
     End Sub
 
-    Private Sub txtPaymentAmount_KeyPress(sender As Object, e As KeyPressEventArgs)
-        ' Allow only numbers and control keys (like backspace)
+    Private Sub txtPaymentAmount_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtPaymentAmount.KeyPress
         If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
             e.Handled = True
         End If

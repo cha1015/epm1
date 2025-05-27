@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Globalization
+Imports MySql.Data.MySqlClient
 
 Public Class HelperDatabase
     ' ------------------ Create a New Customer ------------------
@@ -73,7 +74,6 @@ Public Class HelperDatabase
     End Sub
 
 
-
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
         Dim bookedDates As New List(Of Date)
@@ -125,23 +125,32 @@ Public Class HelperDatabase
             Return -1 ' Indicates duplicate booking
         End If
 
+        ' Convert start and end times to 24-hour format
+        Dim eventStart As DateTime = DateTime.ParseExact(eventStartTime, "h:mm tt", CultureInfo.InvariantCulture)
+        Dim eventEnd As DateTime = DateTime.ParseExact(eventEndTime, "h:mm tt", CultureInfo.InvariantCulture)
+
+        ' Convert to HH:mm:ss for storage in the database
+        Dim formattedStartTime As String = eventStart.ToString("HH:mm:ss")
+        Dim formattedEndTime As String = eventEnd.ToString("HH:mm:ss")
+
         ' Proceed with booking insertion
-        Dim query As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price); SELECT LAST_INSERT_ID();"
+        Dim query As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) 
+                            VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price); 
+                            SELECT LAST_INSERT_ID();"
 
         Dim params As New Dictionary(Of String, Object) From {
         {"@customer_id", customerId},
         {"@place_id", placeId},
         {"@num_guests", numGuests},
         {"@event_date", eventDateStart},
-        {"@event_time", eventStartTime},
-        {"@event_end_time", eventEndTime},
+        {"@event_time", formattedStartTime},
+        {"@event_end_time", formattedEndTime},
         {"@total_price", totalPrice}
     }
 
         Dim bookingId As Object = DBHelper.ExecuteScalarQuery(query, params)
         Return If(bookingId IsNot Nothing, Convert.ToInt32(bookingId), -1)
     End Function
-
 
     ' ------------------ Insert Payment Record ------------------
     Public Shared Sub InsertPaymentRecord(bookingId As Integer, customerId As Integer, amountToPay As Decimal)
@@ -164,6 +173,24 @@ Public Class HelperDatabase
         Dim query As String = "SELECT event_type, num_guests FROM Bookings WHERE customer_id = @userId ORDER BY booking_id DESC LIMIT 1"
         Dim params As New Dictionary(Of String, Object) From {{"@userId", userId}}
         Return DBHelper.GetDataTable(query, params)
+    End Function
+
+    ' Fetch detailed booking information for the admin view
+    Public Shared Function GetBookingDetails(bookingId As Integer) As DataTable
+        Dim query As String = "SELECT b.booking_id, b.customer_id, e.event_place, et.event_type, b.num_guests, b.event_date, 
+                           b.event_time, b.event_end_time, b.total_price, b.status, b.services_availed, p.payment_status, 
+                           GROUP_CONCAT(bs.service_name) AS services_availed
+                           FROM bookings b
+                           JOIN customers c ON b.customer_id = c.customer_id
+                           JOIN eventplace e ON b.place_id = e.place_id
+                           JOIN eventtypes et ON e.event_type_id = et.event_type_id
+                           LEFT JOIN payments p ON b.booking_id = p.booking_id
+                           LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
+                           WHERE b.booking_id = @booking_id
+                           GROUP BY b.booking_id"
+
+        Dim parameters As New Dictionary(Of String, Object) From {{"@booking_id", bookingId}}
+        Return DBHelper.GetDataTable(query, parameters)
     End Function
 
 

@@ -32,6 +32,7 @@ Partial Class FormLogIn
         Me.lblGeneralError = New System.Windows.Forms.Label()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
+        Me.cbRememberMe = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'lblPassword
@@ -42,7 +43,7 @@ Partial Class FormLogIn
         Me.lblPassword.ForeColor = System.Drawing.Color.Black
         Me.lblPassword.Location = New System.Drawing.Point(217, 202)
         Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.Size = New System.Drawing.Size(53, 13)
+        Me.lblPassword.Size = New System.Drawing.Size(77, 25)
         Me.lblPassword.TabIndex = 40
         Me.lblPassword.Text = "Password"
         '
@@ -54,7 +55,7 @@ Partial Class FormLogIn
         Me.lblEmail.ForeColor = System.Drawing.Color.Black
         Me.lblEmail.Location = New System.Drawing.Point(217, 139)
         Me.lblEmail.Name = "lblEmail"
-        Me.lblEmail.Size = New System.Drawing.Size(32, 13)
+        Me.lblEmail.Size = New System.Drawing.Size(48, 25)
         Me.lblEmail.TabIndex = 39
         Me.lblEmail.Text = "Email"
         '
@@ -81,7 +82,7 @@ Partial Class FormLogIn
         Me.btnShowPass.ForeColor = System.Drawing.Color.Black
         Me.btnShowPass.Location = New System.Drawing.Point(641, 229)
         Me.btnShowPass.Name = "btnShowPass"
-        Me.btnShowPass.Size = New System.Drawing.Size(86, 24)
+        Me.btnShowPass.Size = New System.Drawing.Size(86, 28)
         Me.btnShowPass.TabIndex = 38
         Me.btnShowPass.Text = "Show"
         Me.btnShowPass.UseVisualStyleBackColor = False
@@ -92,7 +93,7 @@ Partial Class FormLogIn
         Me.txtEmail.ForeColor = System.Drawing.Color.Black
         Me.txtEmail.Location = New System.Drawing.Point(217, 161)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(510, 20)
+        Me.txtEmail.Size = New System.Drawing.Size(510, 28)
         Me.txtEmail.TabIndex = 32
         '
         'lnklblSignUp
@@ -101,9 +102,9 @@ Partial Class FormLogIn
         Me.lnklblSignUp.BackColor = System.Drawing.Color.Transparent
         Me.lnklblSignUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lnklblSignUp.ForeColor = System.Drawing.Color.Black
-        Me.lnklblSignUp.Location = New System.Drawing.Point(217, 343)
+        Me.lnklblSignUp.Location = New System.Drawing.Point(217, 361)
         Me.lnklblSignUp.Name = "lnklblSignUp"
-        Me.lnklblSignUp.Size = New System.Drawing.Size(163, 13)
+        Me.lnklblSignUp.Size = New System.Drawing.Size(233, 25)
         Me.lnklblSignUp.TabIndex = 35
         Me.lnklblSignUp.TabStop = True
         Me.lnklblSignUp.Text = "Don't have an account? Sign Up"
@@ -115,16 +116,16 @@ Partial Class FormLogIn
         Me.txtPass.Location = New System.Drawing.Point(217, 229)
         Me.txtPass.Name = "txtPass"
         Me.txtPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPass.Size = New System.Drawing.Size(417, 20)
+        Me.txtPass.Size = New System.Drawing.Size(417, 28)
         Me.txtPass.TabIndex = 33
         '
         'lblGeneralError
         '
         Me.lblGeneralError.AutoSize = True
-        Me.lblGeneralError.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGeneralError.Location = New System.Drawing.Point(217, 293)
+        Me.lblGeneralError.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblGeneralError.Location = New System.Drawing.Point(217, 311)
         Me.lblGeneralError.Name = "lblGeneralError"
-        Me.lblGeneralError.Size = New System.Drawing.Size(95, 13)
+        Me.lblGeneralError.Size = New System.Drawing.Size(140, 25)
         Me.lblGeneralError.TabIndex = 42
         Me.lblGeneralError.Text = "Invalid credentials."
         '
@@ -146,11 +147,23 @@ Partial Class FormLogIn
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
         '
+        'cbRememberMe
+        '
+        Me.cbRememberMe.AutoSize = True
+        Me.cbRememberMe.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbRememberMe.Location = New System.Drawing.Point(217, 264)
+        Me.cbRememberMe.Name = "cbRememberMe"
+        Me.cbRememberMe.Size = New System.Drawing.Size(126, 27)
+        Me.cbRememberMe.TabIndex = 90
+        Me.cbRememberMe.Text = "Remember Me"
+        Me.cbRememberMe.UseVisualStyleBackColor = True
+        '
         'FormLogIn
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(944, 501)
+        Me.Controls.Add(Me.cbRememberMe)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.lblGeneralError)
@@ -178,4 +191,5 @@ Partial Class FormLogIn
     Friend WithEvents lblGeneralError As Label
     Friend WithEvents btnNext As Button
     Friend WithEvents btnBack As Button
+    Friend WithEvents cbRememberMe As CheckBox
 End Class

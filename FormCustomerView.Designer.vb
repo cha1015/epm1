@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormCustomerView
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class FormCustomerView
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.lblPaymentSection = New System.Windows.Forms.Label()
         Me.dgvPaymentHistory = New System.Windows.Forms.DataGridView()
@@ -29,7 +29,7 @@ Partial Class FormCustomerView
         Me.lblCurrentBooking = New System.Windows.Forms.Label()
         Me.btnLogOut = New System.Windows.Forms.Button()
         Me.lblRole = New System.Windows.Forms.Label()
-        Me.btnEditInformation = New System.Windows.Forms.Button()
+        Me.btnEdit = New System.Windows.Forms.Button()
         Me.lblUsername = New System.Windows.Forms.Label()
         Me.btnSwitchView = New System.Windows.Forms.Button()
         Me.txtPaymentAmount = New System.Windows.Forms.TextBox()
@@ -113,7 +113,7 @@ Partial Class FormCustomerView
         Me.lblRole.TabIndex = 50
         Me.lblRole.Text = "User"
         '
-        'btnEditInformation
+        'btnEdit
         '
         Me.btnEditInformation.BackColor = System.Drawing.Color.Gainsboro
         Me.btnEditInformation.FlatAppearance.BorderSize = 0
@@ -170,7 +170,7 @@ Partial Class FormCustomerView
         Me.Controls.Add(Me.lblCurrentBooking)
         Me.Controls.Add(Me.btnLogOut)
         Me.Controls.Add(Me.lblRole)
-        Me.Controls.Add(Me.btnEditInformation)
+        Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.lblUsername)
         Me.Name = "FormCustomerView"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -188,7 +188,7 @@ Partial Class FormCustomerView
     Friend WithEvents lblCurrentBooking As Label
     Friend WithEvents btnLogOut As Button
     Friend WithEvents lblRole As Label
-    Friend WithEvents btnEditInformation As Button
+    Friend WithEvents btnEdit As Button
     Friend WithEvents lblUsername As Label
     Friend WithEvents btnSwitchView As Button
     Friend WithEvents txtPaymentAmount As TextBox

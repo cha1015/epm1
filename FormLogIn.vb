@@ -9,9 +9,28 @@ Public Class FormLogIn
         HideErrorLabels()
         ResetFieldIndicators()
 
-        AddHandler txtEmail.TextChanged, AddressOf RemoveAsteriskOnInput
-        AddHandler txtPass.TextChanged, AddressOf RemoveAsteriskOnInput
+        txtEmail.Text = ""
+        txtPass.Text = ""
+
+        AddHandler txtEmail.TextChanged, AddressOf DetectEmailAndPromptPassword
     End Sub
+
+    Private Sub DetectEmailAndPromptPassword(sender As Object, e As EventArgs)
+        Dim enteredEmail = txtEmail.Text
+
+        If Not String.IsNullOrWhiteSpace(enteredEmail) Then
+            If My.Settings.RememberMe AndAlso enteredEmail.ToLower().StartsWith(My.Settings.RememberedEmail.ToLower()) Then
+                Dim result = MessageBox.Show($"We detected that {My.Settings.RememberedEmail} is associated with this email. Would you like to auto-fill your password?",
+                                         "Auto-fill Password", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+                If result = DialogResult.Yes Then
+                    txtPass.Text = My.Settings.RememberedPassword
+                    cbRememberMe.Checked = True
+                End If
+            End If
+        End If
+    End Sub
+
 
     Private Sub btnLogIn_Click(sender As Object, e As EventArgs) Handles btnLogIn.Click
         HideErrorLabels()
@@ -35,7 +54,7 @@ Public Class FormLogIn
     End Sub
 
     Private Sub ValidateUserLogin()
-        Dim query As String = "SELECT user_id, username, email, password_hash, role FROM users WHERE BINARY email = @email"
+        Dim query As String = "SELECT user_id, username, email, password, role FROM Users WHERE BINARY email = @email"
         Dim parameters As New Dictionary(Of String, Object) From {{"@email", txtEmail.Text}}
         Dim dt As DataTable
 
@@ -48,29 +67,26 @@ Public Class FormLogIn
         End Try
 
         If dt.Rows.Count > 0 Then
-            Dim storedHash As String = dt.Rows(0)("password_hash").ToString()
-            Dim passwordValid As Boolean
-            Try
-                passwordValid = VerifyPassword(txtPass.Text, storedHash)
-            Catch ex As Exception
-                lblGeneralError.Text = "Password verification failed."
-                lblGeneralError.Visible = True
-                Exit Sub
-            End Try
-
-            If passwordValid Then
-                Try
-                    CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
-                    CurrentUser.Username = dt.Rows(0)("username").ToString()
-                    CurrentUser.Email = dt.Rows(0)("email").ToString()
-                    CurrentUser.Role = dt.Rows(0)("role").ToString()
-                Catch ex As Exception
-                    lblGeneralError.Text = "User data error."
-                    lblGeneralError.Visible = True
-                    Exit Sub
-                End Try
+            Dim storedPassword As String = dt.Rows(0)("password").ToString()
+            If txtPass.Text = storedPassword Then
+                CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
+                CurrentUser.Username = dt.Rows(0)("username").ToString()
+                CurrentUser.Email = dt.Rows(0)("email").ToString()
+                CurrentUser.Role = dt.Rows(0)("role").ToString()
 
                 lblGeneralError.Visible = False
+
+                If cbRememberMe.Checked Then
+                    My.Settings.RememberMe = True
+                    My.Settings.RememberedEmail = txtEmail.Text
+                    My.Settings.RememberedPassword = txtPass.Text
+                    My.Settings.Save()
+                Else
+                    My.Settings.RememberMe = False
+                    My.Settings.RememberedEmail = String.Empty
+                    My.Settings.RememberedPassword = String.Empty
+                    My.Settings.Save()
+                End If
 
                 Select Case CurrentUser.Role
                     Case "Admin"
@@ -104,17 +120,6 @@ Public Class FormLogIn
             lblGeneralError.Visible = True
         End If
     End Sub
-
-    Private Function VerifyPassword(inputPassword As String, storedHash As String) As Boolean
-        Try
-            Using sha256 As SHA256 = SHA256.Create()
-                Dim inputHash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(inputPassword))
-                Return Convert.ToBase64String(inputHash) = storedHash
-            End Using
-        Catch
-            Return False
-        End Try
-    End Function
 
     Private Sub ResetFieldIndicators()
         lblEmail.Text = "Email"
@@ -166,6 +171,20 @@ Public Class FormLogIn
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
+    End Sub
+
+    Private Sub cbRememberMe_CheckedChanged(sender As Object, e As EventArgs) Handles cbRememberMe.CheckedChanged
+        If cbRememberMe.Checked Then
+            My.Settings.RememberMe = True
+            My.Settings.RememberedEmail = txtEmail.Text
+            My.Settings.RememberedPassword = txtPass.Text
+        Else
+            My.Settings.RememberMe = False
+            My.Settings.RememberedEmail = String.Empty
+            My.Settings.RememberedPassword = String.Empty
+        End If
+
+        My.Settings.Save()
     End Sub
 
 End Class
