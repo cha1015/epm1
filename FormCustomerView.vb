@@ -19,6 +19,7 @@ Public Class FormCustomerView
     Private lblAmountPaid As Label
     Private lblPaymentDate As Label
     Private lblPaymentStatus As Label
+    Private relevantPlaceIndices As New List(Of Integer)
 
 
     ' Place names array
@@ -38,20 +39,83 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub CreatePlaceBrowserPanel()
-        ' Create main panel
+        ' Main panel
         pnlPlaceBrowser = New Panel()
         pnlPlaceBrowser.Size = New Size(863, 124)
         pnlPlaceBrowser.Location = New Point(43, 104)
-        pnlPlaceBrowser.BorderStyle = BorderStyle.FixedSingle
+        pnlPlaceBrowser.BorderStyle = BorderStyle.None
         pnlPlaceBrowser.Visible = False
         pnlPlaceBrowser.BackgroundImageLayout = ImageLayout.Stretch
 
-        ' Create navigation buttons
+        ' Make the panel round
+        AddHandler pnlPlaceBrowser.Paint, AddressOf MakePanelRound
+
+        ' Info area panel (beige background)
+        Dim pnlInfoArea As New Panel()
+        pnlInfoArea.Size = New Size(520, 122)
+        pnlInfoArea.Location = New Point(50, 1)
+        pnlInfoArea.BackColor = Color.Transparent
+        ' Place name label (left-aligned, slightly higher)
+        lblPlaceName = New Label()
+        lblPlaceName.Font = New Font("Arial", 20, FontStyle.Bold)
+        lblPlaceName.ForeColor = Color.FromArgb(60, 40, 20)
+        lblPlaceName.BackColor = Color.Transparent
+        lblPlaceName.Size = New Size(480, 36)
+        lblPlaceName.Location = New Point(20, 8) ' Y: slightly higher
+        lblPlaceName.TextAlign = ContentAlignment.MiddleLeft
+
+        ' Payment info labels (left column, slightly higher)
+        lblPaymentId = New Label()
+        lblPaymentId.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblPaymentId.ForeColor = Color.Black
+        lblPaymentId.BackColor = Color.Transparent
+        lblPaymentId.Size = New Size(250, 20)
+        lblPaymentId.Location = New Point(20, 53) ' Y: slightly higher
+
+        lblAmountToPay = New Label()
+        lblAmountToPay.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblAmountToPay.ForeColor = Color.Black
+        lblAmountToPay.BackColor = Color.Transparent
+        lblAmountToPay.Size = New Size(250, 20)
+        lblAmountToPay.Location = New Point(20, 73)
+
+        lblAmountPaid = New Label()
+        lblAmountPaid.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblAmountPaid.ForeColor = Color.Black
+        lblAmountPaid.BackColor = Color.Transparent
+        lblAmountPaid.Size = New Size(250, 20)
+        lblAmountPaid.Location = New Point(20, 93)
+
+        ' Payment info labels (right column, slightly higher)
+        lblPaymentDate = New Label()
+        lblPaymentDate.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblPaymentDate.ForeColor = Color.Black
+        lblPaymentDate.BackColor = Color.Transparent
+        lblPaymentDate.Size = New Size(250, 20)
+        lblPaymentDate.Location = New Point(270, 53) ' Y: slightly higher
+
+        lblPaymentStatus = New Label()
+        lblPaymentStatus.Font = New Font("Arial", 10, FontStyle.Bold)
+        lblPaymentStatus.ForeColor = Color.Black
+        lblPaymentStatus.BackColor = Color.Transparent
+        lblPaymentStatus.Size = New Size(250, 20)
+        lblPaymentStatus.Location = New Point(270, 73)
+
+
+        ' Add labels to info panel
+        pnlInfoArea.Controls.Add(lblPlaceName)
+        pnlInfoArea.Controls.Add(lblPaymentId)
+        pnlInfoArea.Controls.Add(lblAmountToPay)
+        pnlInfoArea.Controls.Add(lblAmountPaid)
+        pnlInfoArea.Controls.Add(lblPaymentDate)
+        pnlInfoArea.Controls.Add(lblPaymentStatus)
+
+        ' Navigation buttons (centered more)
         btnPrevPlace = New Button()
         btnPrevPlace.Text = "◀"
         btnPrevPlace.Size = New Size(40, 40)
-        btnPrevPlace.Location = New Point(10, 42)
-        btnPrevPlace.BackColor = Color.LightGray
+        btnPrevPlace.Location = New Point(10, 42) ' Move right a bit
+        btnPrevPlace.BackColor = Color.White
         btnPrevPlace.FlatStyle = FlatStyle.Flat
         btnPrevPlace.FlatAppearance.BorderSize = 0
         AddHandler btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
@@ -60,66 +124,24 @@ Public Class FormCustomerView
         btnNextPlace = New Button()
         btnNextPlace.Text = "▶"
         btnNextPlace.Size = New Size(40, 40)
-        btnNextPlace.Location = New Point(813, 42)
-        btnNextPlace.BackColor = Color.LightGray
+        btnNextPlace.Location = New Point(805, 42) ' Move left a bit
+        btnNextPlace.BackColor = Color.White
         btnNextPlace.FlatStyle = FlatStyle.Flat
         btnNextPlace.FlatAppearance.BorderSize = 0
         AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
         AddHandler btnNextPlace.Paint, AddressOf MakeButtonRound
 
-        ' Payment info labels
-        lblPaymentId = New Label()
-        lblPaymentId.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblPaymentId.ForeColor = Color.Black
-        lblPaymentId.BackColor = Color.Transparent
-        lblPaymentId.Size = New Size(300, 20)
-        lblPaymentId.Location = New Point(60, 10)
-
-        lblAmountToPay = New Label()
-        lblAmountToPay.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblAmountToPay.ForeColor = Color.Black
-        lblAmountToPay.BackColor = Color.Transparent
-        lblAmountToPay.Size = New Size(300, 20)
-        lblAmountToPay.Location = New Point(60, 35)
-
-        lblAmountPaid = New Label()
-        lblAmountPaid.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblAmountPaid.ForeColor = Color.Black
-        lblAmountPaid.BackColor = Color.Transparent
-        lblAmountPaid.Size = New Size(300, 20)
-        lblAmountPaid.Location = New Point(60, 60)
-
-        lblPaymentDate = New Label()
-        lblPaymentDate.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblPaymentDate.ForeColor = Color.Black
-        lblPaymentDate.BackColor = Color.Transparent
-        lblPaymentDate.Size = New Size(300, 20)
-        lblPaymentDate.Location = New Point(400, 10)
-
-        lblPaymentStatus = New Label()
-        lblPaymentStatus.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblPaymentStatus.ForeColor = Color.Black
-        lblPaymentStatus.BackColor = Color.Transparent
-        lblPaymentStatus.Size = New Size(300, 20)
-        lblPaymentStatus.Location = New Point(400, 35)
-
-        pnlPlaceBrowser.Controls.Add(lblPaymentId)
-        pnlPlaceBrowser.Controls.Add(lblAmountToPay)
-        pnlPlaceBrowser.Controls.Add(lblAmountPaid)
-        pnlPlaceBrowser.Controls.Add(lblPaymentDate)
-        pnlPlaceBrowser.Controls.Add(lblPaymentStatus)
-
-
-        ' Add controls to panel
+        ' Add controls to main panel
+        pnlPlaceBrowser.Controls.Add(pnlInfoArea)
         pnlPlaceBrowser.Controls.Add(btnPrevPlace)
         pnlPlaceBrowser.Controls.Add(btnNextPlace)
-        pnlPlaceBrowser.Controls.Add(lblPlaceName)
-        pnlPlaceBrowser.Controls.Add(lblPlaceDetails)
 
         ' Add panel to form
         Me.Controls.Add(pnlPlaceBrowser)
         pnlPlaceBrowser.BringToFront()
     End Sub
+
+
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dgvCurrentBooking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
@@ -152,13 +174,25 @@ Public Class FormCustomerView
         End Try
 
         UpdatePlaceDisplay()
+        LoadRelevantPlaceIndices()
+
     End Sub
 
     Private Sub UpdatePlaceDisplay()
+        If relevantPlaceIndices.Count = 0 Then
+            ShowNoBookingPanel()
+            Return
+        End If
+
+        If Not relevantPlaceIndices.Contains(currentPlaceIndex) Then
+            currentPlaceIndex = relevantPlaceIndices(0)
+        End If
+
         If currentPlaceIndex < 1 Then currentPlaceIndex = 25
         If currentPlaceIndex > 25 Then currentPlaceIndex = 1
 
         ' Update place name
+        lblPlaceName.Text = $"{placeNames(currentPlaceIndex - 1)}"
 
 
         ' Query for the latest payment for the current place and customer
@@ -212,17 +246,38 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub BtnPrevPlace_Click(sender As Object, e As EventArgs)
-        currentPlaceIndex -= 1
+        If relevantPlaceIndices.Count = 0 Then
+            ShowNoBookingPanel()
+            Return
+        End If
+        Dim idx = GetCurrentRelevantIndex()
+        If idx <= 0 Then
+            currentPlaceIndex = relevantPlaceIndices(relevantPlaceIndices.Count - 1)
+        Else
+            currentPlaceIndex = relevantPlaceIndices(idx - 1)
+        End If
         UpdatePlaceDisplay()
     End Sub
 
     Private Sub BtnNextPlace_Click(sender As Object, e As EventArgs)
-        currentPlaceIndex += 1
+        If relevantPlaceIndices.Count = 0 Then
+            ShowNoBookingPanel()
+            Return
+        End If
+        Dim idx = GetCurrentRelevantIndex()
+        If idx = -1 OrElse idx >= relevantPlaceIndices.Count - 1 Then
+            currentPlaceIndex = relevantPlaceIndices(0)
+        Else
+            currentPlaceIndex = relevantPlaceIndices(idx + 1)
+        End If
         UpdatePlaceDisplay()
     End Sub
 
+
     ' ✅ Load only current customer bookings
     Private Sub LoadBookings()
+        LoadRelevantPlaceIndices()
+
         Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
         dgvPaymentHistory.ClearSelection()
 
@@ -297,12 +352,12 @@ Public Class FormCustomerView
             ' Show grid view, hide panel
             dgvCurrentBooking.Visible = True
             pnlPlaceBrowser.Visible = False
-            btnSwitchView.Text = "Browse Places"
+            btnSwitchView.Text = "Browse"
         Else
             ' Show panel view, hide grid
             dgvCurrentBooking.Visible = False
             pnlPlaceBrowser.Visible = True
-            btnSwitchView.Text = "Show Bookings"
+            btnSwitchView.Text = "Show"
             UpdatePlaceDisplay()
         End If
     End Sub
@@ -416,6 +471,66 @@ Public Class FormCustomerView
         Dim path As New Drawing2D.GraphicsPath()
         path.AddEllipse(0, 0, btn.Width, btn.Height)
         btn.Region = New Region(path)
+    End Sub
+
+    ' New method to make the panel round with rounded corners
+    Private Sub MakePanelRound(sender As Object, e As PaintEventArgs)
+        Dim panel As Panel = CType(sender, Panel)
+        Dim cornerRadius As Integer = 30 ' Adjust this value to make corners more or less rounded
+        Dim path As New Drawing2D.GraphicsPath()
+
+        ' Create rounded rectangle path
+        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
+        path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
+        path.AddArc(panel.Width - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
+        path.AddArc(0, panel.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
+        path.CloseFigure()
+
+        panel.Region = New Region(path)
+    End Sub
+    Private Sub LoadRelevantPlaceIndices()
+        relevantPlaceIndices.Clear()
+        If dgvCurrentBooking.DataSource Is Nothing OrElse dgvCurrentBooking.Rows.Count = 0 Then Return
+
+        For Each row As DataGridViewRow In dgvCurrentBooking.Rows
+            If row.IsNewRow OrElse row.Cells.Count = 0 Then Continue For
+            Dim placeName As String = ""
+            ' Safely get the event_place column if it exists
+            If row.DataGridView.Columns.Contains("event_place") Then
+                placeName = If(row.Cells("event_place").Value IsNot Nothing, row.Cells("event_place").Value.ToString(), "")
+            ElseIf row.Cells.Count > 1 Then
+                placeName = If(row.Cells(1).Value IsNot Nothing, row.Cells(1).Value.ToString(), "")
+            End If
+            Dim idx As Integer = Array.IndexOf(placeNames, placeName)
+            If idx >= 0 AndAlso Not relevantPlaceIndices.Contains(idx + 1) Then
+                relevantPlaceIndices.Add(idx + 1)
+            End If
+        Next
+        relevantPlaceIndices.Sort()
+    End Sub
+    Private Function GetCurrentRelevantIndex() As Integer
+        Return relevantPlaceIndices.IndexOf(currentPlaceIndex)
+    End Function
+    Private Sub ShowNoBookingPanel()
+        pnlPlaceBrowser.BackgroundImage = Nothing
+        pnlPlaceBrowser.BackColor = Color.Beige
+        For Each ctrl As Control In pnlPlaceBrowser.Controls
+            ctrl.Visible = False
+        Next
+
+        Dim lblNoBooking As New Label()
+        lblNoBooking.Text = "No booking data"
+        lblNoBooking.Font = New Font("Arial", 18, FontStyle.Bold)
+        lblNoBooking.ForeColor = Color.FromArgb(60, 40, 20)
+        lblNoBooking.BackColor = Color.Transparent
+        lblNoBooking.AutoSize = False
+        lblNoBooking.TextAlign = ContentAlignment.MiddleCenter
+        lblNoBooking.Size = pnlPlaceBrowser.Size
+        lblNoBooking.Location = New Point(0, 0)
+        lblNoBooking.Name = "lblNoBooking"
+        pnlPlaceBrowser.Controls.Add(lblNoBooking)
+        lblNoBooking.BringToFront()
+        pnlPlaceBrowser.Visible = True
     End Sub
 
 End Class
