@@ -50,15 +50,12 @@ Public Class FormLogIn
                             lblGeneralError.Visible = True
                             Exit Sub
                         End If
-                        ' Assign a dummy nonzero value since the admin won't have a corresponding customer record.
                         CurrentUser.CustomerId = -1
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
                     Case "User"
-                        ' For Users, assign a valid customer id.
-                        ' Here we simply set it equal to the user id, or you could perform a query if needed.
-                        CurrentUser.CustomerId = CurrentUser.UserID ' Or query the Customers table as required.
+                        CurrentUser.CustomerId = CurrentUser.UserID
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
