@@ -126,6 +126,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NavigationHelper.vb" />
     <Compile Include="FormCustomerView.Designer.vb">
       <DependentUpon>FormCustomerView.vb</DependentUpon>
     </Compile>
@@ -207,6 +208,9 @@
     <EmbeddedResource Include="FormCustomerAdminInfo.resx">
       <DependentUpon>FormCustomerAdminInfo.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormCustomerView.resx">
+      <DependentUpon>FormCustomerView.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormLogIn.resx">
       <DependentUpon>FormLogIn.vb</DependentUpon>
     </EmbeddedResource>
@@ -215,6 +219,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormSignUp.resx">
       <DependentUpon>FormSignUp.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

@@ -7,8 +7,12 @@ Public Class FormMain
     Private WithEvents TimerShow As New Timer
 
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        HelperNavigation.RegisterNewForm(Me)
+
         pnlFilter.Left = Me.Width
         pnlFilter.Visible = False
+        pnlFilter.BringToFront()
+        pnlFilter.Dock = DockStyle.None
 
         TimerHide.Interval = 5
         TimerShow.Interval = 5
@@ -26,12 +30,20 @@ Public Class FormMain
         LoadSearchResults()
         UpdatePanelVisibility()
         AdjustResultsPanel()
+        HiddenTextBox.Location = New Point(-100, -100) ' Moves it off the visible area
+        HiddenTextBox.Visible = False
+        HiddenTextBox.Focus()
+        HiddenTextBox.Select()
+        cbSort.TabStop = False
     End Sub
 
 
     Private Sub btnFilter_Click(sender As Object, e As EventArgs) Handles btnFilter.Click
         If pnlFilter.Visible Then
             TimerHide.Start()
+            pnlFilter.Visible = False
+            flpResults.Location = New Point(0, flpResults.Location.Y)
+            flpResults.Width = Me.Width
         Else
             pnlFilter.Visible = True
             TimerShow.Start()
@@ -67,7 +79,11 @@ Public Class FormMain
 
     Private Sub AdjustResultsPanel()
         If pnlFilter.Visible Then
-            flpResults.Width = Me.Width - pnlFilter.Width
+            flpResults.Width = Me.Width '- pnlFilter.Width
+            If pnlFilter.Visible = False Then
+                flpResults.Location = New Point(0, flpResults.Location.Y)
+                flpResults.Width = Me.Width
+            End If
         Else
             flpResults.Width = Me.Width
             pnlFilter.Left = Me.Width
@@ -232,17 +248,31 @@ Public Class FormMain
         customerId = newCustomerId
     End Sub
 
-
     Private Sub btnBook_Click(sender As Object, e As EventArgs)
+        'If String.IsNullOrEmpty(CurrentUser.Username) Then
+        '    Dim result As DialogResult = MessageBox.Show("You need to log in to book an event place. Proceed to login?", "Login Required", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+
+        '    If result = DialogResult.Yes Then
+        '        Dim loginForm As New FormLogIn()
+        '        loginForm.ShowDialog()
+        '        Me.Hide()
+        '        NavigationHelper.GoNext(Me, loginForm, btnNext, btnBack)
+        '        If String.IsNullOrEmpty(CurrentUser.Username) Then
+        '            loginForm.ShowDialog()
+        '            Exit Sub
         If String.IsNullOrEmpty(CurrentUser.Username) Then
             Dim result As DialogResult = MessageBox.Show("You need to log in to book an event place. Proceed to login?", "Login Required", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-
             If result = DialogResult.Yes Then
-                Dim loginForm As New FormLogIn()
-                loginForm.ShowDialog()
+                Dim nextForm As New FormLogIn()
+                'Me.Hide()
+                'nextForm.ShowDialog()
+                'Me.Show()
+                NavigationHelper.GoNext(Me, nextForm, btnNext, btnBack)
+                'nextForm.ShowDialog()
+                Me.Hide()
+                Exit Sub
                 If String.IsNullOrEmpty(CurrentUser.Username) Then
-                    loginForm.ShowDialog()
-                    Exit Sub
+                    MessageBox.Show("Login was not successful.", "Login Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
             Else
                 Exit Sub
@@ -258,8 +288,10 @@ Public Class FormMain
                 Exit Sub
             End If
 
-            Dim adminForm As New FormAdminCenter()
-            adminForm.Show()
+            'Dim adminForm As New FormAdminCenter()
+            'adminForm.Show()
+            Dim nextForm As New FormAdminCenter()
+            NavigationHelper.GoNext(Me, nextForm, btnNext, btnBack)
             Me.Hide()
             Exit Sub
         End If
@@ -271,31 +303,94 @@ Public Class FormMain
         Dim pricePerDay As Decimal = CDec(row("price_per_day"))
 
         Dim bookingForm As New FormBooking(CurrentUser.UserID, placeId) With {
-    .EventPlaceName = row("event_place").ToString(),
-    .EventPlaceCapacity = CInt(row("capacity")),
-    .BasePricePerDay = CDec(row("price_per_day")),
-    .EventPlaceFeatures = row("features").ToString(),
-    .EventPlaceDescription = row("description").ToString(),
-    .OpeningHours = row("opening_hours").ToString(),
-    .ClosingHours = row("closing_hours").ToString(),
-    .AvailableDays = row("available_days").ToString(),
-    .EventPlaceImageUrl = row("image_url").ToString()
-}
+.EventPlaceName = row("event_place").ToString(),
+.EventPlaceCapacity = CInt(row("capacity")),
+.BasePricePerDay = CDec(row("price_per_day")),
+.EventPlaceFeatures = row("features").ToString(),
+.EventPlaceDescription = row("description").ToString(),
+.OpeningHours = row("opening_hours").ToString(),
+.ClosingHours = row("closing_hours").ToString(),
+.AvailableDays = row("available_days").ToString()} ',
+        '.EventPlaceImageUrl = row("image_url").ToString()
 
-        bookingForm.ShowDialog()
+        nextForm = bookingForm
+        nextForm.ShowDialog()
+        NavigationHelper.GoNext(Me, nextForm, btnNext, btnBack)
         Me.Hide()
     End Sub
 
 
+    'Private Sub btnBook_Click(sender As Object, e As EventArgs)
+    '    If String.IsNullOrEmpty(CurrentUser.Username) Then
+    '        Dim result As DialogResult = MessageBox.Show("You need to log in to book an event place. Proceed to login?", "Login Required", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+
+    '        If result = DialogResult.Yes Then
+    '            Dim loginForm As New FormLogIn()
+    '            loginForm.ShowDialog()
+    '            If String.IsNullOrEmpty(CurrentUser.Username) Then
+    '                loginForm.ShowDialog()
+    '                Exit Sub
+    '            End If
+    '        Else
+    '            Exit Sub
+    '        End If
+    '    End If
+
+
+    '    If CurrentUser.Role = "Admin" Then
+    '        MessageBox.Show("Admins cannot book an event place. Redirecting to Admin Center.", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+
+    '        If Application.OpenForms.OfType(Of FormAdminCenter).Any() Then
+    '            Me.Hide()
+    '            Exit Sub
+    '        End If
+
+    '        Dim adminForm As New FormAdminCenter()
+    '        adminForm.Show()
+    '        Me.Hide()
+    '        Exit Sub
+    '    End If
+
+    '    Dim btn As Button = CType(sender, Button)
+    '        Dim row As DataRow = CType(btn.Tag, DataRow)
+    '        Dim placeId As Integer = CInt(row("place_id"))
+    '        Dim capacity As Integer = CInt(row("capacity"))
+    '        Dim pricePerDay As Decimal = CDec(row("price_per_day"))
+
+    '        Dim bookingForm As New FormBooking(CurrentUser.UserID, placeId) With {
+    '    .EventPlaceName = row("event_place").ToString(),
+    '    .EventPlaceCapacity = CInt(row("capacity")),
+    '    .BasePricePerDay = CDec(row("price_per_day")),
+    '    .EventPlaceFeatures = row("features").ToString(),
+    '    .EventPlaceDescription = row("description").ToString(),
+    '    .OpeningHours = row("opening_hours").ToString(),
+    '    .ClosingHours = row("closing_hours").ToString(),
+    '    .AvailableDays = row("available_days").ToString(),
+    '    .EventPlaceImageUrl = row("image_url").ToString()
+    '}
+
+    '        bookingForm.ShowDialog()
+    '        Me.Hide()
+    '    End Sub
+
+
     Private Sub btnApply_Click(sender As Object, e As EventArgs) Handles btnApply.Click
         LoadSearchResults()
+
     End Sub
 
     Private Sub btnCustomerView_Click(sender As Object, e As EventArgs) Handles btnCustomerView.Click
+        'Debug.WriteLine($"Attempting to open CustomerView with CustomerId: {CurrentUser.CustomerId}")
+
+        'Dim customerView As New FormCustomerView(CurrentUser.CustomerId)
+        'customerView.ShowDialog()
+        'Me.Hide()
         Debug.WriteLine($"Attempting to open CustomerView with CustomerId: {CurrentUser.CustomerId}")
 
-        Dim customerView As New FormCustomerView(CurrentUser.CustomerId)
-        customerView.ShowDialog()
+        'Dim customerView As New FormCustomerView(CurrentUser.CustomerId)
+        nextForm = New FormCustomerView(CurrentUser.CustomerId)
+        'nextForm.ShowDialog()
+        NavigationHelper.GoNext(Me, nextForm, btnNext, btnBack)
         Me.Hide()
     End Sub
 
@@ -303,14 +398,35 @@ Public Class FormMain
         Dim signUpForm As New FormSignUp()
         signUpForm.Show()
         Me.Hide()
+        'Dim signUpForm As New FormSignUp()
+        'HelperNavigation.OpenForm(signUpForm, Me)
+        'signUpForm.Show()
+        'Me.Hide()
+
+        'Dim signupForm As New FormSignUp()
+        'nextForm = New FormSignUp()
+        'nextForm.ShowDialog()
+        'NavigationHelper.GoNext(Me, nextForm, btnNext, btnBack)
+        'signupForm.Show()
+        'nextForm.Show()
+        'Me.Hide()
+
     End Sub
     Private Sub btnLogIn_Click(sender As Object, e As EventArgs) Handles btnLogIn.Click
         Dim loginForm As New FormLogIn()
+        'nextForm = New FormLogIn()
+        'NavigationHelper.GoNext(Me, nextForm, btnNext, btnBack)
+        'loginForm.ShowDialog()
+        'nextForm.Show()
+        Me.Hide()
         If loginForm.ShowDialog() = DialogResult.OK Then
+            NavigationHelper.GoNext(Me, nextForm, btnNext, btnBack)
             ' For Admins, open the Admin Center and hide FormMain.
             If CurrentUser.Role = "Admin" Then
-                Dim adminForm As New FormAdminCenter()
-                adminForm.Show()
+                'Dim adminForm As New FormAdminCenter()
+                'adminForm.Show()
+                nextForm = New FormAdminCenter()
+                nextForm.Show()
                 Me.Hide()
             ElseIf CurrentUser.CustomerId > 0 Then
                 ' For Users, update the UI to reflect the logged-in state.
@@ -325,6 +441,9 @@ Public Class FormMain
         Else
             MessageBox.Show("Login failed or customer not found.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
+        'Dim loginForm As New FormLogIn()
+
+        'nextForm.ShowDialog()
     End Sub
 
 
@@ -408,19 +527,22 @@ Public Class FormMain
         txtMinPrice.Text = "Min"
         txtMaxPrice.Text = "Max"
         cbSort.SelectedIndex = -1
+        txtSearch.Text = ""
     End Sub
 
     Private Sub btnClearFilters_Click(sender As Object, e As EventArgs) Handles btnClearFilters.Click
         ClearFilters()
         For i As Integer = 0 To clbEventType.Items.Count - 1
             clbEventType.SetItemChecked(i, False)
+
         Next
         For i As Integer = 0 To clbAvailableOn.Items.Count - 1
             clbAvailableOn.SetItemChecked(i, False)
-        Next
 
+        Next
         LoadSearchResults()
 
+        'UpdatePanelVisibility()
     End Sub
 
     Public Sub DisplayAdminUsername()
@@ -446,19 +568,29 @@ Public Class FormMain
         End If
     End Sub
 
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        If HelperNavigation.ForwardHistory.Count > 0 Then
-            Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop()
-            HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack)
-        Else
-            btnNext.Enabled = False
-        End If
-
-    End Sub
-
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        HelperNavigation.GoBack(Me, btnNext, btnBack)
+        HelperNavigation.GoBack(Me)
     End Sub
 
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        HelperNavigation.GoNext(Me)
+    End Sub
+    'Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+    '    If HelperNavigation.ForwardHistory.Count > 0 Then
+    '        Dim nextForm As System.Windows.Forms.Form = HelperNavigation.ForwardHistory.Pop()
+    '        HelperNavigation.GoNext(Me, nextForm, btnNext, btnBack)
+    '    Else
+    '        btnNext.Enabled = False
+    '    End If
 
+    'End Sub
+
+    'Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+    '    HelperNavigation.GoBack(Me, btnNext, btnBack)
+    'End Sub
+
+    'Private Sub HiddenTextBox_TextChanged(sender As Object, e As EventArgs) Handles HiddenTextBox.TextChanged
+    '    HiddenTextBox.Focus()
+    '    HiddenTextBox.Select()
+    'End Sub
 End Class
