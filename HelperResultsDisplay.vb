@@ -6,8 +6,6 @@ Imports System.Text.RegularExpressions
 
 Public Class HelperResultsDisplay
 
-    ' Generic method to populate any FlowLayoutPanel from a DataTable,
-    ' using a delegate to create each Panel.
     Public Shared Sub PopulateFlowPanel(ByVal flp As FlowLayoutPanel, ByVal dt As DataTable, ByVal panelCreator As Func(Of DataRow, Panel))
         flp.WrapContents = True
         flp.AutoScroll = True

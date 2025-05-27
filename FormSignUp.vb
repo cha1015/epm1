@@ -30,7 +30,7 @@ Public Class FormSignUp
                                                End Sub
         Next
 
-        cbRole.Tag = lblRole
+        cmbRole.Tag = lblRole
 
         Me.ActiveControl = txtFirstName
         Me.BeginInvoke(Sub() txtFirstName.Select())
@@ -118,9 +118,12 @@ Public Class FormSignUp
 
         ' Run validation before proceeding
         If Not ValidateSignUpFields() Then
+            ' Show general message if validation fails
+            MessageBox.Show("All fields are required.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
+        ' Check for availability of username and email, then show password validation
         CheckUsernameAvailability(Nothing, Nothing)
         CheckEmailAvailability(Nothing, Nothing)
         txtConfPass_Leave(Nothing, Nothing)
@@ -128,7 +131,7 @@ Public Class FormSignUp
         Dim passwordStrength As String = CheckPasswordStrength(txtPass.Text)
         If passwordStrength.StartsWith("Very Weak") OrElse passwordStrength.StartsWith("Weak Password") Then
             MessageBox.Show("Your password is not strong enough. Please choose a stronger password.",
-                            "Weak Password", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        "Weak Password", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             lblPwStrength.Text = passwordStrength
             lblPwStrength.Visible = True
             Exit Sub
@@ -136,36 +139,40 @@ Public Class FormSignUp
 
         If lblUsernameError.Visible OrElse lblEmailError.Visible OrElse lblPasswordError.Visible Then
             MessageBox.Show("Please resolve the indicated errors before proceeding.",
-                            "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        If cbRole.SelectedItem.ToString() = "Admin" Then
+        ' Admin code validation for admin role
+        If cmbRole.SelectedItem.ToString() = "Admin" Then
             Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
             If adminCode <> "SECURE123" Then
                 MessageBox.Show("Invalid admin authentication code. Please try again.",
-                                "Authentication Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            "Authentication Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
         End If
 
-        Dim hashedPassword As String = HashPassword(txtPass.Text)
-        Dim userQuery As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role, birthday, age, sex, address) " &
-                                  "VALUES (@fname, @lname, @uname, @email, @pass, @role, @birthday, @age, @sex, @address); SELECT LAST_INSERT_ID();"
+        Dim password As String = txtPass.Text ' Use plain-text password directly
+
+        ' Create new user query
+        Dim userQuery As String = "INSERT INTO Users (first_name, last_name, username, email, password, role, birthday, age, sex, address) " &
+                              "VALUES (@fname, @lname, @uname, @email, @password, @role, @birthday, @age, @sex, @address); SELECT LAST_INSERT_ID();"
         Dim userParams As New Dictionary(Of String, Object) From {
-            {"@fname", txtFirstName.Text},
-            {"@lname", txtLastName.Text},
-            {"@uname", txtUsername.Text},
-            {"@email", txtEmail.Text},
-            {"@pass", hashedPassword},
-            {"@role", cbRole.SelectedItem.ToString()},
-            {"@birthday", dtpBirthday.Value.Date},
-            {"@age", Convert.ToInt32(lblAgeContainer.Text)},
-            {"@sex", cmbSex.SelectedItem.ToString()},
-            {"@address", txtAddress.Text}
-        }
+        {"@fname", txtFirstName.Text},
+        {"@lname", txtLastName.Text},
+        {"@uname", txtUsername.Text},
+        {"@email", txtEmail.Text},
+        {"@password", password}, ' Insert plain-text password directly
+        {"@role", cmbRole.SelectedItem.ToString()},
+        {"@birthday", dtpBirthday.Value.Date},
+        {"@age", Convert.ToInt32(lblAgeContainer.Text)},
+        {"@sex", cmbSex.SelectedItem.ToString()},
+        {"@address", txtAddress.Text}
+    }
 
         Try
+            ' Execute the query to insert the new user
             Dim newUserIdObj As Object = DBHelper.ExecuteScalarQuery(userQuery, userParams)
             Dim newUserId As Integer = If(newUserIdObj IsNot Nothing, Convert.ToInt32(newUserIdObj), -1)
 
@@ -174,20 +181,22 @@ Public Class FormSignUp
                 Return
             End If
 
-            If cbRole.SelectedItem.ToString() <> "Admin" Then
+            ' If the user is not an admin, insert customer information
+            If cmbRole.SelectedItem.ToString() <> "Admin" Then
                 Dim customerQuery As String = "INSERT INTO Customers (user_id, name, birthday, age, sex, address) " &
-                                              "VALUES (@user_id, @name, @birthday, @age, @sex, @address)"
+                                          "VALUES (@user_id, @name, @birthday, @age, @sex, @address)"
                 Dim customerParams As New Dictionary(Of String, Object) From {
-                    {"@user_id", newUserId},
-                    {"@name", txtFirstName.Text & " " & txtLastName.Text},
-                    {"@birthday", dtpBirthday.Value.Date},
-                    {"@age", Convert.ToInt32(lblAgeContainer.Text)},
-                    {"@sex", cmbSex.SelectedItem.ToString()},
-                    {"@address", txtAddress.Text}
-                }
+                {"@user_id", newUserId},
+                {"@name", txtFirstName.Text & " " & txtLastName.Text},
+                {"@birthday", dtpBirthday.Value.Date},
+                {"@age", Convert.ToInt32(lblAgeContainer.Text)},
+                {"@sex", cmbSex.SelectedItem.ToString()},
+                {"@address", txtAddress.Text}
+            }
                 DBHelper.ExecuteQuery(customerQuery, customerParams)
             End If
 
+            ' Success message and navigate to login page
             MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Me.Hide()
             Dim loginForm As New FormLogIn()
@@ -196,6 +205,7 @@ Public Class FormSignUp
             MessageBox.Show("Unexpected error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
 
     Private Sub SetMissingFieldIndicator(txtBox As TextBox)
         txtBox.Text = "Required"
@@ -238,63 +248,39 @@ Public Class FormSignUp
 
     Private Function ValidateSignUpFields() As Boolean
         Dim isValid As Boolean = True
+        Dim missingFields As Boolean = False ' To track if any fields are missing
 
         ' Validate Personal Information Fields
-        If String.IsNullOrWhiteSpace(txtFirstName.Text) Then
-            HelperValidation.MarkFieldInvalid(txtFirstName, "First Name", "First Name is required.")
-            isValid = False
-        Else
-            HelperValidation.ClearFieldError(txtFirstName, "First Name")
-        End If
-
-        If String.IsNullOrWhiteSpace(txtLastName.Text) Then
-            HelperValidation.MarkFieldInvalid(txtLastName, "Last Name", "Last Name is required.")
-            isValid = False
-        Else
-            HelperValidation.ClearFieldError(txtLastName, "Last Name")
-        End If
-
-        If String.IsNullOrWhiteSpace(txtAddress.Text) Then
-            HelperValidation.MarkFieldInvalid(txtAddress, "Address", "Address is required.")
-            isValid = False
-        Else
-            HelperValidation.ClearFieldError(txtAddress, "Address")
-        End If
-
-        If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then
-            isValid = False
-        End If
+        If String.IsNullOrWhiteSpace(txtFirstName.Text) Then missingFields = True
+        If String.IsNullOrWhiteSpace(txtLastName.Text) Then missingFields = True
+        If String.IsNullOrWhiteSpace(txtAddress.Text) Then missingFields = True
+        If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then missingFields = True
 
         ' Validate Account Details Fields
-        If String.IsNullOrWhiteSpace(txtUsername.Text) Then
-            HelperValidation.MarkFieldInvalid(txtUsername, "Username", "Username is required.")
+        If String.IsNullOrWhiteSpace(txtUsername.Text) Then missingFields = True
+        If String.IsNullOrWhiteSpace(txtEmail.Text) Then missingFields = True
+        If String.IsNullOrWhiteSpace(txtPass.Text) Then missingFields = True
+        If String.IsNullOrWhiteSpace(txtConfPass.Text) OrElse txtPass.Text <> txtConfPass.Text Then missingFields = True
+
+        ' Validate ComboBoxes (cmbSex and cmbRole)
+        If cmbSex.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(cmbSex.SelectedItem.ToString()) Then missingFields = True
+        If cmbRole.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(cmbRole.SelectedItem.ToString()) Then missingFields = True
+
+        ' Show the general error message if any fields are missing
+        If missingFields Then
+            MessageBox.Show("All fields are required.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             isValid = False
-        Else
-            HelperValidation.ClearFieldError(txtUsername, "Username")
         End If
 
-        If String.IsNullOrWhiteSpace(txtEmail.Text) Then
-            HelperValidation.MarkFieldInvalid(txtEmail, "Email", "Email is required.")
+        ' Ensure the user is 18 years or older based on the birthday
+        Dim age As Integer = DateTime.Now.Year - dtpBirthday.Value.Year
+        If dtpBirthday.Value > DateTime.Now.AddYears(-age) Then age -= 1
+        If age < 18 Then
+            MessageBox.Show("You must be at least 18 years old to sign up.", "Age Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             isValid = False
-        Else
-            HelperValidation.ClearFieldError(txtEmail, "Email")
         End If
 
-        If String.IsNullOrWhiteSpace(txtPass.Text) Then
-            HelperValidation.MarkFieldInvalid(txtPass, "Password", "Password is required.")
-            isValid = False
-        Else
-            HelperValidation.ClearFieldError(txtPass, "Password")
-        End If
-
-        If String.IsNullOrWhiteSpace(txtConfPass.Text) OrElse txtPass.Text <> txtConfPass.Text Then
-            HelperValidation.MarkFieldInvalid(txtConfPass, "Confirm Password", "Passwords must match.")
-            isValid = False
-        Else
-            HelperValidation.ClearFieldError(txtConfPass, "Confirm Password")
-        End If
-
-        ' Ensure password meets strength requirements
+        ' Validate password strength
         Dim passwordStrength As String = CheckPasswordStrength(txtPass.Text)
         If passwordStrength.StartsWith("Very Weak") OrElse passwordStrength.StartsWith("Weak Password") Then
             MessageBox.Show("Your password is not strong enough. Please choose a stronger password.",
@@ -304,17 +290,15 @@ Public Class FormSignUp
             isValid = False
         End If
 
-        ' Validate Role Selection
-        If cbRole.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(cbRole.SelectedItem.ToString()) Then
-            HelperValidation.MarkFieldInvalid(cbRole, "Role", "Role is required.")
-            MessageBox.Show("Role is a required field. Please select a role.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        ' Ensure password and confirm password match
+        If txtPass.Text <> txtConfPass.Text Then
+            MessageBox.Show("Passwords must match.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             isValid = False
-        Else
-            HelperValidation.ClearFieldError(cbRole, "Role")
         End If
 
         Return isValid
     End Function
+
 
 
     Private Function CheckPasswordStrength(password As String) As String
@@ -348,14 +332,17 @@ Public Class FormSignUp
         Me.Hide()
     End Sub
 
-    Private Sub MoveToNextControl(sender As Object, e As KeyEventArgs)
+    Private Sub MoveToNextControlPersonal(sender As Object, e As KeyEventArgs) Handles txtFirstName.KeyDown, txtLastName.KeyDown, dtpBirthday.KeyDown, cmbSex.KeyDown, txtAddress.KeyDown
         If e.KeyCode = Keys.Enter Then
             e.SuppressKeyPress = True
-            If sender Is cbRole Then
-                btnSignUp.PerformClick()
-            Else
-                SelectNextControl(DirectCast(sender, Control), True, True, True, True)
-            End If
+            SelectNextControl(DirectCast(sender, Control), True, True, True, True)
+        End If
+    End Sub
+
+    Private Sub MoveToNextControlAccount(sender As Object, e As KeyEventArgs) Handles txtUsername.KeyDown, txtEmail.KeyDown, txtPass.KeyDown, txtConfPass.KeyDown, cmbRole.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True
+            SelectNextControl(DirectCast(sender, Control), True, True, True, True)
         End If
     End Sub
 

@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Globalization
+Imports MySql.Data.MySqlClient
 
 Public Class HelperDatabase
     ' ------------------ Create a New Customer ------------------
@@ -124,23 +125,32 @@ Public Class HelperDatabase
             Return -1 ' Indicates duplicate booking
         End If
 
+        ' Convert start and end times to 24-hour format
+        Dim eventStart As DateTime = DateTime.ParseExact(eventStartTime, "h:mm tt", CultureInfo.InvariantCulture)
+        Dim eventEnd As DateTime = DateTime.ParseExact(eventEndTime, "h:mm tt", CultureInfo.InvariantCulture)
+
+        ' Convert to HH:mm:ss for storage in the database
+        Dim formattedStartTime As String = eventStart.ToString("HH:mm:ss")
+        Dim formattedEndTime As String = eventEnd.ToString("HH:mm:ss")
+
         ' Proceed with booking insertion
-        Dim query As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price); SELECT LAST_INSERT_ID();"
+        Dim query As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) 
+                            VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price); 
+                            SELECT LAST_INSERT_ID();"
 
         Dim params As New Dictionary(Of String, Object) From {
         {"@customer_id", customerId},
         {"@place_id", placeId},
         {"@num_guests", numGuests},
         {"@event_date", eventDateStart},
-        {"@event_time", eventStartTime},
-        {"@event_end_time", eventEndTime},
+        {"@event_time", formattedStartTime},
+        {"@event_end_time", formattedEndTime},
         {"@total_price", totalPrice}
     }
 
         Dim bookingId As Object = DBHelper.ExecuteScalarQuery(query, params)
         Return If(bookingId IsNot Nothing, Convert.ToInt32(bookingId), -1)
     End Function
-
 
     ' ------------------ Insert Payment Record ------------------
     Public Shared Sub InsertPaymentRecord(bookingId As Integer, customerId As Integer, amountToPay As Decimal)

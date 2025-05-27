@@ -31,9 +31,8 @@ Public Class FormLogIn
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
         If dt.Rows.Count > 0 Then
-            Dim storedHash As String = dt.Rows(0)("password_hash").ToString()
-            If VerifyPassword(txtPass.Text, storedHash) Then
-                ' Store user details from the Users table.
+            Dim storedPassword As String = dt.Rows(0)("password").ToString() ' Get the plain-text password
+            If txtPass.Text = storedPassword Then ' Directly compare the passwords
                 CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
                 CurrentUser.Username = dt.Rows(0)("username").ToString()
                 CurrentUser.Email = dt.Rows(0)("email").ToString()
@@ -43,7 +42,6 @@ Public Class FormLogIn
 
                 Select Case CurrentUser.Role
                     Case "Admin"
-                        ' Prompt for admin authentication code.
                         Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
                         If String.Compare(adminCode.Trim(), "SECURE123", True) <> 0 Then
                             lblGeneralError.Text = "Invalid admin authentication code."
@@ -72,14 +70,6 @@ Public Class FormLogIn
             lblGeneralError.Visible = True
         End If
     End Sub
-
-
-    Private Function VerifyPassword(inputPassword As String, storedHash As String) As Boolean
-        Using sha256 As SHA256 = SHA256.Create()
-            Dim inputHash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(inputPassword))
-            Return Convert.ToBase64String(inputHash) = storedHash
-        End Using
-    End Function
 
     Private Sub ResetFieldIndicators()
         lblEmail.Text = "Email"
