@@ -111,25 +111,41 @@ Public Class FormBooking
                                                        HelperValidation.PreventBookedDate(dtpEventDateStart, bookedDates, lblDateWarning)
                                                    End Sub
 
+        ' Define possible time formats
+        Dim timeFormats As String() = {"h:mm tt", "hh:mm tt", "H:mm", "HH:mm", "HH:mm:ss"}
+
         ' Parse Opening Hours
         If Not String.IsNullOrWhiteSpace(OpeningHours) Then
-            Dim parsedOpening As DateTime = DateTime.Parse(OpeningHours)
-            cbStartHour.Text = parsedOpening.ToString("h") ' Extract hour
-            cbStartMinutes.Text = parsedOpening.ToString("mm") ' Extract minutes
-            cbStartAMPM.Text = parsedOpening.ToString("tt") ' Extract AM/PM
+            Dim parsedOpening As DateTime
+            If DateTime.TryParseExact(OpeningHours, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedOpening) Then
+                Dim hourStr = parsedOpening.ToString("h")
+                If cbStartHour.Items.Contains(hourStr) Then
+                    cbStartHour.Text = hourStr
+                End If
+                cbStartMinutes.Text = parsedOpening.ToString("mm")
+                cbStartAMPM.Text = parsedOpening.ToString("tt")
+            Else
+                cbStartHour.Text = ""
+                cbStartMinutes.Text = ""
+                cbStartAMPM.Text = ""
+            End If
         End If
+
 
         ' Parse Closing Hours
         If Not String.IsNullOrWhiteSpace(ClosingHours) Then
-            Dim parsedClosing As DateTime = DateTime.Parse(ClosingHours)
-            cbEndHour.Text = parsedClosing.ToString("h") ' Extract hour
-            cbEndMinutes.Text = parsedClosing.ToString("mm") ' Extract minutes
-            cbEndAMPM.Text = parsedClosing.ToString("tt") ' Extract AM/PM
+            Dim parsedClosing As DateTime
+            If DateTime.TryParseExact(ClosingHours, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedClosing) Then
+                cbEndHour.Text = parsedClosing.ToString("h")
+                cbEndMinutes.Text = parsedClosing.ToString("mm")
+                cbEndAMPM.Text = parsedClosing.ToString("tt")
+            Else
+                cbEndHour.Text = ""
+                cbEndMinutes.Text = ""
+                cbEndAMPM.Text = ""
+            End If
         End If
 
-        If String.IsNullOrWhiteSpace(txtNumGuests.Text) Then
-            txtNumGuests.Text = "1" ' Default to 1 guest so price calculation works
-        End If
 
         HelperPrice.UpdateTotalPrice(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
                       chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
