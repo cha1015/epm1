@@ -21,8 +21,6 @@ Public Class FormCustomerView
     Private lblPaymentStatus As Label
     Private relevantPlaceIndices As New List(Of Integer)
 
-
-    ' Place names array
     Private placeNames As String() = {
         "Auditorium", "Ballroom", "Banquet Hall", "Bar", "Cafe", "Club",
         "Conference Hall", "Country Club", "Event Space", "Function Room",
@@ -31,10 +29,9 @@ Public Class FormCustomerView
         "Seminar Room", "Studio", "Theater", "Training Room", "Yacht"
     }
 
-    ' Constructor to accept customer ID
     Public Sub New(ByVal id As Integer)
         InitializeComponent()
-        customerId = id ' Store passed customer ID
+        customerId = id
         CreatePlaceBrowserPanel()
     End Sub
 
@@ -46,31 +43,30 @@ Public Class FormCustomerView
         pnlPlaceBrowser.BorderStyle = BorderStyle.None
         pnlPlaceBrowser.Visible = False
         pnlPlaceBrowser.BackgroundImageLayout = ImageLayout.Stretch
-
-        ' Make the panel round
         AddHandler pnlPlaceBrowser.Paint, AddressOf MakePanelRound
 
-        ' Info area panel (beige background)
+        'Info area panel 
         Dim pnlInfoArea As New Panel()
         pnlInfoArea.Size = New Size(520, 122)
         pnlInfoArea.Location = New Point(50, 1)
         pnlInfoArea.BackColor = Color.Transparent
-        ' Place name label (left-aligned, slightly higher)
+
+        'Place name label 
         lblPlaceName = New Label()
         lblPlaceName.Font = New Font("Arial", 20, FontStyle.Bold)
         lblPlaceName.ForeColor = Color.FromArgb(60, 40, 20)
         lblPlaceName.BackColor = Color.Transparent
         lblPlaceName.Size = New Size(480, 36)
-        lblPlaceName.Location = New Point(20, 8) ' Y: slightly higher
+        lblPlaceName.Location = New Point(20, 8)
         lblPlaceName.TextAlign = ContentAlignment.MiddleLeft
 
-        ' Payment info labels (left column, slightly higher)
+        'Payment info labels 
         lblPaymentId = New Label()
         lblPaymentId.Font = New Font("Arial", 10, FontStyle.Bold)
         lblPaymentId.ForeColor = Color.Black
         lblPaymentId.BackColor = Color.Transparent
         lblPaymentId.Size = New Size(250, 20)
-        lblPaymentId.Location = New Point(20, 53) ' Y: slightly higher
+        lblPaymentId.Location = New Point(20, 53)
 
         lblAmountToPay = New Label()
         lblAmountToPay.Font = New Font("Arial", 10, FontStyle.Bold)
@@ -86,13 +82,13 @@ Public Class FormCustomerView
         lblAmountPaid.Size = New Size(250, 20)
         lblAmountPaid.Location = New Point(20, 93)
 
-        ' Payment info labels (right column, slightly higher)
+        'Payment info labels 
         lblPaymentDate = New Label()
         lblPaymentDate.Font = New Font("Arial", 10, FontStyle.Bold)
         lblPaymentDate.ForeColor = Color.Black
         lblPaymentDate.BackColor = Color.Transparent
         lblPaymentDate.Size = New Size(250, 20)
-        lblPaymentDate.Location = New Point(270, 53) ' Y: slightly higher
+        lblPaymentDate.Location = New Point(270, 53)
 
         lblPaymentStatus = New Label()
         lblPaymentStatus.Font = New Font("Arial", 10, FontStyle.Bold)
@@ -101,8 +97,7 @@ Public Class FormCustomerView
         lblPaymentStatus.Size = New Size(250, 20)
         lblPaymentStatus.Location = New Point(270, 73)
 
-
-        ' Add labels to info panel
+        'Add labels to info panel
         pnlInfoArea.Controls.Add(lblPlaceName)
         pnlInfoArea.Controls.Add(lblPaymentId)
         pnlInfoArea.Controls.Add(lblAmountToPay)
@@ -144,15 +139,20 @@ Public Class FormCustomerView
 
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        '------FOR SAMPLE DATA--------
+        AddSampleBookingData()
+        LoadRelevantPlaceIndices()
+        '----------------------------
         dgvCurrentBooking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         dgvPaymentHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         customerId = CurrentUser.CustomerId
-
         lblUsername.Text = CurrentUser.Username
-        LoadBookings()
-        LoadPaymentHistory()
 
-        ' Set initial place based on customer's current booking
+        '-------MY SQL DATABASE CONNECTION-------
+        'LoadBookings()
+        '----------------------------------------
+
+        LoadPaymentHistory()
         SetInitialPlace()
     End Sub
 
@@ -360,6 +360,10 @@ Public Class FormCustomerView
             btnSwitchView.Text = "Show"
             UpdatePlaceDisplay()
         End If
+
+        '--------SAMPLE DATA---------
+        UpdatePanelFromCurrentBooking()
+        '----------------------------
     End Sub
 
     ' Button to edit customer information
@@ -532,5 +536,73 @@ Public Class FormCustomerView
         lblNoBooking.BringToFront()
         pnlPlaceBrowser.Visible = True
     End Sub
+
+
+    '--------------------SAMPLE DATA--------------------- (kasi diko magamit yung database)
+    Private Sub AddSampleBookingData()
+        Dim dtSample As New DataTable()
+        dtSample.Columns.Add("booking_id", GetType(Integer))
+        dtSample.Columns.Add("event_place", GetType(String))
+        dtSample.Columns.Add("event_date", GetType(Date))
+        dtSample.Columns.Add("event_time", GetType(String))
+        dtSample.Columns.Add("event_end_time", GetType(String))
+        dtSample.Columns.Add("status", GetType(String))
+
+        ' Add sample rows (booking_id, event_place, event_date, event_time, event_end_time, status)
+        dtSample.Rows.Add(101, "Auditorium", #2025-06-01#, "10:00", "14:00", "Approved")
+        dtSample.Rows.Add(102, "Club", #2025-06-05#, "18:00", "23:00", "Approved")
+        dtSample.Rows.Add(103, "Rooftop Venue", #2025-06-10#, "17:00", "22:00", "Pending")
+
+        dgvCurrentBooking.DataSource = dtSample
+    End Sub
+
+    Private Sub UpdatePanelFromCurrentBooking()
+        If dgvCurrentBooking.CurrentRow Is Nothing OrElse dgvCurrentBooking.Rows.Count = 0 Then
+            ShowNoBookingPanel()
+            Return
+        End If
+
+        Dim row = dgvCurrentBooking.CurrentRow
+
+        ' Defensive: check if columns exist
+        Dim placeName As String = If(row.Cells.Contains("event_place"), row.Cells("event_place").Value?.ToString(), "")
+        Dim bookingId As String = If(row.Cells.Contains("booking_id"), row.Cells("booking_id").Value?.ToString(), "-")
+        Dim eventDate As String = If(row.Cells.Contains("event_date"), row.Cells("event_date").Value?.ToString(), "-")
+        Dim eventTime As String = If(row.Cells.Contains("event_time"), row.Cells("event_time").Value?.ToString(), "-")
+        Dim eventEndTime As String = If(row.Cells.Contains("event_end_time"), row.Cells("event_end_time").Value?.ToString(), "-")
+        Dim status As String = If(row.Cells.Contains("status"), row.Cells("status").Value?.ToString(), "-")
+
+        lblPlaceName.Text = placeName
+        lblPaymentId.Text = $"Booking ID: {bookingId}"
+        lblAmountToPay.Text = $"Event Date: {eventDate}"
+        lblAmountPaid.Text = $"Time: {eventTime} - {eventEndTime}"
+        lblPaymentDate.Text = $"Status: {status}"
+        lblPaymentStatus.Text = "" ' Or use for something else if needed
+
+        ' Optionally set the background image as before
+        Dim idx As Integer = Array.IndexOf(placeNames, placeName)
+        If idx >= 0 Then
+            Dim resourceName As String = $"_{idx + 1}"
+            Try
+                Dim img As Image = CType(My.Resources.ResourceManager.GetObject(resourceName), Image)
+                If img IsNot Nothing Then
+                    pnlPlaceBrowser.BackgroundImage = img
+                    pnlPlaceBrowser.BackgroundImageLayout = ImageLayout.Stretch
+                    pnlPlaceBrowser.BackColor = Color.Transparent
+                Else
+                    pnlPlaceBrowser.BackgroundImage = Nothing
+                    pnlPlaceBrowser.BackColor = Color.SandyBrown
+                End If
+            Catch
+                pnlPlaceBrowser.BackgroundImage = Nothing
+                pnlPlaceBrowser.BackColor = Color.SandyBrown
+            End Try
+        End If
+    End Sub
+
+    Private Sub dgvCurrentBooking_SelectionChanged(sender As Object, e As EventArgs) Handles dgvCurrentBooking.SelectionChanged
+        UpdatePanelFromCurrentBooking()
+    End Sub
+
 
 End Class
