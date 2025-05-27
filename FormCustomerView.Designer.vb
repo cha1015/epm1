@@ -113,20 +113,6 @@ Partial Class FormCustomerView
         Me.lblRole.TabIndex = 50
         Me.lblRole.Text = "User"
         '
-        'btnEdit
-        '
-        Me.btnEditInformation.BackColor = System.Drawing.Color.Gainsboro
-        Me.btnEditInformation.FlatAppearance.BorderSize = 0
-        Me.btnEditInformation.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnEditInformation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnEditInformation.ForeColor = System.Drawing.Color.Black
-        Me.btnEditInformation.Location = New System.Drawing.Point(816, 5)
-        Me.btnEditInformation.Name = "btnEditInformation"
-        Me.btnEditInformation.Size = New System.Drawing.Size(120, 34)
-        Me.btnEditInformation.TabIndex = 49
-        Me.btnEditInformation.Text = "Edit Information"
-        Me.btnEditInformation.UseVisualStyleBackColor = False
-        '
         'lblUsername
         '
         Me.lblUsername.AutoSize = True

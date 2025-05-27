@@ -206,12 +206,14 @@
   <ItemGroup>
     <EmbeddedResource Include="FormAdminCenter.resx">
       <DependentUpon>FormAdminCenter.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormBooking.resx">
       <DependentUpon>FormBooking.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormBookingDetails.resx">
       <DependentUpon>FormBookingDetails.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCustomerAdminInfo.resx">
       <DependentUpon>FormCustomerAdminInfo.vb</DependentUpon>

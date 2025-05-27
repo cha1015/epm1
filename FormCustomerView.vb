@@ -113,7 +113,7 @@ Public Class FormCustomerView
         btnPrevPlace.BackColor = Color.White
         btnPrevPlace.FlatStyle = FlatStyle.Flat
         btnPrevPlace.FlatAppearance.BorderSize = 0
-        AddHandler btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
+        'AddHandler btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
         AddHandler btnPrevPlace.Paint, AddressOf MakeButtonRound
 
         btnNextPlace = New Button()
@@ -123,7 +123,7 @@ Public Class FormCustomerView
         btnNextPlace.BackColor = Color.White
         btnNextPlace.FlatStyle = FlatStyle.Flat
         btnNextPlace.FlatAppearance.BorderSize = 0
-        AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
+        'AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
         AddHandler btnNextPlace.Paint, AddressOf MakeButtonRound
 
         ' Add controls to main panel
@@ -139,14 +139,9 @@ Public Class FormCustomerView
 
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        '------FOR SAMPLE DATA--------
-        AddSampleBookingData()
-        LoadRelevantPlaceIndices()
-        '----------------------------
         dgvCurrentBooking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         dgvPaymentHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         customerId = CurrentUser.CustomerId
-
 
         LoadPaymentHistory()
         SetInitialPlace()
@@ -169,7 +164,6 @@ Public Class FormCustomerView
             currentPlaceIndex = 1
         End Try
 
-        UpdatePlaceDisplay()
         LoadRelevantPlaceIndices()
 
     End Sub
@@ -177,7 +171,6 @@ Public Class FormCustomerView
     Private Sub LoadBookings()
         Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
 
-        Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
         dgvPaymentHistory.ClearSelection()
 
 
@@ -201,7 +194,7 @@ Public Class FormCustomerView
                 dtPlaceholder.Columns.Add("Message", GetType(String))
                 dtPlaceholder.Rows.Add("No bookings found. Start by booking an event!")
                 dgvCurrentBooking.DataSource = dtPlaceholder
-                btnSelectBooking.Enabled = False
+                'btnSelectBooking.Enabled = False
                 btnConfirmPayment.Enabled = False
                 dgvCurrentBooking.Refresh()
             End If
@@ -272,30 +265,31 @@ Public Class FormCustomerView
             Me.Hide()
         End If
     End Sub
-    Private Sub btnSelectBooking_Click_1(sender As Object, e As EventArgs) Handles btnSelectBooking.Click
-        If dgvPaymentHistory.SelectedRows.Count = 0 Then
-            MessageBox.Show("Please select a payment to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
 
-        Dim paymentStatus As String = dgvPaymentHistory.SelectedRows(0).Cells("payment_status").Value.ToString()
-        Dim paymentId As Integer = Convert.ToInt32(dgvPaymentHistory.SelectedRows(0).Cells("payment_id").Value)
+    'Private Sub btnSelectBooking_Click(sender As Object, e As EventArgs) Handles btnSelectBooking.Click
+    '    If dgvPaymentHistory.SelectedRows.Count = 0 Then
+    '        MessageBox.Show("Please select a payment to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    '        Return
+    '    End If
 
-        If paymentStatus = "Pending" Then
-            Dim query As String = "UPDATE payments SET payment_status = 'Paid', payment_date = NOW(), amount_paid = amount_to_pay WHERE payment_id = @payment_id"
-            Dim parameters As New Dictionary(Of String, Object) From {{"@payment_id", paymentId}}
+    '    Dim paymentStatus As String = dgvPaymentHistory.SelectedRows(0).Cells("payment_status").Value.ToString()
+    '    Dim paymentId As Integer = Convert.ToInt32(dgvPaymentHistory.SelectedRows(0).Cells("payment_id").Value)
 
-            Try
-                DBHelper.ExecuteQuery(query, parameters)
-                MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadPaymentHistory() ' Refresh payment records
-            Catch ex As MySqlException
-                MessageBox.Show("Payment processing error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        Else
-            MessageBox.Show("This payment is already completed.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        End If
-    End Sub
+    '    If paymentStatus = "Pending" Then
+    '        Dim query As String = "UPDATE payments SET payment_status = 'Paid', payment_date = NOW(), amount_paid = amount_to_pay WHERE payment_id = @payment_id"
+    '        Dim parameters As New Dictionary(Of String, Object) From {{"@payment_id", paymentId}}
+
+    '        Try
+    '            DBHelper.ExecuteQuery(query, parameters)
+    '            MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    '            LoadPaymentHistory() ' Refresh payment records
+    '        Catch ex As MySqlException
+    '            MessageBox.Show("Payment processing error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '        End Try
+    '    Else
+    '        MessageBox.Show("This payment is already completed.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    '    End If
+    'End Sub
 
     Private Sub btnConfirmPayment_Click_1(sender As Object, e As EventArgs) Handles btnConfirmPayment.Click
         If dgvPaymentHistory.SelectedRows.Count = 0 Then
@@ -418,72 +412,6 @@ Public Class FormCustomerView
         pnlPlaceBrowser.Visible = True
     End Sub
 
-
-    '--------------------SAMPLE DATA--------------------- (kasi diko magamit yung database)
-    Private Sub AddSampleBookingData()
-        Dim dtSample As New DataTable()
-        dtSample.Columns.Add("booking_id", GetType(Integer))
-        dtSample.Columns.Add("event_place", GetType(String))
-        dtSample.Columns.Add("event_date", GetType(Date))
-        dtSample.Columns.Add("event_time", GetType(String))
-        dtSample.Columns.Add("event_end_time", GetType(String))
-        dtSample.Columns.Add("status", GetType(String))
-
-        ' Add sample rows (booking_id, event_place, event_date, event_time, event_end_time, status)
-        dtSample.Rows.Add(101, "Auditorium", #2025-06-01#, "10:00", "14:00", "Approved")
-        dtSample.Rows.Add(102, "Club", #2025-06-05#, "18:00", "23:00", "Approved")
-        dtSample.Rows.Add(103, "Rooftop Venue", #2025-06-10#, "17:00", "22:00", "Pending")
-
-        dgvCurrentBooking.DataSource = dtSample
-    End Sub
-
-    Private Sub UpdatePanelFromCurrentBooking()
-        If dgvCurrentBooking.CurrentRow Is Nothing OrElse dgvCurrentBooking.Rows.Count = 0 Then
-            ShowNoBookingPanel()
-            Return
-        End If
-
-        Dim row = dgvCurrentBooking.CurrentRow
-
-        Dim placeName As String = If(dgvCurrentBooking.Columns.Contains("event_place"), row.Cells("event_place").Value?.ToString(), "")
-        Dim bookingId As String = If(dgvCurrentBooking.Columns.Contains("booking_id"), row.Cells("booking_id").Value?.ToString(), "-")
-        Dim eventDate As String = If(dgvCurrentBooking.Columns.Contains("event_date"), row.Cells("event_date").Value?.ToString(), "-")
-        Dim eventTime As String = If(dgvCurrentBooking.Columns.Contains("event_time"), row.Cells("event_time").Value?.ToString(), "-")
-        Dim eventEndTime As String = If(dgvCurrentBooking.Columns.Contains("event_end_time"), row.Cells("event_end_time").Value?.ToString(), "-")
-        Dim status As String = If(dgvCurrentBooking.Columns.Contains("status"), row.Cells("status").Value?.ToString(), "-")
-
-        lblPlaceName.Text = placeName
-        lblPaymentId.Text = $"Booking ID: {bookingId}"
-        lblAmountToPay.Text = $"Event Date: {eventDate}"
-        lblAmountPaid.Text = $"Time: {eventTime} - {eventEndTime}"
-        lblPaymentDate.Text = $"Status: {status}"
-        lblPaymentStatus.Text = ""
-
-        ' Optionally set the background image as before
-        Dim idx As Integer = Array.IndexOf(placeNames, placeName)
-        If idx >= 0 Then
-            Dim resourceName As String = $"_{idx + 1}"
-            Try
-                Dim img As Image = CType(My.Resources.ResourceManager.GetObject(resourceName), Image)
-                If img IsNot Nothing Then
-                    pnlPlaceBrowser.BackgroundImage = img
-                    pnlPlaceBrowser.BackgroundImageLayout = ImageLayout.Stretch
-                    pnlPlaceBrowser.BackColor = Color.Transparent
-                Else
-                    pnlPlaceBrowser.BackgroundImage = Nothing
-                    pnlPlaceBrowser.BackColor = Color.SandyBrown
-                End If
-            Catch
-                pnlPlaceBrowser.BackgroundImage = Nothing
-                pnlPlaceBrowser.BackColor = Color.SandyBrown
-            End Try
-        End If
-    End Sub
-
-
-    Private Sub dgvCurrentBooking_SelectionChanged(sender As Object, e As EventArgs) Handles dgvCurrentBooking.SelectionChanged
-        UpdatePanelFromCurrentBooking()
-    End Sub
 
 
 End Class

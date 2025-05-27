@@ -37,100 +37,100 @@ Partial Class FormBookingDetails
         'lblCustomerName
         '
         Me.lblCustomerName.AutoSize = True
-        Me.lblCustomerName.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCustomerName.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCustomerName.Location = New System.Drawing.Point(41, 130)
         Me.lblCustomerName.Name = "lblCustomerName"
-        Me.lblCustomerName.Size = New System.Drawing.Size(99, 19)
+        Me.lblCustomerName.Size = New System.Drawing.Size(82, 13)
         Me.lblCustomerName.TabIndex = 0
         Me.lblCustomerName.Text = "Customer Name"
         '
         'lblEventPlace
         '
         Me.lblEventPlace.AutoSize = True
-        Me.lblEventPlace.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventPlace.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblEventPlace.Location = New System.Drawing.Point(41, 156)
         Me.lblEventPlace.Name = "lblEventPlace"
-        Me.lblEventPlace.Size = New System.Drawing.Size(72, 19)
+        Me.lblEventPlace.Size = New System.Drawing.Size(65, 13)
         Me.lblEventPlace.TabIndex = 1
         Me.lblEventPlace.Text = "Event Place"
         '
         'lblEventType
         '
         Me.lblEventType.AutoSize = True
-        Me.lblEventType.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblEventType.Location = New System.Drawing.Point(41, 182)
         Me.lblEventType.Name = "lblEventType"
-        Me.lblEventType.Size = New System.Drawing.Size(68, 19)
+        Me.lblEventType.Size = New System.Drawing.Size(62, 13)
         Me.lblEventType.TabIndex = 2
         Me.lblEventType.Text = "Event Type"
         '
         'lblNumGuests
         '
         Me.lblNumGuests.AutoSize = True
-        Me.lblNumGuests.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNumGuests.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNumGuests.Location = New System.Drawing.Point(41, 208)
         Me.lblNumGuests.Name = "lblNumGuests"
-        Me.lblNumGuests.Size = New System.Drawing.Size(109, 19)
+        Me.lblNumGuests.Size = New System.Drawing.Size(92, 13)
         Me.lblNumGuests.TabIndex = 3
         Me.lblNumGuests.Text = "Number of Guests"
         '
         'lblEventDate
         '
         Me.lblEventDate.AutoSize = True
-        Me.lblEventDate.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblEventDate.Location = New System.Drawing.Point(41, 234)
         Me.lblEventDate.Name = "lblEventDate"
-        Me.lblEventDate.Size = New System.Drawing.Size(35, 19)
+        Me.lblEventDate.Size = New System.Drawing.Size(30, 13)
         Me.lblEventDate.TabIndex = 4
         Me.lblEventDate.Text = "Date"
         '
         'lblEventTime
         '
         Me.lblEventTime.AutoSize = True
-        Me.lblEventTime.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEventTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblEventTime.Location = New System.Drawing.Point(41, 260)
         Me.lblEventTime.Name = "lblEventTime"
-        Me.lblEventTime.Size = New System.Drawing.Size(36, 19)
+        Me.lblEventTime.Size = New System.Drawing.Size(30, 13)
         Me.lblEventTime.TabIndex = 5
         Me.lblEventTime.Text = "Time"
         '
         'lblServices
         '
         Me.lblServices.AutoSize = True
-        Me.lblServices.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblServices.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblServices.Location = New System.Drawing.Point(41, 286)
         Me.lblServices.Name = "lblServices"
-        Me.lblServices.Size = New System.Drawing.Size(55, 19)
+        Me.lblServices.Size = New System.Drawing.Size(48, 13)
         Me.lblServices.TabIndex = 6
         Me.lblServices.Text = "Services"
         '
         'lblTotalPrice
         '
         Me.lblTotalPrice.AutoSize = True
-        Me.lblTotalPrice.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTotalPrice.Location = New System.Drawing.Point(41, 312)
         Me.lblTotalPrice.Name = "lblTotalPrice"
-        Me.lblTotalPrice.Size = New System.Drawing.Size(66, 19)
+        Me.lblTotalPrice.Size = New System.Drawing.Size(58, 13)
         Me.lblTotalPrice.TabIndex = 7
         Me.lblTotalPrice.Text = "Total Price"
         '
         'lblPaymentStatus
         '
         Me.lblPaymentStatus.AutoSize = True
-        Me.lblPaymentStatus.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPaymentStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPaymentStatus.Location = New System.Drawing.Point(41, 338)
         Me.lblPaymentStatus.Name = "lblPaymentStatus"
-        Me.lblPaymentStatus.Size = New System.Drawing.Size(94, 19)
+        Me.lblPaymentStatus.Size = New System.Drawing.Size(81, 13)
         Me.lblPaymentStatus.TabIndex = 8
         Me.lblPaymentStatus.Text = "Payment Status"
         '
         'lblStatus
         '
         Me.lblStatus.AutoSize = True
-        Me.lblStatus.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblStatus.Location = New System.Drawing.Point(41, 104)
         Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(43, 19)
+        Me.lblStatus.Size = New System.Drawing.Size(37, 13)
         Me.lblStatus.TabIndex = 9
         Me.lblStatus.Text = "Status"
         '

@@ -52,7 +52,9 @@ Public Class FormSignUp
     Private Sub CheckUsernameAvailability(sender As Object, e As EventArgs)
         Dim query As String = "SELECT COUNT(*) FROM Users WHERE username = @uname"
         Dim parameters As New Dictionary(Of String, Object) From {{"@uname", txtUsername.Text}}
+
         Dim userExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+
         lblUsernameError.Text = If(userExists > 0, $"Username already exists! Try {txtUsername.Text}123", "")
         lblUsernameError.Visible = userExists > 0
     End Sub
@@ -60,7 +62,9 @@ Public Class FormSignUp
     Private Sub CheckEmailAvailability(sender As Object, e As EventArgs)
         Dim query As String = "SELECT COUNT(*) FROM Users WHERE email = @email"
         Dim parameters As New Dictionary(Of String, Object) From {{"@email", txtEmail.Text}}
+
         Dim emailExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+
         lblEmailError.Text = If(emailExists > 0, "Email already registered. Try a different one.", "")
         lblEmailError.Visible = emailExists > 0
     End Sub
@@ -143,8 +147,10 @@ Public Class FormSignUp
             Return
         End If
 
+
         ' Admin code validation for admin role
         If cmbRole.SelectedItem.ToString() = "Admin" Then
+
             Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
             If adminCode <> "SECURE123" Then
                 MessageBox.Show("Invalid admin authentication code. Please try again.",
@@ -158,6 +164,7 @@ Public Class FormSignUp
         ' Create new user query
         Dim userQuery As String = "INSERT INTO Users (first_name, last_name, username, email, password, role, birthday, age, sex, address) " &
                               "VALUES (@fname, @lname, @uname, @email, @password, @role, @birthday, @age, @sex, @address); SELECT LAST_INSERT_ID();"
+
         Dim userParams As New Dictionary(Of String, Object) From {
         {"@fname", txtFirstName.Text},
         {"@lname", txtLastName.Text},
@@ -181,6 +188,7 @@ Public Class FormSignUp
                 Return
             End If
 
+
             ' If the user is not an admin, insert customer information
             If cmbRole.SelectedItem.ToString() <> "Admin" Then
                 Dim customerQuery As String = "INSERT INTO Customers (user_id, name, birthday, age, sex, address) " &
@@ -194,17 +202,27 @@ Public Class FormSignUp
                 {"@address", txtAddress.Text}
             }
                 DBHelper.ExecuteQuery(customerQuery, customerParams)
+
             End If
 
-            ' Success message and navigate to login page
-            MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Me.Hide()
-            Dim loginForm As New FormLogIn()
-            loginForm.Show()
+        ' Success message and navigate to login page
+        MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Me.Hide()
+        Dim loginForm As New FormLogIn()
+        loginForm.Show()
         Catch ex As Exception
-            MessageBox.Show("Unexpected error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        MessageBox.Show("Unexpected error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+    Private Function GetAdminCodeFromDatabase(username As String) As String
+        Dim query As String = "SELECT admin_code FROM Users WHERE username = @uname"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@uname", username}}
+        Try
+            Return Convert.ToString(DBHelper.ExecuteScalarQuery(query, parameters))
+        Catch
+            Return ""
+        End Try
+    End Function
 
 
     Private Sub SetMissingFieldIndicator(txtBox As TextBox)
@@ -240,10 +258,12 @@ Public Class FormSignUp
     End Sub
 
     Private Function HashPassword(password As String) As String
-        Using sha256 As SHA256 = sha256.Create()
+
+        Using sha256 As SHA256 = SHA256.Create()
             Dim hashedBytes As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(password))
             Return Convert.ToBase64String(hashedBytes)
         End Using
+
     End Function
 
     Private Function ValidateSignUpFields() As Boolean
