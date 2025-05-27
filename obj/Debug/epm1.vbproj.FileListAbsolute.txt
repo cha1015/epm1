@@ -98,3 +98,4 @@ C:\Users\khorc\source\repos\epm1\obj\Debug\epm1.vbproj.Up2Date
 C:\Users\khorc\source\repos\epm1\obj\Debug\epm1.exe
 C:\Users\khorc\source\repos\epm1\obj\Debug\epm1.xml
 C:\Users\khorc\source\repos\epm1\obj\Debug\epm1.pdb
+C:\Users\khorc\source\repos\epm1\obj\Debug\epm1.FormCustomerView.resources

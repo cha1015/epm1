@@ -53,9 +53,12 @@ Module DBHelper
             Try
                 connection.Open()
                 Using cmd As New MySqlCommand(query, connection)
-                    For Each param In parameters
-                        cmd.Parameters.AddWithValue(param.Key, param.Value)
-                    Next
+                    If parameters IsNot Nothing Then
+                        For Each param In parameters
+                            cmd.Parameters.AddWithValue(param.Key, param.Value)
+                        Next
+                    End If
+
                     Dim adapter As New MySqlDataAdapter(cmd)
                     adapter.Fill(dt)
                 End Using

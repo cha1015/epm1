@@ -410,4 +410,7 @@ Public Class FormBooking
         HelperNavigation.GoNext(Me)
     End Sub
 
+    Private Sub lblEventTypePaymentContainer_Click(sender As Object, e As EventArgs) Handles lblEventTypePaymentContainer.Click
+
+    End Sub
 End Class
