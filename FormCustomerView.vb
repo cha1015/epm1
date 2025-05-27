@@ -133,10 +133,10 @@ Public Class FormCustomerView
 
         ' Set background image from resources and stretch it
         Try
-            Dim img As Image = Nothing
-            Dim resourceName As String = $"__{currentPlaceIndex}"
 
-            img = CType(My.Resources.ResourceManager.GetObject(resourceName), Image)
+            Dim resourceName As String = $"_{currentPlaceIndex}"
+            Dim img As Image = CType(My.Resources.ResourceManager.GetObject(resourceName), Image)
+
 
             If img IsNot Nothing Then
                 pnlPlaceBrowser.BackgroundImage = img
@@ -144,12 +144,12 @@ Public Class FormCustomerView
                 pnlPlaceBrowser.BackColor = Color.Transparent
             Else
                 pnlPlaceBrowser.BackgroundImage = Nothing
-                pnlPlaceBrowser.BackColor = Color.LightBlue
+                pnlPlaceBrowser.BackColor = Color.SandyBrown
                 Debug.WriteLine($"Image resource '{resourceName}' not found.")
             End If
         Catch ex As Exception
             pnlPlaceBrowser.BackgroundImage = Nothing
-            pnlPlaceBrowser.BackColor = Color.LightBlue
+            pnlPlaceBrowser.BackColor = Color.SandyBrown
             Debug.WriteLine($"Error loading image for place {currentPlaceIndex}: {ex.Message}")
         End Try
 
