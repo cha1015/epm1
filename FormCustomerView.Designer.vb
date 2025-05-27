@@ -32,6 +32,7 @@ Partial Class FormCustomerView
         Me.btnEditInformation = New System.Windows.Forms.Button()
         Me.lblUsername = New System.Windows.Forms.Label()
         Me.btnSwitchView = New System.Windows.Forms.Button()
+        Me.txtPaymentAmount = New System.Windows.Forms.TextBox()
         CType(Me.dgvPaymentHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCurrentBooking, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -148,11 +149,19 @@ Partial Class FormCustomerView
         Me.btnSwitchView.Text = "View"
         Me.btnSwitchView.UseVisualStyleBackColor = True
         '
+        'txtPaymentAmount
+        '
+        Me.txtPaymentAmount.Location = New System.Drawing.Point(652, 471)
+        Me.txtPaymentAmount.Name = "txtPaymentAmount"
+        Me.txtPaymentAmount.Size = New System.Drawing.Size(100, 20)
+        Me.txtPaymentAmount.TabIndex = 62
+        '
         'FormCustomerView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(944, 501)
+        Me.Controls.Add(Me.txtPaymentAmount)
         Me.Controls.Add(Me.btnSwitchView)
         Me.Controls.Add(Me.lblPaymentSection)
         Me.Controls.Add(Me.dgvPaymentHistory)
@@ -182,4 +191,5 @@ Partial Class FormCustomerView
     Friend WithEvents btnEditInformation As Button
     Friend WithEvents lblUsername As Label
     Friend WithEvents btnSwitchView As Button
+    Friend WithEvents txtPaymentAmount As TextBox
 End Class

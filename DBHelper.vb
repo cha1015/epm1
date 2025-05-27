@@ -1,9 +1,8 @@
-﻿Imports System.Data.SqlClient
+﻿
 Imports MySql.Data.MySqlClient
 
 Module DBHelper
-    Private ReadOnly connectionString As String = "server=127.0.0.1;user=root;password=Khoral@10;database=epm2;"
-
+    Private ReadOnly connectionString As String = "Server=localhost;Database=event_management;User ID=root;Password=Khoral@10;Pooling=True;"
 
     Public Function GetConnection() As MySqlConnection
         Return New MySqlConnection(connectionString)
@@ -53,12 +52,9 @@ Module DBHelper
             Try
                 connection.Open()
                 Using cmd As New MySqlCommand(query, connection)
-                    If parameters IsNot Nothing Then
-                        For Each param In parameters
-                            cmd.Parameters.AddWithValue(param.Key, param.Value)
-                        Next
-                    End If
-
+                    For Each param In parameters
+                        cmd.Parameters.AddWithValue(param.Key, param.Value)
+                    Next
                     Dim adapter As New MySqlDataAdapter(cmd)
                     adapter.Fill(dt)
                 End Using

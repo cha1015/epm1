@@ -294,7 +294,6 @@ Public Class FormCustomerView
 
             If dtBookings.Rows.Count > 0 Then
                 dgvCurrentBooking.DataSource = dtBookings
-                btnSelectBooking.Enabled = True
                 btnConfirmPayment.Enabled = True
             Else
                 ' Create a temporary placeholder row when no bookings exist
@@ -302,7 +301,6 @@ Public Class FormCustomerView
                 dtPlaceholder.Columns.Add("Message", GetType(String))
                 dtPlaceholder.Rows.Add("No bookings found. Start by booking an event!")
                 dgvCurrentBooking.DataSource = dtPlaceholder
-                btnSelectBooking.Enabled = False
                 btnConfirmPayment.Enabled = False
                 dgvCurrentBooking.Refresh()
             End If
