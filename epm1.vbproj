@@ -132,6 +132,12 @@
     <Compile Include="FormCustomerView.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormWelcome.Designer.vb">
+      <DependentUpon>FormWelcome.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormWelcome.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="HelperBooking.vb" />
     <Compile Include="CurrentUser.vb" />
     <Compile Include="CustomerResult.vb" />
@@ -219,6 +225,9 @@
     <EmbeddedResource Include="FormSignUp.resx">
       <DependentUpon>FormSignUp.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormWelcome.resx">
+      <DependentUpon>FormWelcome.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -229,6 +238,7 @@
   <ItemGroup>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application1.Designer.vb</LastGenOutput>
     </None>
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
