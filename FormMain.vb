@@ -11,6 +11,8 @@ Public Class FormMain
 
         pnlFilter.Left = Me.Width
         pnlFilter.Visible = False
+        pnlFilter.BringToFront()
+        pnlFilter.Dock = DockStyle.None
 
         TimerHide.Interval = 5
         TimerShow.Interval = 5
@@ -28,12 +30,20 @@ Public Class FormMain
         LoadSearchResults()
         UpdatePanelVisibility()
         AdjustResultsPanel()
+        HiddenTextBox.Location = New Point(-100, -100) ' Moves it off the visible area
+        HiddenTextBox.Visible = False
+        HiddenTextBox.Focus()
+        HiddenTextBox.Select()
+        cbSort.TabStop = False
     End Sub
 
 
     Private Sub btnFilter_Click(sender As Object, e As EventArgs) Handles btnFilter.Click
         If pnlFilter.Visible Then
             TimerHide.Start()
+            pnlFilter.Visible = False
+            flpResults.Location = New Point(0, flpResults.Location.Y)
+            flpResults.Width = Me.Width
         Else
             pnlFilter.Visible = True
             TimerShow.Start()
@@ -69,7 +79,11 @@ Public Class FormMain
 
     Private Sub AdjustResultsPanel()
         If pnlFilter.Visible Then
-            flpResults.Width = Me.Width - pnlFilter.Width
+            flpResults.Width = Me.Width '- pnlFilter.Width
+            If pnlFilter.Visible = False Then
+                flpResults.Location = New Point(0, flpResults.Location.Y)
+                flpResults.Width = Me.Width
+            End If
         Else
             flpResults.Width = Me.Width
             pnlFilter.Left = Me.Width
@@ -373,6 +387,14 @@ Public Class FormMain
 
         HelperResultsDisplay.PopulateEventPlaces(flpResults, dt, AddressOf btnBook_Click, Nothing, Nothing, False)
 
+        'Dim autoCompleteList As New AutoCompleteStringCollection()
+        'autoCompleteList.AddRange(New String() {"Auditorium", "Ballroom", "Banquet", "Bar", "Cafe", "Club", "Conference Hall", "Country Club", "Event Space", "Function Room",
+        '"Gallery", "Halal Venue", "Hotel", "Kids Friendly Venue", "Meeting Room", "Museum", "Outdoor Venue", "Private Estate", "Restaurant", "Rooftop Venue", "Seminar Room",
+        '"Studio", "Theater", "Training Room", "Yacht"})
+
+        'txtSearch.AutoCompleteMode = AutoCompleteMode.SuggestAppend
+        'txtSearch.AutoCompleteSource = AutoCompleteSource.CustomSource
+        'txtSearch.AutoCompleteCustomSource = autoCompleteList
 
     End Sub
 
