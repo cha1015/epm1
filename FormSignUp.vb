@@ -313,9 +313,7 @@ Public Class FormSignUp
         texts = New String() {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Address"}
 
 
-        'Dim labels As Label() = {lblFirstName, lblLastName, lblUsername, lblEmail, lblPassword, lblConfirmPassword, lblRole, lblAge, lblAddress}
-        'Dim fields As TextBox() = {txtFirstName, txtLastName, txtUsername, txtEmail, txtPass, txtConfPass, txtAddress}
-        'Dim texts As String() = {"First Name", "Last Name", "Username", "Email", "Password", "Confirm Password", "Role", "Age", "Address"}
+
 
         HelperValidation.ApplyFieldIndicators(labels, texts)
 
