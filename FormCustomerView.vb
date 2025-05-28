@@ -109,11 +109,11 @@ Public Class FormCustomerView
         btnPrevPlace = New Button()
         btnPrevPlace.Text = "◀"
         btnPrevPlace.Size = New Size(40, 40)
-        btnPrevPlace.Location = New Point(10, 42) ' Move right a bit
+        btnPrevPlace.Location = New Point(10, 42)
         btnPrevPlace.BackColor = Color.White
         btnPrevPlace.FlatStyle = FlatStyle.Flat
         btnPrevPlace.FlatAppearance.BorderSize = 0
-        'AddHandler btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
+        AddHandler btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
         AddHandler btnPrevPlace.Paint, AddressOf MakeButtonRound
 
         btnNextPlace = New Button()
@@ -123,7 +123,7 @@ Public Class FormCustomerView
         btnNextPlace.BackColor = Color.White
         btnNextPlace.FlatStyle = FlatStyle.Flat
         btnNextPlace.FlatAppearance.BorderSize = 0
-        'AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
+        AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
         AddHandler btnNextPlace.Paint, AddressOf MakeButtonRound
 
         ' Add controls to main panel
@@ -136,42 +136,125 @@ Public Class FormCustomerView
         pnlPlaceBrowser.BringToFront()
     End Sub
 
+    Private Sub BtnPrevPlace_Click(sender As Object, e As EventArgs)
+        If relevantPlaceIndices.Count <= 1 Then Return
+        Dim idx As Integer = relevantPlaceIndices.IndexOf(currentPlaceIndex)
+        If idx > 0 Then
+            currentPlaceIndex = relevantPlaceIndices(idx - 1)
+            UpdatePlaceBrowserPanel()
+            LoadCurrentBookingData() ' Add this line to refresh booking data
+        End If
+    End Sub
 
+    Private Sub BtnNextPlace_Click(sender As Object, e As EventArgs)
+        If relevantPlaceIndices.Count <= 1 Then Return
+        Dim idx As Integer = relevantPlaceIndices.IndexOf(currentPlaceIndex)
+        If idx < relevantPlaceIndices.Count - 1 Then
+            currentPlaceIndex = relevantPlaceIndices(idx + 1)
+            UpdatePlaceBrowserPanel()
+            LoadCurrentBookingData() ' Add this line to refresh booking data
+        End If
+    End Sub
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dgvCurrentBooking.Visible = False
         dgvCurrentBooking.Enabled = False
 
-
         pnlPlaceBrowser.Visible = True
 
         dgvPaymentHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         customerId = CurrentUser.CustomerId
-
+        LoadBookings()
         LoadPaymentHistory()
         SetInitialPlace()
     End Sub
 
-
     Private Sub SetInitialPlace()
-        ' Check if customer has any current bookings and set the place accordingly
+        ' Check if customer has any current payments and set the place accordingly
         Try
-            Dim query As String = "SELECT p.place_id FROM bookings b JOIN eventplace p ON b.place_id = p.place_id WHERE b.customer_id = @customer_id AND b.status = 'Approved' ORDER BY b.event_date DESC LIMIT 1"
+            Dim query As String = "SELECT b.place_id FROM payments pay " &
+                                "JOIN bookings b ON pay.booking_id = b.booking_id " &
+                                "WHERE pay.customer_id = @customer_id " &
+                                "ORDER BY pay.payment_id DESC LIMIT 1"
             Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
 
-            Dim dtBooking As DataTable = DBHelper.GetDataTable(query, parameters)
-            If dtBooking.Rows.Count > 0 Then
-                currentPlaceIndex = Convert.ToInt32(dtBooking.Rows(0)("place_id"))
+            Dim dtPayment As DataTable = DBHelper.GetDataTable(query, parameters)
+            If dtPayment.Rows.Count > 0 Then
+                currentPlaceIndex = Convert.ToInt32(dtPayment.Rows(0)("place_id"))
                 If currentPlaceIndex < 1 Or currentPlaceIndex > 25 Then
                     currentPlaceIndex = 1
                 End If
+            Else
+                currentPlaceIndex = 1
             End If
         Catch ex As Exception
             currentPlaceIndex = 1
+            Debug.WriteLine("Error setting initial place: " & ex.Message)
         End Try
 
         LoadRelevantPlaceIndices()
         UpdatePlaceBrowserPanel()
+        LoadCurrentBookingData() ' Load initial payment data
+        Debug.WriteLine($"Initial place set to: {currentPlaceIndex}")
+    End Sub
+
+    ' New method to load payment data for current place
+    Private Sub LoadCurrentBookingData()
+        Try
+            ' Load payment data for the current place
+            Dim query As String = "SELECT pay.payment_id, pay.booking_id, pay.customer_id, pay.amount_to_pay, " &
+                                "pay.amount_paid, pay.payment_date, pay.payment_status, p.event_place " &
+                                "FROM payments pay " &
+                                "JOIN bookings b ON pay.booking_id = b.booking_id " &
+                                "JOIN eventplace p ON b.place_id = p.place_id " &
+                                "WHERE pay.customer_id = @customer_id AND b.place_id = @place_id " &
+                                "ORDER BY pay.payment_date DESC, pay.payment_id DESC"
+
+            Dim parameters As New Dictionary(Of String, Object) From {
+                {"@customer_id", customerId},
+                {"@place_id", currentPlaceIndex}
+            }
+
+            Dim dtPayments As DataTable = DBHelper.GetDataTable(query, parameters)
+
+            If dtPayments.Rows.Count > 0 Then
+                dgvPaymentHistory.DataSource = dtPayments
+                btnConfirmPayment.Enabled = True
+                Debug.WriteLine($"Loaded {dtPayments.Rows.Count} payment records for place {currentPlaceIndex}")
+            Else
+                ' Create placeholder table for no payments
+                Dim dtPlaceholder As New DataTable()
+                dtPlaceholder.Columns.Add("payment_id", GetType(Integer))
+                dtPlaceholder.Columns.Add("booking_id", GetType(Integer))
+                dtPlaceholder.Columns.Add("customer_id", GetType(Integer))
+                dtPlaceholder.Columns.Add("amount_to_pay", GetType(Decimal))
+                dtPlaceholder.Columns.Add("amount_paid", GetType(Decimal))
+                dtPlaceholder.Columns.Add("payment_date", GetType(String))
+                dtPlaceholder.Columns.Add("payment_status", GetType(String))
+                dtPlaceholder.Columns.Add("event_place", GetType(String))
+
+                Dim row As DataRow = dtPlaceholder.NewRow()
+                row("payment_id") = 0
+                row("booking_id") = 0
+                row("customer_id") = customerId
+                row("amount_to_pay") = 0
+                row("amount_paid") = 0
+                row("payment_date") = "N/A"
+                row("payment_status") = "No payments for " & placeNames(currentPlaceIndex - 1)
+                row("event_place") = placeNames(currentPlaceIndex - 1)
+                dtPlaceholder.Rows.Add(row)
+
+                dgvPaymentHistory.DataSource = dtPlaceholder
+                btnConfirmPayment.Enabled = False
+                Debug.WriteLine($"No payment records found for place {currentPlaceIndex}")
+            End If
+
+            dgvPaymentHistory.ClearSelection()
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading current payment data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine("Error: " & ex.Message)
+        End Try
     End Sub
 
     Private Sub LoadBookings()
@@ -179,13 +262,11 @@ Public Class FormCustomerView
 
         dgvPaymentHistory.ClearSelection()
 
-
         Dim query As String = $"SELECT b.booking_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status 
                        FROM bookings b
                        JOIN eventplace p ON b.place_id = p.place_id 
                        WHERE b.customer_id = {customerId}
                        ORDER BY b.event_date DESC"
-
 
         Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
 
@@ -200,7 +281,6 @@ Public Class FormCustomerView
                 dtPlaceholder.Columns.Add("Message", GetType(String))
                 dtPlaceholder.Rows.Add("No bookings found. Start by booking an event!")
                 dgvCurrentBooking.DataSource = dtPlaceholder
-                'btnSelectBooking.Enabled = False
                 btnConfirmPayment.Enabled = False
                 dgvCurrentBooking.Refresh()
             End If
@@ -208,7 +288,6 @@ Public Class FormCustomerView
         Catch ex As MySqlException
         End Try
     End Sub
-
 
     Private Sub LoadPaymentHistory()
         Dim query As String = "SELECT payment_id, amount_to_pay, amount_paid, payment_date, payment_status 
@@ -246,7 +325,6 @@ Public Class FormCustomerView
         editForm.ShowDialog()
     End Sub
 
-
     Private Sub btnMain_Click(sender As Object, e As EventArgs)
         Dim mainForm As New FormMain()
         mainForm.Show()
@@ -271,31 +349,6 @@ Public Class FormCustomerView
             Me.Hide()
         End If
     End Sub
-
-    'Private Sub btnSelectBooking_Click(sender As Object, e As EventArgs) Handles btnSelectBooking.Click
-    '    If dgvPaymentHistory.SelectedRows.Count = 0 Then
-    '        MessageBox.Show("Please select a payment to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-    '        Return
-    '    End If
-
-    '    Dim paymentStatus As String = dgvPaymentHistory.SelectedRows(0).Cells("payment_status").Value.ToString()
-    '    Dim paymentId As Integer = Convert.ToInt32(dgvPaymentHistory.SelectedRows(0).Cells("payment_id").Value)
-
-    '    If paymentStatus = "Pending" Then
-    '        Dim query As String = "UPDATE payments SET payment_status = 'Paid', payment_date = NOW(), amount_paid = amount_to_pay WHERE payment_id = @payment_id"
-    '        Dim parameters As New Dictionary(Of String, Object) From {{"@payment_id", paymentId}}
-
-    '        Try
-    '            DBHelper.ExecuteQuery(query, parameters)
-    '            MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-    '            LoadPaymentHistory() ' Refresh payment records
-    '        Catch ex As MySqlException
-    '            MessageBox.Show("Payment processing error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '        End Try
-    '    Else
-    '        MessageBox.Show("This payment is already completed.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
-    '    End If
-    'End Sub
 
     Private Sub btnConfirmPayment_Click_1(sender As Object, e As EventArgs) Handles btnConfirmPayment.Click
         If dgvPaymentHistory.SelectedRows.Count = 0 Then
@@ -373,29 +426,46 @@ Public Class FormCustomerView
 
         panel.Region = New Region(path)
     End Sub
+
     Private Sub LoadRelevantPlaceIndices()
         relevantPlaceIndices.Clear()
-        If dgvCurrentBooking.DataSource Is Nothing OrElse dgvCurrentBooking.Rows.Count = 0 Then Return
 
-        For Each row As DataGridViewRow In dgvCurrentBooking.Rows
-            If row.IsNewRow OrElse row.Cells.Count = 0 Then Continue For
-            Dim placeName As String = ""
-            ' Safely get the event_place column if it exists
-            If row.DataGridView.Columns.Contains("event_place") Then
-                placeName = If(row.Cells("event_place").Value IsNot Nothing, row.Cells("event_place").Value.ToString(), "")
-            ElseIf row.Cells.Count > 1 Then
-                placeName = If(row.Cells(1).Value IsNot Nothing, row.Cells(1).Value.ToString(), "")
+        Try
+            ' Get all place IDs that have payments for this customer
+            Dim query As String = "SELECT DISTINCT b.place_id FROM payments p " &
+                                "JOIN bookings b ON p.booking_id = b.booking_id " &
+                                "WHERE p.customer_id = @customer_id ORDER BY b.place_id"
+
+            Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
+            Dim dtPlaces As DataTable = DBHelper.GetDataTable(query, parameters)
+
+            For Each row As DataRow In dtPlaces.Rows
+                Dim placeId As Integer = Convert.ToInt32(row("place_id"))
+                If placeId >= 1 AndAlso placeId <= 25 Then
+                    relevantPlaceIndices.Add(placeId)
+                End If
+            Next
+
+            relevantPlaceIndices.Sort()
+
+            ' If no relevant places found, add current place to avoid empty list
+            If relevantPlaceIndices.Count = 0 AndAlso currentPlaceIndex >= 1 AndAlso currentPlaceIndex <= 25 Then
+                relevantPlaceIndices.Add(currentPlaceIndex)
             End If
-            Dim idx As Integer = Array.IndexOf(placeNames, placeName)
-            If idx >= 0 AndAlso Not relevantPlaceIndices.Contains(idx + 1) Then
-                relevantPlaceIndices.Add(idx + 1)
+
+        Catch ex As Exception
+            Debug.WriteLine("Error loading relevant place indices: " & ex.Message)
+            ' Fallback to current place
+            If currentPlaceIndex >= 1 AndAlso currentPlaceIndex <= 25 Then
+                relevantPlaceIndices.Add(currentPlaceIndex)
             End If
-        Next
-        relevantPlaceIndices.Sort()
+        End Try
     End Sub
+
     Private Function GetCurrentRelevantIndex() As Integer
         Return relevantPlaceIndices.IndexOf(currentPlaceIndex)
     End Function
+
     Private Sub ShowNoBookingPanel()
         pnlPlaceBrowser.BackgroundImage = Nothing
         pnlPlaceBrowser.BackColor = Color.Beige
@@ -417,15 +487,56 @@ Public Class FormCustomerView
         lblNoBooking.BringToFront()
         pnlPlaceBrowser.Visible = True
     End Sub
+
     Private Sub UpdatePlaceBrowserPanel()
+        Dim imageName As String = "_" & currentPlaceIndex.ToString()
+        Dim img As Image = TryCast(My.Resources.ResourceManager.GetObject(imageName), Image)
+        pnlPlaceBrowser.BackgroundImage = img
+
+        For Each ctrl As Control In pnlPlaceBrowser.Controls.OfType(Of Label)().ToList()
+            If ctrl.Name = "lblNoBooking" Then
+                pnlPlaceBrowser.Controls.Remove(ctrl)
+                ctrl.Dispose()
+            End If
+        Next
+
         If relevantPlaceIndices.Count = 0 Then
             ShowNoBookingPanel()
             Return
         End If
 
-        ' Example: Set label values based on currentPlaceIndex or current booking/payment
-        lblPlaceName.Text = placeNames(currentPlaceIndex - 1)
-        ' Set other labels (lblPaymentId, lblAmountToPay, etc.) here based on your data
+        Dim dataRow As DataRow = GetLatestBookingPayment()
+        If dataRow IsNot Nothing Then
+            lblPlaceName.Text = dataRow("event_place").ToString()
+            lblPaymentId.Text = "Payment ID: " & dataRow("payment_id").ToString()
+
+            If IsDBNull(dataRow("amount_to_pay")) Then
+                lblAmountToPay.Text = "Amount to Pay: N/A"
+            Else
+                lblAmountToPay.Text = "Amount to Pay: ₱" & Convert.ToDecimal(dataRow("amount_to_pay")).ToString("F2")
+            End If
+
+            If IsDBNull(dataRow("amount_paid")) Then
+                lblAmountPaid.Text = "Amount Paid: N/A"
+            Else
+                lblAmountPaid.Text = "Amount Paid: ₱" & Convert.ToDecimal(dataRow("amount_paid")).ToString("F2")
+            End If
+
+            If IsDBNull(dataRow("payment_date")) Then
+                lblPaymentDate.Text = "Payment Date: N/A"
+            Else
+                lblPaymentDate.Text = "Payment Date: " & Convert.ToDateTime(dataRow("payment_date")).ToString("yyyy-MM-dd")
+            End If
+
+            lblPaymentStatus.Text = "Status: " & dataRow("payment_status").ToString()
+        Else
+            lblPlaceName.Text = placeNames(currentPlaceIndex - 1)
+            lblPaymentId.Text = "Payment ID: N/A"
+            lblAmountToPay.Text = "Amount to Pay: N/A"
+            lblAmountPaid.Text = "Amount Paid: N/A"
+            lblPaymentDate.Text = "Payment Date: N/A"
+            lblPaymentStatus.Text = "Status: N/A"
+        End If
 
         For Each ctrl As Control In pnlPlaceBrowser.Controls
             ctrl.Visible = True
@@ -433,6 +544,22 @@ Public Class FormCustomerView
         pnlPlaceBrowser.Visible = True
     End Sub
 
-
+    Private Function GetLatestBookingPayment() As DataRow
+        Dim query As String = "SELECT p.event_place, pay.payment_id, pay.amount_to_pay, pay.amount_paid, pay.payment_date, pay.payment_status " &
+                          "FROM payments pay " &
+                          "JOIN bookings b ON pay.booking_id = b.booking_id " &
+                          "JOIN eventplace p ON b.place_id = p.place_id " &
+                          "WHERE pay.customer_id = @customer_id AND b.place_id = @place_id " &
+                          "ORDER BY pay.payment_date DESC LIMIT 1"
+        Dim parameters As New Dictionary(Of String, Object) From {
+        {"@customer_id", customerId},
+        {"@place_id", currentPlaceIndex}
+    }
+        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+        If dt.Rows.Count > 0 Then
+            Return dt.Rows(0)
+        End If
+        Return Nothing
+    End Function
 
 End Class
