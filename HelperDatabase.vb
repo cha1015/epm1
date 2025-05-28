@@ -230,7 +230,6 @@ Public Class HelperDatabase
         Return DBHelper.GetDataTable(query, params)
     End Function
 
-    ' Fetch detailed booking information for the admin view
     Public Shared Function GetBookingDetails(bookingId As Integer) As DataTable
         Dim query As String = "
         SELECT 
@@ -246,7 +245,7 @@ Public Class HelperDatabase
             b.total_price, 
             b.status, 
             b.services_availed, 
-            p.payment_status, 
+            MAX(p.payment_status) AS payment_status,  -- Use MAX() to get a single payment status
             i.invoice_date,  
             GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed  -- Corrected join
         FROM bookings b
@@ -257,17 +256,15 @@ Public Class HelperDatabase
         LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
         LEFT JOIN services s ON bs.service_id = s.service_id  -- Added join with services table
         WHERE b.booking_id = @booking_id
-        GROUP BY b.booking_id
+        GROUP BY b.booking_id, b.customer_id, e.event_place, e.event_type, b.num_guests, b.event_date, b.event_end_date, 
+                 b.event_time, b.event_end_time, b.total_price, b.status, b.services_availed, i.invoice_date
         "
 
         Dim parameters As New Dictionary(Of String, Object) From {{"@booking_id", bookingId}}
 
-        ' Get the data
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
-        ' Check if there is any data
         If dt.Rows.Count = 0 Then
-            ' If no data found, return an empty DataTable or log the error
             MessageBox.Show("Booking not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
 

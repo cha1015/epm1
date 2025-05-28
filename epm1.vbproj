@@ -126,6 +126,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormAddEventPlace.Designer.vb">
+      <DependentUpon>FormAddEventPlace.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddEventPlace.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormBookingDetails.Designer.vb">
       <DependentUpon>FormBookingDetails.vb</DependentUpon>
     </Compile>
@@ -136,6 +142,12 @@
       <DependentUpon>FormCustomerView.vb</DependentUpon>
     </Compile>
     <Compile Include="FormCustomerView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUpdateEventPlace.Designer.vb">
+      <DependentUpon>FormUpdateEventPlace.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormUpdateEventPlace.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HelperBooking.vb" />
@@ -204,6 +216,9 @@
     <Compile Include="HelperValidation.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormAddEventPlace.resx">
+      <DependentUpon>FormAddEventPlace.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormAdminCenter.resx">
       <DependentUpon>FormAdminCenter.vb</DependentUpon>
     </EmbeddedResource>
@@ -227,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormSignUp.resx">
       <DependentUpon>FormSignUp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUpdateEventPlace.resx">
+      <DependentUpon>FormUpdateEventPlace.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
