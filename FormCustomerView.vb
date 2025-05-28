@@ -4,7 +4,7 @@ Imports System.Text
 
 Public Class FormCustomerView
 
-    Private customerId As Integer
+    Private user_id As Integer
     Private pnlPlaceBrowser As Panel
     Private lblPlaceName As Label
     Private lblPlaceDetails As Label
@@ -18,6 +18,10 @@ Public Class FormCustomerView
 
     Private allBookings As New List(Of DataRow)
     Private currentBookingIndex As Integer = 0
+    ' At the top of FormCustomerView
+    Private customer_id As Integer
+
+
 
     Private placeNames As String() = {
         "Auditorium", "Ballroom", "Banquet Hall", "Bar", "Cafe", "Club",
@@ -27,9 +31,8 @@ Public Class FormCustomerView
         "Seminar Room", "Studio", "Theater", "Training Room", "Yacht"
     }
 
-    Public Sub New(ByVal id As Integer)
+    Public Sub New()
         InitializeComponent()
-        customerId = id
         CreatePlaceBrowserPanel()
     End Sub
 
@@ -119,9 +122,6 @@ Public Class FormCustomerView
         AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
         AddHandler btnNextPlace.Paint, AddressOf MakeButtonRound
 
-        pnlPlaceBrowser.Controls.Add(btnPrevPlace)
-        pnlPlaceBrowser.Controls.Add(btnNextPlace)
-
         pnlPlaceBrowser.Controls.Add(pnlInfoArea)
         pnlPlaceBrowser.Controls.Add(btnPrevPlace)
         pnlPlaceBrowser.Controls.Add(btnNextPlace)
@@ -147,14 +147,21 @@ Public Class FormCustomerView
         End If
     End Sub
 
+    Public Sub New(ByVal id As Integer)
+        InitializeComponent()
+        customer_id = id
+        CreatePlaceBrowserPanel()
+    End Sub
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         pnlPlaceBrowser.Visible = True
-        customerId = CurrentUser.CustomerId
+        customer_id = CurrentUser.CustomerId
         LoadAllBookings()
         currentBookingIndex = 0
+        customer_id = CurrentUser.CustomerId
         UpdatePlaceBrowserPanel()
     End Sub
+
 
     Private Sub LoadAllBookings()
         allBookings.Clear()
@@ -165,13 +172,14 @@ Public Class FormCustomerView
                           "JOIN eventplace p ON b.place_id = p.place_id " &
                           "WHERE b.customer_id = @customer_id " &
                           "ORDER BY b.event_date DESC, b.booking_id DESC"
-        Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
+        Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", CurrentUser.CustomerId}}
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
         For Each row As DataRow In dt.Rows
             allBookings.Add(row)
         Next
-        Debug.WriteLine($"Loaded {allBookings.Count} bookings for customer {customerId}")
+        Debug.WriteLine($"Loaded {allBookings.Count} bookings for customer {CurrentUser.CustomerId}")
     End Sub
+
 
 
     Private Sub ShowNoBookingPanel()
@@ -200,6 +208,7 @@ Public Class FormCustomerView
             ShowNoBookingPanel()
             btnPrevPlace.Visible = False
             btnNextPlace.Visible = False
+            pnlPlaceBrowser.Refresh()
             Return
         End If
 

@@ -22,61 +22,24 @@ Partial Class FormCustomerView
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.lblPaymentSection = New System.Windows.Forms.Label()
         Me.btnConfirmPayment = New System.Windows.Forms.Button()
-        Me.lblCurrentBooking = New System.Windows.Forms.Label()
-        Me.btnLogOut = New System.Windows.Forms.Button()
         Me.lblRole = New System.Windows.Forms.Label()
         Me.btnEdit = New System.Windows.Forms.Button()
         Me.lblUsername = New System.Windows.Forms.Label()
-        Me.txtPaymentAmount = New System.Windows.Forms.TextBox()
+        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.SuspendLayout()
-        '
-        'lblPaymentSection
-        '
-        Me.lblPaymentSection.AutoSize = True
-        Me.lblPaymentSection.BackColor = System.Drawing.Color.Transparent
-        Me.lblPaymentSection.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPaymentSection.Location = New System.Drawing.Point(40, 248)
-        Me.lblPaymentSection.Name = "lblPaymentSection"
-        Me.lblPaymentSection.Size = New System.Drawing.Size(87, 13)
-        Me.lblPaymentSection.TabIndex = 58
-        Me.lblPaymentSection.Text = "Payment Section"
         '
         'btnConfirmPayment
         '
+        Me.btnConfirmPayment.BackColor = System.Drawing.Color.Transparent
+        Me.btnConfirmPayment.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnConfirmPayment.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnConfirmPayment.Location = New System.Drawing.Point(783, 471)
+        Me.btnConfirmPayment.Location = New System.Drawing.Point(853, 474)
         Me.btnConfirmPayment.Name = "btnConfirmPayment"
-        Me.btnConfirmPayment.Size = New System.Drawing.Size(123, 26)
+        Me.btnConfirmPayment.Size = New System.Drawing.Size(79, 26)
         Me.btnConfirmPayment.TabIndex = 56
-        Me.btnConfirmPayment.Text = "Confirm Payment"
-        Me.btnConfirmPayment.UseVisualStyleBackColor = True
-        '
-        'lblCurrentBooking
-        '
-        Me.lblCurrentBooking.AutoSize = True
-        Me.lblCurrentBooking.BackColor = System.Drawing.Color.Transparent
-        Me.lblCurrentBooking.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCurrentBooking.Location = New System.Drawing.Point(43, 82)
-        Me.lblCurrentBooking.Name = "lblCurrentBooking"
-        Me.lblCurrentBooking.Size = New System.Drawing.Size(83, 13)
-        Me.lblCurrentBooking.TabIndex = 52
-        Me.lblCurrentBooking.Text = "Current Booking"
-        '
-        'btnLogOut
-        '
-        Me.btnLogOut.BackColor = System.Drawing.Color.Gainsboro
-        Me.btnLogOut.FlatAppearance.BorderSize = 0
-        Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLogOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnLogOut.ForeColor = System.Drawing.Color.Black
-        Me.btnLogOut.Location = New System.Drawing.Point(816, 45)
-        Me.btnLogOut.Name = "btnLogOut"
-        Me.btnLogOut.Size = New System.Drawing.Size(120, 34)
-        Me.btnLogOut.TabIndex = 51
-        Me.btnLogOut.Text = "Log Out"
-        Me.btnLogOut.UseVisualStyleBackColor = False
+        Me.btnConfirmPayment.UseVisualStyleBackColor = False
         '
         'lblRole
         '
@@ -84,7 +47,7 @@ Partial Class FormCustomerView
         Me.lblRole.BackColor = System.Drawing.Color.Transparent
         Me.lblRole.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRole.ForeColor = System.Drawing.Color.Black
-        Me.lblRole.Location = New System.Drawing.Point(598, 36)
+        Me.lblRole.Location = New System.Drawing.Point(741, 43)
         Me.lblRole.Name = "lblRole"
         Me.lblRole.Size = New System.Drawing.Size(29, 13)
         Me.lblRole.TabIndex = 50
@@ -103,29 +66,37 @@ Partial Class FormCustomerView
         Me.lblUsername.BackColor = System.Drawing.Color.Transparent
         Me.lblUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.Black
-        Me.lblUsername.Location = New System.Drawing.Point(598, 5)
+        Me.lblUsername.Location = New System.Drawing.Point(741, 19)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(35, 13)
         Me.lblUsername.TabIndex = 48
         Me.lblUsername.Text = "Guest"
         '
-        'txtPaymentAmount
+        'FlowLayoutPanel1
         '
-        Me.txtPaymentAmount.Location = New System.Drawing.Point(652, 471)
-        Me.txtPaymentAmount.Name = "txtPaymentAmount"
-        Me.txtPaymentAmount.Size = New System.Drawing.Size(100, 20)
-        Me.txtPaymentAmount.TabIndex = 62
+        Me.FlowLayoutPanel1.AutoScroll = True
+        Me.FlowLayoutPanel1.BackColor = System.Drawing.Color.Transparent
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(27, 126)
+        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(891, 328)
+        Me.FlowLayoutPanel1.TabIndex = 64
+        '
+        'Panel1
+        '
+        Me.Panel1.Location = New System.Drawing.Point(27, 126)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(891, 328)
+        Me.Panel1.TabIndex = 0
         '
         'FormCustomerView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(944, 501)
-        Me.Controls.Add(Me.txtPaymentAmount)
-        Me.Controls.Add(Me.lblPaymentSection)
+        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.FlowLayoutPanel1)
         Me.Controls.Add(Me.btnConfirmPayment)
-        Me.Controls.Add(Me.lblCurrentBooking)
-        Me.Controls.Add(Me.btnLogOut)
         Me.Controls.Add(Me.lblRole)
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.lblUsername)
@@ -136,12 +107,10 @@ Partial Class FormCustomerView
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents lblPaymentSection As Label
     Friend WithEvents btnConfirmPayment As Button
-    Friend WithEvents lblCurrentBooking As Label
-    Friend WithEvents btnLogOut As Button
     Friend WithEvents lblRole As Label
     Friend WithEvents btnEdit As Button
     Friend WithEvents lblUsername As Label
-    Friend WithEvents txtPaymentAmount As TextBox
+    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
+    Friend WithEvents Panel1 As Panel
 End Class
