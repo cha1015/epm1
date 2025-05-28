@@ -164,9 +164,19 @@ Public Class FormBooking
         If Not HelperValidation.IsValidCustomerInfo(txtCustomerName, dtpBirthday, cmbSex, txtAddress) Then Exit Sub
         PopulatePaymentDetails()
         tcDetails.SelectedTab = tpPaymentDetails
+
         ' Validate age here using the helper method:
         If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then Exit Sub
+
+        ' Fix: Ensure that the number of guests is not mistakenly set to the customer's age
+        Dim birthDate As Date = dtpBirthday.Value
+        Dim today As Date = Date.Today
+        Dim age As Integer = today.Year - birthDate.Year
+        If birthDate > today.AddYears(-age) Then age -= 1
+
+        txtAge.Text = age.ToString() ' Ensure this is the age, not the number of guests
     End Sub
+
 
     Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs) Handles btnPlaceBooking.Click
         ' Check for duplicate booking
@@ -175,10 +185,9 @@ Public Class FormBooking
             Exit Sub
         End If
 
-        ' Parse the number of guests from text
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then
-            numGuests = 0
+            numGuests = 1 ' Default to 1 if it's not valid
         End If
 
         ' Create complete time strings by combining hour, minute, and AM/PM values.

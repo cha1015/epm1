@@ -141,83 +141,161 @@ Public Class HelperResultsDisplay
         PopulateFlowPanel(flpResults, dt, createPanel)
     End Sub
 
-    ' Method for populating Pending Bookings
+    ' Method for populating Pending Bookings with event details and image
     Public Shared Sub PopulatePendingBookings(ByVal flpPendingBookings As FlowLayoutPanel, ByVal dt As DataTable,
-                                            ByVal approveHandler As EventHandler, ByVal rejectHandler As EventHandler,
-                                            ByVal adminForm As FormAdminCenter)
+                                          ByVal approveHandler As EventHandler, ByVal rejectHandler As EventHandler,
+                                          ByVal adminForm As FormAdminCenter)
+        ' Define the width of each panel (3 panels per row)
+        Dim scrollbarWidth As Integer = SystemInformation.VerticalScrollBarWidth
+        Dim availableWidth As Integer = flpPendingBookings.Width - scrollbarWidth - (10 * 6)
+        Dim panelWidth As Integer = availableWidth \ 3 ' 3 panels per row
+        Dim panelHeight As Integer = 380 ' Adjust height for contents
+
+        ' Function to create the panel for each booking
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
                                                          Dim panel As New Panel()
-                                                         panel.Size = New Size(300, 80)
+                                                         panel.Size = New Size(panelWidth, panelHeight)
                                                          panel.BorderStyle = BorderStyle.FixedSingle
                                                          panel.Margin = New Padding(10)
 
+                                                         ' PictureBox for event image (on top of the panel)
+                                                         Dim pb As New PictureBox()
+                                                         pb.Size = New Size(panelWidth, 140)
+                                                         pb.Location = New Point(0, 0)
+                                                         pb.SizeMode = PictureBoxSizeMode.StretchImage
+                                                         Dim imagePath As String = row("image_url").ToString().Trim()
+                                                         Dim defaultImagePath As String = "C:\event images\No Image.png"
+                                                         If String.IsNullOrEmpty(imagePath) OrElse Not IO.File.Exists(imagePath) Then
+                                                             imagePath = defaultImagePath
+                                                         End If
+                                                         Try
+                                                             pb.Image = Image.FromFile(imagePath)
+                                                         Catch ex As Exception
+                                                             pb.Image = Nothing
+                                                         End Try
+
+                                                         ' Event Details on the bottom of the panel
+                                                         ' Customer Label
                                                          Dim lblName As New Label With {
-                                                         .Text = "Customer: " & row("name").ToString(),
-                                                         .Location = New Point(5, 5),
-                                                         .AutoSize = True
-                                                     }
-                                                         Dim lblEvent As New Label With {
-                                                         .Text = "Event: " & row("event_place").ToString(),
-                                                         .Location = New Point(5, 25),
-                                                         .AutoSize = True
-                                                     }
-                                                         Dim lblDate As New Label With {
-                                                         .Text = "Date: " & Convert.ToDateTime(row("event_date")).ToShortDateString(),
-                                                         .Location = New Point(5, 45),
-                                                         .AutoSize = True
-                                                         }
+                                                 .Text = "Customer: " & row("name").ToString(),
+                                                 .Location = New Point(5, 145),
+                                                 .Size = New Size(panelWidth - 20, 22),
+                                                 .Font = New Font("Poppins", 10, FontStyle.Bold)
+                                             }
 
-                                                         Dim eventTime As String = String.Empty
-                                                         Dim eventEndTime As String = String.Empty
+                                                         ' Event Place Label
+                                                         Dim lblEventPlace As New Label With {
+                                                 .Text = "Event Place: " & row("event_place").ToString(),
+                                                 .Location = New Point(5, 170),
+                                                 .Size = New Size(panelWidth - 20, 20),
+                                                 .Font = New Font("Poppins", 8)
+                                             }
 
-                                                         If dt.Columns.Contains("event_time") AndAlso Not IsDBNull(row("event_time")) Then
-                                                             Dim ts As TimeSpan = DirectCast(row("event_time"), TimeSpan)
-                                                             eventTime = DateTime.Today.Add(ts).ToString("hh:mm tt")
-                                                         Else
-                                                             eventTime = "N/A"
-                                                         End If
+                                                         ' Event Type Label
+                                                         Dim lblEventType As New Label With {
+                                                 .Text = "Event Type: " & row("event_type").ToString(),
+                                                 .Location = New Point(5, 190),
+                                                 .Size = New Size(panelWidth - 20, 20),
+                                                 .Font = New Font("Poppins", 8)
+                                             }
 
-                                                         If dt.Columns.Contains("event_end_time") AndAlso Not IsDBNull(row("event_end_time")) Then
-                                                             Dim tsEnd As TimeSpan = DirectCast(row("event_end_time"), TimeSpan)
-                                                             eventEndTime = DateTime.Today.Add(tsEnd).ToString("hh:mm tt")
-                                                         Else
-                                                             eventEndTime = "N/A"
-                                                         End If
+                                                         ' Guests Label
+                                                         Dim lblGuests As New Label With {
+                                                 .Text = "Guests: " & row("num_guests").ToString(),
+                                                 .Location = New Point(5, 210),
+                                                 .Size = New Size(panelWidth - 20, 20),
+                                                 .Font = New Font("Poppins", 8)
+                                             }
 
-                                                         Dim lblTime As New Label With {
-                                                         .Text = "Time: " & eventTime & " - " & eventEndTime,
-                                                         .Location = New Point(5, 65),
-                                                         .AutoSize = True
-                                                         }
+                                                         ' Event Date Label
+                                                         Dim lblEventDate As New Label With {
+                                                 .Text = "Event Date: " & Convert.ToDateTime(row("event_date")).ToShortDateString(),
+                                                 .Location = New Point(5, 230),
+                                                 .Size = New Size(panelWidth - 20, 20),
+                                                 .Font = New Font("Poppins", 8)
+                                             }
 
-                                                         panel.Controls.Add(lblName)
-                                                         panel.Controls.Add(lblEvent)
-                                                         panel.Controls.Add(lblDate)
-                                                         panel.Controls.Add(lblTime)
+                                                         ' Event Time Label
+                                                         Dim startTime As String = If(Not IsDBNull(row("event_time")), row("event_time").ToString(), "N/A")
+                                                         Dim endTime As String = If(Not IsDBNull(row("event_end_time")), row("event_end_time").ToString(), "N/A")
+
+                                                         Dim lblEventTime As New Label With {
+                                                .Text = "Event Time: " & startTime & " - " & endTime,
+                                                .Location = New Point(5, 250),
+                                                .Size = New Size(panelWidth - 20, 20),
+                                                .Font = New Font("Poppins", 8)
+                                            }
+
+                                                         ' Services Label
+                                                         Dim services As String = row("services_availed").ToString()
+                                                         Dim serviceIds As String() = services.Split(","c)
+                                                         Dim serviceNames As New List(Of String)
+
+                                                         ' Query service names based on service IDs
+                                                         For Each serviceId As String In serviceIds
+                                                             ' Trim whitespace and check if the serviceId is a valid integer
+                                                             serviceId = serviceId.Trim()
+
+                                                             If Not String.IsNullOrEmpty(serviceId) AndAlso IsNumeric(serviceId) Then
+                                                                 Dim serviceName As String = GetServiceNameById(Convert.ToInt32(serviceId))
+                                                                 If Not String.IsNullOrEmpty(serviceName) Then
+                                                                     serviceNames.Add(serviceName)
+                                                                 End If
+                                                             End If
+                                                         Next
+
+                                                         ' Display the services
+                                                         Dim lblServices As New Label With {
+                                                        .Text = "Services: " & String.Join(", ", serviceNames),
+                                                        .Location = New Point(5, 270),
+                                                        .Size = New Size(panelWidth - 20, 20),
+                                                        .Font = New Font("Poppins", 8)
+                                                    }
+
+                                                         ' Total Price Label
+                                                         Dim lblTotalPrice As New Label With {
+                                                 .Text = "Total Price: " & row("total_price").ToString(),
+                                                 .Location = New Point(5, 290),
+                                                 .Size = New Size(panelWidth - 20, 20),
+                                                 .Font = New Font("Poppins", 8)
+                                             }
 
                                                          ' Approve and Reject Buttons
                                                          Dim btnApprove As New Button()
                                                          btnApprove.Text = "Approve"
-                                                         btnApprove.Size = New Size(75, 25)
-                                                         btnApprove.Location = New Point(200, 5)
+                                                         btnApprove.Size = New Size(panelWidth - 20, 30)
+                                                         btnApprove.Location = New Point(5, panelHeight - 40)
                                                          btnApprove.Tag = row
-                                                         btnApprove.FlatStyle = FlatStyle.Flat
                                                          AddHandler btnApprove.Click, Sub(sender, e)
                                                                                           approveHandler(sender, e)
                                                                                           adminForm.ShowBookingDetails(DirectCast(DirectCast(sender, Button).Tag, DataRow))
                                                                                       End Sub
-                                                         panel.Controls.Add(btnApprove)
+                                                         btnApprove.FlatStyle = FlatStyle.Flat
+                                                         btnApprove.Font = New Font("Poppins", 8)
 
                                                          Dim btnReject As New Button()
                                                          btnReject.Text = "Reject"
-                                                         btnReject.Size = New Size(75, 25)
-                                                         btnReject.Location = New Point(200, 35)
+                                                         btnReject.Size = New Size(panelWidth - 20, 30)
+                                                         btnReject.Location = New Point(5, panelHeight - 70)
                                                          btnReject.Tag = row
-                                                         btnReject.FlatStyle = FlatStyle.Flat
                                                          AddHandler btnReject.Click, Sub(sender, e)
                                                                                          rejectHandler(sender, e)
                                                                                          adminForm.ShowBookingDetails(DirectCast(DirectCast(sender, Button).Tag, DataRow))
                                                                                      End Sub
+                                                         btnReject.FlatStyle = FlatStyle.Flat
+                                                         btnReject.Font = New Font("Poppins", 8)
+
+                                                         ' Add all controls to the panel
+                                                         panel.Controls.Add(pb)
+                                                         panel.Controls.Add(lblName)
+                                                         panel.Controls.Add(lblEventPlace)
+                                                         panel.Controls.Add(lblEventType)
+                                                         panel.Controls.Add(lblGuests)
+                                                         panel.Controls.Add(lblEventDate)
+                                                         panel.Controls.Add(lblEventTime)
+                                                         panel.Controls.Add(lblServices)
+                                                         panel.Controls.Add(lblTotalPrice)
+                                                         panel.Controls.Add(btnApprove)
                                                          panel.Controls.Add(btnReject)
 
                                                          ' Panel background color logic based on the days until event
@@ -237,8 +315,24 @@ Public Class HelperResultsDisplay
 
                                                          Return panel
                                                      End Function
+
         PopulateFlowPanel(flpPendingBookings, dt, createPanel)
     End Sub
+
+    ' Helper function to get service name by ID
+    Private Shared Function GetServiceNameById(serviceId As Integer) As String
+        Dim serviceName As String = String.Empty
+        Dim query As String = "SELECT service_name FROM services WHERE service_id = @service_id"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@service_id", serviceId}}
+
+        ' Execute the query and fetch the service name
+        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+        If dt.Rows.Count > 0 Then
+            serviceName = dt.Rows(0)("service_name").ToString()
+        End If
+
+        Return serviceName
+    End Function
 
     ' Method for populating Approved Bookings
     Public Shared Sub PopulateApprovedBookings(ByVal flpApproved As FlowLayoutPanel, ByVal dt As DataTable)
@@ -675,7 +769,6 @@ Public Class HelperResultsDisplay
 
         ' Populate the FlowLayoutPanel with the event place panels
         PopulateFlowPanel(flpResults, dt, createPanel)
-        Debug.WriteLine("Populating event places... Total rows: " & dt.Rows.Count)
 
     End Sub
 

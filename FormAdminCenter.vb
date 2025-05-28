@@ -57,6 +57,7 @@ Public Class FormAdminCenter
                           "CASE WHEN EXISTS (SELECT * FROM bookings WHERE bookings.place_id = eventplace.place_id) " &
                           "THEN 'Booked' ELSE 'Available' END AS status " &
                           "FROM eventplace WHERE 1=1"
+
         Dim dt As New DataTable()
         Using connection As MySqlConnection = DBHelper.GetConnection()
             Using cmd As New MySqlCommand(query, connection)
@@ -103,64 +104,187 @@ Public Class FormAdminCenter
                                                      txtPlaceID, btnUpdate, btnDelete)
     End Sub
 
+
     '--- Load Pending Bookings
     Private Sub LoadPendingBookings()
-        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
-                          "FROM bookings b " &
-                          "JOIN customers c ON b.customer_id = c.customer_id " &
-                          "JOIN eventplace e ON b.place_id = e.place_id " &
-                          "WHERE b.status = 'Pending' ORDER BY b.event_date ASC"
+        Dim query As String = "SELECT 
+                            b.booking_id, 
+                            c.name, 
+                            e.event_place, 
+                            b.event_type, 
+                            b.num_guests, 
+                            e.image_url, 
+                            b.event_date, 
+                            b.event_time, 
+                            b.event_end_time, 
+                            b.event_end_date, 
+                            b.total_price, 
+                            b.status, 
+                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                        FROM 
+                            bookings b
+                        JOIN 
+                            customers c ON b.customer_id = c.customer_id
+                        JOIN 
+                            eventplace e ON b.place_id = e.place_id
+                        LEFT JOIN 
+                            bookingservices bs ON b.booking_id = bs.booking_id
+                        LEFT JOIN 
+                            services s ON bs.service_id = s.service_id
+                        WHERE 
+                            b.status = 'Pending' 
+                        GROUP BY 
+                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
+                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
+                        ORDER BY 
+                            b.event_date ASC
+                        "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         ' Populate the pending bookings panel
         HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
+
+        ' Update the tab label based on the number of pending bookings
+        UpdateTabLabel(tpPendings, flpPending)
     End Sub
 
     Private Sub LoadApprovedBookings()
-        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
-                          "FROM bookings b " &
-                          "JOIN customers c ON b.customer_id = c.customer_id " &
-                          "JOIN eventplace e ON b.place_id = e.place_id " &
-                          "WHERE b.status = 'Approved' ORDER BY b.event_date ASC"
+        Dim query As String = "SELECT 
+                            b.booking_id, 
+                            c.name, 
+                            e.event_place, 
+                            b.event_type, 
+                            b.num_guests, 
+                            e.image_url, 
+                            b.event_date, 
+                            b.event_time, 
+                            b.event_end_time, 
+                            b.event_end_date, 
+                            b.total_price, 
+                            b.status, 
+                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                        FROM 
+                            bookings b
+                        JOIN 
+                            customers c ON b.customer_id = c.customer_id
+                        JOIN 
+                            eventplace e ON b.place_id = e.place_id
+                        LEFT JOIN 
+                            bookingservices bs ON b.booking_id = bs.booking_id
+                        LEFT JOIN 
+                            services s ON bs.service_id = s.service_id
+                        WHERE 
+                            b.status = 'Approved' 
+                        GROUP BY 
+                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
+                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
+                        ORDER BY 
+                            b.event_date ASC
+                        "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         ' Populate the approved bookings panel
         HelperResultsDisplay.PopulateApprovedBookings(flpApproved, dt)
+
+        ' Update the tab label based on the number of approved bookings
+        UpdateTabLabel(tpApproved, flpApproved)
     End Sub
-
-    Private Sub LoadAllBookings()
-        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
-                          "FROM bookings b " &
-                          "JOIN customers c ON b.customer_id = c.customer_id " &
-                          "JOIN eventplace e ON b.place_id = e.place_id ORDER BY b.event_date ASC"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-
-        ' Populate the all bookings panel
-        HelperResultsDisplay.PopulateAllBookings(flpAll, dt)
-    End Sub
-
 
     Private Sub LoadRejectedBookings()
-        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
-                          "FROM bookings b " &
-                          "JOIN customers c ON b.customer_id = c.customer_id " &
-                          "JOIN eventplace e ON b.place_id = e.place_id " &
-                          "WHERE b.status = 'Rejected' ORDER BY b.event_date ASC"
+        Dim query As String = "SELECT 
+                            b.booking_id, 
+                            c.name, 
+                            e.event_place, 
+                            b.event_type, 
+                            b.num_guests, 
+                            e.image_url, 
+                            b.event_date, 
+                            b.event_time, 
+                            b.event_end_time, 
+                            b.event_end_date, 
+                            b.total_price, 
+                            b.status, 
+                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                        FROM 
+                            bookings b
+                        JOIN 
+                            customers c ON b.customer_id = c.customer_id
+                        JOIN 
+                            eventplace e ON b.place_id = e.place_id
+                        LEFT JOIN 
+                            bookingservices bs ON b.booking_id = bs.booking_id
+                        LEFT JOIN 
+                            services s ON bs.service_id = s.service_id
+                        WHERE 
+                            b.status = 'Rejected' 
+                        GROUP BY 
+                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
+                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
+                        ORDER BY 
+                            b.event_date ASC
+                        "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         ' Populate the rejected bookings panel
         HelperResultsDisplay.PopulateRejectedBookings(flpRejected, dt)
+
+        ' Update the tab label based on the number of rejected bookings
+        UpdateTabLabel(tpRejected, flpRejected)
     End Sub
+
+    Private Sub LoadAllBookings()
+        Dim query As String = "SELECT 
+                            b.booking_id, 
+                            c.name, 
+                            e.event_place, 
+                            b.event_type, 
+                            b.num_guests, 
+                            e.image_url, 
+                            b.event_date, 
+                            b.event_time, 
+                            b.event_end_time, 
+                            b.event_end_date, 
+                            b.total_price, 
+                            b.status, 
+                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                        FROM 
+                            bookings b
+                        JOIN 
+                            customers c ON b.customer_id = c.customer_id
+                        JOIN 
+                            eventplace e ON b.place_id = e.place_id
+                        LEFT JOIN 
+                            bookingservices bs ON b.booking_id = bs.booking_id
+                        LEFT JOIN 
+                            services s ON bs.service_id = s.service_id
+                        GROUP BY 
+                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
+                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
+                        ORDER BY 
+                            b.event_date ASC"
+
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Populate the all bookings panel
+        HelperResultsDisplay.PopulateAllBookings(flpAll, dt)
+
+        ' Update the tab label based on the number of all bookings
+        UpdateTabLabel(tpAll, flpAll)
+    End Sub
+
 
 
     '--- Load Availability of Event Places
     ' In FormAdminCenter
 
     Private Sub LoadAvailability()
-        Dim query As String = "SELECT e.event_place, e.place_id, e.status, e.image_url, " &
+        ' Corrected query: Remove reference to e.status and use the dynamically calculated Availability
+        Dim query As String = "SELECT e.event_place, e.place_id, " &
                           "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved') " &
-                          "THEN 'Booked' ELSE 'Available' END AS Availability " &
+                          "THEN 'Booked' ELSE 'Available' END AS Availability, " &
+                          "e.image_url " &
                           "FROM eventplace e"
+
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         ' Split the event places into Available and Booked
@@ -190,6 +314,7 @@ Public Class FormAdminCenter
                                                      txtAvailableDays, txtDescription,
                                                      txtPlaceID, btnUpdate, btnDelete)
     End Sub
+
 
 
 
@@ -569,7 +694,11 @@ Public Class FormAdminCenter
         End If
     End Sub
 
-    '--- Additional Legend (optional)
+    Private Sub UpdateTabLabel(tabPage As TabPage, flowLayoutPanel As FlowLayoutPanel)
+        ' Update the tab label with the number of items in the FlowLayoutPanel
+        Dim itemCount As Integer = flowLayoutPanel.Controls.Count
+        tabPage.Text = $"{tabPage.Text.Split(" "c)(0)} ({itemCount})"
+    End Sub
 
 
     Private Sub LogError(errorMessage As String)
