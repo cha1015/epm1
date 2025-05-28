@@ -81,14 +81,17 @@ Public Class FormCustomerView
 
     Private Sub LoadAllBookings()
         allBookings.Clear()
+
         Dim query As String = "SELECT b.booking_id, b.place_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status, " &
-                          "pay.payment_id, pay.amount_to_pay, pay.amount_paid, pay.payment_date, pay.payment_status " &
-                          "FROM bookings b " &
-                          "LEFT JOIN payments pay ON pay.booking_id = b.booking_id " &
-                          "JOIN eventplace p ON b.place_id = p.place_id " &
-                          "WHERE b.customer_id = @customer_id " &
-                          "ORDER BY b.event_date DESC, b.booking_id DESC"
-        Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", CurrentUser.CustomerId}}
+                      "pay.payment_id, pay.amount_to_pay, pay.amount_paid, pay.payment_date, pay.payment_status, " &
+                      "b.customer_id, c.name " &
+                      "FROM bookings b " &
+                      "LEFT JOIN payments pay ON pay.booking_id = b.booking_id " &
+                      "JOIN eventplace p ON b.place_id = p.place_id " &
+                      "JOIN customers c ON b.customer_id = c.customer_id " &
+                      "ORDER BY b.event_date DESC, b.booking_id DESC"
+        Dim parameters As Dictionary(Of String, Object) = Nothing
+
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
         For Each row As DataRow In dt.Rows
             allBookings.Add(row)
@@ -171,13 +174,8 @@ Public Class FormCustomerView
         If quicheFont IsNot Nothing Then Return
         Try
             ' If the font is installed on the system:
-            quicheFont = New Font("FONTSPRING DEMO - Quiche Sans", 12, FontStyle.Bold)
+            quicheFont = New Font("Poppins", 12, FontStyle.Bold)
         Catch
-            ' If the font is embedded as a resource (e.g., Resources.QuicheSans), use PrivateFontCollection:
-            'Dim pfc As New PrivateFontCollection()
-            'pfc.AddFontFile("path_to_your_font_file.ttf")
-            'quicheFont = New Font(pfc.Families(0), 12, FontStyle.Bold)
-            ' (Uncomment and adjust if using embedded font)
             quicheFont = New Font("Arial", 12, FontStyle.Bold) ' fallback
         End Try
     End Sub
@@ -186,8 +184,52 @@ Public Class FormCustomerView
         LoadCustomFont()
         FlowLayoutPanel1.Controls.Clear()
         FlowLayoutPanel1.Visible = True
+        Debug.WriteLine("Bookings loaded: " & allBookings.Count)
 
-        If allBookings.Count = 0 Then
+
+        ' --- Filtering logic ---
+        Dim filteredBookings = allBookings.AsEnumerable()
+        Debug.WriteLine("Filtered bookings: " & filteredBookings.Count())
+
+        ' Status filtering
+        Dim showPending = cbPending.Checked
+        Dim showRejected = cbRejected.Checked
+        Dim showPaid = cbPaid.Checked
+
+        filteredBookings = filteredBookings.Where(Function(row)
+                                                      Dim status = row("status").ToString().ToLower()
+                                                      If status = "pending" AndAlso showPending Then Return True
+                                                      If status = "rejected" AndAlso showRejected Then Return True
+                                                      If status = "approved" OrElse status = "paid" Then
+                                                          ' Consider booking as paid if payment_status is "Paid"
+                                                          Dim paymentStatus = If(IsDBNull(row("payment_status")), "", row("payment_status").ToString().ToLower())
+                                                          If (status = "approved" AndAlso paymentStatus = "paid" AndAlso showPaid) Then Return True
+                                                          If (status = "approved" AndAlso paymentStatus <> "paid" AndAlso showPending) Then Return True
+                                                      End If
+                                                      Return False
+                                                  End Function)
+
+        ' Search filtering
+        Dim searchText = txtSearch.Text.Trim().ToLower()
+        If searchText.Length > 0 Then
+            filteredBookings = filteredBookings.Where(Function(row)
+                                                          Dim placeName = row("event_place").ToString().ToLower()
+                                                          Dim customerName = If(row.Table.Columns.Contains("customer_name"), row("customer_name").ToString().ToLower(), "")
+                                                          Dim customerId = row("customer_id").ToString().ToLower()
+                                                          Dim bookingId = row("booking_id").ToString().ToLower()
+                                                          Dim paymentId = If(IsDBNull(row("payment_id")), "", row("payment_id").ToString().ToLower())
+                                                          Return placeName.Contains(searchText) OrElse
+                   customerName.Contains(searchText) OrElse
+                   customerId.Contains(searchText) OrElse
+                   bookingId.Contains(searchText) OrElse
+                   paymentId.Contains(searchText)
+                                                      End Function)
+        End If
+
+        ' Sort by event_date DESC, booking_id DESC (already sorted in LoadAllBookings, but ensure)
+        filteredBookings = filteredBookings.OrderByDescending(Function(row) Convert.ToDateTime(row("event_date"))).ThenByDescending(Function(row) Convert.ToInt32(row("booking_id")))
+
+        If Not filteredBookings.Any() Then
             Dim lblNoBooking As New Label()
             lblNoBooking.Text = "No booking data"
             lblNoBooking.Font = New Font(quicheFont.FontFamily, 14, FontStyle.Bold)
@@ -199,7 +241,7 @@ Public Class FormCustomerView
             Return
         End If
 
-        For Each dataRow As DataRow In allBookings
+        For Each dataRow As DataRow In filteredBookings
             ' Main panel
             Dim panel As New Panel()
             panel.Size = New Size(864, 181)
@@ -252,7 +294,18 @@ Public Class FormCustomerView
             Dim detailsFont As New Font(quicheFont.FontFamily, 9, FontStyle.Regular)
             Dim y As Integer = 8
 
-            ' Customer ID only (top left)
+            ' Customer Name (top left)
+            Dim customerName As String = If(dataRow.Table.Columns.Contains("customer_name"), dataRow("customer_name").ToString(), CurrentUser.Username)
+            Dim lblCustomerName As New Label()
+            lblCustomerName.Text = "Customer Name: " & customerName
+            lblCustomerName.Font = detailsFont
+            lblCustomerName.ForeColor = Color.Black
+            lblCustomerName.Location = New Point(10, y)
+            lblCustomerName.Size = New Size(380, 18)
+            panel2.Controls.Add(lblCustomerName)
+            y += 20
+
+            ' Customer ID
             Dim lblCustomerId As New Label()
             lblCustomerId.Text = "Customer ID: " & CurrentUser.CustomerId.ToString()
             lblCustomerId.Font = detailsFont
@@ -260,59 +313,62 @@ Public Class FormCustomerView
             lblCustomerId.Location = New Point(10, y)
             lblCustomerId.Size = New Size(180, 18)
             panel2.Controls.Add(lblCustomerId)
-            y += 20
 
-            ' Booking ID and Date (side by side)
+            ' Booking ID
             Dim lblBookingId As New Label()
             lblBookingId.Text = "Booking ID: " & dataRow("booking_id").ToString()
             lblBookingId.Font = detailsFont
             lblBookingId.ForeColor = Color.Black
-            lblBookingId.Location = New Point(10, y)
+            lblBookingId.Location = New Point(200, y)
             lblBookingId.Size = New Size(180, 18)
             panel2.Controls.Add(lblBookingId)
+            y += 20
 
+            ' Date
             Dim lblEventDate As New Label()
             lblEventDate.Text = "Date: " & Convert.ToDateTime(dataRow("event_date")).ToString("yyyy-MM-dd")
             lblEventDate.Font = detailsFont
             lblEventDate.ForeColor = Color.Black
-            lblEventDate.Location = New Point(200, y)
-            lblEventDate.Size = New Size(200, 18)
+            lblEventDate.Location = New Point(10, y)
+            lblEventDate.Size = New Size(180, 18)
             panel2.Controls.Add(lblEventDate)
-            y += 20
 
-            ' Event Time and Payment ID (side by side)
+            ' Time
             Dim lblEventTime As New Label()
             lblEventTime.Text = "Time: " & dataRow("event_time").ToString() & " - " & dataRow("event_end_time").ToString()
             lblEventTime.Font = detailsFont
             lblEventTime.ForeColor = Color.Black
-            lblEventTime.Location = New Point(10, y)
+            lblEventTime.Location = New Point(200, y)
             lblEventTime.Size = New Size(180, 18)
             panel2.Controls.Add(lblEventTime)
+            y += 20
 
+            ' Payment ID
             Dim lblPaymentId As New Label()
             lblPaymentId.Text = "Payment ID: " & If(IsDBNull(dataRow("payment_id")), "N/A", dataRow("payment_id").ToString())
             lblPaymentId.Font = detailsFont
             lblPaymentId.ForeColor = Color.Black
-            lblPaymentId.Location = New Point(200, y)
-            lblPaymentId.Size = New Size(200, 18)
+            lblPaymentId.Location = New Point(10, y)
+            lblPaymentId.Size = New Size(180, 18)
             panel2.Controls.Add(lblPaymentId)
-            y += 20
 
-            ' Payment Date and Amount Paid (side by side)
+            ' Payment Date
             Dim lblPaymentDate As New Label()
             lblPaymentDate.Text = "Payment Date: " & If(IsDBNull(dataRow("payment_date")), "N/A", Convert.ToDateTime(dataRow("payment_date")).ToString("yyyy-MM-dd"))
             lblPaymentDate.Font = detailsFont
             lblPaymentDate.ForeColor = Color.Black
-            lblPaymentDate.Location = New Point(10, y)
+            lblPaymentDate.Location = New Point(200, y)
             lblPaymentDate.Size = New Size(180, 18)
             panel2.Controls.Add(lblPaymentDate)
+            y += 20
 
+            ' Amount Paid
             Dim lblAmountPaid As New Label()
             lblAmountPaid.Text = "Amount Paid: " & If(IsDBNull(dataRow("amount_paid")), "N/A", "₱" & Convert.ToDecimal(dataRow("amount_paid")).ToString("F2"))
             lblAmountPaid.Font = detailsFont
             lblAmountPaid.ForeColor = Color.Black
-            lblAmountPaid.Location = New Point(200, y)
-            lblAmountPaid.Size = New Size(200, 18)
+            lblAmountPaid.Location = New Point(10, y)
+            lblAmountPaid.Size = New Size(180, 18)
             panel2.Controls.Add(lblAmountPaid)
 
             panel.Controls.Add(panel2)
@@ -353,7 +409,7 @@ Public Class FormCustomerView
                 lblStatus.Font = New Font(quicheFont.FontFamily, 13, FontStyle.Bold)
                 lblStatus.ForeColor = If(isApproved, Color.SeaGreen, Color.OrangeRed)
                 lblStatus.Dock = DockStyle.Top
-                lblStatus.Height = 50
+                lblStatus.Height = 76
                 lblStatus.TextAlign = ContentAlignment.MiddleCenter
                 panel3.Controls.Add(lblStatus)
 
@@ -401,35 +457,35 @@ Public Class FormCustomerView
             btnPay.Visible = isApproved AndAlso Not isPaid
 
             AddHandler btnPay.Click,
-            Sub(senderBtn, eBtn)
-                Dim payAmount As Decimal
-                If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
-                    MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    Return
-                End If
-                If payAmount <> toPay Then
-                    MessageBox.Show("You must pay the exact amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    Return
-                End If
-                If paid >= toPay Then
-                    MessageBox.Show("Already paid.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Return
-                End If
+        Sub(senderBtn, eBtn)
+            Dim payAmount As Decimal
+            If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
+                MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            If payAmount <> toPay Then
+                MessageBox.Show("You must pay the exact amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            If paid >= toPay Then
+                MessageBox.Show("Already paid.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Return
+            End If
 
-                ' Update database using DBHelper
-                Dim paymentId = dataRow("payment_id")
-                Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
-                Dim parameters As New Dictionary(Of String, Object) From {
-                    {"@amount_paid", payAmount},
-                    {"@payment_date", DateTime.Now},
-                    {"@payment_status", "Paid"},
-                    {"@payment_id", paymentId}
-                }
-                DBHelper.ExecuteQuery(updateQuery, parameters)
-                MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadAllBookings()
-                PopulateBookingPanels()
-            End Sub
+            ' Update database using DBHelper
+            Dim paymentId = dataRow("payment_id")
+            Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
+            Dim parameters As New Dictionary(Of String, Object) From {
+                {"@amount_paid", payAmount},
+                {"@payment_date", DateTime.Now},
+                {"@payment_status", "Paid"},
+                {"@payment_id", paymentId}
+            }
+            DBHelper.ExecuteQuery(updateQuery, parameters)
+            MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            LoadAllBookings()
+            PopulateBookingPanels()
+        End Sub
 
             If isApproved AndAlso Not isPaid Then
                 panel.Controls.Add(txtPayment)
@@ -439,6 +495,7 @@ Public Class FormCustomerView
             FlowLayoutPanel1.Controls.Add(panel)
         Next
     End Sub
+
 
     ' Helper: Set a rounded rectangle region for a panel
     Private Sub SetPanelRoundedRect(p As Panel, cornerRadius As Integer)
@@ -489,6 +546,7 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        Me.Close()
         FormMain.Show()
     End Sub
 
@@ -504,5 +562,20 @@ Public Class FormCustomerView
         Me.WindowState = FormWindowState.Minimized
     End Sub
 
+    Private Sub cbPending_CheckedChanged(sender As Object, e As EventArgs) Handles cbPending.CheckedChanged
+        PopulateBookingPanels()
+    End Sub
+
+    Private Sub cbRejected_CheckedChanged(sender As Object, e As EventArgs) Handles cbRejected.CheckedChanged
+        PopulateBookingPanels()
+    End Sub
+
+    Private Sub cbPaid_CheckedChanged(sender As Object, e As EventArgs) Handles cbPaid.CheckedChanged
+        PopulateBookingPanels()
+    End Sub
+
+    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+        PopulateBookingPanels()
+    End Sub
 
 End Class

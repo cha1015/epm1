@@ -354,5 +354,8 @@
   <ItemGroup>
     <None Include="Resources\CUSTOMER VIEW %283%29.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CUSTOMER VIEW %284%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
