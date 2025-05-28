@@ -18,7 +18,7 @@ Public Class FormAdminCenter
         LoadAvailability()            ' Availability of Event Places
         LoadRevenueReports()          ' Revenue per Event Place
         LoadInvoices()                ' Invoices with Accept Payment
-        LoadBookedDates()             ' Booked Dates
+        'LoadBookedDates()             ' Booked Dates
         LoadCustomerCount()           ' Customer Count
         LoadCustomerRecords()         ' Customer Records
         LoadBookingStatusChart()      ' Booking Status Chart
@@ -111,11 +111,11 @@ Public Class FormAdminCenter
     End Sub
 
     '--- Load Booked Dates
-    Private Sub LoadBookedDates()
-        Dim query As String = "SELECT DISTINCT event_date FROM bookings WHERE status='Approved'"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateBookedDates(flpBookedDates, dt)
-    End Sub
+    'Private Sub LoadBookedDates()
+    '    Dim query As String = "SELECT DISTINCT event_date FROM bookings WHERE status='Approved'"
+    '    Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+    '    HelperResultsDisplay.PopulateBookedDates(flpBookedDates, dt)
+    'End Sub
 
     '--- Load Customer Count
     Private Sub LoadCustomerCount()
