@@ -139,6 +139,9 @@
   <data name="_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CUSTOMER VIEW (2)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CUSTOMER VIEW (2)1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -160,9 +163,6 @@
   <data name="_22" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\22.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CUSTOMER VIEW (2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CUSTOMER VIEW (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -172,8 +172,8 @@
   <data name="_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CUSTOMER VIEW" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CUSTOMER VIEW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CUSTOMER VIEW (2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CUSTOMER VIEW (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,8 +190,14 @@
   <data name="_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="close" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CUSTOMER VIEW" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CUSTOMER VIEW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_25" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\25.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,7 +214,7 @@
   <data name="_21" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\21.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CUSTOMER VIEW (2)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CUSTOMER VIEW (2)1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="minimize" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\minimize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

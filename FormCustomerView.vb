@@ -68,6 +68,8 @@ Public Class FormCustomerView
         Dim prop As Reflection.PropertyInfo = GetType(Panel).GetProperty("DoubleBuffered", Reflection.BindingFlags.Instance Or Reflection.BindingFlags.NonPublic)
         prop.SetValue(FlowLayoutPanel1, True, Nothing)
 
+        lblUsername.Text = CurrentUser.Username
+        lblRole.Text = CurrentUser.Role
     End Sub
 
     Private Sub SetPanelDoubleBuffered(p As Panel)
@@ -317,50 +319,64 @@ Public Class FormCustomerView
             panel.Controls.Add(panel2)
 
 
-
-            ' Panel3: Approval & Price
             Dim panel3 As New Panel()
+            Dim statusStr As String = dataRow("status").ToString().ToLower()
+            Dim isApproved As Boolean = statusStr = "approved"
+            Dim isRejected As Boolean = statusStr = "rejected"
+
             panel3.Location = New Point(664, 14)
-            panel3.Size = New Size(189, 120)
+            If isApproved Then
+                panel3.Size = New Size(189, 120)
+            Else
+                panel3.Size = New Size(189, 40) ' Collapsed size if not approved
+            End If
             panel3.BackColor = Color.FromArgb(255, 255, 255, 230)
             panel3.BorderStyle = BorderStyle.None
             AddHandler panel3.Paint, AddressOf MakePanelRound
             SetPanelDoubleBuffered(panel3)
 
             Dim lblApproval As New Label()
-            Dim isApproved As Boolean = dataRow("status").ToString().ToLower() = "approved"
-            lblApproval.Text = If(isApproved, "Approved", "Pending")
+            lblApproval.Text = If(isApproved, "Approved", If(isRejected, "Rejected", "Pending"))
             lblApproval.Font = New Font(quicheFont.FontFamily, 13, FontStyle.Bold)
-            lblApproval.ForeColor = If(isApproved, Color.SeaGreen, Color.OrangeRed)
-            lblApproval.Location = New Point(20, 20)
+            lblApproval.ForeColor = If(isApproved, Color.SeaGreen, If(isRejected, Color.Gray, Color.OrangeRed))
+            lblApproval.Location = New Point(20, 10)
             lblApproval.Size = New Size(150, 24)
             lblApproval.TextAlign = ContentAlignment.MiddleCenter
             panel3.Controls.Add(lblApproval)
 
-            Dim lblAmountToPay As New Label()
-            lblAmountToPay.Text = "₱" & If(IsDBNull(dataRow("amount_to_pay")), "0.00", Convert.ToDecimal(dataRow("amount_to_pay")).ToString("F2"))
-            lblAmountToPay.Font = New Font(quicheFont.FontFamily, 15, FontStyle.Bold)
-            lblAmountToPay.ForeColor = Color.FromArgb(60, 40, 20)
-            lblAmountToPay.Location = New Point(20, 60)
-            lblAmountToPay.Size = New Size(150, 30)
-            lblAmountToPay.TextAlign = ContentAlignment.MiddleCenter
-            panel3.Controls.Add(lblAmountToPay)
+            If isApproved Then
+                Dim lblAmountToPay As New Label()
+                lblAmountToPay.Text = "₱" & If(IsDBNull(dataRow("amount_to_pay")), "0.00", Convert.ToDecimal(dataRow("amount_to_pay")).ToString("F2"))
+                lblAmountToPay.Font = New Font(quicheFont.FontFamily, 15, FontStyle.Bold)
+                lblAmountToPay.ForeColor = Color.FromArgb(60, 40, 20)
+                lblAmountToPay.Location = New Point(20, 60)
+                lblAmountToPay.Size = New Size(150, 30)
+                lblAmountToPay.TextAlign = ContentAlignment.MiddleCenter
+                panel3.Controls.Add(lblAmountToPay)
+            End If
 
             panel.Controls.Add(panel3)
 
-            ' TextBox1: Payment input
+            ' If rejected, gray out the main panel
+            If isRejected Then
+                panel.BackColor = Color.LightGray
+                For Each ctrl As Control In panel.Controls
+                    ctrl.Enabled = False
+                Next
+            End If
+
+            ' Payment controls
             Dim txtPayment As New TextBox()
             txtPayment.Location = New Point(664, 146)
             txtPayment.Size = New Size(94, 20)
             txtPayment.Font = detailsFont
             txtPayment.Visible = isApproved
 
-            ' Button1: Pay
             Dim btnPay As New Button()
             btnPay.Text = "Pay"
             btnPay.Location = New Point(766, 146)
             btnPay.Size = New Size(87, 20)
-            btnPay.Font = detailsFont
+            btnPay.Font = New Font(detailsFont.FontFamily, 8, FontStyle.Regular) ' Reduced font size
             btnPay.BackColor = Color.FromArgb(220, 240, 220)
             btnPay.FlatStyle = FlatStyle.Flat
             btnPay.Enabled = isApproved
@@ -375,49 +391,35 @@ Public Class FormCustomerView
                     isPaid = True
                 End If
             End If
-            If isPaid Then
-                btnPay.Enabled = False
-                btnPay.Text = "Paid"
-                txtPayment.Visible = False
-                Dim lblPaid As New Label()
-                lblPaid.Text = "Paid"
-                lblPaid.Font = New Font(quicheFont.FontFamily, 10, FontStyle.Bold)
-                lblPaid.ForeColor = Color.SeaGreen
-                lblPaid.Location = New Point(664, 146)
-                lblPaid.Size = New Size(94, 20)
-                panel.Controls.Add(lblPaid)
-            End If
-
-            ' Payment logic
             AddHandler btnPay.Click,
-                Sub(senderBtn, eBtn)
-                    Dim payAmount As Decimal
-                    If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
-                        MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                        Return
-                    End If
-                    Dim toPay = Convert.ToDecimal(dataRow("amount_to_pay"))
-                    Dim paid = If(IsDBNull(dataRow("amount_paid")), 0D, Convert.ToDecimal(dataRow("amount_paid")))
-                    If paid + payAmount > toPay Then
-                        MessageBox.Show("Payment exceeds required amount.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Return
-                    End If
+    Sub(senderBtn, eBtn)
+        Dim payAmount As Decimal
+        If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
+            MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+        Dim toPay = Convert.ToDecimal(dataRow("amount_to_pay"))
+        Dim paid = If(IsDBNull(dataRow("amount_paid")), 0D, Convert.ToDecimal(dataRow("amount_paid")))
+        If paid + payAmount > toPay Then
+            MessageBox.Show("Payment exceeds required amount.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
 
-                    ' Update database
-                    Dim paymentId = dataRow("payment_id")
-                    Dim newPaid = paid + payAmount
-                    Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
-                    Dim parameters As New Dictionary(Of String, Object) From {
-                        {"@amount_paid", newPaid},
-                        {"@payment_date", DateTime.Now},
-                        {"@payment_status", If(newPaid >= toPay, "Paid", "Partial")},
-                        {"@payment_id", paymentId}
-                    }
-                    'DBHelper.ExecuteNonQuery(updateQuery, parameters)
-                    MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    LoadAllBookings()
-                    PopulateBookingPanels()
-                End Sub
+        ' Update database using DBHelper
+        Dim paymentId = dataRow("payment_id")
+        Dim newPaid = paid + payAmount
+        Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
+        Dim parameters As New Dictionary(Of String, Object) From {
+            {"@amount_paid", newPaid},
+            {"@payment_date", DateTime.Now},
+            {"@payment_status", If(newPaid >= toPay, "Paid", "Partial")},
+            {"@payment_id", paymentId}
+        }
+        DBHelper.ExecuteQuery(updateQuery, parameters)
+        MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        LoadAllBookings()
+        PopulateBookingPanels()
+    End Sub
 
             If isApproved AndAlso Not isPaid Then
                 panel.Controls.Add(txtPayment)
@@ -428,8 +430,42 @@ Public Class FormCustomerView
         Next
     End Sub
 
+    Private Sub lblUsername_Click(sender As Object, e As EventArgs) Handles lblUsername.Click
 
+    End Sub
 
+    Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
+        If result = DialogResult.Yes Then
+            CurrentUser.UserID = -1
+            CurrentUser.Username = String.Empty
+            CurrentUser.Email = String.Empty
+            CurrentUser.Role = String.Empty
+            CurrentUser.CustomerId = -1
 
+            Me.Refresh()
+            Application.DoEvents()
+
+            Dim mainForm As New FormMain()
+            mainForm.Show()
+            Me.Hide()
+        End If
+    End Sub
+
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        FormMain.Show()
+    End Sub
+
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        HelperNavigation.GoNext(Me)
+    End Sub
+
+    Private Sub close_Click(sender As Object, e As EventArgs) Handles btnclose.Click
+        Close()
+    End Sub
+
+    Private Sub btnminimize_Click(sender As Object, e As EventArgs) Handles btnminimize.Click
+        Me.WindowState = FormWindowState.Minimized
+    End Sub
 End Class

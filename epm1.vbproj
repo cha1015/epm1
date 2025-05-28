@@ -126,6 +126,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DraggablePanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormBookingDetails.Designer.vb">
       <DependentUpon>FormBookingDetails.vb</DependentUpon>
     </Compile>
@@ -341,6 +344,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimize.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
