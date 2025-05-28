@@ -188,20 +188,31 @@ Public Class FormBooking
 
         ' Calculate final total price
         Dim finalTotalPrice As Decimal = HelperPrice.ComputeFinalPrice(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                               dtpEventDateStart, dtpEventDateEnd,
-                                               chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                                               cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                               chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
+                                           dtpEventDateStart, dtpEventDateEnd,
+                                           chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
+                                           cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
+                                           chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
+
+        ' Create new customer
+        Dim customerResult As CustomerResult = HelperDatabase.CreateNewCustomer(txtCustomerName.Text, dtpBirthday.Value, cmbSex.Text, txtAddress.Text, numGuests)
+
+        If customerResult.CustomerId <= 0 Then
+            MessageBox.Show($"Customer creation failed! Error: {customerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        ' Link the new customer to the current user
+        HelperDatabase.InsertUserCustomer(CurrentUser.UserID, customerResult.CustomerId)
 
         ' Call PlaceBooking with the complete time strings and using 'numGuests' as an integer
-        Dim bookingId As Integer = HelperDatabase.PlaceBooking(CurrentUser.CustomerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, finalTotalPrice)
+        Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerResult.CustomerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, finalTotalPrice)
 
         If bookingId > 0 Then
             HelperDatabase.SaveBookingServices(bookingId, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
-            HelperDatabase.InsertPaymentRecord(bookingId, CurrentUser.CustomerId, finalTotalPrice)
+            HelperDatabase.InsertPaymentRecord(bookingId, customerResult.CustomerId, finalTotalPrice)
 
             Dim result = MessageBox.Show("Booking and payment recorded successfully! Do you want to review your customer details?",
-                                     "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                                 "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
             If result = DialogResult.Yes Then
                 Dim customerViewForm As New FormCustomerView(CurrentUser.CustomerId)
                 customerViewForm.Show()
@@ -210,7 +221,6 @@ Public Class FormBooking
             MessageBox.Show("Booking failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
-
 
     Private Sub PopulatePaymentDetails()
         lblCustomerContainer.Text = txtCustomerName.Text
