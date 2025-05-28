@@ -149,7 +149,6 @@ Public Class HelperResultsDisplay
         PopulateFlowPanel(flpResults, dt, createPanel)
     End Sub
 
-    '--- Specialized method for Pending Bookings (with Approve and Reject handlers) ---
     Public Shared Sub PopulatePendingBookings(ByVal flpPendingBookings As FlowLayoutPanel, ByVal dt As DataTable,
                                             ByVal approveHandler As EventHandler, ByVal rejectHandler As EventHandler,
                                             ByVal adminForm As FormAdminCenter)
@@ -170,35 +169,63 @@ Public Class HelperResultsDisplay
                                                          .AutoSize = True
                                                      }
                                                          Dim lblDate As New Label With {
-                                                         .Text = "Date: " & row("event_date").ToString(),
+                                                         .Text = "Date: " & Convert.ToDateTime(row("event_date")).ToShortDateString(),
                                                          .Location = New Point(5, 45),
                                                          .AutoSize = True
-                                                     }
+                                                         }
+
+                                                         Dim eventTime As String = String.Empty
+                                                         Dim eventEndTime As String = String.Empty
+
+                                                         If dt.Columns.Contains("event_time") AndAlso Not IsDBNull(row("event_time")) Then
+                                                             Dim ts As TimeSpan = DirectCast(row("event_time"), TimeSpan)
+                                                             eventTime = DateTime.Today.Add(ts).ToString("hh:mm tt")
+                                                         Else
+                                                             eventTime = "N/A"
+                                                         End If
+
+                                                         If dt.Columns.Contains("event_end_time") AndAlso Not IsDBNull(row("event_end_time")) Then
+                                                             Dim tsEnd As TimeSpan = DirectCast(row("event_end_time"), TimeSpan)
+                                                             eventEndTime = DateTime.Today.Add(tsEnd).ToString("hh:mm tt")
+                                                         Else
+                                                             eventEndTime = "N/A"
+                                                         End If
+
+                                                         Dim lblTime As New Label With {
+                                                         .Text = "Time: " & eventTime & " - " & eventEndTime,
+                                                         .Location = New Point(5, 65),
+                                                         .AutoSize = True
+                                                         }
+
                                                          panel.Controls.Add(lblName)
                                                          panel.Controls.Add(lblEvent)
                                                          panel.Controls.Add(lblDate)
+                                                         panel.Controls.Add(lblTime)
 
-                                                         ' Approve button
                                                          Dim btnApprove As New Button()
                                                          btnApprove.Text = "Approve"
                                                          btnApprove.Size = New Size(75, 25)
                                                          btnApprove.Location = New Point(200, 5)
                                                          btnApprove.Tag = row
                                                          btnApprove.FlatStyle = FlatStyle.Flat
-                                                         AddHandler btnApprove.Click, approveHandler
+                                                         AddHandler btnApprove.Click, Sub(sender, e)
+                                                                                          approveHandler(sender, e)
+                                                                                          adminForm.ShowBookingDetails(DirectCast(DirectCast(sender, Button).Tag, DataRow))
+                                                                                      End Sub
                                                          panel.Controls.Add(btnApprove)
 
-                                                         ' Reject button
                                                          Dim btnReject As New Button()
                                                          btnReject.Text = "Reject"
                                                          btnReject.Size = New Size(75, 25)
                                                          btnReject.Location = New Point(200, 35)
                                                          btnReject.Tag = row
                                                          btnReject.FlatStyle = FlatStyle.Flat
-                                                         AddHandler btnReject.Click, rejectHandler
+                                                         AddHandler btnReject.Click, Sub(sender, e)
+                                                                                         rejectHandler(sender, e)
+                                                                                         adminForm.ShowBookingDetails(DirectCast(DirectCast(sender, Button).Tag, DataRow))
+                                                                                     End Sub
                                                          panel.Controls.Add(btnReject)
 
-                                                         ' Set background color based on urgency
                                                          Dim eventDate As DateTime
                                                          If DateTime.TryParse(row("event_date").ToString(), eventDate) Then
                                                              Dim daysUntilEvent As Integer = (eventDate - DateTime.Now).Days
@@ -213,16 +240,13 @@ Public Class HelperResultsDisplay
                                                              panel.BackColor = Color.LightGray
                                                          End If
 
-                                                         ' Add the MouseDown and MouseUp events to show/hide FormBookingDetails
                                                          AddHandler panel.MouseDown, Sub(sender, e)
                                                                                          If e.Button = MouseButtons.Left Then
-                                                                                             ' Show FormBookingDetails when left mouse button is pressed
                                                                                              adminForm.ShowBookingDetails(row)
                                                                                          End If
                                                                                      End Sub
 
                                                          AddHandler panel.MouseUp, Sub(sender, e)
-                                                                                       ' Hide FormBookingDetails when mouse button is released
                                                                                        adminForm.HideBookingDetails()
                                                                                    End Sub
 
@@ -230,8 +254,6 @@ Public Class HelperResultsDisplay
                                                      End Function
         PopulateFlowPanel(flpPendingBookings, dt, createPanel)
     End Sub
-
-
 
 
     '--- Specialized method for Event Place Availability ---

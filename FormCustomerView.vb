@@ -257,6 +257,23 @@ Public Class FormCustomerView
         End Try
     End Sub
 
+    Private Function GetCustomerIdByUserId(userId As Integer) As Integer
+        Dim query As String = "SELECT customer_id FROM usercustomers WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", userId}}
+
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+            If dt.Rows.Count > 0 Then
+                Return Convert.ToInt32(dt.Rows(0)("customer_id"))
+            Else
+                Return -1 ' or handle error appropriately
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error fetching customer ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1
+        End Try
+    End Function
+
     Private Sub LoadBookings()
         Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
 
@@ -265,12 +282,13 @@ Public Class FormCustomerView
         Dim query As String = $"SELECT b.booking_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status 
                        FROM bookings b
                        JOIN eventplace p ON b.place_id = p.place_id 
-                       WHERE b.customer_id = {customerId}
+                       WHERE b.customer_id = @customer_id
                        ORDER BY b.event_date DESC"
 
         Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
 
         Try
+            ' Retrieve data
             Dim dtBookings As DataTable = DBHelper.GetDataTable(query, parameters)
 
             If dtBookings.Rows.Count > 0 Then
@@ -286,8 +304,8 @@ Public Class FormCustomerView
             End If
 
         Catch ex As MySqlException
+            MessageBox.Show("Error loading bookings: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
 
     Private Sub LoadPaymentHistory()
         Dim query As String = "SELECT payment_id, amount_to_pay, amount_paid, payment_date, payment_status 

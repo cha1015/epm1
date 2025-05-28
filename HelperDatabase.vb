@@ -41,7 +41,45 @@ Public Class HelperDatabase
         DBHelper.ExecuteQuery(deleteQuery, deleteParams)
 
         ' Insert selected services dynamically
+        Dim serviceList As New List(Of String) ' List to store selected services
         Dim insertQuery As String = "INSERT INTO BookingServices (booking_id, service_id) VALUES (@bookingId, @serviceId)"
+
+        Using connection As MySqlConnection = DBHelper.GetConnection()
+            Try
+                connection.Open()
+                Using cmd As New MySqlCommand(insertQuery, connection)
+                    cmd.Parameters.AddWithValue("@bookingId", bookingId)
+
+                    ' Add each selected service to the service list
+                    Dim serviceSelections As Dictionary(Of Integer, Boolean) = New Dictionary(Of Integer, Boolean) From {
+                {1, catering}, {2, clown}, {3, singer}, {4, dancer}, {5, videoke}
+            }
+
+                    For Each service In serviceSelections
+                        If service.Value Then
+                            cmd.Parameters.AddWithValue("@serviceId", service.Key)
+                            cmd.ExecuteNonQuery()
+                            serviceList.Add(service.Key.ToString()) ' Add the service ID to the list
+                            cmd.Parameters.RemoveAt("@serviceId")
+                        End If
+                    Next
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error saving booking services: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                connection.Close()
+            End Try
+        End Using
+
+        ' Now update the services_availed column in the bookings table with a concatenated list of selected services
+        Dim services As String = String.Join(", ", serviceList)
+        Dim updateQuery As String = "UPDATE bookings SET services_availed = @services WHERE booking_id = @bookingId"
+        Dim updateParams As New Dictionary(Of String, Object) From {
+    {"@services", services},
+    {"@bookingId", bookingId}
+}
+        DBHelper.ExecuteQuery(updateQuery, updateParams)
+
 
         Using connection As MySqlConnection = DBHelper.GetConnection()
             Try
@@ -113,45 +151,66 @@ Public Class HelperDatabase
         Next
     End Sub
 
-    ' ------------------ Place a New Booking ------------------
     Public Shared Function PlaceBooking(customerId As Integer, placeId As Integer, numGuests As Integer, eventDateStart As Date,
-                                eventStartTime As String, eventEndTime As String, totalPrice As Decimal) As Integer
-
-        Dim checkQuery As String = "SELECT COUNT(*) FROM Bookings WHERE place_id = @place_id AND event_date = @event_date"
-        Dim checkParams As New Dictionary(Of String, Object) From {{"@place_id", placeId}, {"@event_date", eventDateStart}}
-
-        If Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkQuery, checkParams)) > 0 Then
+                                      eventStartTime As String, eventEndTime As String, totalPrice As Decimal) As Integer
+        ' ------------------ Check if customer exists ------------------
+        Dim checkCustomerQuery As String = "SELECT COUNT(*) FROM Customers WHERE customer_id = @customer_id"
+        Dim checkCustomerParams As New Dictionary(Of String, Object) From {
+        {"@customer_id", customerId}
+    }
+        Dim customerExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkCustomerQuery, checkCustomerParams))
+        If customerExists = 0 Then
+            MessageBox.Show("Customer not found! Please create a customer record first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return -1
         End If
 
-        If eventStartTime.Length <= 2 AndAlso eventStartTime.All(AddressOf Char.IsDigit) Then
-            eventStartTime = eventStartTime.PadLeft(2, "0"c) & ":00"
-        End If
-        If eventEndTime.Length <= 2 AndAlso eventEndTime.All(AddressOf Char.IsDigit) Then
-            eventEndTime = eventEndTime.PadLeft(2, "0"c) & ":00"
-        End If
-
-        Dim formats As String() = {"h:mm tt", "hh:mm tt", "H:mm", "HH:mm", "HH:mm:ss"}
-        Dim eventStart As DateTime
-        Dim eventEnd As DateTime
-
-        If Not DateTime.TryParseExact(eventStartTime, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStart) Then
-            Throw New FormatException($"Invalid eventStartTime format: '{eventStartTime}'")
+        ' ------------------ Duplicate Booking Check ------------------
+        Dim checkQuery As String = "SELECT COUNT(*) FROM Bookings WHERE place_id = @place_id AND event_date = @event_date"
+        Dim checkParams As New Dictionary(Of String, Object) From {
+        {"@place_id", placeId},
+        {"@event_date", eventDateStart}
+    }
+        Dim duplicateCount As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkQuery, checkParams))
+        If duplicateCount > 0 Then
+            Return -1
         End If
 
-        If Not DateTime.TryParseExact(eventEndTime, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEnd) Then
-            Throw New FormatException($"Invalid eventEndTime format: '{eventEndTime}'")
+        ' ------------------ Time String Correction & Parsing ------------------
+        Dim timeFormats() As String = {"h:mm tt", "hh:mm tt"}
+
+        Dim correctedEventStartTime As String = eventStartTime.Trim()
+        If Not correctedEventStartTime.Contains(":") Then
+            correctedEventStartTime &= ":00"  ' Append default minutes if missing.
+        End If
+        If Not (correctedEventStartTime.ToUpper().Contains("AM") OrElse correctedEventStartTime.ToUpper().Contains("PM")) Then
+            correctedEventStartTime &= " AM"  ' Append default meridiem if missing.
         End If
 
+        Dim parsedStart As DateTime
+        If Not DateTime.TryParseExact(correctedEventStartTime, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedStart) Then
+            Throw New FormatException("eventStartTime string format is not recognized: " & eventStartTime)
+        End If
 
-        Dim formattedStartTime As String = eventStart.ToString("HH:mm:ss")
-        Dim formattedEndTime As String = eventEnd.ToString("HH:mm:ss")
+        Dim correctedEventEndTime As String = eventEndTime.Trim()
+        If Not correctedEventEndTime.Contains(":") Then
+            correctedEventEndTime &= ":00"
+        End If
+        If Not (correctedEventEndTime.ToUpper().Contains("AM") OrElse correctedEventEndTime.ToUpper().Contains("PM")) Then
+            correctedEventEndTime &= " AM"
+        End If
 
-        Dim query As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) 
-                        VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price); 
-                        SELECT LAST_INSERT_ID();"
+        Dim parsedEnd As DateTime
+        If Not DateTime.TryParseExact(correctedEventEndTime, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedEnd) Then
+            Throw New FormatException("eventEndTime string format is not recognized: " & eventEndTime)
+        End If
 
-        Dim params As New Dictionary(Of String, Object) From {
+        Dim formattedStartTime As String = parsedStart.ToString("HH:mm:ss")
+        Dim formattedEndTime As String = parsedEnd.ToString("HH:mm:ss")
+
+        ' ------------------ Insert Booking ------------------
+        Dim insertQuery As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) " &
+                                "VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price)"
+        Dim insertParams As New Dictionary(Of String, Object) From {
         {"@customer_id", customerId},
         {"@place_id", placeId},
         {"@num_guests", numGuests},
@@ -161,9 +220,19 @@ Public Class HelperDatabase
         {"@total_price", totalPrice}
     }
 
-        Dim bookingId As Object = DBHelper.ExecuteScalarQuery(query, params)
-        Return If(bookingId IsNot Nothing, Convert.ToInt32(bookingId), -1)
+        Dim insertResult As Integer = DBHelper.ExecuteQuery(insertQuery, insertParams)
+        ' If the insert did not affect any rows, then fail.
+        If insertResult <= 0 Then
+            Return -1
+        End If
+
+        ' ------------------ Retrieve Last Inserted Booking ID ------------------
+        Dim bookingIdQuery As String = "SELECT LAST_INSERT_ID();"
+        Dim bookingIdObj As Object = DBHelper.ExecuteScalarQuery(bookingIdQuery, New Dictionary(Of String, Object)())
+        Return If(bookingIdObj IsNot Nothing, Convert.ToInt32(bookingIdObj), -1)
     End Function
+
+
 
     ' ------------------ Insert Payment Record ------------------
     Public Shared Sub InsertPaymentRecord(bookingId As Integer, customerId As Integer, amountToPay As Decimal)

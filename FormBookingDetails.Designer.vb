@@ -150,6 +150,7 @@ Partial Class FormBookingDetails
         Me.Controls.Add(Me.lblEventPlace)
         Me.Controls.Add(Me.lblCustomerName)
         Me.Name = "FormBookingDetails"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormBookingDetails"
         Me.ResumeLayout(False)
         Me.PerformLayout()
