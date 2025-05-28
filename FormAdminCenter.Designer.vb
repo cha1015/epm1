@@ -328,7 +328,7 @@ Partial Class FormAdminCenter
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.ForeColor = System.Drawing.Color.Black
-        Me.Label11.Location = New System.Drawing.Point(4, 184)
+        Me.Label11.Location = New System.Drawing.Point(8, 229)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(55, 25)
         Me.Label11.TabIndex = 42
@@ -340,7 +340,7 @@ Partial Class FormAdminCenter
         Me.chartTotalStatus.ChartAreas.Add(ChartArea1)
         Legend1.Name = "Legend1"
         Me.chartTotalStatus.Legends.Add(Legend1)
-        Me.chartTotalStatus.Location = New System.Drawing.Point(13, 228)
+        Me.chartTotalStatus.Location = New System.Drawing.Point(13, 258)
         Me.chartTotalStatus.Margin = New System.Windows.Forms.Padding(4)
         Me.chartTotalStatus.Name = "chartTotalStatus"
         Me.chartTotalStatus.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel
@@ -348,7 +348,7 @@ Partial Class FormAdminCenter
         Series1.Legend = "Legend1"
         Series1.Name = "Series1"
         Me.chartTotalStatus.Series.Add(Series1)
-        Me.chartTotalStatus.Size = New System.Drawing.Size(262, 227)
+        Me.chartTotalStatus.Size = New System.Drawing.Size(262, 197)
         Me.chartTotalStatus.TabIndex = 41
         Me.chartTotalStatus.Text = "Chart1"
         '

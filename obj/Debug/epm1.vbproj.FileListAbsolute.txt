@@ -100,3 +100,7 @@ C:\Users\krizi\Source\Repos\EVENT\obj\Debug\epm1.vbproj.Up2Date
 C:\Users\krizi\Source\Repos\EVENT\obj\Debug\epm1.exe
 C:\Users\krizi\Source\Repos\EVENT\obj\Debug\epm1.xml
 C:\Users\krizi\Source\Repos\EVENT\obj\Debug\epm1.pdb
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.vbproj.AssemblyReference.cache
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.exe
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.xml
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.pdb
