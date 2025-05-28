@@ -44,7 +44,6 @@ Partial Class FormAdminCenter
         Me.flpPendingBookings = New System.Windows.Forms.FlowLayoutPanel()
         Me.tpInvoicesAndPayments = New System.Windows.Forms.TabPage()
         Me.flpInvoices = New System.Windows.Forms.FlowLayoutPanel()
-        Me.tpReports = New System.Windows.Forms.TabPage()
         Me.tpEventPlaceMgmt = New System.Windows.Forms.TabPage()
         Me.flpEventPlaces = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
@@ -170,7 +169,6 @@ Partial Class FormAdminCenter
         '
         Me.tcAdminCenter.Controls.Add(Me.tpBookings)
         Me.tcAdminCenter.Controls.Add(Me.tpInvoicesAndPayments)
-        Me.tcAdminCenter.Controls.Add(Me.tpReports)
         Me.tcAdminCenter.Controls.Add(Me.tpEventPlaceMgmt)
         Me.tcAdminCenter.Controls.Add(Me.tpCustomerRecords)
         Me.tcAdminCenter.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -309,17 +307,6 @@ Partial Class FormAdminCenter
         Me.flpInvoices.Name = "flpInvoices"
         Me.flpInvoices.Size = New System.Drawing.Size(1200, 466)
         Me.flpInvoices.TabIndex = 0
-        '
-        'tpReports
-        '
-        Me.tpReports.Location = New System.Drawing.Point(4, 34)
-        Me.tpReports.Margin = New System.Windows.Forms.Padding(4)
-        Me.tpReports.Name = "tpReports"
-        Me.tpReports.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpReports.Size = New System.Drawing.Size(1220, 518)
-        Me.tpReports.TabIndex = 7
-        Me.tpReports.Text = "Reports"
-        Me.tpReports.UseVisualStyleBackColor = True
         '
         'tpEventPlaceMgmt
         '
@@ -842,7 +829,6 @@ Partial Class FormAdminCenter
     Friend WithEvents lblNumCustomersContainer As Label
     Friend WithEvents flpCustomerRecords As FlowLayoutPanel
     Friend WithEvents flpInvoices As FlowLayoutPanel
-    Friend WithEvents tpReports As TabPage
     Friend WithEvents lblPendingBookings As Label
     Friend WithEvents lblAvailability As Label
     Friend WithEvents flpAvailability As FlowLayoutPanel
