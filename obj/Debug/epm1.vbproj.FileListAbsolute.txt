@@ -115,3 +115,5 @@ C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormWelcome.resources
 C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.Resources.resources
 C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.vbproj.GenerateResource.cache
 C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.vbproj.CoreCompileInputs.cache
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormBooking123.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormBookingDetails.resources

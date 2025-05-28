@@ -589,5 +589,4 @@ Public Class FormAdminCenter
         Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
         editForm.ShowDialog()
     End Sub
-
 End Class

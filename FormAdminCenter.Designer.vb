@@ -30,7 +30,7 @@ Partial Class FormAdminCenter
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnLogOut = New System.Windows.Forms.Button()
-        Me.btnCustomerView = New System.Windows.Forms.Button()
+        Me.btnEdit = New System.Windows.Forms.Button()
         Me.lblRole = New System.Windows.Forms.Label()
         Me.lblUsername = New System.Windows.Forms.Label()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
@@ -150,21 +150,21 @@ Partial Class FormAdminCenter
         Me.btnLogOut.TabIndex = 93
         Me.btnLogOut.UseVisualStyleBackColor = False
         '
-        'btnCustomerView
+        'btnEdit
         '
-        Me.btnCustomerView.BackColor = System.Drawing.Color.Transparent
-        Me.btnCustomerView.BackgroundImage = Global.epm1.My.Resources.Resources.BttnMyAccount
-        Me.btnCustomerView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btnCustomerView.FlatAppearance.BorderSize = 0
-        Me.btnCustomerView.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCustomerView.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCustomerView.ForeColor = System.Drawing.Color.Black
-        Me.btnCustomerView.Location = New System.Drawing.Point(1141, 25)
-        Me.btnCustomerView.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.btnCustomerView.Name = "btnCustomerView"
-        Me.btnCustomerView.Size = New System.Drawing.Size(88, 23)
-        Me.btnCustomerView.TabIndex = 92
-        Me.btnCustomerView.UseVisualStyleBackColor = False
+        Me.btnEdit.BackColor = System.Drawing.Color.Transparent
+        Me.btnEdit.BackgroundImage = Global.epm1.My.Resources.Resources.bttnEditInfo
+        Me.btnEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnEdit.FlatAppearance.BorderSize = 0
+        Me.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnEdit.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnEdit.ForeColor = System.Drawing.Color.Black
+        Me.btnEdit.Location = New System.Drawing.Point(1141, 25)
+        Me.btnEdit.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.btnEdit.Name = "btnEdit"
+        Me.btnEdit.Size = New System.Drawing.Size(88, 23)
+        Me.btnEdit.TabIndex = 92
+        Me.btnEdit.UseVisualStyleBackColor = False
         '
         'lblRole
         '
@@ -922,7 +922,7 @@ Partial Class FormAdminCenter
         Me.ClientSize = New System.Drawing.Size(1259, 617)
         Me.Controls.Add(Me.tcAdminCenter)
         Me.Controls.Add(Me.btnLogOut)
-        Me.Controls.Add(Me.btnCustomerView)
+        Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.lblRole)
         Me.Controls.Add(Me.lblUsername)
         Me.Controls.Add(Me.btnNext)
@@ -959,7 +959,7 @@ Partial Class FormAdminCenter
     Friend WithEvents btnNext As Button
     Friend WithEvents btnBack As Button
     Friend WithEvents btnLogOut As Button
-    Friend WithEvents btnCustomerView As Button
+    Friend WithEvents btnEdit As Button
     Friend WithEvents lblRole As Label
     Friend WithEvents lblUsername As Label
     Friend WithEvents ImageList1 As ImageList
