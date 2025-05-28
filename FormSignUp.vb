@@ -215,74 +215,6 @@ Public Class FormSignUp
         End If
     End Sub
 
-    'Private Sub btnSignUp_Click(sender As Object, e As EventArgs) Handles btnSignUp.Click
-    '    HideErrorLabels()
-
-    '    CheckUsernameAvailability(Nothing, Nothing)
-    '    CheckEmailAvailability(Nothing, Nothing)
-    '    txtConfPass_Leave(Nothing, Nothing)
-
-    '    If lblUsernameError.Visible OrElse lblEmailError.Visible OrElse lblPasswordError.Visible Then
-    '        MessageBox.Show("Please resolve the indicated errors before proceeding.", "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-    '        Return
-    '    End If
-
-    '    If cmbRole.SelectedItem.ToString() = "Admin" Then
-    '        Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
-    '        If adminCode <> "SECURE123" Then
-    '            MessageBox.Show("Invalid admin authentication code. Please try again.", "Authentication Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '            Exit Sub
-    '        End If
-    '    End If
-
-    '    Dim hashedPassword As String = HashPassword(txtPass.Text)
-    '    Dim userQuery As String = "INSERT INTO Users (first_name, last_name, username, email, password_hash, role, birthday, age, sex, address) " &
-    '                             "VALUES (@fname, @lname, @uname, @email, @pass, @role, @birthday, @age, @sex, @address); SELECT LAST_INSERT_ID();"
-    '    Dim userParams As New Dictionary(Of String, Object) From {
-    '        {"@fname", txtFirstName.Text},
-    '        {"@lname", txtLastName.Text},
-    '        {"@uname", txtUsername.Text},
-    '        {"@email", txtEmail.Text},
-    '        {"@pass", hashedPassword},
-    '        {"@role", cmbRole.SelectedItem.ToString()},
-    '        {"@birthday", dtpBirthday.Value.Date},
-    '        {"@age", Convert.ToInt32(lblAgeContainer.Text)},
-    '        {"@sex", cmbSex.SelectedItem.ToString()},
-    '        {"@address", txtAddress.Text}
-    '    }
-
-    '    Try
-    '        Dim newUserIdObj As Object = DBHelper.ExecuteScalarQuery(userQuery, userParams)
-    '        Dim newUserId As Integer = If(newUserIdObj IsNot Nothing, Convert.ToInt32(newUserIdObj), -1)
-
-    '        If newUserId <= 0 Then
-    '            MessageBox.Show("Account creation failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '            Return
-    '        End If
-
-    '        If cmbRole.SelectedItem.ToString() <> "Admin" Then
-    '            Dim customerQuery As String = "INSERT INTO Customers (user_id, name, birthday, age, sex, address) " &
-    '                                          "VALUES (@user_id, @name, @birthday, @age, @sex, @address)"
-    '            Dim customerParams As New Dictionary(Of String, Object) From {
-    '                {"@user_id", newUserId},
-    '                {"@name", txtFirstName.Text & " " & txtLastName.Text},
-    '                {"@birthday", dtpBirthday.Value.Date},
-    '                {"@age", Convert.ToInt32(lblAgeContainer.Text)},
-    '                {"@sex", cmbSex.SelectedItem.ToString()},
-    '                {"@address", txtAddress.Text}
-    '            }
-    '            DBHelper.ExecuteQuery(customerQuery, customerParams)
-    '        End If
-
-    '        MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-    '        Me.Hide()
-    '        Dim loginForm As New FormLogIn()
-    '        loginForm.Show()
-    '    Catch ex As Exception
-    '        MessageBox.Show("Unexpected error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '    End Try
-    'End Sub
-
     Private Sub btnSignUp_Click(sender As Object, e As EventArgs) Handles btnSignUp.Click
         HideErrorLabels()
 
@@ -406,11 +338,6 @@ Public Class FormSignUp
         lblAdminCodeError.Visible = False
     End Sub
 
-    'Private Function HashPassword(password As String) As String
-    '    Dim sha256 As SHA256 = SHA256.Create()
-    '    Dim hashedBytes As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(password))
-    '    Return Convert.ToBase64String(hashedBytes)
-    'End Function
 
     Private Function HashPassword(password As String) As String
         Using sha256 As SHA256 = SHA256.Create()
@@ -502,17 +429,6 @@ Public Class FormSignUp
         loginForm.Show()
         Me.Hide()
     End Sub
-
-    'Private Sub MoveToNextControl(sender As Object, e As KeyEventArgs)
-    '    If e.KeyCode = Keys.Enter Then
-    '        e.SuppressKeyPress = True
-    '        If sender Is cmbRole Then
-    '            btnSignUp.PerformClick()
-    '        Else
-    '            SelectNextControl(DirectCast(sender, Control), True, True, True, True)
-    '        End If
-    '    End If
-    'End Sub
     Private Sub MoveToNextControlPersonal(sender As Object, e As KeyEventArgs) Handles txtFirstName.KeyDown, txtLastName.KeyDown, dtpBirthday.KeyDown, cmbSex.KeyDown, txtAddress.KeyDown
         If e.KeyCode = Keys.Enter Then
             e.SuppressKeyPress = True

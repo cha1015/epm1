@@ -2,25 +2,27 @@
 Imports System.Data
 Imports System.Globalization
 Imports System.IO
+Imports System.Security.Principal
 Imports System.Windows.Forms.DataVisualization.Charting
 
 Public Class FormAdminCenter
 
     Private Sub FormAdminCenter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HelperNavigation.RegisterNewForm(Me)
-
         lblUsername.Text = CurrentUser.Username
 
         ' Load all datasets into FlowLayoutPanels and Chart:
-        LoadSearchResults()         ' Event Places (with update/delete)
-        LoadPendingBookings()         ' Pending Bookings (with Approve/Reject)
-        LoadAvailability()            ' Availability of Event Places
-        LoadRevenueReports()          ' Revenue per Event Place
-        LoadInvoices()                ' Invoices with Accept Payment
-        LoadBookedDates()             ' Booked Dates
-        LoadCustomerCount()           ' Customer Count
-        LoadCustomerRecords()         ' Customer Records
-        LoadBookingStatusChart()      ' Booking Status Chart
+        LoadSearchResults()          ' Event Places (with update/delete)
+        LoadPendingBookings()        ' Pending Bookings (with Approve/Reject)
+        LoadApprovedBookings()       ' Approved Bookings
+        LoadRejectedBookings()       ' Rejected Bookings
+        LoadAllBookings()            ' All Bookings
+        LoadAvailability()           ' Availability of Event Places
+        LoadRevenueReports()         ' Revenue per Event Place
+        LoadInvoices()               ' Invoices with Accept Payment
+        LoadCustomerCount()          ' Customer Count
+        LoadCustomerRecords()        ' Customer Records
+        LoadBookingStatusChart()     ' Booking Status Chart
 
         ' Set up field indicators and validation for event place data entry.
         Dim labels = {lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
@@ -35,14 +37,26 @@ Public Class FormAdminCenter
         Next
     End Sub
 
+    ' Add DateChanged event handler for the MonthCalendar control
+    Private Sub mcBookings_DateChanged(sender As Object, e As DateRangeEventArgs) Handles mcBookings.DateChanged
+        Dim selectedDate As Date = e.Start
+
+        ' Update the chart and flow panels based on the selected date
+        UpdateBookingStatusChart(selectedDate)
+        UpdateRevenueReports(selectedDate)
+        UpdateAvailability(selectedDate)
+        UpdatePendingBookings(selectedDate)
+    End Sub
+
 #Region "Data Loading using HelperResultsDisplay (FlowLayoutPanels)"
 
     '--- Load Event Places (Search Results)
     Private Sub LoadSearchResults()
+        ' Updated query to calculate status dynamically
         Dim query As String = "SELECT place_id, event_place, event_type, capacity, price_per_day, description, image_url, " &
-                              "CASE WHEN EXISTS (SELECT 1 FROM bookings WHERE bookings.place_id = eventplace.place_id) " &
-                              "THEN 'Booked' ELSE 'Available' END AS status " &
-                              "FROM eventplace WHERE 1=1"
+                          "CASE WHEN EXISTS (SELECT 1 FROM bookings WHERE bookings.place_id = eventplace.place_id) " &
+                          "THEN 'Booked' ELSE 'Available' END AS status " &
+                          "FROM eventplace WHERE 1=1"
         Dim dt As New DataTable()
         Using connection As MySqlConnection = DBHelper.GetConnection()
             Using cmd As New MySqlCommand(query, connection)
@@ -56,61 +70,173 @@ Public Class FormAdminCenter
                 End Try
             End Using
         End Using
-        For Each col As DataColumn In dt.Columns
-            Debug.Print("Column: " & col.ColumnName)
+
+        ' Separate available and booked event places
+        Dim availablePlaces As DataTable = dt.Clone()
+        Dim bookedPlaces As DataTable = dt.Clone()
+
+        For Each row As DataRow In dt.Rows
+            If row("status").ToString() = "Available" Then
+                availablePlaces.ImportRow(row)
+            Else
+                bookedPlaces.ImportRow(row)
+            End If
         Next
 
+        ' Determine if the current user is an admin
         Dim currentRoleIsAdmin As Boolean = CurrentUser.Role.Equals("Admin", StringComparison.OrdinalIgnoreCase)
-        HelperResultsDisplay.PopulateEventPlaces(flpEventPlaces, dt, Nothing, AddressOf btnUpdate_Click, AddressOf btnDelete_Click, currentRoleIsAdmin)
 
+        ' Populate available event places into flpAvailable
+        HelperResultsDisplay.PopulateEventPlacesForAdmin(flpAvailable, availablePlaces, True,
+                                                     txtEventPlace, txtEventType, txtCapacity,
+                                                     txtPricePerDay, txtFeatures, txtImageUrl,
+                                                     txtOpeningHours, txtClosingHours,
+                                                     txtAvailableDays, txtDescription,
+                                                     txtPlaceID, btnUpdate, btnDelete)
+
+        ' Populate booked event places into flpBooked
+        HelperResultsDisplay.PopulateEventPlacesForAdmin(flpBooked, bookedPlaces, False,
+                                                     txtEventPlace, txtEventType, txtCapacity,
+                                                     txtPricePerDay, txtFeatures, txtImageUrl,
+                                                     txtOpeningHours, txtClosingHours,
+                                                     txtAvailableDays, txtDescription,
+                                                     txtPlaceID, btnUpdate, btnDelete)
     End Sub
 
     '--- Load Pending Bookings
     Private Sub LoadPendingBookings()
-        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.total_price, b.status " &
-                              "FROM bookings b " &
-                              "JOIN customers c ON b.customer_id = c.customer_id " &
-                              "JOIN eventplace e ON b.place_id = e.place_id " &
-                              "WHERE b.status='Pending' ORDER BY b.event_date ASC"
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                          "FROM bookings b " &
+                          "JOIN customers c ON b.customer_id = c.customer_id " &
+                          "JOIN eventplace e ON b.place_id = e.place_id " &
+                          "WHERE b.status = 'Pending' ORDER BY b.event_date ASC"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click)
+
+        ' Populate the pending bookings panel
+        HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
     End Sub
 
-    '--- Load Availability of Event Places
-    Private Sub LoadAvailability()
-        Dim query As String = "SELECT e.event_place, " &
-                              "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved') " &
-                              "THEN 'Booked' ELSE 'Available' END AS Availability " &
-                              "FROM eventplace e"
+    Private Sub LoadApprovedBookings()
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                          "FROM bookings b " &
+                          "JOIN customers c ON b.customer_id = c.customer_id " &
+                          "JOIN eventplace e ON b.place_id = e.place_id " &
+                          "WHERE b.status = 'Approved' ORDER BY b.event_date ASC"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateAvailability(flpAvailability, dt)
+
+        ' Populate the approved bookings panel
+        HelperResultsDisplay.PopulateApprovedBookings(flpApproved, dt)
     End Sub
+
+    Private Sub LoadAllBookings()
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                          "FROM bookings b " &
+                          "JOIN customers c ON b.customer_id = c.customer_id " &
+                          "JOIN eventplace e ON b.place_id = e.place_id ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Populate the all bookings panel
+        HelperResultsDisplay.PopulateAllBookings(flpAll, dt)
+    End Sub
+
+
+    Private Sub LoadRejectedBookings()
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                          "FROM bookings b " &
+                          "JOIN customers c ON b.customer_id = c.customer_id " &
+                          "JOIN eventplace e ON b.place_id = e.place_id " &
+                          "WHERE b.status = 'Rejected' ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Populate the rejected bookings panel
+        HelperResultsDisplay.PopulateRejectedBookings(flpRejected, dt)
+    End Sub
+
+
+    '--- Load Availability of Event Places
+    ' In FormAdminCenter
+
+    Private Sub LoadAvailability()
+        Dim query As String = "SELECT e.event_place, e.place_id, e.status, e.image_url, " &
+                          "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved') " &
+                          "THEN 'Booked' ELSE 'Available' END AS Availability " &
+                          "FROM eventplace e"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Split the event places into Available and Booked
+        Dim availablePlaces As DataTable = dt.Clone()
+        Dim bookedPlaces As DataTable = dt.Clone()
+
+        For Each row As DataRow In dt.Rows
+            If row("Availability").ToString() = "Available" Then
+                availablePlaces.ImportRow(row)
+            Else
+                bookedPlaces.ImportRow(row)
+            End If
+        Next
+
+        ' Pass the controls as arguments to PopulateEventPlacesForAdmin
+        HelperResultsDisplay.PopulateEventPlacesForAdmin(flpAvailable, availablePlaces, True,
+                                                     txtEventPlace, txtEventType, txtCapacity,
+                                                     txtPricePerDay, txtFeatures, txtImageUrl,
+                                                     txtOpeningHours, txtClosingHours,
+                                                     txtAvailableDays, txtDescription,
+                                                     txtPlaceID, btnUpdate, btnDelete)
+
+        HelperResultsDisplay.PopulateEventPlacesForAdmin(flpBooked, bookedPlaces, False,
+                                                     txtEventPlace, txtEventType, txtCapacity,
+                                                     txtPricePerDay, txtFeatures, txtImageUrl,
+                                                     txtOpeningHours, txtClosingHours,
+                                                     txtAvailableDays, txtDescription,
+                                                     txtPlaceID, btnUpdate, btnDelete)
+    End Sub
+
+
 
     '--- Load Revenue Reports
     Private Sub LoadRevenueReports()
-        Dim query As String = "SELECT e.event_place, SUM(b.total_price) AS total_revenue " &
-                              "FROM eventplace e " &
-                              "JOIN bookings b ON e.place_id = b.place_id " &
-                              "WHERE b.status='Approved' " &
-                              "GROUP BY e.place_id"
+        Dim query As String = "SELECT e.event_place, " &
+                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
+                          "FROM eventplace e " &
+                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'Approved' " &
+                          "GROUP BY e.place_id"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
     End Sub
 
+
     '--- Load Invoices
     Private Sub LoadInvoices()
-        Dim query As String = "SELECT invoice_id, user_id, event_place, total_amount, payment_status, invoice_data " &
-                              "FROM invoices WHERE payment_status='Pending' ORDER BY invoice_data ASC"
+        Dim query As String = "SELECT invoice_id, user_id, event_place, total_amount, payment_status, invoice_date
+        FROM invoices
+        WHERE payment_status = 'Pending'
+        ORDER BY invoice_date ASC
+        "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
     End Sub
 
-    '--- Load Booked Dates
-    Private Sub LoadBookedDates()
-        Dim query As String = "SELECT DISTINCT event_date FROM bookings WHERE status='Approved'"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateBookedDates(flpBookedDates, dt)
-    End Sub
+    ' ------------------ Load Booked Dates ------------------
+    Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
+        Dim bookedDates As New List(Of Date)
+        Dim query As String = "SELECT event_date, event_end_date FROM Bookings WHERE place_id = @place_id"
+
+        Dim params As New Dictionary(Of String, Object) From {{"@place_id", placeId}}
+
+        Dim dt As DataTable = DBHelper.GetDataTable(query, params)
+        For Each row As DataRow In dt.Rows
+            Dim startDate As Date = Convert.ToDateTime(row("event_date"))
+            Dim endDate As Date = Convert.ToDateTime(row("event_end_date"))
+
+            ' Add all dates in the range to the booked list
+            For Each d As Date In Enumerable.Range(0, (endDate - startDate).Days + 1).Select(Function(i) startDate.AddDays(i))
+                bookedDates.Add(d)
+            Next
+        Next
+
+        Return bookedDates
+    End Function
+
 
     '--- Load Customer Count
     Private Sub LoadCustomerCount()
@@ -145,6 +271,84 @@ Public Class FormAdminCenter
 
 #End Region
 
+#Region "Data Updates Based on Selected Date"
+
+    '--- Update the Booking Status Chart for the selected date
+    Private Sub UpdateBookingStatusChart(selectedDate As Date)
+        chartTotalStatus.Series.Clear()
+        Dim statusSeries As New Series("BookingStatus") With {
+            .ChartType = SeriesChartType.Bar,
+            .LabelFormat = "0"
+        }
+        chartTotalStatus.Series.Add(statusSeries)
+
+        ' Update query to filter by selected date
+        Dim query As String = "SELECT status, COUNT(*) AS count FROM bookings WHERE event_date = @selectedDate GROUP BY status"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+
+        For Each row As DataRow In dt.Rows
+            statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
+        Next
+        chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
+        chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
+    End Sub
+
+    '--- Update Revenue Reports for the selected date
+    Private Sub UpdateRevenueReports(selectedDate As Date)
+        Dim query As String = "SELECT e.event_place, " &
+                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
+                          "FROM eventplace e " &
+                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status='Approved' AND b.event_date = @selectedDate " &
+                          "GROUP BY e.place_id"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
+    End Sub
+
+
+    '--- Update Availability for the selected date
+    Private Sub UpdateAvailability(selectedDate As Date)
+        Dim query As String = "SELECT e.event_place, " &
+                          "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved' AND b.event_date = @selectedDate) " &
+                          "THEN 'Booked' ELSE 'Available' END AS Availability " &
+                          "FROM eventplace e"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+
+        ' Retrieve the FlowLayoutPanels for available and booked event places
+        Dim flpAvailable As FlowLayoutPanel = CType(tcAvailability.TabPages("tpAvailable").Controls("flpAvailable"), FlowLayoutPanel)
+        Dim flpBooked As FlowLayoutPanel = CType(tcAvailability.TabPages("tpBooked").Controls("flpBooked"), FlowLayoutPanel)
+
+        ' Separate the data into available and booked places
+        Dim availablePlaces As DataTable = dt.Clone()
+        Dim bookedPlaces As DataTable = dt.Clone()
+
+        For Each row As DataRow In dt.Rows
+            If row("Availability").ToString() = "Available" Then
+                availablePlaces.ImportRow(row)
+            Else
+                bookedPlaces.ImportRow(row)
+            End If
+        Next
+
+        ' Populate the FlowLayoutPanels with the sorted event places
+        HelperResultsDisplay.PopulateAvailability(flpAvailable, availablePlaces)
+        HelperResultsDisplay.PopulateAvailability(flpBooked, bookedPlaces)
+    End Sub
+
+
+    '--- Update Pending Bookings for the selected date
+    Private Sub UpdatePendingBookings(selectedDate As Date)
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                              "FROM bookings b " &
+                              "JOIN customers c ON b.customer_id = c.customer_id " &
+                              "JOIN eventplace e ON b.place_id = e.place_id " &
+                              "WHERE b.status = 'Pending' AND b.event_date = @selectedDate " &
+                              "ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+        HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
+    End Sub
+
+#End Region
+
 #Region "Event Handlers for Booking Approval/Payment"
 
     '--- Approve individual booking
@@ -162,6 +366,10 @@ Public Class FormAdminCenter
         LoadPendingBookings()
         LoadBookingStatusChart()
         LoadAvailability()
+        ' After approving or rejecting the booking, reload the panels
+        LoadApprovedBookings()
+        LoadRejectedBookings()
+        LoadAllBookings()
     End Sub
 
     '--- Reject individual booking
@@ -179,6 +387,10 @@ Public Class FormAdminCenter
         LoadPendingBookings()
         LoadBookingStatusChart()
         LoadAvailability()
+        ' After approving or rejecting the booking, reload the panels
+        LoadApprovedBookings()
+        LoadRejectedBookings()
+        LoadAllBookings()
     End Sub
 
     '--- Accept payment for an invoice
@@ -309,27 +521,56 @@ Public Class FormAdminCenter
 
 #End Region
 
+    ' Store a reference to the booking details form so we can hide it later
+    Private bookingDetailsForm As FormBookingDetails
+
+    ' Show booking details
+    Public Sub ShowBookingDetails(ByVal row As DataRow)
+        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
+            ' Create a new form if it doesn't exist
+            bookingDetailsForm = New FormBookingDetails()
+        End If
+
+        ' Ensure the bookingId is valid
+        Dim bookingId As Integer = Convert.ToInt32(row("booking_id"))
+        Debug.Print("Booking ID: " & bookingId.ToString())
+
+        ' Load the booking details into the form
+        bookingDetailsForm.LoadBookingDetails(bookingId)
+        bookingDetailsForm.ShowDialog()
+    End Sub
+
+
+    ' Hide booking details
+    Public Sub HideBookingDetails()
+        ' Close the booking details form when the mouse button is released
+        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
+            bookingDetailsForm.Hide()
+        End If
+    End Sub
+
     '--- Log Out ---
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
-        LogError($"User {CurrentUser.UserID} logged out.")
-        CurrentUser.Username = String.Empty
-        CurrentUser.UserID = 0
-        CurrentUser.Email = String.Empty
-        Me.Hide()
-        FormLogIn.Show()
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If result = DialogResult.Yes Then
+            CurrentUser.UserID = -1
+            CurrentUser.Username = String.Empty
+            CurrentUser.Email = String.Empty
+            CurrentUser.Role = String.Empty
+            CurrentUser.CustomerId = -1
+
+            Me.Refresh()
+            Application.DoEvents()
+
+            Dim mainForm As New FormMain()
+            mainForm.Show()
+            Me.Hide()
+        End If
     End Sub
 
     '--- Additional Legend (optional)
-    Private Sub AddLegend()
-        Dim legend As New Label With {
-            .Text = "Red = Booked | Green = Available",
-            .ForeColor = Color.Black,
-            .AutoSize = True,
-            .Font = New Font("Arial", 10, FontStyle.Bold),
-            .Location = New Point(flpAvailability.Left, flpAvailability.Bottom + 10)
-        }
-        Me.Controls.Add(legend)
-    End Sub
+
 
     Private Sub LogError(errorMessage As String)
         Using writer As New StreamWriter("error_log.txt", True)
@@ -343,6 +584,10 @@ Public Class FormAdminCenter
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
+    End Sub
+    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
+        editForm.ShowDialog()
     End Sub
 
 End Class

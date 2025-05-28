@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormLogIn
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class FormLogIn
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormLogIn))
         Me.lblPassword = New System.Windows.Forms.Label()
@@ -33,7 +33,6 @@ Partial Class FormLogIn
         Me.lblGeneralError = New System.Windows.Forms.Label()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
-        Me.cbRememberMe = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'lblPassword
@@ -171,21 +170,6 @@ Partial Class FormLogIn
         Me.btnBack.TabIndex = 88
         Me.btnBack.UseVisualStyleBackColor = False
         '
-        'cbRememberMe
-        '
-        Me.cbRememberMe.AutoSize = True
-        Me.cbRememberMe.BackColor = System.Drawing.Color.Transparent
-        Me.cbRememberMe.Font = New System.Drawing.Font("Poppins", 8.0!)
-        Me.cbRememberMe.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.cbRememberMe.Location = New System.Drawing.Point(421, 383)
-        Me.cbRememberMe.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbRememberMe.Name = "cbRememberMe"
-        Me.cbRememberMe.Size = New System.Drawing.Size(137, 29)
-        Me.cbRememberMe.TabIndex = 91
-        Me.cbRememberMe.Text = "Remember Me"
-        Me.cbRememberMe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.cbRememberMe.UseVisualStyleBackColor = False
-        '
         'FormLogIn
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -193,7 +177,6 @@ Partial Class FormLogIn
         Me.BackgroundImage = Global.epm1.My.Resources.Resources.LogIn
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1259, 617)
-        Me.Controls.Add(Me.cbRememberMe)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.lblGeneralError)
@@ -223,5 +206,4 @@ Partial Class FormLogIn
     Friend WithEvents lblGeneralError As Label
     Friend WithEvents btnNext As Button
     Friend WithEvents btnBack As Button
-    Friend WithEvents cbRememberMe As CheckBox
 End Class

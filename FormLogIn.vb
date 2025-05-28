@@ -42,7 +42,7 @@ Public Class FormLogIn
         If dt.Rows.Count > 0 Then
             Dim storedHash As String = dt.Rows(0)("password_hash").ToString()
             If VerifyPassword(txtPass.Text, storedHash) Then
-                ' Store user details from the Users table.
+                'Store user details from the Users table.
                 CurrentUser.UserID = CInt(dt.Rows(0)("user_id"))
                 CurrentUser.Username = dt.Rows(0)("username").ToString()
                 CurrentUser.Email = dt.Rows(0)("email").ToString()
@@ -52,28 +52,28 @@ Public Class FormLogIn
 
                 Select Case CurrentUser.Role
                     Case "Admin"
-                        ' Prompt for admin authentication code.
+                        'Prompt for admin authentication code.
                         Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
                         If String.Compare(adminCode.Trim(), "SECURE123", True) <> 0 Then
                             lblGeneralError.Text = "Invalid admin authentication code."
                             lblGeneralError.Visible = True
                             Exit Sub
                         End If
-                        ' Assign a dummy nonzero value since the admin won't have a corresponding customer record.
+                        'Assign a dummy nonzero value since the admin won't have a corresponding customer record.
                         CurrentUser.CustomerId = -1
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
                     Case "User"
-                        ' For Users, assign a valid customer id.
-                        ' Here we simply set it equal to the user id, or you could perform a query if needed.
+                        'For Users, assign a valid customer id.
+                        'Here we simply Set it equal To the user id, Or you could perform a query if needed.
                         CurrentUser.CustomerId = CurrentUser.UserID ' Or query the Customers table as required.
-                        MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
-                        Me.DialogResult = DialogResult.OK
-                        Me.Close()
-                    Case Else
-                        lblGeneralError.Text = "Invalid role detected! Contact support."
-                        lblGeneralError.Visible = True
+                            MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                            Me.DialogResult = DialogResult.OK
+                            Me.Close()
+                            Case Else
+                            lblGeneralError.Text = "Invalid role detected! Contact support."
+                            lblGeneralError.Visible = True
                 End Select
             Else
                 lblGeneralError.Text = "Invalid credentials."
@@ -424,7 +424,7 @@ End Class
 '    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
 '        HelperNavigation.GoNext(Me)
 '    End Sub
-'    Private Sub cbRememberMe_CheckedChanged(sender As Object, e As EventArgs) Handles cbRememberMe.CheckedChanged
+'    Private Sub cbRememberMe_CheckedChanged(sender As Object, e As EventArgs) 
 '        If cbRememberMe.Checked Then
 '            My.Settings.RememberMe = True
 '            My.Settings.RememberedEmail = txtEmail.Text
