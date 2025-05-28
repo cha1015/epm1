@@ -68,16 +68,17 @@ Public Class FormAdminCenter
 
     '--- Load Pending Bookings
     Private Sub LoadPendingBookings()
-        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.total_price, b.status " &
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
                           "FROM bookings b " &
                           "JOIN customers c ON b.customer_id = c.customer_id " &
                           "JOIN eventplace e ON b.place_id = e.place_id " &
-                          "WHERE b.status='Pending' ORDER BY b.event_date ASC"
+                          "WHERE b.status = 'Pending' ORDER BY b.event_date ASC"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         ' Populate the pending bookings panel
         HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
     End Sub
+
 
 
     '--- Load Availability of Event Places
