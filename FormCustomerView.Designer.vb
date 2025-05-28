@@ -72,9 +72,9 @@ Partial Class FormCustomerView
         Me.FlowLayoutPanel1.AutoScroll = True
         Me.FlowLayoutPanel1.BackColor = System.Drawing.Color.Transparent
         Me.FlowLayoutPanel1.Controls.Add(Me.Panel1)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(29, 96)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(29, 112)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(903, 356)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(903, 360)
         Me.FlowLayoutPanel1.TabIndex = 64
         '
         'Panel1
@@ -96,7 +96,7 @@ Partial Class FormCustomerView
         Me.Panel6.BackColor = System.Drawing.Color.Lime
         Me.Panel6.Location = New System.Drawing.Point(664, 14)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(189, 152)
+        Me.Panel6.Size = New System.Drawing.Size(189, 126)
         Me.Panel6.TabIndex = 5
         '
         'Panel3
@@ -200,7 +200,7 @@ Partial Class FormCustomerView
         Me.btnclose.ForeColor = System.Drawing.Color.Transparent
         Me.btnclose.Location = New System.Drawing.Point(926, 1)
         Me.btnclose.Name = "btnclose"
-        Me.btnclose.Size = New System.Drawing.Size(15, 14)
+        Me.btnclose.Size = New System.Drawing.Size(12, 12)
         Me.btnclose.TabIndex = 69
         Me.btnclose.UseVisualStyleBackColor = False
         '
@@ -214,7 +214,7 @@ Partial Class FormCustomerView
         Me.btnminimize.ForeColor = System.Drawing.Color.Transparent
         Me.btnminimize.Location = New System.Drawing.Point(909, 1)
         Me.btnminimize.Name = "btnminimize"
-        Me.btnminimize.Size = New System.Drawing.Size(15, 14)
+        Me.btnminimize.Size = New System.Drawing.Size(12, 12)
         Me.btnminimize.TabIndex = 70
         Me.btnminimize.UseVisualStyleBackColor = False
         '
@@ -230,7 +230,7 @@ Partial Class FormCustomerView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.epm1.My.Resources.Resources.CUSTOMER_VIEW__2_1
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.CUSTOMER_VIEW__3_
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.ControlBox = False

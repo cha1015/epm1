@@ -107,7 +107,7 @@ Public Class FormCustomerView
         Dim lblNoBooking As New Label()
         lblNoBooking.Text = "No booking data"
         lblNoBooking.Font = New Font("Arial", 18, FontStyle.Bold)
-        lblNoBooking.ForeColor = Color.FromArgb(60, 40, 20)
+        lblNoBooking.ForeColor = Color.Black
         lblNoBooking.BackColor = Color.Transparent
         lblNoBooking.AutoSize = False
         lblNoBooking.TextAlign = ContentAlignment.MiddleCenter
@@ -193,7 +193,7 @@ Public Class FormCustomerView
             Dim lblNoBooking As New Label()
             lblNoBooking.Text = "No booking data"
             lblNoBooking.Font = New Font(quicheFont.FontFamily, 14, FontStyle.Bold)
-            lblNoBooking.ForeColor = Color.FromArgb(60, 40, 20)
+            lblNoBooking.ForeColor = Color.Black
             lblNoBooking.BackColor = Color.Transparent
             lblNoBooking.Size = New Size(864, 181)
             lblNoBooking.TextAlign = ContentAlignment.MiddleCenter
@@ -206,12 +206,12 @@ Public Class FormCustomerView
             Dim panel As New Panel()
             panel.Size = New Size(864, 181)
             panel.Margin = New Padding(10)
-            panel.BackColor = Color.FromArgb(245, 245, 250)
+            panel.BackColor = Color.FromArgb(229, 222, 210)
             panel.BorderStyle = BorderStyle.None
             AddHandler panel.Paint, AddressOf MakePanelRound
             SetPanelDoubleBuffered(panel)
 
-            ' PictureBox
+            ' PictureBox (rounded rectangle)
             Dim pb As New PictureBox()
             pb.Location = New Point(13, 13)
             pb.Size = New Size(218, 152)
@@ -221,43 +221,44 @@ Public Class FormCustomerView
             pb.Image = TryCast(My.Resources.ResourceManager.GetObject(imageName), Image)
             pb.BackColor = Color.White
             pb.BorderStyle = BorderStyle.None
+            AddHandler pb.Paint, AddressOf MakePictureBoxRoundedRect
             panel.Controls.Add(pb)
 
-            ' Panel1: Place Name
+            ' Panel1: Place Name (rounded rectangle, set region directly)
             Dim panel1 As New Panel()
             panel1.Location = New Point(246, 14)
             panel1.Size = New Size(405, 50)
-            panel1.BackColor = Color.FromArgb(255, 255, 255, 220)
+            panel1.BackColor = Color.FromArgb(255, 206, 200, 189)
             panel1.BorderStyle = BorderStyle.None
-            AddHandler panel1.Paint, AddressOf MakePanelRound
             SetPanelDoubleBuffered(panel1)
+            SetPanelRoundedRect(panel1, 18) ' Set region directly
 
             Dim lblPlaceName As New Label()
             lblPlaceName.Text = dataRow("event_place").ToString()
             lblPlaceName.Font = New Font(quicheFont.FontFamily, 18, FontStyle.Bold)
-            lblPlaceName.ForeColor = Color.FromArgb(40, 30, 20)
+            lblPlaceName.ForeColor = Color.Black
             lblPlaceName.Dock = DockStyle.Fill
-            lblPlaceName.TextAlign = ContentAlignment.MiddleLeft
+            lblPlaceName.TextAlign = ContentAlignment.MiddleCenter
             panel1.Controls.Add(lblPlaceName)
             panel.Controls.Add(panel1)
 
-            ' Panel2: Details
+            ' Panel2: Details (rounded rectangle)
             Dim panel2 As New Panel()
             panel2.Location = New Point(246, 71)
             panel2.Size = New Size(405, 95)
-            panel2.BackColor = Color.FromArgb(245, 245, 245, 200)
+            panel2.BackColor = Color.FromArgb(255, 206, 200, 189)
             panel2.BorderStyle = BorderStyle.None
             AddHandler panel2.Paint, AddressOf MakePanelRound
+            SetPanelDoubleBuffered(panel2)
 
             Dim detailsFont As New Font(quicheFont.FontFamily, 9, FontStyle.Regular)
             Dim y As Integer = 8
-            SetPanelDoubleBuffered(panel2)
 
             ' Customer ID only (top left)
             Dim lblCustomerId As New Label()
             lblCustomerId.Text = "Customer ID: " & CurrentUser.CustomerId.ToString()
             lblCustomerId.Font = detailsFont
-            lblCustomerId.ForeColor = Color.FromArgb(60, 40, 20)
+            lblCustomerId.ForeColor = Color.Black
             lblCustomerId.Location = New Point(10, y)
             lblCustomerId.Size = New Size(180, 18)
             panel2.Controls.Add(lblCustomerId)
@@ -267,7 +268,7 @@ Public Class FormCustomerView
             Dim lblBookingId As New Label()
             lblBookingId.Text = "Booking ID: " & dataRow("booking_id").ToString()
             lblBookingId.Font = detailsFont
-            lblBookingId.ForeColor = Color.FromArgb(60, 40, 20)
+            lblBookingId.ForeColor = Color.Black
             lblBookingId.Location = New Point(10, y)
             lblBookingId.Size = New Size(180, 18)
             panel2.Controls.Add(lblBookingId)
@@ -275,7 +276,7 @@ Public Class FormCustomerView
             Dim lblEventDate As New Label()
             lblEventDate.Text = "Date: " & Convert.ToDateTime(dataRow("event_date")).ToString("yyyy-MM-dd")
             lblEventDate.Font = detailsFont
-            lblEventDate.ForeColor = Color.FromArgb(60, 40, 20)
+            lblEventDate.ForeColor = Color.Black
             lblEventDate.Location = New Point(200, y)
             lblEventDate.Size = New Size(200, 18)
             panel2.Controls.Add(lblEventDate)
@@ -285,7 +286,7 @@ Public Class FormCustomerView
             Dim lblEventTime As New Label()
             lblEventTime.Text = "Time: " & dataRow("event_time").ToString() & " - " & dataRow("event_end_time").ToString()
             lblEventTime.Font = detailsFont
-            lblEventTime.ForeColor = Color.FromArgb(60, 40, 20)
+            lblEventTime.ForeColor = Color.Black
             lblEventTime.Location = New Point(10, y)
             lblEventTime.Size = New Size(180, 18)
             panel2.Controls.Add(lblEventTime)
@@ -293,7 +294,7 @@ Public Class FormCustomerView
             Dim lblPaymentId As New Label()
             lblPaymentId.Text = "Payment ID: " & If(IsDBNull(dataRow("payment_id")), "N/A", dataRow("payment_id").ToString())
             lblPaymentId.Font = detailsFont
-            lblPaymentId.ForeColor = Color.FromArgb(60, 40, 20)
+            lblPaymentId.ForeColor = Color.Black
             lblPaymentId.Location = New Point(200, y)
             lblPaymentId.Size = New Size(200, 18)
             panel2.Controls.Add(lblPaymentId)
@@ -303,7 +304,7 @@ Public Class FormCustomerView
             Dim lblPaymentDate As New Label()
             lblPaymentDate.Text = "Payment Date: " & If(IsDBNull(dataRow("payment_date")), "N/A", Convert.ToDateTime(dataRow("payment_date")).ToString("yyyy-MM-dd"))
             lblPaymentDate.Font = detailsFont
-            lblPaymentDate.ForeColor = Color.FromArgb(60, 40, 20)
+            lblPaymentDate.ForeColor = Color.Black
             lblPaymentDate.Location = New Point(10, y)
             lblPaymentDate.Size = New Size(180, 18)
             panel2.Controls.Add(lblPaymentDate)
@@ -311,55 +312,74 @@ Public Class FormCustomerView
             Dim lblAmountPaid As New Label()
             lblAmountPaid.Text = "Amount Paid: " & If(IsDBNull(dataRow("amount_paid")), "N/A", "₱" & Convert.ToDecimal(dataRow("amount_paid")).ToString("F2"))
             lblAmountPaid.Font = detailsFont
-            lblAmountPaid.ForeColor = Color.FromArgb(60, 40, 20)
+            lblAmountPaid.ForeColor = Color.Black
             lblAmountPaid.Location = New Point(200, y)
             lblAmountPaid.Size = New Size(200, 18)
             panel2.Controls.Add(lblAmountPaid)
 
             panel.Controls.Add(panel2)
 
-
+            ' Panel3: Approval & Price (rounded rectangle, match color to panel1/panel2)
             Dim panel3 As New Panel()
             Dim statusStr As String = dataRow("status").ToString().ToLower()
             Dim isApproved As Boolean = statusStr = "approved"
             Dim isRejected As Boolean = statusStr = "rejected"
+            Dim isPending As Boolean = statusStr = "pending"
 
             panel3.Location = New Point(664, 14)
-            If isApproved Then
-                panel3.Size = New Size(189, 120)
-            Else
-                panel3.Size = New Size(189, 40) ' Collapsed size if not approved
-            End If
-            panel3.BackColor = Color.FromArgb(255, 255, 255, 230)
+            panel3.Size = New Size(189, 152)
+            panel3.BackColor = Color.FromArgb(255, 206, 200, 189) ' Match panel1/panel2
             panel3.BorderStyle = BorderStyle.None
             AddHandler panel3.Paint, AddressOf MakePanelRound
             SetPanelDoubleBuffered(panel3)
 
-            Dim lblApproval As New Label()
-            lblApproval.Text = If(isApproved, "Approved", If(isRejected, "Rejected", "Pending"))
-            lblApproval.Font = New Font(quicheFont.FontFamily, 13, FontStyle.Bold)
-            lblApproval.ForeColor = If(isApproved, Color.SeaGreen, If(isRejected, Color.Gray, Color.OrangeRed))
-            lblApproval.Location = New Point(20, 10)
-            lblApproval.Size = New Size(150, 24)
-            lblApproval.TextAlign = ContentAlignment.MiddleCenter
-            panel3.Controls.Add(lblApproval)
+            Dim paid As Decimal = If(IsDBNull(dataRow("amount_paid")), 0D, Convert.ToDecimal(dataRow("amount_paid")))
+            Dim toPay As Decimal = If(IsDBNull(dataRow("amount_to_pay")), 0D, Convert.ToDecimal(dataRow("amount_to_pay")))
+            Dim isPaid As Boolean = (paid >= toPay AndAlso toPay > 0)
 
-            If isApproved Then
+            panel3.Controls.Clear()
+
+            If isPaid Then
+                ' Paid: show "Paid" centered, no price
+                Dim lblPaid As New Label()
+                lblPaid.Text = "Paid"
+                lblPaid.Font = New Font(quicheFont.FontFamily, 18, FontStyle.Bold)
+                lblPaid.ForeColor = Color.SeaGreen
+                lblPaid.Dock = DockStyle.Fill
+                lblPaid.TextAlign = ContentAlignment.MiddleCenter
+                panel3.Controls.Add(lblPaid)
+            ElseIf isPending OrElse isApproved Then
+                ' Pending or Approved: status centered, price below
+                Dim lblStatus As New Label()
+                lblStatus.Text = If(isApproved, "Approved", "Pending")
+                lblStatus.Font = New Font(quicheFont.FontFamily, 13, FontStyle.Bold)
+                lblStatus.ForeColor = If(isApproved, Color.SeaGreen, Color.OrangeRed)
+                lblStatus.Dock = DockStyle.Top
+                lblStatus.Height = 50
+                lblStatus.TextAlign = ContentAlignment.MiddleCenter
+                panel3.Controls.Add(lblStatus)
+
                 Dim lblAmountToPay As New Label()
-                lblAmountToPay.Text = "₱" & If(IsDBNull(dataRow("amount_to_pay")), "0.00", Convert.ToDecimal(dataRow("amount_to_pay")).ToString("F2"))
+                lblAmountToPay.Text = "₱" & toPay.ToString("F2")
                 lblAmountToPay.Font = New Font(quicheFont.FontFamily, 15, FontStyle.Bold)
-                lblAmountToPay.ForeColor = Color.FromArgb(60, 40, 20)
-                lblAmountToPay.Location = New Point(20, 60)
-                lblAmountToPay.Size = New Size(150, 30)
-                lblAmountToPay.TextAlign = ContentAlignment.MiddleCenter
+                lblAmountToPay.ForeColor = Color.Black
+                lblAmountToPay.Dock = DockStyle.Fill
+                lblAmountToPay.TextAlign = ContentAlignment.TopCenter
                 panel3.Controls.Add(lblAmountToPay)
+            ElseIf isRejected Then
+                Dim lblRejected As New Label()
+                lblRejected.Text = "Rejected"
+                lblRejected.Font = New Font(quicheFont.FontFamily, 13, FontStyle.Bold)
+                lblRejected.ForeColor = Color.OrangeRed
+                lblRejected.Dock = DockStyle.Fill
+                lblRejected.TextAlign = ContentAlignment.MiddleCenter
+                panel3.Controls.Add(lblRejected)
             End If
 
             panel.Controls.Add(panel3)
 
-            ' If rejected, gray out the main panel
             If isRejected Then
-                panel.BackColor = Color.LightGray
+                panel.BackColor = Color.FromArgb(214, 211, 202)
                 For Each ctrl As Control In panel.Controls
                     ctrl.Enabled = False
                 Next
@@ -370,56 +390,48 @@ Public Class FormCustomerView
             txtPayment.Location = New Point(664, 146)
             txtPayment.Size = New Size(94, 20)
             txtPayment.Font = detailsFont
-            txtPayment.Visible = isApproved
+            txtPayment.Visible = isApproved AndAlso Not isPaid
 
             Dim btnPay As New Button()
             btnPay.Text = "Pay"
             btnPay.Location = New Point(766, 146)
             btnPay.Size = New Size(87, 20)
-            btnPay.Font = New Font(detailsFont.FontFamily, 8, FontStyle.Regular) ' Reduced font size
+            btnPay.Font = New Font(detailsFont.FontFamily, 8, FontStyle.Regular)
             btnPay.BackColor = Color.FromArgb(220, 240, 220)
             btnPay.FlatStyle = FlatStyle.Flat
-            btnPay.Enabled = isApproved
-            btnPay.Visible = isApproved
+            btnPay.Enabled = isApproved AndAlso Not isPaid
+            btnPay.Visible = isApproved AndAlso Not isPaid
 
-            ' If already paid, show as paid and disable payment
-            Dim isPaid As Boolean = False
-            If Not IsDBNull(dataRow("amount_paid")) AndAlso Not IsDBNull(dataRow("amount_to_pay")) Then
-                Dim paid = Convert.ToDecimal(dataRow("amount_paid"))
-                Dim toPay = Convert.ToDecimal(dataRow("amount_to_pay"))
-                If paid >= toPay AndAlso toPay > 0 Then
-                    isPaid = True
-                End If
-            End If
             AddHandler btnPay.Click,
-    Sub(senderBtn, eBtn)
-        Dim payAmount As Decimal
-        If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
-            MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-        Dim toPay = Convert.ToDecimal(dataRow("amount_to_pay"))
-        Dim paid = If(IsDBNull(dataRow("amount_paid")), 0D, Convert.ToDecimal(dataRow("amount_paid")))
-        If paid + payAmount > toPay Then
-            MessageBox.Show("Payment exceeds required amount.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
+            Sub(senderBtn, eBtn)
+                Dim payAmount As Decimal
+                If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
+                    MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Return
+                End If
+                If payAmount <> toPay Then
+                    MessageBox.Show("You must pay the exact amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Return
+                End If
+                If paid >= toPay Then
+                    MessageBox.Show("Already paid.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Return
+                End If
 
-        ' Update database using DBHelper
-        Dim paymentId = dataRow("payment_id")
-        Dim newPaid = paid + payAmount
-        Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
-        Dim parameters As New Dictionary(Of String, Object) From {
-            {"@amount_paid", newPaid},
-            {"@payment_date", DateTime.Now},
-            {"@payment_status", If(newPaid >= toPay, "Paid", "Partial")},
-            {"@payment_id", paymentId}
-        }
-        DBHelper.ExecuteQuery(updateQuery, parameters)
-        MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        LoadAllBookings()
-        PopulateBookingPanels()
-    End Sub
+                ' Update database using DBHelper
+                Dim paymentId = dataRow("payment_id")
+                Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
+                Dim parameters As New Dictionary(Of String, Object) From {
+                    {"@amount_paid", payAmount},
+                    {"@payment_date", DateTime.Now},
+                    {"@payment_status", "Paid"},
+                    {"@payment_id", paymentId}
+                }
+                DBHelper.ExecuteQuery(updateQuery, parameters)
+                MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                LoadAllBookings()
+                PopulateBookingPanels()
+            End Sub
 
             If isApproved AndAlso Not isPaid Then
                 panel.Controls.Add(txtPayment)
@@ -429,6 +441,31 @@ Public Class FormCustomerView
             FlowLayoutPanel1.Controls.Add(panel)
         Next
     End Sub
+
+    ' Helper: Set a rounded rectangle region for a panel
+    Private Sub SetPanelRoundedRect(p As Panel, cornerRadius As Integer)
+        Dim path As New Drawing2D.GraphicsPath()
+        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
+        path.AddArc(p.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
+        path.AddArc(p.Width - cornerRadius, p.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
+        path.AddArc(0, p.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
+        path.CloseFigure()
+        p.Region = New Region(path)
+    End Sub
+
+    ' Helper: Make PictureBox rounded rectangle (not ellipse)
+    Private Sub MakePictureBoxRoundedRect(sender As Object, e As PaintEventArgs)
+        Dim pb As PictureBox = CType(sender, PictureBox)
+        Dim cornerRadius As Integer = 32 ' Less round than ellipse
+        Dim path As New Drawing2D.GraphicsPath()
+        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
+        path.AddArc(pb.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
+        path.AddArc(pb.Width - cornerRadius, pb.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
+        path.AddArc(0, pb.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
+        path.CloseFigure()
+        pb.Region = New Region(path)
+    End Sub
+
 
     Private Sub lblUsername_Click(sender As Object, e As EventArgs) Handles lblUsername.Click
 
@@ -468,4 +505,6 @@ Public Class FormCustomerView
     Private Sub btnminimize_Click(sender As Object, e As EventArgs) Handles btnminimize.Click
         Me.WindowState = FormWindowState.Minimized
     End Sub
+
+
 End Class
