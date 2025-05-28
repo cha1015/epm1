@@ -383,13 +383,12 @@ Partial Class FormSignUp
         '
         'lblPwStrength
         '
-        Me.lblPwStrength.AutoSize = True
         Me.lblPwStrength.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPwStrength.ForeColor = System.Drawing.Color.Gray
-        Me.lblPwStrength.Location = New System.Drawing.Point(475, 149)
+        Me.lblPwStrength.Location = New System.Drawing.Point(406, 149)
         Me.lblPwStrength.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPwStrength.Name = "lblPwStrength"
-        Me.lblPwStrength.Size = New System.Drawing.Size(69, 23)
+        Me.lblPwStrength.Size = New System.Drawing.Size(342, 23)
         Me.lblPwStrength.TabIndex = 75
         Me.lblPwStrength.Text = "Strength:"
         '

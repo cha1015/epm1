@@ -61,6 +61,7 @@ Public Class FormBooking
         lblCapacityContainer.Text = EventPlaceCapacity.ToString()
         lblPricePerDayContainer.Text = "₱" & BasePricePerDay.ToString("F2")
         lblFeaturesContainer.Text = EventPlaceFeatures
+        lblDescriptionContainer.Text = EventPlaceDescription
         lblDescriptionContainer.AutoSize = False
         lblDescriptionContainer.Size = New Size(Panel1.Width - 20, 0)
         lblDescriptionContainer.MaximumSize = New Size(Panel1.Width - 20, 0)
@@ -401,6 +402,10 @@ Public Class FormBooking
     End Sub
 
     Private Sub tpPaymentDetails_Click(sender As Object, e As EventArgs) Handles tpPaymentDetails.Click
+
+    End Sub
+
+    Private Sub lblAvailableDaysContainer_Click(sender As Object, e As EventArgs) Handles lblAvailableDaysContainer.Click
 
     End Sub
 End Class
