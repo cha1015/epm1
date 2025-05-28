@@ -6,6 +6,7 @@ Imports System.Text.RegularExpressions
 
 Public Class HelperResultsDisplay
 
+    ' General method to populate any flow panel
     Public Shared Sub PopulateFlowPanel(ByVal flp As FlowLayoutPanel, ByVal dt As DataTable, ByVal panelCreator As Func(Of DataRow, Panel))
         flp.WrapContents = True
         flp.AutoScroll = True
@@ -17,7 +18,7 @@ Public Class HelperResultsDisplay
         Next
     End Sub
 
-    '--- Specialized method for Event Places ---
+    ' Method for populating Event Places
     Public Shared Sub PopulateEventPlaces(ByVal flpResults As FlowLayoutPanel, ByVal dt As DataTable,
                                             ByVal btnBookHandler As EventHandler,
                                             ByVal btnUpdateHandler As EventHandler,
@@ -30,6 +31,7 @@ Public Class HelperResultsDisplay
 
         Dim toolTip As New ToolTip()
 
+        ' Create the event place panel
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
                                                          Dim panel As New Panel()
                                                          panel.Size = New Size(panelWidth, panelHeight)
@@ -91,19 +93,6 @@ Public Class HelperResultsDisplay
                                                          toolTip.SetToolTip(lblEventType, fullEventTypesText)
                                                          lblEventType.Font = New Font("Poppins", 8)
 
-                                                         ' Label for booking status
-                                                         'Dim lblStatus As New Label()
-                                                         'lblStatus.AutoSize = False
-                                                         'lblStatus.Size = New Size(panelWidth - 20, 20)
-                                                         'lblStatus.Location = New Point(5, 225)
-                                                         'Dim colName As String = dt.Columns.Cast(Of DataColumn)() _
-                                                         '.FirstOrDefault(Function(c) String.Equals(c.ColumnName, "status", StringComparison.OrdinalIgnoreCase))?.ColumnName
-                                                         'If Not String.IsNullOrEmpty(colName) Then
-                                                         '    lblStatus.Text = If(row(colName).ToString() = "Booked", "Status: Booked", "Status: Available")
-                                                         'Else
-                                                         '    lblStatus.Text = "Status: Unknown"
-                                                         'End If
-
                                                          ' Action Button(s): either Book or Update/Delete buttons
                                                          If Not isAdmin Then
                                                              Dim btnBook As New Button()
@@ -141,7 +130,6 @@ Public Class HelperResultsDisplay
                                                          panel.Controls.Add(lblCapacity)
                                                          panel.Controls.Add(lblPrice)
                                                          panel.Controls.Add(lblEventType)
-                                                         'panel.Controls.Add(lblStatus)
 
                                                          Return panel
                                                      End Function
@@ -149,6 +137,7 @@ Public Class HelperResultsDisplay
         PopulateFlowPanel(flpResults, dt, createPanel)
     End Sub
 
+    ' Method for populating Pending Bookings
     Public Shared Sub PopulatePendingBookings(ByVal flpPendingBookings As FlowLayoutPanel, ByVal dt As DataTable,
                                             ByVal approveHandler As EventHandler, ByVal rejectHandler As EventHandler,
                                             ByVal adminForm As FormAdminCenter)
@@ -202,6 +191,7 @@ Public Class HelperResultsDisplay
                                                          panel.Controls.Add(lblDate)
                                                          panel.Controls.Add(lblTime)
 
+                                                         ' Approve and Reject Buttons
                                                          Dim btnApprove As New Button()
                                                          btnApprove.Text = "Approve"
                                                          btnApprove.Size = New Size(75, 25)
@@ -226,6 +216,7 @@ Public Class HelperResultsDisplay
                                                                                      End Sub
                                                          panel.Controls.Add(btnReject)
 
+                                                         ' Panel background color logic based on the days until event
                                                          Dim eventDate As DateTime
                                                          If DateTime.TryParse(row("event_date").ToString(), eventDate) Then
                                                              Dim daysUntilEvent As Integer = (eventDate - DateTime.Now).Days
@@ -240,21 +231,182 @@ Public Class HelperResultsDisplay
                                                              panel.BackColor = Color.LightGray
                                                          End If
 
-                                                         AddHandler panel.MouseDown, Sub(sender, e)
-                                                                                         If e.Button = MouseButtons.Left Then
-                                                                                             adminForm.ShowBookingDetails(row)
-                                                                                         End If
-                                                                                     End Sub
-
-                                                         AddHandler panel.MouseUp, Sub(sender, e)
-                                                                                       adminForm.HideBookingDetails()
-                                                                                   End Sub
-
                                                          Return panel
                                                      End Function
         PopulateFlowPanel(flpPendingBookings, dt, createPanel)
     End Sub
 
+    ' Method for populating Approved Bookings
+    Public Shared Sub PopulateApprovedBookings(ByVal flpApproved As FlowLayoutPanel, ByVal dt As DataTable)
+        Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow) createApprovedPanel(row, dt)
+        PopulateFlowPanel(flpApproved, dt, createPanel)
+    End Sub
+
+
+    ' Method for populating Rejected Bookings
+    Public Shared Sub PopulateRejectedBookings(ByVal flpRejected As FlowLayoutPanel, ByVal dt As DataTable)
+        Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow) createRejectedPanel(row, dt)
+        PopulateFlowPanel(flpRejected, dt, createPanel)
+    End Sub
+
+    ' Method for populating All Bookings
+    Public Shared Sub PopulateAllBookings(ByVal flpAll As FlowLayoutPanel, ByVal dt As DataTable)
+        Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow) createAllPanel(row, dt)
+        PopulateFlowPanel(flpAll, dt, createPanel)
+    End Sub
+
+    ' Panel creation methods for Approved, Rejected, and All bookings
+    Private Shared Function createApprovedPanel(row As DataRow, dt As DataTable) As Panel
+        ' Create the panel for approved bookings
+        Dim panel As New Panel()
+        panel.Size = New Size(300, 100)  ' Increase height to fit more labels
+        panel.BorderStyle = BorderStyle.FixedSingle
+        panel.Margin = New Padding(10)
+
+        ' Label for customer name
+        Dim lblName As New Label With {
+        .Text = "Customer: " & row("name").ToString(),
+        .Location = New Point(5, 5),
+        .AutoSize = True
+    }
+
+        ' Label for event name
+        Dim lblEvent As New Label With {
+        .Text = "Event: " & row("event_place").ToString(),
+        .Location = New Point(5, 25),
+        .AutoSize = True
+    }
+
+        ' Label for event date
+        Dim lblDate As New Label With {
+        .Text = "Date: " & Convert.ToDateTime(row("event_date")).ToShortDateString(),
+        .Location = New Point(5, 45),
+        .AutoSize = True
+    }
+
+        ' Label for event time and end time
+        Dim eventTime As String = "N/A"
+        Dim eventEndTime As String = "N/A"
+        If dt.Columns.Contains("event_time") AndAlso Not IsDBNull(row("event_time")) Then
+            eventTime = DateTime.Today.Add(DirectCast(row("event_time"), TimeSpan)).ToString("hh:mm tt")
+        End If
+        If dt.Columns.Contains("event_end_time") AndAlso Not IsDBNull(row("event_end_time")) Then
+            eventEndTime = DateTime.Today.Add(DirectCast(row("event_end_time"), TimeSpan)).ToString("hh:mm tt")
+        End If
+        Dim lblTime As New Label With {
+        .Text = "Time: " & eventTime & " - " & eventEndTime,
+        .Location = New Point(5, 65),
+        .AutoSize = True
+    }
+
+        panel.Controls.Add(lblName)
+        panel.Controls.Add(lblEvent)
+        panel.Controls.Add(lblDate)
+        panel.Controls.Add(lblTime)
+
+        Return panel
+    End Function
+    Private Shared Function createRejectedPanel(row As DataRow, dt As DataTable) As Panel
+        ' Create the panel for rejected bookings
+        Dim panel As New Panel()
+        panel.Size = New Size(300, 100)  ' Increase height to fit more labels
+        panel.BorderStyle = BorderStyle.FixedSingle
+        panel.Margin = New Padding(10)
+
+        ' Label for customer name
+        Dim lblName As New Label With {
+        .Text = "Customer: " & row("name").ToString(),
+        .Location = New Point(5, 5),
+        .AutoSize = True
+    }
+
+        ' Label for event name
+        Dim lblEvent As New Label With {
+        .Text = "Event: " & row("event_place").ToString(),
+        .Location = New Point(5, 25),
+        .AutoSize = True
+    }
+
+        ' Label for event date
+        Dim lblDate As New Label With {
+        .Text = "Date: " & Convert.ToDateTime(row("event_date")).ToShortDateString(),
+        .Location = New Point(5, 45),
+        .AutoSize = True
+    }
+
+        ' Label for event time and end time
+        Dim eventTime As String = "N/A"
+        Dim eventEndTime As String = "N/A"
+        If dt.Columns.Contains("event_time") AndAlso Not IsDBNull(row("event_time")) Then
+            eventTime = DateTime.Today.Add(DirectCast(row("event_time"), TimeSpan)).ToString("hh:mm tt")
+        End If
+        If dt.Columns.Contains("event_end_time") AndAlso Not IsDBNull(row("event_end_time")) Then
+            eventEndTime = DateTime.Today.Add(DirectCast(row("event_end_time"), TimeSpan)).ToString("hh:mm tt")
+        End If
+        Dim lblTime As New Label With {
+        .Text = "Time: " & eventTime & " - " & eventEndTime,
+        .Location = New Point(5, 65),
+        .AutoSize = True
+    }
+
+        panel.Controls.Add(lblName)
+        panel.Controls.Add(lblEvent)
+        panel.Controls.Add(lblDate)
+        panel.Controls.Add(lblTime)
+
+        Return panel
+    End Function
+
+    Private Shared Function createAllPanel(row As DataRow, dt As DataTable) As Panel
+        ' Create the panel for all bookings
+        Dim panel As New Panel()
+        panel.Size = New Size(300, 100)  ' Increase height to fit more labels
+        panel.BorderStyle = BorderStyle.FixedSingle
+        panel.Margin = New Padding(10)
+
+        ' Label for customer name
+        Dim lblName As New Label With {
+        .Text = "Customer: " & row("name").ToString(),
+        .Location = New Point(5, 5),
+        .AutoSize = True
+    }
+
+        ' Label for event name
+        Dim lblEvent As New Label With {
+        .Text = "Event: " & row("event_place").ToString(),
+        .Location = New Point(5, 25),
+        .AutoSize = True
+    }
+
+        ' Label for event date
+        Dim lblDate As New Label With {
+        .Text = "Date: " & Convert.ToDateTime(row("event_date")).ToShortDateString(),
+        .Location = New Point(5, 45),
+        .AutoSize = True
+    }
+
+        ' Label for event time and end time
+        Dim eventTime As String = "N/A"
+        Dim eventEndTime As String = "N/A"
+        If dt.Columns.Contains("event_time") AndAlso Not IsDBNull(row("event_time")) Then
+            eventTime = DateTime.Today.Add(DirectCast(row("event_time"), TimeSpan)).ToString("hh:mm tt")
+        End If
+        If dt.Columns.Contains("event_end_time") AndAlso Not IsDBNull(row("event_end_time")) Then
+            eventEndTime = DateTime.Today.Add(DirectCast(row("event_end_time"), TimeSpan)).ToString("hh:mm tt")
+        End If
+        Dim lblTime As New Label With {
+        .Text = "Time: " & eventTime & " - " & eventEndTime,
+        .Location = New Point(5, 65),
+        .AutoSize = True
+    }
+
+        panel.Controls.Add(lblName)
+        panel.Controls.Add(lblEvent)
+        panel.Controls.Add(lblDate)
+        panel.Controls.Add(lblTime)
+
+        Return panel
+    End Function
 
     '--- Specialized method for Event Place Availability ---
     Public Shared Sub PopulateAvailability(ByVal flpAvailability As FlowLayoutPanel, ByVal dt As DataTable)

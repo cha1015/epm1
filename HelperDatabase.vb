@@ -52,15 +52,19 @@ Public Class HelperDatabase
 
                     ' Add each selected service to the service list
                     Dim serviceSelections As Dictionary(Of Integer, Boolean) = New Dictionary(Of Integer, Boolean) From {
-                {1, catering}, {2, clown}, {3, singer}, {4, dancer}, {5, videoke}
-            }
+                    {1, catering},
+                    {2, clown},
+                    {3, singer},
+                    {4, dancer},
+                    {5, videoke}
+                }
 
                     For Each service In serviceSelections
                         If service.Value Then
                             cmd.Parameters.AddWithValue("@serviceId", service.Key)
                             cmd.ExecuteNonQuery()
                             serviceList.Add(service.Key.ToString()) ' Add the service ID to the list
-                            cmd.Parameters.RemoveAt("@serviceId")
+                            cmd.Parameters.RemoveAt("@serviceId") ' Reset parameter for next iteration
                         End If
                     Next
                 End Using
@@ -75,42 +79,11 @@ Public Class HelperDatabase
         Dim services As String = String.Join(", ", serviceList)
         Dim updateQuery As String = "UPDATE bookings SET services_availed = @services WHERE booking_id = @bookingId"
         Dim updateParams As New Dictionary(Of String, Object) From {
-    {"@services", services},
-    {"@bookingId", bookingId}
-}
+        {"@services", services},
+        {"@bookingId", bookingId}
+    }
         DBHelper.ExecuteQuery(updateQuery, updateParams)
-
-
-        Using connection As MySqlConnection = DBHelper.GetConnection()
-            Try
-                connection.Open()
-                Using cmd As New MySqlCommand(insertQuery, connection)
-                    cmd.Parameters.AddWithValue("@bookingId", bookingId)
-
-                    Dim serviceSelections As Dictionary(Of Integer, Boolean) = New Dictionary(Of Integer, Boolean) From {
-                    {1, catering},
-                    {2, clown},
-                    {3, singer},
-                    {4, dancer},
-                    {5, videoke}
-                }
-
-                    For Each service In serviceSelections
-                        If service.Value Then
-                            cmd.Parameters.AddWithValue("@serviceId", service.Key)
-                            cmd.ExecuteNonQuery()
-                            cmd.Parameters.RemoveAt("@serviceId")
-                        End If
-                    Next
-                End Using
-            Catch ex As Exception
-                MessageBox.Show("Error saving booking services: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Finally
-                connection.Close()
-            End Try
-        End Using
     End Sub
-
 
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
@@ -152,7 +125,7 @@ Public Class HelperDatabase
     End Sub
 
     Public Shared Function PlaceBooking(customerId As Integer, placeId As Integer, numGuests As Integer, eventDateStart As Date,
-                                      eventStartTime As String, eventEndTime As String, totalPrice As Decimal) As Integer
+                                      eventStartTime As String, eventEndTime As String, eventEndDate As Date, totalPrice As Decimal) As Integer
         ' ------------------ Check if customer exists ------------------
         Dim checkCustomerQuery As String = "SELECT COUNT(*) FROM Customers WHERE customer_id = @customer_id"
         Dim checkCustomerParams As New Dictionary(Of String, Object) From {
@@ -208,8 +181,8 @@ Public Class HelperDatabase
         Dim formattedEndTime As String = parsedEnd.ToString("HH:mm:ss")
 
         ' ------------------ Insert Booking ------------------
-        Dim insertQuery As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) " &
-                                "VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price)"
+        Dim insertQuery As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, event_end_date, total_price) " &
+                                "VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @event_end_date, @total_price)"
         Dim insertParams As New Dictionary(Of String, Object) From {
         {"@customer_id", customerId},
         {"@place_id", placeId},
@@ -217,6 +190,7 @@ Public Class HelperDatabase
         {"@event_date", eventDateStart},
         {"@event_time", formattedStartTime},
         {"@event_end_time", formattedEndTime},
+        {"@event_end_date", eventEndDate},  ' New field added for multi-day events
         {"@total_price", totalPrice}
     }
 
@@ -231,7 +205,6 @@ Public Class HelperDatabase
         Dim bookingIdObj As Object = DBHelper.ExecuteScalarQuery(bookingIdQuery, New Dictionary(Of String, Object)())
         Return If(bookingIdObj IsNot Nothing, Convert.ToInt32(bookingIdObj), -1)
     End Function
-
 
 
     ' ------------------ Insert Payment Record ------------------
@@ -259,21 +232,46 @@ Public Class HelperDatabase
 
     ' Fetch detailed booking information for the admin view
     Public Shared Function GetBookingDetails(bookingId As Integer) As DataTable
-        Dim query As String = "SELECT b.booking_id, b.customer_id, e.event_place, et.event_type, b.num_guests, b.event_date, 
-                           b.event_time, b.event_end_time, b.total_price, b.status, b.services_availed, p.payment_status, 
-                           GROUP_CONCAT(bs.service_name) AS services_availed
-                           FROM bookings b
-                           JOIN customers c ON b.customer_id = c.customer_id
-                           JOIN eventplace e ON b.place_id = e.place_id
-                           JOIN eventtypes et ON e.event_type_id = et.event_type_id
-                           LEFT JOIN payments p ON b.booking_id = p.booking_id
-                           LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
-                           WHERE b.booking_id = @booking_id
-                           GROUP BY b.booking_id"
+        Dim query As String = "
+        SELECT 
+            b.booking_id, 
+            b.customer_id, 
+            e.event_place, 
+            e.event_type, 
+            b.num_guests, 
+            b.event_date, 
+            b.event_end_date, 
+            b.event_time, 
+            b.event_end_time, 
+            b.total_price, 
+            b.status, 
+            b.services_availed, 
+            p.payment_status, 
+            i.invoice_date,  
+            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed  -- Corrected join
+        FROM bookings b
+        JOIN customers c ON b.customer_id = c.customer_id
+        JOIN eventplace e ON b.place_id = e.place_id
+        LEFT JOIN payments p ON b.booking_id = p.booking_id
+        LEFT JOIN invoices i ON b.booking_id = i.invoice_id  
+        LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
+        LEFT JOIN services s ON bs.service_id = s.service_id  -- Added join with services table
+        WHERE b.booking_id = @booking_id
+        GROUP BY b.booking_id
+        "
 
         Dim parameters As New Dictionary(Of String, Object) From {{"@booking_id", bookingId}}
-        Return DBHelper.GetDataTable(query, parameters)
-    End Function
 
+        ' Get the data
+        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+
+        ' Check if there is any data
+        If dt.Rows.Count = 0 Then
+            ' If no data found, return an empty DataTable or log the error
+            MessageBox.Show("Booking not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+
+        Return dt
+    End Function
 
 End Class

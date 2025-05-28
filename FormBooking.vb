@@ -191,6 +191,17 @@ Public Class FormBooking
         ' Use the logged-in user's customer ID
         Dim customerId As Integer = CurrentUser.CustomerId
 
+        If customerResult.CustomerId <= 0 Then
+            MessageBox.Show($"Customer creation failed! Error: {customerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        ' Link the new customer to the current user
+        HelperDatabase.InsertUserCustomer(CurrentUser.UserID, customerResult.CustomerId)
+
+        ' Call PlaceBooking with the complete time strings and using 'numGuests' as an integer
+        Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerResult.CustomerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, dtpEventDateEnd.Value.Date, finalTotalPrice)
+
         ' Place the booking for the current user
         Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, finalTotalPrice)
 

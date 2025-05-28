@@ -165,6 +165,16 @@ Public Class FormCustomerView
     End Sub
 
 
+        btnPrevPlace = New Button()
+        btnPrevPlace.Text = "◀"
+        btnPrevPlace.Size = New Size(40, 40)
+        btnPrevPlace.Location = New Point(10, 42)
+        btnPrevPlace.BackColor = Color.White
+        btnPrevPlace.FlatStyle = FlatStyle.Flat
+        btnPrevPlace.FlatAppearance.BorderSize = 0
+        btnPrevPlace.Visible = True
+        AddHandler() btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
+        AddHandler() btnPrevPlace.Paint, AddressOf MakeButtonRound
 
     ' At the class level
     Private quicheFont As Font = Nothing
