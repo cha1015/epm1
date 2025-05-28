@@ -159,6 +159,7 @@ Public Class HelperResultsDisplay
                                                          panel.BorderStyle = BorderStyle.FixedSingle
                                                          panel.Margin = New Padding(10)
 
+                                                         ' Create labels for customer name, event place, and event date
                                                          Dim lblName As New Label With {
                                                          .Text = "Customer: " & row("name").ToString(),
                                                          .Location = New Point(5, 5),
@@ -174,9 +175,27 @@ Public Class HelperResultsDisplay
                                                          .Location = New Point(5, 45),
                                                          .AutoSize = True
                                                      }
+
+                                                         ' Correct way of formatting the time from the database
+                                                         Dim eventTime As String = String.Empty
+                                                         Dim eventEndTime As String = String.Empty
+                                                         If Not IsDBNull(row("event_time")) Then
+                                                             eventTime = Convert.ToDateTime(row("event_time")).ToString("hh:mm tt")
+                                                         End If
+                                                         If Not IsDBNull(row("event_end_time")) Then
+                                                             eventEndTime = Convert.ToDateTime(row("event_end_time")).ToString("hh:mm tt")
+                                                         End If
+
+                                                         ' Add formatted times to the labels
+                                                         Dim lblTime As New Label With {
+                                                         .Text = "Time: " & eventTime & " - " & eventEndTime,
+                                                         .Location = New Point(5, 65),
+                                                         .AutoSize = True
+                                                     }
                                                          panel.Controls.Add(lblName)
                                                          panel.Controls.Add(lblEvent)
                                                          panel.Controls.Add(lblDate)
+                                                         panel.Controls.Add(lblTime)  ' Adding time label
 
                                                          ' Approve button
                                                          Dim btnApprove As New Button()
@@ -185,7 +204,11 @@ Public Class HelperResultsDisplay
                                                          btnApprove.Location = New Point(200, 5)
                                                          btnApprove.Tag = row
                                                          btnApprove.FlatStyle = FlatStyle.Flat
-                                                         AddHandler btnApprove.Click, approveHandler
+                                                         AddHandler btnApprove.Click, Sub(sender, e)
+                                                                                          ' Handle approve button click
+                                                                                          approveHandler(sender, e)
+                                                                                          adminForm.ShowBookingDetails(DirectCast(DirectCast(sender, Button).Tag, DataRow))
+                                                                                      End Sub
                                                          panel.Controls.Add(btnApprove)
 
                                                          ' Reject button
@@ -195,7 +218,11 @@ Public Class HelperResultsDisplay
                                                          btnReject.Location = New Point(200, 35)
                                                          btnReject.Tag = row
                                                          btnReject.FlatStyle = FlatStyle.Flat
-                                                         AddHandler btnReject.Click, rejectHandler
+                                                         AddHandler btnReject.Click, Sub(sender, e)
+                                                                                         ' Handle reject button click
+                                                                                         rejectHandler(sender, e)
+                                                                                         adminForm.ShowBookingDetails(DirectCast(DirectCast(sender, Button).Tag, DataRow))
+                                                                                     End Sub
                                                          panel.Controls.Add(btnReject)
 
                                                          ' Set background color based on urgency
@@ -230,8 +257,6 @@ Public Class HelperResultsDisplay
                                                      End Function
         PopulateFlowPanel(flpPendingBookings, dt, createPanel)
     End Sub
-
-
 
 
     '--- Specialized method for Event Place Availability ---

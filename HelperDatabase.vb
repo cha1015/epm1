@@ -41,7 +41,45 @@ Public Class HelperDatabase
         DBHelper.ExecuteQuery(deleteQuery, deleteParams)
 
         ' Insert selected services dynamically
+        Dim serviceList As New List(Of String) ' List to store selected services
         Dim insertQuery As String = "INSERT INTO BookingServices (booking_id, service_id) VALUES (@bookingId, @serviceId)"
+
+        Using connection As MySqlConnection = DBHelper.GetConnection()
+            Try
+                connection.Open()
+                Using cmd As New MySqlCommand(insertQuery, connection)
+                    cmd.Parameters.AddWithValue("@bookingId", bookingId)
+
+                    ' Add each selected service to the service list
+                    Dim serviceSelections As Dictionary(Of Integer, Boolean) = New Dictionary(Of Integer, Boolean) From {
+                {1, catering}, {2, clown}, {3, singer}, {4, dancer}, {5, videoke}
+            }
+
+                    For Each service In serviceSelections
+                        If service.Value Then
+                            cmd.Parameters.AddWithValue("@serviceId", service.Key)
+                            cmd.ExecuteNonQuery()
+                            serviceList.Add(service.Key.ToString()) ' Add the service ID to the list
+                            cmd.Parameters.RemoveAt("@serviceId")
+                        End If
+                    Next
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error saving booking services: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                connection.Close()
+            End Try
+        End Using
+
+        ' Now update the services_availed column in the bookings table with a concatenated list of selected services
+        Dim services As String = String.Join(", ", serviceList)
+        Dim updateQuery As String = "UPDATE bookings SET services_availed = @services WHERE booking_id = @bookingId"
+        Dim updateParams As New Dictionary(Of String, Object) From {
+    {"@services", services},
+    {"@bookingId", bookingId}
+}
+        DBHelper.ExecuteQuery(updateQuery, updateParams)
+
 
         Using connection As MySqlConnection = DBHelper.GetConnection()
             Try
