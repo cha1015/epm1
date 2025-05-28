@@ -104,3 +104,14 @@ C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.vbproj.AssemblyReferenc
 C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.exe
 C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.xml
 C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.pdb
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormAdminCenter.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormBooking.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormCustomerAdminInfo.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormCustomerView.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormLogIn.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormMain.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormSignUp.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.FormWelcome.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.Resources.resources
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.vbproj.GenerateResource.cache
+C:\Users\krizi\Source\Repos\whenmatatapos\obj\Debug\epm1.vbproj.CoreCompileInputs.cache

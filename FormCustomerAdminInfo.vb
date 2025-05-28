@@ -1,403 +1,273 @@
-﻿'Public Class FormCustomerAdminInfo
-'    Private Sub FormCustomerAdminInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-'        HelperNavigation.RegisterNewForm(Me)
-'    End Sub
-
-'    Private Sub btnBack_Click(sender As Object, e As EventArgs)
-'        HelperNavigation.GoBack(Me)
-'    End Sub
-
-'    Private Sub btnNext_Click(sender As Object, e As EventArgs)
-'        HelperNavigation.GoNext(Me)
-'    End Sub
-
-
-'End Class
-
-
-Imports System
+﻿Imports MySql.Data.MySqlClient
+Imports System.Security.Cryptography
 Imports System.Text
-Imports System.Globalization
-Imports System.IO
-Imports MySql.Data.MySqlClient
+Imports System.Text.RegularExpressions
 
-Public Class FormBooking
-    '' ------------------ Properties ------------------
-    'Public Property PlaceId As Integer
-    'Public Property EventPlaceName As String
-    'Public Property EventPlaceCapacity As Integer
-    'Public Property BasePricePerDay As Decimal
-    'Public Property EventPlaceFeatures As String
-    'Public Property EventVenueType As String
-    'Public Property OpeningHours As String
-    'Public Property ClosingHours As String
-    'Public Property AvailableDays As String
-    'Public Property EventPlaceDescription As String
-    'Public Property EventTime As String
-    'Public Property EventPlaceImageUrl As String
+Public Class FormCustomerAdminInfo
+    Private userId As Integer
 
-    'Private _customerId As Integer
-    'Public Property FirstName As String
-    'Public Property LastName As String
-    'Dim bookedDates As New List(Of Date)
-    ' ------------------ Constructor ------------------
-    Public Sub New(customerId As Integer, placeId As Integer)
+    Public Sub New(userId As Integer)
         InitializeComponent()
-        _customerId = customerId
-        Me.PlaceId = placeId
+        Me.userId = userId
     End Sub
 
+    Private Sub FormCustomerAdminInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Load user data from database
+        Dim query As String = "SELECT first_name, last_name, username, email, password, birthday, sex, address FROM Users WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", userId}}
 
-    Private Sub FormBooking_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        lblDateWarning.Visible = False
+        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
-        lblEventPlace.Text = EventPlaceName
-        lblPlaceIDContainer.Text = PlaceId.ToString()
-        lblCapacityContainer.Text = EventPlaceCapacity.ToString()
-        lblPricePerDayContainer.Text = "₱" & BasePricePerDay.ToString("F2")
-        lblFeaturesContainer.Text = EventPlaceFeatures
-        lblDescriptionContainer.Text = EventPlaceDescription
+        If dt.Rows.Count > 0 Then
+            txtFirstName.Text = dt.Rows(0)("first_name").ToString()
+            txtLastName.Text = dt.Rows(0)("last_name").ToString()
+            txtUsername.Text = dt.Rows(0)("username").ToString()
+            txtEmail.Text = dt.Rows(0)("email").ToString()
+            txtPass.Text = "" ' Don't pre-fill password
+            dtpBirthday.Value = Convert.ToDateTime(dt.Rows(0)("birthday"))
+            cmbSex.SelectedItem = dt.Rows(0)("sex").ToString()
+            txtAddress.Text = dt.Rows(0)("address").ToString()
 
-        lblHoursContainer.Text = If(String.IsNullOrWhiteSpace(OpeningHours) OrElse String.IsNullOrWhiteSpace(ClosingHours),
-            "N/A",
-            $"{ConvertTo12HourFormat(OpeningHours)} - {ConvertTo12HourFormat(ClosingHours)}")
-
-        lblAvailableDaysContainer.Text = $"Available: {HelperEvent.FormatAvailableDays(AvailableDays)}"
-
-        dtpEventDateStart.Value = Date.Today
-        dtpEventDateStart.MinDate = Date.Today
-        dtpEventDateEnd.MinDate = Date.Today
-        cbSameDayEvent.Checked = True
-        dtpEventDateEnd.Value = dtpEventDateStart.Value
-        dtpEventDateEnd.Enabled = False
-        lblEventDatePaymentContainer.Text = dtpEventDateStart.Value.ToShortDateString()
-
-        HelperDatabase.PopulateEventTypeCombo(EventPlaceName, cbEventType)
-        bookedDates = HelperDatabase.LoadBookedDates(PlaceId)
-
-        Dim lastBooking As DataTable = HelperDatabase.GetLastBooking(CurrentUser.UserID)
-        If lastBooking.Rows.Count > 0 Then
-            cbEventType.Text = lastBooking.Rows(0)("event_type").ToString()
-            txtNumGuests.Text = lastBooking.Rows(0)("num_guests").ToString()
-
-            Dim eventTime As TimeSpan = Convert.ToDateTime(lastBooking.Rows(0)("event_time")).TimeOfDay
-            Dim eventEndTime As TimeSpan = If(lastBooking.Rows(0)("event_end_time") Is DBNull.Value, TimeSpan.Zero, Convert.ToDateTime(lastBooking.Rows(0)("event_end_time")).TimeOfDay)
-
-            ' Format using two-digit hour, so it matches the combobox items (e.g., "08")
-            cbStartHour.Text = eventTime.Hours.ToString("00")
-            cbStartMinutes.Text = eventTime.Minutes.ToString("00")
-            cbStartAMPM.Text = If(eventTime.Hours < 12, "AM", "PM")
-
-            If eventEndTime <> TimeSpan.Zero Then
-                cbEndHour.Text = eventEndTime.Hours.ToString("00")
-                cbEndMinutes.Text = eventEndTime.Minutes.ToString("00")
-                cbEndAMPM.Text = If(eventEndTime.Hours < 12, "AM", "PM")
-            Else
-                cbEndHour.Text = "12"
-                cbEndMinutes.Text = "00"
-                cbEndAMPM.Text = "PM"
-            End If
-
-            chkCatering.Checked = Convert.ToBoolean(lastBooking.Rows(0)("catering"))
-            chkClown.Checked = Convert.ToBoolean(lastBooking.Rows(0)("clown"))
-            chkSinger.Checked = Convert.ToBoolean(lastBooking.Rows(0)("singer"))
-            chkDancer.Checked = Convert.ToBoolean(lastBooking.Rows(0)("dancer"))
-            chkVideoke.Checked = Convert.ToBoolean(lastBooking.Rows(0)("videoke"))
+            ' Calculate and display age based on birthday
+            lblAgeContainer.Text = CalculateAge(dtpBirthday.Value).ToString()
         End If
 
-        HelperUI.LoadEventPlaceImage(EventPlaceImageUrl, pb)
-        Dim customerData As DataTable = HelperDatabase.GetCustomerData(CurrentUser.UserID)
+        lblUsernameError.Visible = False
+        lblEmailError.Visible = False
 
-        If customerData.Rows.Count > 0 Then
-            txtCustomerName.Text = customerData.Rows(0)("name").ToString()
-            dtpBirthday.Value = Convert.ToDateTime(customerData.Rows(0)("birthday"))
-            cmbSex.Text = customerData.Rows(0)("sex").ToString()
-            txtAddress.Text = customerData.Rows(0)("address").ToString()
-        Else
-            MessageBox.Show("Customer information not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End If
-
-        AddHandler dtpEventDateStart.ValueChanged, Sub(s, evt)
-                                                       HelperValidation.PreventBookedDate(dtpEventDateStart, bookedDates, lblDateWarning)
-                                                   End Sub
-
-        ' Modified parsing for OpeningHours to support both single and double digit hour formats.
-        If Not String.IsNullOrWhiteSpace(OpeningHours) Then
-            Dim parsedOpening As DateTime
-            Dim formats() As String = {"HH:mm:ss", "H:mm:ss"}
-            If DateTime.TryParseExact(OpeningHours, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedOpening) Then
-                cbStartHour.Text = parsedOpening.ToString("hh")   ' Use two digits (e.g., "08")
-                cbStartMinutes.Text = parsedOpening.ToString("mm")
-                cbStartAMPM.Text = parsedOpening.ToString("tt")
-            End If
-        End If
-
-        ' Modified parsing for ClosingHours similar to OpeningHours.
-        If Not String.IsNullOrWhiteSpace(ClosingHours) Then
-            Dim parsedClosing As DateTime
-            Dim formats() As String = {"HH:mm:ss", "H:mm:ss"}
-            If DateTime.TryParseExact(ClosingHours, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedClosing) Then
-                cbEndHour.Text = parsedClosing.ToString("hh")
-                cbEndMinutes.Text = parsedClosing.ToString("mm")
-                cbEndAMPM.Text = parsedClosing.ToString("tt")
-            End If
-        End If
-
-        If String.IsNullOrWhiteSpace(txtNumGuests.Text) Then
-            txtNumGuests.Text = "1"
-        End If
-
-        HelperPrice.UpdateTotalPrice(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
-                  chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                  cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                  dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity, BasePricePerDay,
-                  lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
+        ' Initially hide the password change panel
+        pnlPass.Visible = False
     End Sub
 
-
-    Private Function ConvertTo12HourFormat(time As String) As String
-        Dim parsedTime As DateTime
-        If DateTime.TryParseExact(time, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedTime) Then
-            Return parsedTime.ToString("h:mm tt")
-        End If
-        Return String.Empty
-    End Function
-
-
-    Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs) Handles dtpBirthday.ValueChanged
-        Dim birthDate As Date = dtpBirthday.Value
+    ' This function calculates age based on birthday
+    Private Function CalculateAge(birthDate As Date) As Integer
         Dim today As Date = Date.Today
         Dim age As Integer = today.Year - birthDate.Year
         If birthDate > today.AddYears(-age) Then age -= 1
-        txtAge.Text = age.ToString()
-    End Sub
-    Private Sub btnBookingProceed_Click(sender As Object, e As EventArgs)
-        HelperValidation.ValidateBooking(Nothing, tcDetails, tpCustomerDetails, tpPaymentDetails, cbEventType, txtNumGuests,
-                                     dtpEventDateStart, dtpEventDateEnd, cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
-                                     chkOutsideAvailableHours, txtCustomerName, dtpBirthday, cmbSex, txtAddress, OpeningHours, ClosingHours, PlaceId)
-    End Sub
+        Return age
+    End Function
 
-
-    Private Sub btnCustomerProceed_Click(sender As Object, e As EventArgs) Handles btnCustomerProceed.Click
-        If Not HelperValidation.IsValidCustomerInfo(txtCustomerName, dtpBirthday, cmbSex, txtAddress) Then Exit Sub
-        PopulatePaymentDetails()
-        tcDetails.SelectedTab = tpPaymentDetails
-        ' Validate age here using the helper method:
-        If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then Exit Sub
+    ' This function validates if the entered username/email already exists
+    Private Sub CheckUsernameAvailability(sender As Object, e As EventArgs)
+        Dim query As String = "SELECT COUNT(*) FROM Users WHERE username = @uname AND user_id != @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {
+            {"@uname", txtUsername.Text},
+            {"@user_id", userId}
+        }
+        Dim userExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+        lblUsernameError.Visible = userExists > 0
+        lblUsernameError.Text = If(userExists > 0, "Username already exists! Try a different one.", "")
     End Sub
 
-    Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs) Handles btnPlaceBooking.Click
-        ' Check for duplicate booking
-        If bookedDates.Contains(dtpEventDateStart.Value.Date) Then
-            MessageBox.Show("This date is already booked. Please select another.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
-
-        ' Parse the number of guests from text
-        Dim numGuests As Integer
-        If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then
-            numGuests = 0
-        End If
-
-        ' Create complete time strings by combining hour, minute, and AM/PM values.
-        Dim eventStartStr As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
-        Dim eventEndStr As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
-
-        ' Calculate final total price
-        Dim finalTotalPrice As Decimal = HelperPrice.ComputeFinalPrice(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                           dtpEventDateStart, dtpEventDateEnd,
-                                           chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                                           cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                           chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
-
-        ' Create new customer
-        Dim customerResult As CustomerResult = HelperDatabase.CreateNewCustomer(txtCustomerName.Text, dtpBirthday.Value, cmbSex.Text, txtAddress.Text, numGuests)
-
-        If customerResult.CustomerId <= 0 Then
-            MessageBox.Show($"Customer creation failed! Error: {customerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
-
-        ' Link the new customer to the current user
-        HelperDatabase.InsertUserCustomer(CurrentUser.UserID, customerResult.CustomerId)
-
-        ' Call PlaceBooking with the correct types (Date for eventDateStart and eventEndDate, Decimal for totalPrice)
-        Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerResult.CustomerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, dtpEventDateEnd.Value.Date, finalTotalPrice)
-
-        If bookingId > 0 Then
-            HelperDatabase.SaveBookingServices(bookingId, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
-            HelperDatabase.InsertPaymentRecord(bookingId, customerResult.CustomerId, finalTotalPrice)
-
-            Dim result = MessageBox.Show("Booking and payment recorded successfully! Do you want to review your customer details?",
-                                     "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
-            If result = DialogResult.Yes Then
-                Dim customerViewForm As New FormCustomerView(CurrentUser.CustomerId)
-                customerViewForm.Show()
-            End If
-        Else
-            MessageBox.Show("Booking failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End If
+    Private Sub CheckEmailAvailability(sender As Object, e As EventArgs)
+        Dim query As String = "SELECT COUNT(*) FROM Users WHERE email = @email AND user_id != @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {
+            {"@email", txtEmail.Text},
+            {"@user_id", userId}
+        }
+        Dim emailExists As Integer = Convert.ToInt32(DBHelper.ExecuteScalarQuery(query, parameters))
+        lblEmailError.Visible = emailExists > 0
+        lblEmailError.Text = If(emailExists > 0, "Email already registered. Try a different one.", "")
     End Sub
 
+    ' Show password change panel after verifying current password
+    Private Sub btnChangePassClick(sender As Object, e As EventArgs) Handles btnChangePass.Click
+        Dim currentPassword As String = InputBox("Please enter your current password:", "Current Password")
 
-    Private Sub PopulatePaymentDetails()
-        lblCustomerContainer.Text = txtCustomerName.Text
-        lblEventPlacePaymentContainer.Text = lblEventPlace.Text
-        lblEventTypePaymentContainer.Text = cbEventType.Text
-        lblNumGuestsPaymentContainer.Text = txtNumGuests.Text
-        lblEventDatePaymentContainer.Text = If(cbSameDayEvent.Checked, dtpEventDateStart.Value.ToShortDateString(),
-                                       $"{dtpEventDateStart.Value.ToShortDateString()} - {dtpEventDateEnd.Value.ToShortDateString()}")
-        lblEventTimePaymentContainer.Text = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text} - {cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
+        ' Verify current password
+        Dim query As String = "SELECT password FROM Users WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", userId}}
+        Dim currentPasswordFromDb As String = Convert.ToString(DBHelper.ExecuteScalarQuery(query, parameters))
 
-        Dim numGuests As Integer
-        If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then numGuests = 0
-
-        Dim finalTotalPrice As Decimal = HelperPrice.ComputeFinalPrice(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                                               dtpEventDateStart, dtpEventDateEnd,
-                                                               chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                                                               cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                                               chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
-
-        txtTotalPrice.Text = "₱" & finalTotalPrice.ToString("F2")
-        lblTotalPricePaymentContainer.Text = txtTotalPrice.Text
-
-        lblPriceBreakdown.Text = HelperPrice.GeneratePriceBreakdown(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                                                dtpEventDateStart, dtpEventDateEnd, chkOutsideAvailableHours,
-                                                                cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
-                                                                OpeningHours, ClosingHours, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke, finalTotalPrice)
-    End Sub
-
-    Private Sub tcDetails_Selecting(sender As Object, e As TabControlCancelEventArgs) Handles tcDetails.Selecting
-        HelperValidation.ValidateBooking(e, tcDetails, tpCustomerDetails, tpPaymentDetails,
-                                     cbEventType, txtNumGuests, dtpEventDateStart, dtpEventDateEnd,
-                                     cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
-                                     chkOutsideAvailableHours, txtCustomerName, dtpBirthday, cmbSex,
-                                     txtAddress, OpeningHours, ClosingHours, PlaceId)
-    End Sub
-
-
-
-    Private Sub cbEndHour_SelectedIndexChanged(sender As Object, e As EventArgs)
-        HelperEvent.HandleEndHourChange(cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, dtpEventDateStart, dtpEventDateEnd, cbSameDayEvent)
-    End Sub
-
-    Private Sub dtpEventDateStart_ValueChanged(sender As Object, e As EventArgs)
-        HelperEvent.HandleEventStartDateChange(dtpEventDateStart, dtpEventDateEnd, cbSameDayEvent)
-        If cbSameDayEvent.Checked Then
-            dtpEventDateEnd.Value = dtpEventDateStart.Value
-        End If
-    End Sub
-
-    Private Sub UpdateTotalPrice() Handles cbEndHour.SelectedIndexChanged, cbEndMinutes.SelectedIndexChanged, cbEndAMPM.SelectedIndexChanged,
-                                    cbStartHour.SelectedIndexChanged, cbStartMinutes.SelectedIndexChanged, cbStartAMPM.SelectedIndexChanged,
-                                    txtNumGuests.TextChanged, chkCatering.CheckedChanged, chkClown.CheckedChanged,
-                                    chkSinger.CheckedChanged, chkDancer.CheckedChanged, chkVideoke.CheckedChanged,
-                                    chkOutsideAvailableHours.CheckedChanged
-
-        HelperPrice.UpdateTotalPrice(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke, chkOutsideAvailableHours, cbStartHour,
-                                   cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                   dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity, BasePricePerDay,
-                                   lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
-    End Sub
-
-
-    Private Sub UpdateTotalPrice(sender As Object, e As EventArgs) Handles txtNumGuests.TextChanged, chkVideoke.CheckedChanged, chkSinger.CheckedChanged, chkOutsideAvailableHours.CheckedChanged, chkDancer.CheckedChanged, chkClown.CheckedChanged, chkCatering.CheckedChanged, cbStartMinutes.SelectedIndexChanged, cbStartHour.SelectedIndexChanged, cbStartAMPM.SelectedIndexChanged, cbEndMinutes.SelectedIndexChanged, cbEndHour.SelectedIndexChanged, cbEndAMPM.SelectedIndexChanged
-
-    End Sub
-
-    Private Sub cbSameDayEvent_CheckedChanged(sender As Object, e As EventArgs) Handles cbSameDayEvent.CheckedChanged
-        If cbSameDayEvent.Checked Then
-            dtpEventDateEnd.Value = dtpEventDateStart.Value
-            dtpEventDateEnd.Enabled = False
-            lblEventDatePaymentContainer.Text = dtpEventDateStart.Value.ToShortDateString()
-        Else
-            dtpEventDateEnd.Enabled = True
-            lblEventDatePaymentContainer.Text = $"{dtpEventDateStart.Value.ToShortDateString()} - {dtpEventDateEnd.Value.ToShortDateString()}"
-        End If
-        UpdateEventEndDate()
-    End Sub
-
-    Private Sub UpdateEventEndDate()
-        ' If the same-day checkbox is checked, simply assign the start date.
-        If cbSameDayEvent.Checked Then
-            dtpEventDateEnd.Value = dtpEventDateStart.Value
+        If currentPassword <> currentPasswordFromDb Then
+            MessageBox.Show("Current password is incorrect.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
 
-        ' Otherwise, update dtpEventDateEnd based on event time inputs.
-        Dim startHour As Integer, startMinutes As Integer, endHour As Integer, endMinutes As Integer
-        If Not Integer.TryParse(cbStartHour.Text, startHour) OrElse Not Integer.TryParse(cbStartMinutes.Text, startMinutes) Then Exit Sub
-        If Not Integer.TryParse(cbEndHour.Text, endHour) OrElse Not Integer.TryParse(cbEndMinutes.Text, endMinutes) Then Exit Sub
+        ' Show the password change panel
+        pnlPass.Visible = True
+    End Sub
 
-        Dim startAMPM As String = cbStartAMPM.Text
-        Dim endAMPM As String = cbEndAMPM.Text
+    ' Show password field as plain text or asterisks
+    Private Sub btnShowPass_Click(sender As Object, e As EventArgs) Handles btnShowPass.Click
+        txtPass.PasswordChar = If(txtPass.PasswordChar = "*"c, ControlChars.NullChar, "*"c)
+    End Sub
 
-        If startAMPM = "PM" AndAlso startHour < 12 Then startHour += 12
-        If startAMPM = "AM" AndAlso startHour = 12 Then startHour = 0
+    Private Sub btnShowConfPass_Click(sender As Object, e As EventArgs) Handles btnShowConfPass.Click
+        txtConfPass.PasswordChar = If(txtConfPass.PasswordChar = "*"c, ControlChars.NullChar, "*"c)
+    End Sub
 
-        If endAMPM = "PM" AndAlso endHour < 12 Then endHour += 12
-        If endAMPM = "AM" AndAlso endHour = 12 Then endHour = 0
+    ' Validate input fields before saving the edited data
+    Private Sub btnConfirmEdit_Click(sender As Object, e As EventArgs) Handles btnConfirmEdit.Click
+        ' Validate the fields before saving
+        If Not ValidateFormFields() Then
+            MessageBox.Show("All fields are required and must be valid.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
 
-        Dim eventStartTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, startHour, startMinutes, 0)
-        Dim eventEndTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, endHour, endMinutes, 0)
+        ' Check if username or email already exists
+        If lblUsernameError.Visible OrElse lblEmailError.Visible Then
+            MessageBox.Show("Please resolve the indicated errors before proceeding.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
 
-        ' If the provided event end time is not after the start time, assume the event spans midnight.
-        If eventEndTime <= eventStartTime Then
-            dtpEventDateEnd.Value = dtpEventDateStart.Value.AddDays(1)
+        ' If password is changed, only then update password
+        Dim password As String = If(String.IsNullOrWhiteSpace(txtPass.Text), txtPass.Text, txtPass.Text) ' Keep current password if not changed
+
+        ' Update the user data
+        Dim query As String = "UPDATE Users SET first_name = @first_name, last_name = @last_name, username = @username, email = @email, password = @password, birthday = @birthday, sex = @sex, address = @address WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {
+            {"@first_name", txtFirstName.Text},
+            {"@last_name", txtLastName.Text},
+            {"@username", txtUsername.Text}, ' Update username here
+            {"@email", txtEmail.Text},
+            {"@password", password}, ' Use the new password if provided, otherwise keep the old password
+            {"@birthday", dtpBirthday.Value},
+            {"@sex", cmbSex.SelectedItem.ToString()},
+            {"@address", txtAddress.Text},
+            {"@user_id", userId}
+        }
+
+        Try
+            DBHelper.ExecuteQuery(query, parameters)
+            MessageBox.Show("Your details have been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            MessageBox.Show("An error occurred while updating your details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' Confirm password change (only if the new password is not the same as the old one)
+    Private Sub btnConfirmPasswordChange_Click(sender As Object, e As EventArgs) Handles btnConfirmPasswordChange.Click
+        If txtPass.Text = txtConfPass.Text Then
+            ' Check if the new password is the same as the current password
+            Dim query As String = "SELECT password FROM Users WHERE user_id = @user_id"
+            Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", userId}}
+            Dim currentPasswordFromDb As String = Convert.ToString(DBHelper.ExecuteScalarQuery(query, parameters))
+
+            If txtPass.Text = currentPasswordFromDb Then
+                If MessageBox.Show("You are attempting to use your old password. Do you want to continue?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    ' Proceed with the password change
+                    UpdatePassword()
+                End If
+            Else
+                ' Proceed with the password change
+                UpdatePassword()
+            End If
         Else
-            dtpEventDateEnd.Value = dtpEventDateStart.Value
+            MessageBox.Show("Passwords do not match. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 
+    ' Update password in the database
+    Private Sub UpdatePassword()
+        ' Update the password in the database
+        Dim query As String = "UPDATE Users SET password = @password WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {
+            {"@password", txtPass.Text},
+            {"@user_id", userId}
+        }
 
-    Private Sub btBookingProceed_Click(sender As Object, e As EventArgs) Handles btBookingProceed.Click
-        If Not HelperValidation.ValidateBookingInputs(cbEventType, dtpEventDateStart, dtpEventDateEnd,
-                                                    cbStartHour, cbStartMinutes, cbStartAMPM,
-                                                    cbEndHour, cbEndMinutes, cbEndAMPM,
-                                                    chkOutsideAvailableHours, OpeningHours, ClosingHours, PlaceId) Then
+        Try
+            DBHelper.ExecuteQuery(query, parameters)
+            MessageBox.Show("Password updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            pnlPass.Visible = False
+        Catch ex As Exception
+            MessageBox.Show("An error occurred while updating your password.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' Validate all required fields before saving the changes
+    Private Function ValidateFormFields() As Boolean
+        Dim isValid As Boolean = True
+
+        ' Check if any required fields are empty
+        If String.IsNullOrWhiteSpace(txtFirstName.Text) OrElse String.IsNullOrWhiteSpace(txtLastName.Text) OrElse String.IsNullOrWhiteSpace(txtAddress.Text) Then
+            isValid = False
+        End If
+
+        If String.IsNullOrWhiteSpace(txtUsername.Text) OrElse String.IsNullOrWhiteSpace(txtEmail.Text) Then
+            isValid = False
+        End If
+
+        If cmbSex.SelectedItem Is Nothing Then
+            isValid = False
+        End If
+
+        ' Validate that the user is at least 18 years old based on their birthday
+        Dim age As Integer = DateTime.Now.Year - dtpBirthday.Value.Year
+        If dtpBirthday.Value > DateTime.Now.AddYears(-age) Then age -= 1
+        If age < 18 Then
+            isValid = False
+        End If
+
+        Return isValid
+    End Function
+
+    ' Handle 'Enter' key for form field navigation
+    Private Sub MoveToNextField(sender As Object, e As KeyEventArgs) Handles txtFirstName.KeyDown, txtLastName.KeyDown, dtpBirthday.KeyDown, cmbSex.KeyDown, txtAddress.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True
+            SelectNextControl(DirectCast(sender, Control), True, True, True, True)
+        End If
+    End Sub
+
+    ' Handle 'Enter' key for account details navigation
+    Private Sub MoveToNextFieldAccount(sender As Object, e As KeyEventArgs) Handles txtUsername.KeyDown, txtEmail.KeyDown, btnChangePass.KeyDown, txtPass.KeyDown, txtConfPass.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True
+            SelectNextControl(DirectCast(sender, Control), True, True, True, True)
+        End If
+    End Sub
+
+    Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
+        ' Validate the fields before proceeding
+        If Not ValidateFormFields() Then
+            MessageBox.Show("Please complete all required personal information and ensure you meet the age requirement of 18 years old.",
+                            "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
-        Dim eventStartTime As DateTime, eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime
-        Dim timeFormat As String = "h:mm tt"
-        DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime)
-        DateTime.TryParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime)
-        DateTime.TryParse(OpeningHours, openingTime)
-        DateTime.TryParse(ClosingHours, closingTime)
-
-        Dim finalTotalPrice As Decimal = Convert.ToDecimal(lblTotalPricePaymentContainer.Tag)
-
-        Dim confirmProceed As DialogResult = MessageBox.Show($"Total Price Updated: ₱{finalTotalPrice:F2}. Do you want to proceed to customer details?", "Price Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
-
-        If confirmProceed = DialogResult.Yes Then
-            tcDetails.SelectedTab = tpCustomerDetails
+        ' Check for username/email duplicates
+        If lblUsernameError.Visible OrElse lblEmailError.Visible Then
+            MessageBox.Show("Please resolve the indicated errors before proceeding.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
         End If
 
-        If chkOutsideAvailableHours.Checked Then
-            Dim perMinuteRate As Decimal = 17D
-            Dim additionalCharges As Decimal = 0D
-
-            If eventStartTime < openingTime Then
-                Dim earlyMinutes As Integer = Math.Max(0, CInt((openingTime - eventStartTime).TotalMinutes))
-                additionalCharges += earlyMinutes * perMinuteRate
-            End If
-
-            If eventEndTime > closingTime Then
-                Dim overtimeMinutes As Integer = Math.Max(0, CInt((eventEndTime - closingTime).TotalMinutes))
-                additionalCharges += overtimeMinutes * perMinuteRate
-            End If
-
-            finalTotalPrice += additionalCharges
+        ' Ask user for confirmation to proceed with the changes
+        Dim confirmResult As DialogResult = MessageBox.Show("Are you sure you want to change your details?", "Confirm Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If confirmResult = DialogResult.Yes Then
+            ' Proceed to the next tab (tpAccountDetails)
+            tcSignUp.SelectedTab = tpAccountDetails
+        Else
+            ' If the user cancels, revert changes and load initial details
+            LoadUserDetails() ' Call the method to load the initial data from the database
+            MessageBox.Show("Changes have been reverted.", "Changes Reverted", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        HelperNavigation.GoBack(Me)
+    ' Method to load initial user details in case of canceling the changes
+    Private Sub LoadUserDetails()
+        ' Load user data from database again
+        Dim query As String = "SELECT first_name, last_name, username, email, password, birthday, sex, address FROM Users WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", userId}}
+
+        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+
+        If dt.Rows.Count > 0 Then
+            txtFirstName.Text = dt.Rows(0)("first_name").ToString()
+            txtLastName.Text = dt.Rows(0)("last_name").ToString()
+            txtUsername.Text = dt.Rows(0)("username").ToString()
+            txtEmail.Text = dt.Rows(0)("email").ToString()
+            txtPass.Text = "" ' Don't pre-fill password
+            dtpBirthday.Value = Convert.ToDateTime(dt.Rows(0)("birthday"))
+            cmbSex.SelectedItem = dt.Rows(0)("sex").ToString()
+            txtAddress.Text = dt.Rows(0)("address").ToString()
+
+            ' Calculate and display age based on birthday
+            lblAgeContainer.Text = CalculateAge(dtpBirthday.Value).ToString()
+        End If
+
+        ' Revert the password change panel visibility
+        pnlPass.Visible = False
     End Sub
-
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        HelperNavigation.GoNext(Me)
-    End Sub
-
-
 End Class

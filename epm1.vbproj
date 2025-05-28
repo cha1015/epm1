@@ -162,9 +162,7 @@
     <Compile Include="FormCustomerAdminInfo.Designer.vb">
       <DependentUpon>FormCustomerAdminInfo.vb</DependentUpon>
     </Compile>
-    <Compile Include="FormCustomerAdminInfo.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="FormCustomerAdminInfo.vb" />
     <Compile Include="FormLogIn.Designer.vb">
       <DependentUpon>FormLogIn.vb</DependentUpon>
     </Compile>
