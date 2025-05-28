@@ -3,7 +3,9 @@ Imports System.Security.Cryptography
 Imports System.Text
 
 Public Class FormLogIn
+
     Private Sub FormLogIn_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         HideErrorLabels()
         ResetFieldIndicators()
 
@@ -40,14 +42,29 @@ Public Class FormLogIn
         If String.IsNullOrWhiteSpace(txtPass.Text) Then MarkFieldAsMissing(lblPassword) : missingFields = True
 
         If missingFields Then Return
+        txtEmail.Text = txtEmail.Text.Trim()
+        txtPass.Text = txtPass.Text.Trim()
 
-        ValidateUserLogin()
+        Try
+            ValidateUserLogin()
+        Catch ex As Exception
+            lblGeneralError.Text = "An error occurred during login."
+            lblGeneralError.Visible = True
+        End Try
     End Sub
 
     Private Sub ValidateUserLogin()
         Dim query As String = "SELECT user_id, username, email, password, role FROM Users WHERE BINARY email = @email"
         Dim parameters As New Dictionary(Of String, Object) From {{"@email", txtEmail.Text}}
-        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+        Dim dt As DataTable
+
+        Try
+            dt = DBHelper.GetDataTable(query, parameters)
+        Catch ex As Exception
+            lblGeneralError.Text = "Database error. Please try again."
+            lblGeneralError.Visible = True
+            Exit Sub
+        End Try
 
         If dt.Rows.Count > 0 Then
             Dim storedPassword As String = dt.Rows(0)("password").ToString()
@@ -83,11 +100,13 @@ Public Class FormLogIn
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
+                        FormAdminCenter.Show()
                     Case "User"
                         CurrentUser.CustomerId = CurrentUser.UserID
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
-                        Me.Hide()
+                        Me.Close()
+                        FormMain.Show()
                     Case Else
                         lblGeneralError.Text = "Invalid role detected! Contact support."
                         lblGeneralError.Visible = True

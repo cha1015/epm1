@@ -12,14 +12,17 @@ Public Class FormAdminCenter
         lblUsername.Text = CurrentUser.Username
 
         ' Load all datasets into FlowLayoutPanels and Chart:
-        LoadSearchResults()         ' Event Places (with update/delete)
-        LoadPendingBookings()         ' Pending Bookings (with Approve/Reject)
-        LoadAvailability()            ' Availability of Event Places
-        LoadRevenueReports()          ' Revenue per Event Place
-        LoadInvoices()                ' Invoices with Accept Payment
-        LoadCustomerCount()           ' Customer Count
-        LoadCustomerRecords()         ' Customer Records
-        LoadBookingStatusChart()      ' Booking Status Chart
+        LoadSearchResults()          ' Event Places (with update/delete)
+        LoadPendingBookings()        ' Pending Bookings (with Approve/Reject)
+        LoadApprovedBookings()       ' Approved Bookings
+        LoadRejectedBookings()       ' Rejected Bookings
+        LoadAllBookings()            ' All Bookings
+        LoadAvailability()           ' Availability of Event Places
+        LoadRevenueReports()         ' Revenue per Event Place
+        LoadInvoices()               ' Invoices with Accept Payment
+        LoadCustomerCount()          ' Customer Count
+        LoadCustomerRecords()        ' Customer Records
+        LoadBookingStatusChart()     ' Booking Status Chart
 
         ' Set up field indicators and validation for event place data entry.
         Dim labels = {lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
@@ -85,9 +88,44 @@ Public Class FormAdminCenter
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         ' Populate the pending bookings panel
-        HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
+        HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
     End Sub
 
+    Private Sub LoadApprovedBookings()
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                          "FROM bookings b " &
+                          "JOIN customers c ON b.customer_id = c.customer_id " &
+                          "JOIN eventplace e ON b.place_id = e.place_id " &
+                          "WHERE b.status = 'Approved' ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Populate the approved bookings panel
+        HelperResultsDisplay.PopulateApprovedBookings(flpApproved, dt)
+    End Sub
+
+    Private Sub LoadAllBookings()
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                          "FROM bookings b " &
+                          "JOIN customers c ON b.customer_id = c.customer_id " &
+                          "JOIN eventplace e ON b.place_id = e.place_id ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Populate the all bookings panel
+        HelperResultsDisplay.PopulateAllBookings(flpAll, dt)
+    End Sub
+
+
+    Private Sub LoadRejectedBookings()
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                          "FROM bookings b " &
+                          "JOIN customers c ON b.customer_id = c.customer_id " &
+                          "JOIN eventplace e ON b.place_id = e.place_id " &
+                          "WHERE b.status = 'Rejected' ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Populate the rejected bookings panel
+        HelperResultsDisplay.PopulateRejectedBookings(flpRejected, dt)
+    End Sub
 
 
     '--- Load Availability of Event Places
@@ -114,8 +152,11 @@ Public Class FormAdminCenter
 
     '--- Load Invoices
     Private Sub LoadInvoices()
-        Dim query As String = "SELECT invoice_id, user_id, event_place, total_amount, payment_status, invoice_data " &
-                              "FROM invoices WHERE payment_status='Pending' ORDER BY invoice_data ASC"
+        Dim query As String = "SELECT invoice_id, user_id, event_place, total_amount, payment_status, invoice_date
+        FROM invoices
+        WHERE payment_status = 'Pending'
+        ORDER BY invoice_date ASC
+        "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
     End Sub
@@ -227,7 +268,7 @@ Public Class FormAdminCenter
                               "WHERE b.status = 'Pending' AND b.event_date = @selectedDate " &
                               "ORDER BY b.event_date ASC"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
-        HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
+        HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
     End Sub
 
 #End Region
@@ -249,6 +290,10 @@ Public Class FormAdminCenter
         LoadPendingBookings()
         LoadBookingStatusChart()
         LoadAvailability()
+        ' After approving or rejecting the booking, reload the panels
+        LoadApprovedBookings()
+        LoadRejectedBookings()
+        LoadAllBookings()
     End Sub
 
     '--- Reject individual booking
@@ -266,6 +311,10 @@ Public Class FormAdminCenter
         LoadPendingBookings()
         LoadBookingStatusChart()
         LoadAvailability()
+        ' After approving or rejecting the booking, reload the panels
+        LoadApprovedBookings()
+        LoadRejectedBookings()
+        LoadAllBookings()
     End Sub
 
     '--- Accept payment for an invoice

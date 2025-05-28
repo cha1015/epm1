@@ -1,9 +1,8 @@
-﻿Imports System
+﻿Imports MySql.Data.MySqlClient
 Imports System.Text
 Imports System.Globalization
 Imports System.IO
-Imports MySql.Data.MySqlClient
-
+Imports System
 Public Class FormBooking
     ' ------------------ Properties ------------------
     Public Property PlaceId As Integer
@@ -204,15 +203,16 @@ Public Class FormBooking
         ' Link the new customer to the current user
         HelperDatabase.InsertUserCustomer(CurrentUser.UserID, customerResult.CustomerId)
 
-        ' Call PlaceBooking with the correct types (Date for eventDateStart and eventEndDate, Decimal for totalPrice)
+        ' Call PlaceBooking with the complete time strings and using 'numGuests' as an integer
         Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerResult.CustomerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, dtpEventDateEnd.Value.Date, finalTotalPrice)
+
 
         If bookingId > 0 Then
             HelperDatabase.SaveBookingServices(bookingId, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
             HelperDatabase.InsertPaymentRecord(bookingId, customerResult.CustomerId, finalTotalPrice)
 
             Dim result = MessageBox.Show("Booking and payment recorded successfully! Do you want to review your customer details?",
-                                     "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                                 "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
             If result = DialogResult.Yes Then
                 Dim customerViewForm As New FormCustomerView(CurrentUser.CustomerId)
                 customerViewForm.Show()
@@ -221,7 +221,6 @@ Public Class FormBooking
             MessageBox.Show("Booking failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
-
 
     Private Sub PopulatePaymentDetails()
         lblCustomerContainer.Text = txtCustomerName.Text

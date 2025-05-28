@@ -237,10 +237,10 @@ Public Class HelperDatabase
             b.booking_id, 
             b.customer_id, 
             e.event_place, 
-            e.event_type,   -- event_type is now in the eventplace table
+            e.event_type, 
             b.num_guests, 
             b.event_date, 
-            b.event_end_date,  -- Added event_end_date for multi-day events
+            b.event_end_date, 
             b.event_time, 
             b.event_end_time, 
             b.total_price, 
@@ -248,15 +248,17 @@ Public Class HelperDatabase
             b.services_availed, 
             p.payment_status, 
             i.invoice_date,  
-            GROUP_CONCAT(bs.service_name ORDER BY bs.service_name) AS services_availed
+            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed  -- Corrected join
         FROM bookings b
         JOIN customers c ON b.customer_id = c.customer_id
         JOIN eventplace e ON b.place_id = e.place_id
         LEFT JOIN payments p ON b.booking_id = p.booking_id
         LEFT JOIN invoices i ON b.booking_id = i.invoice_id  
         LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
+        LEFT JOIN services s ON bs.service_id = s.service_id  -- Added join with services table
         WHERE b.booking_id = @booking_id
-        GROUP BY b.booking_id"
+        GROUP BY b.booking_id
+        "
 
         Dim parameters As New Dictionary(Of String, Object) From {{"@booking_id", bookingId}}
 
@@ -271,8 +273,5 @@ Public Class HelperDatabase
 
         Return dt
     End Function
-
-
-
 
 End Class
