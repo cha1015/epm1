@@ -22,9 +22,9 @@ Partial Class FormAdminCenter
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnLogOut = New System.Windows.Forms.Button()
@@ -33,17 +33,23 @@ Partial Class FormAdminCenter
         Me.lblUsername = New System.Windows.Forms.Label()
         Me.tcAdminCenter = New System.Windows.Forms.TabControl()
         Me.tpBookings = New System.Windows.Forms.TabPage()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.flpRevenueReports = New System.Windows.Forms.FlowLayoutPanel()
+        Me.tcPendApprRej = New System.Windows.Forms.TabControl()
+        Me.tpPendings = New System.Windows.Forms.TabPage()
+        Me.flpPending = New System.Windows.Forms.FlowLayoutPanel()
+        Me.tpApproved = New System.Windows.Forms.TabPage()
+        Me.flpApproved = New System.Windows.Forms.FlowLayoutPanel()
+        Me.tpRejected = New System.Windows.Forms.TabPage()
+        Me.flpRejected = New System.Windows.Forms.FlowLayoutPanel()
+        Me.tpAll = New System.Windows.Forms.TabPage()
+        Me.flpAll = New System.Windows.Forms.FlowLayoutPanel()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.chartTotalStatus = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.mcBookings = New System.Windows.Forms.MonthCalendar()
-        Me.lblAvailability = New System.Windows.Forms.Label()
-        Me.flpAvailability = New System.Windows.Forms.FlowLayoutPanel()
         Me.tpInvoicesAndPayments = New System.Windows.Forms.TabPage()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.flpRevenueReports = New System.Windows.Forms.FlowLayoutPanel()
         Me.flpInvoices = New System.Windows.Forms.FlowLayoutPanel()
         Me.tpEventPlaceMgmt = New System.Windows.Forms.TabPage()
-        Me.flpEventPlaces = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.txtPlaceID = New System.Windows.Forms.TextBox()
         Me.lblPlaceID = New System.Windows.Forms.Label()
@@ -77,27 +83,26 @@ Partial Class FormAdminCenter
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblNumCustomersContainer = New System.Windows.Forms.Label()
         Me.flpCustomerRecords = New System.Windows.Forms.FlowLayoutPanel()
-        Me.tcPendApprRej = New System.Windows.Forms.TabControl()
-        Me.tpPendings = New System.Windows.Forms.TabPage()
-        Me.tpApproved = New System.Windows.Forms.TabPage()
-        Me.flpPending = New System.Windows.Forms.FlowLayoutPanel()
-        Me.tpRejected = New System.Windows.Forms.TabPage()
-        Me.tpAll = New System.Windows.Forms.TabPage()
-        Me.flpApproved = New System.Windows.Forms.FlowLayoutPanel()
-        Me.flpRejected = New System.Windows.Forms.FlowLayoutPanel()
-        Me.flpAll = New System.Windows.Forms.FlowLayoutPanel()
+        Me.tcAvailability = New System.Windows.Forms.TabControl()
+        Me.tpAvailable = New System.Windows.Forms.TabPage()
+        Me.flpAvailable = New System.Windows.Forms.FlowLayoutPanel()
+        Me.tpBooked = New System.Windows.Forms.TabPage()
+        Me.flpBooked = New System.Windows.Forms.FlowLayoutPanel()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpBookings.SuspendLayout()
-        CType(Me.chartTotalStatus, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tpInvoicesAndPayments.SuspendLayout()
-        Me.tpEventPlaceMgmt.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.tpCustomerRecords.SuspendLayout()
         Me.tcPendApprRej.SuspendLayout()
         Me.tpPendings.SuspendLayout()
         Me.tpApproved.SuspendLayout()
         Me.tpRejected.SuspendLayout()
         Me.tpAll.SuspendLayout()
+        CType(Me.chartTotalStatus, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpInvoicesAndPayments.SuspendLayout()
+        Me.tpEventPlaceMgmt.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        Me.tpCustomerRecords.SuspendLayout()
+        Me.tcAvailability.SuspendLayout()
+        Me.tpAvailable.SuspendLayout()
+        Me.tpBooked.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnNext
@@ -160,7 +165,7 @@ Partial Class FormAdminCenter
         Me.lblRole.Location = New System.Drawing.Point(888, 42)
         Me.lblRole.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(56, 25)
+        Me.lblRole.Size = New System.Drawing.Size(44, 19)
         Me.lblRole.TabIndex = 91
         Me.lblRole.Text = "Admin"
         '
@@ -173,15 +178,15 @@ Partial Class FormAdminCenter
         Me.lblUsername.Location = New System.Drawing.Point(888, 17)
         Me.lblUsername.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(102, 25)
+        Me.lblUsername.Size = New System.Drawing.Size(80, 19)
         Me.lblUsername.TabIndex = 90
         Me.lblUsername.Text = "Admin Name"
         '
         'tcAdminCenter
         '
         Me.tcAdminCenter.Controls.Add(Me.tpBookings)
-        Me.tcAdminCenter.Controls.Add(Me.tpInvoicesAndPayments)
         Me.tcAdminCenter.Controls.Add(Me.tpEventPlaceMgmt)
+        Me.tcAdminCenter.Controls.Add(Me.tpInvoicesAndPayments)
         Me.tcAdminCenter.Controls.Add(Me.tpCustomerRecords)
         Me.tcAdminCenter.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tcAdminCenter.Location = New System.Drawing.Point(16, 54)
@@ -195,135 +200,193 @@ Partial Class FormAdminCenter
         'tpBookings
         '
         Me.tpBookings.Controls.Add(Me.tcPendApprRej)
-        Me.tpBookings.Controls.Add(Me.Label1)
-        Me.tpBookings.Controls.Add(Me.flpRevenueReports)
         Me.tpBookings.Controls.Add(Me.Label11)
         Me.tpBookings.Controls.Add(Me.chartTotalStatus)
         Me.tpBookings.Controls.Add(Me.mcBookings)
-        Me.tpBookings.Controls.Add(Me.lblAvailability)
-        Me.tpBookings.Controls.Add(Me.flpAvailability)
-        Me.tpBookings.Location = New System.Drawing.Point(4, 34)
+        Me.tpBookings.Location = New System.Drawing.Point(4, 28)
         Me.tpBookings.Margin = New System.Windows.Forms.Padding(4)
         Me.tpBookings.Name = "tpBookings"
         Me.tpBookings.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpBookings.Size = New System.Drawing.Size(1220, 518)
+        Me.tpBookings.Size = New System.Drawing.Size(1220, 524)
         Me.tpBookings.TabIndex = 6
         Me.tpBookings.Text = "Bookings"
         Me.tpBookings.UseVisualStyleBackColor = True
         '
-        'Label1
+        'tcPendApprRej
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(4, 220)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(74, 25)
-        Me.Label1.TabIndex = 44
-        Me.Label1.Text = "Revenue"
+        Me.tcPendApprRej.Controls.Add(Me.tpPendings)
+        Me.tcPendApprRej.Controls.Add(Me.tpApproved)
+        Me.tcPendApprRej.Controls.Add(Me.tpRejected)
+        Me.tcPendApprRej.Controls.Add(Me.tpAll)
+        Me.tcPendApprRej.Location = New System.Drawing.Point(329, 10)
+        Me.tcPendApprRej.Name = "tcPendApprRej"
+        Me.tcPendApprRej.SelectedIndex = 0
+        Me.tcPendApprRej.Size = New System.Drawing.Size(883, 507)
+        Me.tcPendApprRej.TabIndex = 45
         '
-        'flpRevenueReports
+        'tpPendings
         '
-        Me.flpRevenueReports.Location = New System.Drawing.Point(9, 249)
-        Me.flpRevenueReports.Margin = New System.Windows.Forms.Padding(4)
-        Me.flpRevenueReports.Name = "flpRevenueReports"
-        Me.flpRevenueReports.Size = New System.Drawing.Size(448, 259)
-        Me.flpRevenueReports.TabIndex = 43
+        Me.tpPendings.Controls.Add(Me.flpPending)
+        Me.tpPendings.Location = New System.Drawing.Point(4, 28)
+        Me.tpPendings.Name = "tpPendings"
+        Me.tpPendings.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpPendings.Size = New System.Drawing.Size(875, 475)
+        Me.tpPendings.TabIndex = 0
+        Me.tpPendings.Text = "Pendings"
+        Me.tpPendings.UseVisualStyleBackColor = True
+        '
+        'flpPending
+        '
+        Me.flpPending.Location = New System.Drawing.Point(7, 7)
+        Me.flpPending.Margin = New System.Windows.Forms.Padding(4)
+        Me.flpPending.Name = "flpPending"
+        Me.flpPending.Size = New System.Drawing.Size(861, 461)
+        Me.flpPending.TabIndex = 1
+        '
+        'tpApproved
+        '
+        Me.tpApproved.Controls.Add(Me.flpApproved)
+        Me.tpApproved.Location = New System.Drawing.Point(4, 28)
+        Me.tpApproved.Name = "tpApproved"
+        Me.tpApproved.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpApproved.Size = New System.Drawing.Size(875, 475)
+        Me.tpApproved.TabIndex = 1
+        Me.tpApproved.Text = "Approved"
+        Me.tpApproved.UseVisualStyleBackColor = True
+        '
+        'flpApproved
+        '
+        Me.flpApproved.Location = New System.Drawing.Point(7, 7)
+        Me.flpApproved.Margin = New System.Windows.Forms.Padding(4)
+        Me.flpApproved.Name = "flpApproved"
+        Me.flpApproved.Size = New System.Drawing.Size(861, 461)
+        Me.flpApproved.TabIndex = 2
+        '
+        'tpRejected
+        '
+        Me.tpRejected.Controls.Add(Me.flpRejected)
+        Me.tpRejected.Location = New System.Drawing.Point(4, 28)
+        Me.tpRejected.Name = "tpRejected"
+        Me.tpRejected.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpRejected.Size = New System.Drawing.Size(875, 475)
+        Me.tpRejected.TabIndex = 2
+        Me.tpRejected.Text = "Rejected"
+        Me.tpRejected.UseVisualStyleBackColor = True
+        '
+        'flpRejected
+        '
+        Me.flpRejected.Location = New System.Drawing.Point(7, 7)
+        Me.flpRejected.Margin = New System.Windows.Forms.Padding(4)
+        Me.flpRejected.Name = "flpRejected"
+        Me.flpRejected.Size = New System.Drawing.Size(861, 461)
+        Me.flpRejected.TabIndex = 2
+        '
+        'tpAll
+        '
+        Me.tpAll.Controls.Add(Me.flpAll)
+        Me.tpAll.Location = New System.Drawing.Point(4, 28)
+        Me.tpAll.Name = "tpAll"
+        Me.tpAll.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpAll.Size = New System.Drawing.Size(875, 475)
+        Me.tpAll.TabIndex = 3
+        Me.tpAll.Text = "All"
+        Me.tpAll.UseVisualStyleBackColor = True
+        '
+        'flpAll
+        '
+        Me.flpAll.Location = New System.Drawing.Point(7, 7)
+        Me.flpAll.Margin = New System.Windows.Forms.Padding(4)
+        Me.flpAll.Name = "flpAll"
+        Me.flpAll.Size = New System.Drawing.Size(861, 461)
+        Me.flpAll.TabIndex = 2
         '
         'Label11
         '
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.ForeColor = System.Drawing.Color.Black
-        Me.Label11.Location = New System.Drawing.Point(7, 10)
+        Me.Label11.Location = New System.Drawing.Point(4, 184)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(55, 25)
+        Me.Label11.Size = New System.Drawing.Size(43, 19)
         Me.Label11.TabIndex = 42
         Me.Label11.Text = "Status"
         '
         'chartTotalStatus
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.chartTotalStatus.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.chartTotalStatus.Legends.Add(Legend1)
-        Me.chartTotalStatus.Location = New System.Drawing.Point(9, 39)
+        ChartArea3.Name = "ChartArea1"
+        Me.chartTotalStatus.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.chartTotalStatus.Legends.Add(Legend3)
+        Me.chartTotalStatus.Location = New System.Drawing.Point(8, 207)
         Me.chartTotalStatus.Margin = New System.Windows.Forms.Padding(4)
         Me.chartTotalStatus.Name = "chartTotalStatus"
         Me.chartTotalStatus.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.chartTotalStatus.Series.Add(Series1)
-        Me.chartTotalStatus.Size = New System.Drawing.Size(448, 178)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.chartTotalStatus.Series.Add(Series3)
+        Me.chartTotalStatus.Size = New System.Drawing.Size(314, 300)
         Me.chartTotalStatus.TabIndex = 41
         Me.chartTotalStatus.Text = "Chart1"
         '
         'mcBookings
         '
-        Me.mcBookings.Location = New System.Drawing.Point(470, 10)
+        Me.mcBookings.Location = New System.Drawing.Point(13, 13)
         Me.mcBookings.Name = "mcBookings"
         Me.mcBookings.TabIndex = 5
         '
-        'lblAvailability
-        '
-        Me.lblAvailability.AutoSize = True
-        Me.lblAvailability.Location = New System.Drawing.Point(465, 220)
-        Me.lblAvailability.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.lblAvailability.Name = "lblAvailability"
-        Me.lblAvailability.Size = New System.Drawing.Size(84, 25)
-        Me.lblAvailability.TabIndex = 2
-        Me.lblAvailability.Text = "Availability"
-        '
-        'flpAvailability
-        '
-        Me.flpAvailability.Location = New System.Drawing.Point(469, 247)
-        Me.flpAvailability.Margin = New System.Windows.Forms.Padding(4)
-        Me.flpAvailability.Name = "flpAvailability"
-        Me.flpAvailability.Size = New System.Drawing.Size(263, 261)
-        Me.flpAvailability.TabIndex = 1
-        '
         'tpInvoicesAndPayments
         '
+        Me.tpInvoicesAndPayments.Controls.Add(Me.Label1)
+        Me.tpInvoicesAndPayments.Controls.Add(Me.flpRevenueReports)
         Me.tpInvoicesAndPayments.Controls.Add(Me.flpInvoices)
-        Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 34)
+        Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 28)
         Me.tpInvoicesAndPayments.Margin = New System.Windows.Forms.Padding(4)
         Me.tpInvoicesAndPayments.Name = "tpInvoicesAndPayments"
         Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(1220, 518)
+        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(1220, 524)
         Me.tpInvoicesAndPayments.TabIndex = 5
         Me.tpInvoicesAndPayments.Text = "Invoices and Payments"
         Me.tpInvoicesAndPayments.UseVisualStyleBackColor = True
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(8, 4)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(57, 19)
+        Me.Label1.TabIndex = 45
+        Me.Label1.Text = "Revenue"
+        '
+        'flpRevenueReports
+        '
+        Me.flpRevenueReports.Location = New System.Drawing.Point(8, 27)
+        Me.flpRevenueReports.Margin = New System.Windows.Forms.Padding(4)
+        Me.flpRevenueReports.Name = "flpRevenueReports"
+        Me.flpRevenueReports.Size = New System.Drawing.Size(379, 482)
+        Me.flpRevenueReports.TabIndex = 44
+        '
         'flpInvoices
         '
-        Me.flpInvoices.Location = New System.Drawing.Point(9, 43)
+        Me.flpInvoices.Location = New System.Drawing.Point(395, 27)
         Me.flpInvoices.Margin = New System.Windows.Forms.Padding(4)
         Me.flpInvoices.Name = "flpInvoices"
-        Me.flpInvoices.Size = New System.Drawing.Size(1200, 466)
+        Me.flpInvoices.Size = New System.Drawing.Size(814, 482)
         Me.flpInvoices.TabIndex = 0
         '
         'tpEventPlaceMgmt
         '
         Me.tpEventPlaceMgmt.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.tpEventPlaceMgmt.Controls.Add(Me.flpEventPlaces)
+        Me.tpEventPlaceMgmt.Controls.Add(Me.tcAvailability)
         Me.tpEventPlaceMgmt.Controls.Add(Me.GroupBox1)
-        Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 34)
+        Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 28)
         Me.tpEventPlaceMgmt.Margin = New System.Windows.Forms.Padding(4)
         Me.tpEventPlaceMgmt.Name = "tpEventPlaceMgmt"
         Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1220, 518)
+        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1220, 524)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
-        '
-        'flpEventPlaces
-        '
-        Me.flpEventPlaces.AutoScroll = True
-        Me.flpEventPlaces.BackColor = System.Drawing.Color.Transparent
-        Me.flpEventPlaces.Location = New System.Drawing.Point(15, 6)
-        Me.flpEventPlaces.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.flpEventPlaces.Name = "flpEventPlaces"
-        Me.flpEventPlaces.Size = New System.Drawing.Size(593, 505)
-        Me.flpEventPlaces.TabIndex = 95
         '
         'GroupBox1
         '
@@ -361,7 +424,7 @@ Partial Class FormAdminCenter
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox1.Size = New System.Drawing.Size(587, 505)
+        Me.GroupBox1.Size = New System.Drawing.Size(597, 505)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Data Entry"
@@ -375,7 +438,7 @@ Partial Class FormAdminCenter
         Me.txtPlaceID.Location = New System.Drawing.Point(137, 25)
         Me.txtPlaceID.Margin = New System.Windows.Forms.Padding(4)
         Me.txtPlaceID.Name = "txtPlaceID"
-        Me.txtPlaceID.Size = New System.Drawing.Size(407, 21)
+        Me.txtPlaceID.Size = New System.Drawing.Size(407, 17)
         Me.txtPlaceID.TabIndex = 34
         '
         'lblPlaceID
@@ -386,7 +449,7 @@ Partial Class FormAdminCenter
         Me.lblPlaceID.Location = New System.Drawing.Point(8, 25)
         Me.lblPlaceID.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPlaceID.Name = "lblPlaceID"
-        Me.lblPlaceID.Size = New System.Drawing.Size(67, 25)
+        Me.lblPlaceID.Size = New System.Drawing.Size(53, 19)
         Me.lblPlaceID.TabIndex = 33
         Me.lblPlaceID.Text = "Place ID"
         '
@@ -396,7 +459,7 @@ Partial Class FormAdminCenter
         Me.lblErrorCapacity.Location = New System.Drawing.Point(256, 121)
         Me.lblErrorCapacity.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorCapacity.Name = "lblErrorCapacity"
-        Me.lblErrorCapacity.Size = New System.Drawing.Size(20, 25)
+        Me.lblErrorCapacity.Size = New System.Drawing.Size(15, 19)
         Me.lblErrorCapacity.TabIndex = 31
         Me.lblErrorCapacity.Text = "-"
         '
@@ -406,7 +469,7 @@ Partial Class FormAdminCenter
         Me.lblErrorOpeningHours.Location = New System.Drawing.Point(552, 234)
         Me.lblErrorOpeningHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorOpeningHours.Name = "lblErrorOpeningHours"
-        Me.lblErrorOpeningHours.Size = New System.Drawing.Size(20, 25)
+        Me.lblErrorOpeningHours.Size = New System.Drawing.Size(15, 19)
         Me.lblErrorOpeningHours.TabIndex = 30
         Me.lblErrorOpeningHours.Text = "-"
         '
@@ -416,7 +479,7 @@ Partial Class FormAdminCenter
         Me.lblErrorPrice.Location = New System.Drawing.Point(256, 149)
         Me.lblErrorPrice.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorPrice.Name = "lblErrorPrice"
-        Me.lblErrorPrice.Size = New System.Drawing.Size(20, 25)
+        Me.lblErrorPrice.Size = New System.Drawing.Size(15, 19)
         Me.lblErrorPrice.TabIndex = 32
         Me.lblErrorPrice.Text = "-"
         '
@@ -471,7 +534,7 @@ Partial Class FormAdminCenter
         Me.txtAvailableDays.Location = New System.Drawing.Point(137, 255)
         Me.txtAvailableDays.Margin = New System.Windows.Forms.Padding(4)
         Me.txtAvailableDays.Name = "txtAvailableDays"
-        Me.txtAvailableDays.Size = New System.Drawing.Size(407, 21)
+        Me.txtAvailableDays.Size = New System.Drawing.Size(407, 17)
         Me.txtAvailableDays.TabIndex = 27
         '
         'lblAvailableDays
@@ -482,7 +545,7 @@ Partial Class FormAdminCenter
         Me.lblAvailableDays.Location = New System.Drawing.Point(8, 255)
         Me.lblAvailableDays.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblAvailableDays.Name = "lblAvailableDays"
-        Me.lblAvailableDays.Size = New System.Drawing.Size(112, 25)
+        Me.lblAvailableDays.Size = New System.Drawing.Size(89, 19)
         Me.lblAvailableDays.TabIndex = 26
         Me.lblAvailableDays.Text = "Available Days"
         '
@@ -495,7 +558,7 @@ Partial Class FormAdminCenter
         Me.txtClosingHours.Location = New System.Drawing.Point(433, 228)
         Me.txtClosingHours.Margin = New System.Windows.Forms.Padding(4)
         Me.txtClosingHours.Name = "txtClosingHours"
-        Me.txtClosingHours.Size = New System.Drawing.Size(111, 21)
+        Me.txtClosingHours.Size = New System.Drawing.Size(111, 17)
         Me.txtClosingHours.TabIndex = 25
         '
         'lblClosingHours
@@ -506,7 +569,7 @@ Partial Class FormAdminCenter
         Me.lblClosingHours.Location = New System.Drawing.Point(312, 228)
         Me.lblClosingHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblClosingHours.Name = "lblClosingHours"
-        Me.lblClosingHours.Size = New System.Drawing.Size(107, 25)
+        Me.lblClosingHours.Size = New System.Drawing.Size(85, 19)
         Me.lblClosingHours.TabIndex = 24
         Me.lblClosingHours.Text = "Closing Hours"
         '
@@ -519,7 +582,7 @@ Partial Class FormAdminCenter
         Me.txtOpeningHours.Location = New System.Drawing.Point(137, 228)
         Me.txtOpeningHours.Margin = New System.Windows.Forms.Padding(4)
         Me.txtOpeningHours.Name = "txtOpeningHours"
-        Me.txtOpeningHours.Size = New System.Drawing.Size(111, 21)
+        Me.txtOpeningHours.Size = New System.Drawing.Size(111, 17)
         Me.txtOpeningHours.TabIndex = 23
         '
         'lblOpeningHours
@@ -530,7 +593,7 @@ Partial Class FormAdminCenter
         Me.lblOpeningHours.Location = New System.Drawing.Point(8, 231)
         Me.lblOpeningHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblOpeningHours.Name = "lblOpeningHours"
-        Me.lblOpeningHours.Size = New System.Drawing.Size(115, 25)
+        Me.lblOpeningHours.Size = New System.Drawing.Size(91, 19)
         Me.lblOpeningHours.TabIndex = 22
         Me.lblOpeningHours.Text = "Opening Hours"
         '
@@ -543,7 +606,7 @@ Partial Class FormAdminCenter
         Me.txtImageUrl.Location = New System.Drawing.Point(137, 199)
         Me.txtImageUrl.Margin = New System.Windows.Forms.Padding(4)
         Me.txtImageUrl.Name = "txtImageUrl"
-        Me.txtImageUrl.Size = New System.Drawing.Size(407, 21)
+        Me.txtImageUrl.Size = New System.Drawing.Size(407, 17)
         Me.txtImageUrl.TabIndex = 21
         '
         'lblImageUrl
@@ -554,7 +617,7 @@ Partial Class FormAdminCenter
         Me.lblImageUrl.Location = New System.Drawing.Point(8, 202)
         Me.lblImageUrl.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblImageUrl.Name = "lblImageUrl"
-        Me.lblImageUrl.Size = New System.Drawing.Size(56, 25)
+        Me.lblImageUrl.Size = New System.Drawing.Size(44, 19)
         Me.lblImageUrl.TabIndex = 20
         Me.lblImageUrl.Text = "Image"
         '
@@ -566,7 +629,7 @@ Partial Class FormAdminCenter
         Me.lblFeatures.Location = New System.Drawing.Point(8, 172)
         Me.lblFeatures.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFeatures.Name = "lblFeatures"
-        Me.lblFeatures.Size = New System.Drawing.Size(72, 25)
+        Me.lblFeatures.Size = New System.Drawing.Size(57, 19)
         Me.lblFeatures.TabIndex = 19
         Me.lblFeatures.Text = "Features"
         '
@@ -579,7 +642,7 @@ Partial Class FormAdminCenter
         Me.txtFeatures.Location = New System.Drawing.Point(137, 171)
         Me.txtFeatures.Margin = New System.Windows.Forms.Padding(4)
         Me.txtFeatures.Name = "txtFeatures"
-        Me.txtFeatures.Size = New System.Drawing.Size(407, 21)
+        Me.txtFeatures.Size = New System.Drawing.Size(407, 17)
         Me.txtFeatures.TabIndex = 18
         '
         'txtDescription
@@ -603,7 +666,7 @@ Partial Class FormAdminCenter
         Me.lblDescription.Location = New System.Drawing.Point(8, 278)
         Me.lblDescription.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDescription.Name = "lblDescription"
-        Me.lblDescription.Size = New System.Drawing.Size(90, 25)
+        Me.lblDescription.Size = New System.Drawing.Size(72, 19)
         Me.lblDescription.TabIndex = 16
         Me.lblDescription.Text = "Description"
         '
@@ -616,7 +679,7 @@ Partial Class FormAdminCenter
         Me.txtEventType.Location = New System.Drawing.Point(137, 84)
         Me.txtEventType.Margin = New System.Windows.Forms.Padding(4)
         Me.txtEventType.Name = "txtEventType"
-        Me.txtEventType.Size = New System.Drawing.Size(407, 21)
+        Me.txtEventType.Size = New System.Drawing.Size(407, 17)
         Me.txtEventType.TabIndex = 13
         '
         'lblEventType
@@ -627,7 +690,7 @@ Partial Class FormAdminCenter
         Me.lblEventType.Location = New System.Drawing.Point(8, 84)
         Me.lblEventType.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventType.Name = "lblEventType"
-        Me.lblEventType.Size = New System.Drawing.Size(106, 25)
+        Me.lblEventType.Size = New System.Drawing.Size(82, 19)
         Me.lblEventType.TabIndex = 13
         Me.lblEventType.Text = "Type of Event"
         '
@@ -640,7 +703,7 @@ Partial Class FormAdminCenter
         Me.txtEventPlace.Location = New System.Drawing.Point(137, 53)
         Me.txtEventPlace.Margin = New System.Windows.Forms.Padding(4)
         Me.txtEventPlace.Name = "txtEventPlace"
-        Me.txtEventPlace.Size = New System.Drawing.Size(407, 21)
+        Me.txtEventPlace.Size = New System.Drawing.Size(407, 17)
         Me.txtEventPlace.TabIndex = 12
         '
         'lblEventPlace
@@ -651,7 +714,7 @@ Partial Class FormAdminCenter
         Me.lblEventPlace.Location = New System.Drawing.Point(8, 54)
         Me.lblEventPlace.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEventPlace.Name = "lblEventPlace"
-        Me.lblEventPlace.Size = New System.Drawing.Size(92, 25)
+        Me.lblEventPlace.Size = New System.Drawing.Size(72, 19)
         Me.lblEventPlace.TabIndex = 12
         Me.lblEventPlace.Text = "Event Place"
         '
@@ -663,7 +726,7 @@ Partial Class FormAdminCenter
         Me.lblPricePerDay.Location = New System.Drawing.Point(8, 143)
         Me.lblPricePerDay.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPricePerDay.Name = "lblPricePerDay"
-        Me.lblPricePerDay.Size = New System.Drawing.Size(104, 25)
+        Me.lblPricePerDay.Size = New System.Drawing.Size(81, 19)
         Me.lblPricePerDay.TabIndex = 5
         Me.lblPricePerDay.Text = "Price per Day"
         '
@@ -675,7 +738,7 @@ Partial Class FormAdminCenter
         Me.lblCapacity.Location = New System.Drawing.Point(8, 113)
         Me.lblCapacity.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCapacity.Name = "lblCapacity"
-        Me.lblCapacity.Size = New System.Drawing.Size(75, 25)
+        Me.lblCapacity.Size = New System.Drawing.Size(58, 19)
         Me.lblCapacity.TabIndex = 4
         Me.lblCapacity.Text = "Capacity"
         '
@@ -688,7 +751,7 @@ Partial Class FormAdminCenter
         Me.txtPricePerDay.Location = New System.Drawing.Point(137, 143)
         Me.txtPricePerDay.Margin = New System.Windows.Forms.Padding(4)
         Me.txtPricePerDay.Name = "txtPricePerDay"
-        Me.txtPricePerDay.Size = New System.Drawing.Size(111, 21)
+        Me.txtPricePerDay.Size = New System.Drawing.Size(111, 17)
         Me.txtPricePerDay.TabIndex = 2
         '
         'txtCapacity
@@ -700,7 +763,7 @@ Partial Class FormAdminCenter
         Me.txtCapacity.Location = New System.Drawing.Point(137, 113)
         Me.txtCapacity.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCapacity.Name = "txtCapacity"
-        Me.txtCapacity.Size = New System.Drawing.Size(111, 21)
+        Me.txtCapacity.Size = New System.Drawing.Size(111, 17)
         Me.txtCapacity.TabIndex = 1
         '
         'tpCustomerRecords
@@ -709,11 +772,11 @@ Partial Class FormAdminCenter
         Me.tpCustomerRecords.Controls.Add(Me.Label4)
         Me.tpCustomerRecords.Controls.Add(Me.lblNumCustomersContainer)
         Me.tpCustomerRecords.Controls.Add(Me.flpCustomerRecords)
-        Me.tpCustomerRecords.Location = New System.Drawing.Point(4, 34)
+        Me.tpCustomerRecords.Location = New System.Drawing.Point(4, 28)
         Me.tpCustomerRecords.Margin = New System.Windows.Forms.Padding(4)
         Me.tpCustomerRecords.Name = "tpCustomerRecords"
         Me.tpCustomerRecords.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpCustomerRecords.Size = New System.Drawing.Size(1220, 518)
+        Me.tpCustomerRecords.Size = New System.Drawing.Size(1220, 524)
         Me.tpCustomerRecords.TabIndex = 4
         Me.tpCustomerRecords.Text = "Customer Records"
         '
@@ -724,7 +787,7 @@ Partial Class FormAdminCenter
         Me.Label4.ForeColor = System.Drawing.Color.Black
         Me.Label4.Location = New System.Drawing.Point(1075, 490)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(126, 25)
+        Me.Label4.Size = New System.Drawing.Size(99, 19)
         Me.Label4.TabIndex = 34
         Me.Label4.Text = "Total Customers"
         '
@@ -736,7 +799,7 @@ Partial Class FormAdminCenter
         Me.lblNumCustomersContainer.Location = New System.Drawing.Point(1075, 468)
         Me.lblNumCustomersContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblNumCustomersContainer.Name = "lblNumCustomersContainer"
-        Me.lblNumCustomersContainer.Size = New System.Drawing.Size(21, 25)
+        Me.lblNumCustomersContainer.Size = New System.Drawing.Size(16, 19)
         Me.lblNumCustomersContainer.TabIndex = 33
         Me.lblNumCustomersContainer.Text = "0"
         '
@@ -748,93 +811,53 @@ Partial Class FormAdminCenter
         Me.flpCustomerRecords.Size = New System.Drawing.Size(1200, 457)
         Me.flpCustomerRecords.TabIndex = 0
         '
-        'tcPendApprRej
+        'tcAvailability
         '
-        Me.tcPendApprRej.Controls.Add(Me.tpPendings)
-        Me.tcPendApprRej.Controls.Add(Me.tpApproved)
-        Me.tcPendApprRej.Controls.Add(Me.tpRejected)
-        Me.tcPendApprRej.Controls.Add(Me.tpAll)
-        Me.tcPendApprRej.Location = New System.Drawing.Point(745, 10)
-        Me.tcPendApprRej.Name = "tcPendApprRej"
-        Me.tcPendApprRej.SelectedIndex = 0
-        Me.tcPendApprRej.Size = New System.Drawing.Size(467, 501)
-        Me.tcPendApprRej.TabIndex = 45
+        Me.tcAvailability.Controls.Add(Me.tpAvailable)
+        Me.tcAvailability.Controls.Add(Me.tpBooked)
+        Me.tcAvailability.Location = New System.Drawing.Point(7, 16)
+        Me.tcAvailability.Name = "tcAvailability"
+        Me.tcAvailability.SelectedIndex = 0
+        Me.tcAvailability.Size = New System.Drawing.Size(601, 501)
+        Me.tcAvailability.TabIndex = 47
         '
-        'tpPendings
+        'tpAvailable
         '
-        Me.tpPendings.Controls.Add(Me.flpPending)
-        Me.tpPendings.Location = New System.Drawing.Point(4, 34)
-        Me.tpPendings.Name = "tpPendings"
-        Me.tpPendings.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpPendings.Size = New System.Drawing.Size(459, 463)
-        Me.tpPendings.TabIndex = 0
-        Me.tpPendings.Text = "Pendings"
-        Me.tpPendings.UseVisualStyleBackColor = True
+        Me.tpAvailable.Controls.Add(Me.flpAvailable)
+        Me.tpAvailable.Location = New System.Drawing.Point(4, 28)
+        Me.tpAvailable.Name = "tpAvailable"
+        Me.tpAvailable.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpAvailable.Size = New System.Drawing.Size(593, 469)
+        Me.tpAvailable.TabIndex = 0
+        Me.tpAvailable.Text = "Available"
+        Me.tpAvailable.UseVisualStyleBackColor = True
         '
-        'tpApproved
+        'flpAvailable
         '
-        Me.tpApproved.Controls.Add(Me.flpApproved)
-        Me.tpApproved.Location = New System.Drawing.Point(4, 34)
-        Me.tpApproved.Name = "tpApproved"
-        Me.tpApproved.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpApproved.Size = New System.Drawing.Size(459, 463)
-        Me.tpApproved.TabIndex = 1
-        Me.tpApproved.Text = "Approved"
-        Me.tpApproved.UseVisualStyleBackColor = True
+        Me.flpAvailable.AutoScroll = True
+        Me.flpAvailable.Location = New System.Drawing.Point(6, 6)
+        Me.flpAvailable.Name = "flpAvailable"
+        Me.flpAvailable.Size = New System.Drawing.Size(581, 457)
+        Me.flpAvailable.TabIndex = 1
         '
-        'flpPending
+        'tpBooked
         '
-        Me.flpPending.Location = New System.Drawing.Point(7, 7)
-        Me.flpPending.Margin = New System.Windows.Forms.Padding(4)
-        Me.flpPending.Name = "flpPending"
-        Me.flpPending.Size = New System.Drawing.Size(445, 449)
-        Me.flpPending.TabIndex = 1
+        Me.tpBooked.Controls.Add(Me.flpBooked)
+        Me.tpBooked.Location = New System.Drawing.Point(4, 28)
+        Me.tpBooked.Name = "tpBooked"
+        Me.tpBooked.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpBooked.Size = New System.Drawing.Size(593, 469)
+        Me.tpBooked.TabIndex = 1
+        Me.tpBooked.Text = "Booked"
+        Me.tpBooked.UseVisualStyleBackColor = True
         '
-        'tpRejected
+        'flpBooked
         '
-        Me.tpRejected.Controls.Add(Me.flpRejected)
-        Me.tpRejected.Location = New System.Drawing.Point(4, 34)
-        Me.tpRejected.Name = "tpRejected"
-        Me.tpRejected.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpRejected.Size = New System.Drawing.Size(459, 463)
-        Me.tpRejected.TabIndex = 2
-        Me.tpRejected.Text = "Rejected"
-        Me.tpRejected.UseVisualStyleBackColor = True
-        '
-        'tpAll
-        '
-        Me.tpAll.Controls.Add(Me.flpAll)
-        Me.tpAll.Location = New System.Drawing.Point(4, 34)
-        Me.tpAll.Name = "tpAll"
-        Me.tpAll.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpAll.Size = New System.Drawing.Size(459, 463)
-        Me.tpAll.TabIndex = 3
-        Me.tpAll.Text = "All"
-        Me.tpAll.UseVisualStyleBackColor = True
-        '
-        'flpApproved
-        '
-        Me.flpApproved.Location = New System.Drawing.Point(7, 7)
-        Me.flpApproved.Margin = New System.Windows.Forms.Padding(4)
-        Me.flpApproved.Name = "flpApproved"
-        Me.flpApproved.Size = New System.Drawing.Size(445, 449)
-        Me.flpApproved.TabIndex = 2
-        '
-        'flpRejected
-        '
-        Me.flpRejected.Location = New System.Drawing.Point(7, 7)
-        Me.flpRejected.Margin = New System.Windows.Forms.Padding(4)
-        Me.flpRejected.Name = "flpRejected"
-        Me.flpRejected.Size = New System.Drawing.Size(445, 449)
-        Me.flpRejected.TabIndex = 2
-        '
-        'flpAll
-        '
-        Me.flpAll.Location = New System.Drawing.Point(7, 7)
-        Me.flpAll.Margin = New System.Windows.Forms.Padding(4)
-        Me.flpAll.Name = "flpAll"
-        Me.flpAll.Size = New System.Drawing.Size(445, 449)
-        Me.flpAll.TabIndex = 2
+        Me.flpBooked.AutoScroll = True
+        Me.flpBooked.Location = New System.Drawing.Point(7, 6)
+        Me.flpBooked.Name = "flpBooked"
+        Me.flpBooked.Size = New System.Drawing.Size(580, 453)
+        Me.flpBooked.TabIndex = 0
         '
         'FormAdminCenter
         '
@@ -855,18 +878,22 @@ Partial Class FormAdminCenter
         Me.tcAdminCenter.ResumeLayout(False)
         Me.tpBookings.ResumeLayout(False)
         Me.tpBookings.PerformLayout()
-        CType(Me.chartTotalStatus, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tpInvoicesAndPayments.ResumeLayout(False)
-        Me.tpEventPlaceMgmt.ResumeLayout(False)
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.tpCustomerRecords.ResumeLayout(False)
-        Me.tpCustomerRecords.PerformLayout()
         Me.tcPendApprRej.ResumeLayout(False)
         Me.tpPendings.ResumeLayout(False)
         Me.tpApproved.ResumeLayout(False)
         Me.tpRejected.ResumeLayout(False)
         Me.tpAll.ResumeLayout(False)
+        CType(Me.chartTotalStatus, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tpInvoicesAndPayments.ResumeLayout(False)
+        Me.tpInvoicesAndPayments.PerformLayout()
+        Me.tpEventPlaceMgmt.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        Me.tpCustomerRecords.ResumeLayout(False)
+        Me.tpCustomerRecords.PerformLayout()
+        Me.tcAvailability.ResumeLayout(False)
+        Me.tpAvailable.ResumeLayout(False)
+        Me.tpBooked.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -909,21 +936,16 @@ Partial Class FormAdminCenter
     Friend WithEvents lblErrorOpeningHours As Label
     Friend WithEvents lblErrorPrice As Label
     Friend WithEvents lblErrorCapacity As Label
-    Friend WithEvents flpEventPlaces As FlowLayoutPanel
     Friend WithEvents tpBookings As TabPage
     Friend WithEvents Label4 As Label
     Friend WithEvents lblNumCustomersContainer As Label
     Friend WithEvents flpCustomerRecords As FlowLayoutPanel
     Friend WithEvents flpInvoices As FlowLayoutPanel
-    Friend WithEvents lblAvailability As Label
-    Friend WithEvents flpAvailability As FlowLayoutPanel
     Friend WithEvents txtPlaceID As TextBox
     Friend WithEvents lblPlaceID As Label
-    Friend WithEvents flpRevenueReports As FlowLayoutPanel
     Friend WithEvents Label11 As Label
     Friend WithEvents chartTotalStatus As DataVisualization.Charting.Chart
     Friend WithEvents mcBookings As MonthCalendar
-    Friend WithEvents Label1 As Label
     Friend WithEvents tcPendApprRej As TabControl
     Friend WithEvents tpPendings As TabPage
     Friend WithEvents flpPending As FlowLayoutPanel
@@ -933,4 +955,11 @@ Partial Class FormAdminCenter
     Friend WithEvents flpApproved As FlowLayoutPanel
     Friend WithEvents flpRejected As FlowLayoutPanel
     Friend WithEvents flpAll As FlowLayoutPanel
+    Friend WithEvents Label1 As Label
+    Friend WithEvents flpRevenueReports As FlowLayoutPanel
+    Friend WithEvents tcAvailability As TabControl
+    Friend WithEvents tpAvailable As TabPage
+    Friend WithEvents flpAvailable As FlowLayoutPanel
+    Friend WithEvents tpBooked As TabPage
+    Friend WithEvents flpBooked As FlowLayoutPanel
 End Class

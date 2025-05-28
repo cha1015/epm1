@@ -343,8 +343,8 @@ Public Class FormMain
         If loginForm.ShowDialog() = DialogResult.OK Then
             ' For Admins, open the Admin Center and hide FormMain.
             If CurrentUser.Role = "Admin" Then
-                Dim adminForm As New FormAdminCenter()
-                adminForm.Show()
+                'Dim adminForm As New FormAdminCenter()
+                'adminForm.Show()
                 Me.Hide()
             ElseIf CurrentUser.CustomerId > 0 Then
                 ' For Users, update the UI to reflect the logged-in state.
