@@ -228,7 +228,7 @@ Partial Class FormCustomerView
         '
         Me.txtSearch.BackColor = System.Drawing.Color.Gainsboro
         Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtSearch.ForeColor = System.Drawing.Color.White
+        Me.txtSearch.ForeColor = System.Drawing.Color.Black
         Me.txtSearch.Location = New System.Drawing.Point(91, 96)
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.Size = New System.Drawing.Size(222, 13)
