@@ -236,7 +236,7 @@ Public Class HelperDatabase
             b.booking_id, 
             b.customer_id, 
             e.event_place, 
-            e.event_type, 
+            b.event_type, 
             b.num_guests, 
             b.event_date, 
             b.event_end_date, 
@@ -256,7 +256,7 @@ Public Class HelperDatabase
         LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
         LEFT JOIN services s ON bs.service_id = s.service_id  -- Added join with services table
         WHERE b.booking_id = @booking_id
-        GROUP BY b.booking_id, b.customer_id, e.event_place, e.event_type, b.num_guests, b.event_date, b.event_end_date, 
+        GROUP BY b.booking_id, b.customer_id, e.event_place, b.event_type, b.num_guests, b.event_date, b.event_end_date, 
                  b.event_time, b.event_end_time, b.total_price, b.status, b.services_availed, i.invoice_date
         "
 
