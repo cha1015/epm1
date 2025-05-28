@@ -342,14 +342,6 @@ Public Class HelperValidation
         Next
     End Sub
 
-    'Show an asterisk (Or add it If missing) On required fields In real time.
-    'Public Shared Sub ShowAsteriskOnMissedFields(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
-    '    For i As Integer = 0 To fieldControls.Length - 1
-    '        If String.IsNullOrWhiteSpace(fieldControls(i).Text) Then
-    '            labelControls(i).Text = $"{labelTexts(i)} *"
-    '        End If
-    '    Next
-    'End Sub
 
     ' Mark TextBox invalid if empty: show red asterisk and red label text
     Public Shared Sub MarkFieldInvalidIfEmpty(txtControl As TextBox, defaultLabelText As String)
@@ -405,14 +397,6 @@ Public Class HelperValidation
         Next
     End Sub
 
-    ' Remove the asterisk When the user enters input.
-    'Public Shared Sub RemoveAsteriskOnInput(sender As Object, labelControls As Label(), labelTexts As String())
-    '    Dim txtBox As TextBox = TryCast(sender, TextBox)
-    '    If txtBox IsNot Nothing Then
-    '        Dim index As Integer = Array.IndexOf(labelControls.Select(Function(lbl) lbl.Name).ToArray(), txtBox.Tag?.ToString())
-    '        If index >= 0 Then labelControls(index).Text = labelTexts(index)
-    '    End If
-    'End Sub
 
     Public Shared Sub RemoveAsteriskOnInput(sender As Object, labelControls As Label(), labelTexts As String())
         Dim txtBox As TextBox = TryCast(sender, TextBox)
@@ -425,14 +409,7 @@ Public Class HelperValidation
         End If
     End Sub
 
-    'Update the labels In real time As fields are filled Or left empty.
-    'Public Shared Sub ValidateFieldsInRealTime(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
-    '    For i As Integer = 0 To fieldControls.Length - 1
-    '        labelControls(i).Text = If(String.IsNullOrWhiteSpace(fieldControls(i).Text),
-    '                                     $"{labelTexts(i)} *",
-    '                                     labelTexts(i))
-    '    Next
-    'End Sub
+
 
     Public Shared Sub ValidateFieldsInRealTime(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To fieldControls.Length - 1
@@ -834,21 +811,6 @@ Public Class HelperValidation
         End If
     End Sub
 
-    '' ------------------ Validate Customer Age ------------------
-    'Public Shared Function ValidateCustomerAge(dtpBirthday As DateTimePicker) As Boolean
-    '    Dim birthDate As Date = dtpBirthday.Value
-    '    Dim today As Date = Date.Today
-    '    Dim age As Integer = today.Year - birthDate.Year
-    '    If birthDate > today.AddYears(-age) Then age -= 1
-
-    '    If age < 18 Then
-    '        MarkFieldInvalid(dtpBirthday, dtpBirthday.Tag?.ToString() & "", "Must be 18 or older to book.")
-    '        Return False
-    '    End If
-
-    '    ClearFieldError(dtpBirthday, dtpBirthday.Tag?.ToString() & "")
-    '    Return True
-    'End Function
     ' ------------------ Validate Customer Age ------------------
     Public Shared Function ValidateCustomerAge(dtpBirthday As DateTimePicker) As Boolean
         Dim birthDate As Date = dtpBirthday.Value

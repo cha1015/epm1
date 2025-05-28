@@ -56,7 +56,7 @@ Partial Class FormSignUp
         Me.lblUsername = New System.Windows.Forms.Label()
         Me.btnShowPass = New System.Windows.Forms.Button()
         Me.btnShowConfPass = New System.Windows.Forms.Button()
-        Me.cbRole = New System.Windows.Forms.ComboBox()
+        Me.cmbRole = New System.Windows.Forms.ComboBox()
         Me.txtEmail = New System.Windows.Forms.TextBox()
         Me.txtUsername = New System.Windows.Forms.TextBox()
         Me.txtPass = New System.Windows.Forms.TextBox()
@@ -342,7 +342,7 @@ Partial Class FormSignUp
         Me.tpAccountDetails.Controls.Add(Me.lblUsername)
         Me.tpAccountDetails.Controls.Add(Me.btnShowPass)
         Me.tpAccountDetails.Controls.Add(Me.btnShowConfPass)
-        Me.tpAccountDetails.Controls.Add(Me.cbRole)
+        Me.tpAccountDetails.Controls.Add(Me.cmbRole)
         Me.tpAccountDetails.Controls.Add(Me.txtEmail)
         Me.tpAccountDetails.Controls.Add(Me.txtUsername)
         Me.tpAccountDetails.Controls.Add(Me.txtPass)
@@ -510,20 +510,20 @@ Partial Class FormSignUp
         Me.btnShowConfPass.TabIndex = 64
         Me.btnShowConfPass.UseVisualStyleBackColor = True
         '
-        'cbRole
+        'cmbRole
         '
-        Me.cbRole.AutoCompleteCustomSource.AddRange(New String() {"User", "Admin"})
-        Me.cbRole.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
-        Me.cbRole.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.cbRole.Font = New System.Drawing.Font("Cinzel", 7.2!)
-        Me.cbRole.ForeColor = System.Drawing.Color.Black
-        Me.cbRole.FormattingEnabled = True
-        Me.cbRole.Items.AddRange(New Object() {"User", "Admin"})
-        Me.cbRole.Location = New System.Drawing.Point(225, 295)
-        Me.cbRole.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbRole.Name = "cbRole"
-        Me.cbRole.Size = New System.Drawing.Size(256, 24)
-        Me.cbRole.TabIndex = 62
+        Me.cmbRole.AutoCompleteCustomSource.AddRange(New String() {"User", "Admin"})
+        Me.cmbRole.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.cmbRole.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
+        Me.cmbRole.Font = New System.Drawing.Font("Cinzel", 7.2!)
+        Me.cmbRole.ForeColor = System.Drawing.Color.Black
+        Me.cmbRole.FormattingEnabled = True
+        Me.cmbRole.Items.AddRange(New Object() {"User", "Admin"})
+        Me.cmbRole.Location = New System.Drawing.Point(225, 295)
+        Me.cmbRole.Margin = New System.Windows.Forms.Padding(4)
+        Me.cmbRole.Name = "cmbRole"
+        Me.cmbRole.Size = New System.Drawing.Size(256, 24)
+        Me.cmbRole.TabIndex = 62
         '
         'txtEmail
         '
@@ -617,7 +617,7 @@ Partial Class FormSignUp
     Friend WithEvents lblUsername As Label
     Friend WithEvents btnShowPass As Button
     Friend WithEvents btnShowConfPass As Button
-    Friend WithEvents cbRole As ComboBox
+    Friend WithEvents cmbRole As ComboBox
     Friend WithEvents txtEmail As TextBox
     Friend WithEvents txtUsername As TextBox
     Friend WithEvents txtPass As TextBox
