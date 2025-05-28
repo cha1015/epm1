@@ -54,7 +54,7 @@ Public Class FormAdminCenter
     Private Sub LoadSearchResults()
         ' Updated query to calculate status dynamically
         Dim query As String = "SELECT place_id, event_place, event_type, capacity, price_per_day, description, image_url, " &
-                          "CASE WHEN EXISTS (SELECT 1 FROM bookings WHERE bookings.place_id = eventplace.place_id) " &
+                          "CASE WHEN EXISTS (SELECT * FROM bookings WHERE bookings.place_id = eventplace.place_id) " &
                           "THEN 'Booked' ELSE 'Available' END AS status " &
                           "FROM eventplace WHERE 1=1"
         Dim dt As New DataTable()
@@ -219,14 +219,14 @@ Public Class FormAdminCenter
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
         Dim bookedDates As New List(Of Date)
-        Dim query As String = "SELECT event_date, event_end_date FROM Bookings WHERE place_id = @place_id"
+        Dim query As String = "SELECT event_date, SELECT * FROM Bookings WHERE place_id = @place_id"
 
         Dim params As New Dictionary(Of String, Object) From {{"@place_id", placeId}}
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, params)
         For Each row As DataRow In dt.Rows
             Dim startDate As Date = Convert.ToDateTime(row("event_date"))
-            Dim endDate As Date = Convert.ToDateTime(row("event_end_date"))
+            Dim endDate As Date = Convert.ToDateTime(row(""))
 
             ' Add all dates in the range to the booked list
             For Each d As Date In Enumerable.Range(0, (endDate - startDate).Days + 1).Select(Function(i) startDate.AddDays(i))

@@ -61,6 +61,8 @@ Public Class HelperResultsDisplay
                                                          lblName.Location = New Point(5, 140)
                                                          lblName.Text = row("event_place").ToString()
                                                          lblName.Font = New Font("Poppins", 10, FontStyle.Bold)
+                                                         lblName.AutoEllipsis = True
+                                                         lblName.TextAlign = ContentAlignment.MiddleLeft
 
                                                          ' Label for capacity
                                                          Dim lblCapacity As New Label()
@@ -92,8 +94,10 @@ Public Class HelperResultsDisplay
                                                          lblEventType.Text = "Event Types: " & displayEventTypes
                                                          toolTip.SetToolTip(lblEventType, fullEventTypesText)
                                                          lblEventType.Font = New Font("Poppins", 8)
+                                                         lblEventType.AutoEllipsis = True
+                                                         lblEventType.TextAlign = ContentAlignment.MiddleLeft
 
-                                                         ' Action Button(s): either Book or Update/Delete buttons
+                                                         ' Action Button(s): either Book or Update/Delete buttonsgit 
                                                          If Not isAdmin Then
                                                              Dim btnBook As New Button()
                                                              btnBook.Text = "Book Now"

@@ -38,11 +38,12 @@ Partial Class FormCustomerView
         Me.btnLogOut = New System.Windows.Forms.Button()
         Me.btnclose = New System.Windows.Forms.Button()
         Me.btnminimize = New System.Windows.Forms.Button()
-        Me.DraggablePanel1 = New epm1.DraggablePanel()
         Me.cbPaid = New System.Windows.Forms.CheckBox()
         Me.cbRejected = New System.Windows.Forms.CheckBox()
         Me.cbPending = New System.Windows.Forms.CheckBox()
         Me.txtSearch = New System.Windows.Forms.TextBox()
+        Me.cbApproved = New System.Windows.Forms.CheckBox()
+        Me.DraggablePanel1 = New epm1.DraggablePanel()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -222,14 +223,6 @@ Partial Class FormCustomerView
         Me.btnminimize.TabIndex = 70
         Me.btnminimize.UseVisualStyleBackColor = False
         '
-        'DraggablePanel1
-        '
-        Me.DraggablePanel1.BackColor = System.Drawing.Color.Transparent
-        Me.DraggablePanel1.Location = New System.Drawing.Point(-6, -8)
-        Me.DraggablePanel1.Name = "DraggablePanel1"
-        Me.DraggablePanel1.Size = New System.Drawing.Size(902, 25)
-        Me.DraggablePanel1.TabIndex = 68
-        '
         'cbPaid
         '
         Me.cbPaid.Appearance = System.Windows.Forms.Appearance.Button
@@ -251,7 +244,7 @@ Partial Class FormCustomerView
         Me.cbRejected.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gray
         Me.cbRejected.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.cbRejected.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbRejected.Location = New System.Drawing.Point(754, 92)
+        Me.cbRejected.Location = New System.Drawing.Point(680, 92)
         Me.cbRejected.Name = "cbRejected"
         Me.cbRejected.Size = New System.Drawing.Size(68, 21)
         Me.cbRejected.TabIndex = 76
@@ -266,7 +259,7 @@ Partial Class FormCustomerView
         Me.cbPending.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gray
         Me.cbPending.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.cbPending.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbPending.Location = New System.Drawing.Point(680, 92)
+        Me.cbPending.Location = New System.Drawing.Point(606, 92)
         Me.cbPending.Name = "cbPending"
         Me.cbPending.Size = New System.Drawing.Size(68, 21)
         Me.cbPending.TabIndex = 77
@@ -285,6 +278,29 @@ Partial Class FormCustomerView
         Me.txtSearch.Size = New System.Drawing.Size(222, 13)
         Me.txtSearch.TabIndex = 78
         '
+        'cbApproved
+        '
+        Me.cbApproved.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbApproved.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gray
+        Me.cbApproved.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.cbApproved.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbApproved.Location = New System.Drawing.Point(754, 92)
+        Me.cbApproved.Name = "cbApproved"
+        Me.cbApproved.Size = New System.Drawing.Size(68, 21)
+        Me.cbApproved.TabIndex = 79
+        Me.cbApproved.Text = "Approved"
+        Me.cbApproved.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.cbApproved.ThreeState = True
+        Me.cbApproved.UseVisualStyleBackColor = True
+        '
+        'DraggablePanel1
+        '
+        Me.DraggablePanel1.BackColor = System.Drawing.Color.Transparent
+        Me.DraggablePanel1.Location = New System.Drawing.Point(-6, -8)
+        Me.DraggablePanel1.Name = "DraggablePanel1"
+        Me.DraggablePanel1.Size = New System.Drawing.Size(902, 25)
+        Me.DraggablePanel1.TabIndex = 68
+        '
         'FormCustomerView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -293,6 +309,7 @@ Partial Class FormCustomerView
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.ControlBox = False
+        Me.Controls.Add(Me.cbApproved)
         Me.Controls.Add(Me.txtSearch)
         Me.Controls.Add(Me.cbPending)
         Me.Controls.Add(Me.cbRejected)
@@ -341,4 +358,5 @@ Partial Class FormCustomerView
     Friend WithEvents cbRejected As CheckBox
     Friend WithEvents cbPending As CheckBox
     Friend WithEvents txtSearch As TextBox
+    Friend WithEvents cbApproved As CheckBox
 End Class

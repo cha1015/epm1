@@ -169,27 +169,31 @@ Public Class FormBooking
     End Sub
 
     Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs) Handles btnPlaceBooking.Click
+        ' Check for duplicate booking
         If bookedDates.Contains(dtpEventDateStart.Value.Date) Then
             MessageBox.Show("This date is already booked. Please select another.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
+        ' Parse the number of guests from text
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then
             numGuests = 0
         End If
 
+        ' Create complete time strings by combining hour, minute, and AM/PM values.
         Dim eventStartStr As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
         Dim eventEndStr As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
 
+        ' Calculate final total price
         Dim finalTotalPrice As Decimal = HelperPrice.ComputeFinalPrice(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                       dtpEventDateStart, dtpEventDateEnd,
-                                       chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                                       cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                       chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
+                                           dtpEventDateStart, dtpEventDateEnd,
+                                           chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
+                                           cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
+                                           chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
 
-        ' Use the logged-in user's customer ID
-        Dim CustomerId As Integer = CurrentUser.CustomerId
+        ' Create new customer
+        Dim customerResult As CustomerResult = HelperDatabase.CreateNewCustomer(txtCustomerName.Text, dtpBirthday.Value, cmbSex.Text, txtAddress.Text, numGuests)
 
         If CustomerResult.CustomerId <= 0 Then
             MessageBox.Show($"Customer creation failed! Error: {CustomerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -205,19 +209,18 @@ Public Class FormBooking
 
         If bookingId > 0 Then
             HelperDatabase.SaveBookingServices(bookingId, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
-            HelperDatabase.InsertPaymentRecord(bookingId, customerId, finalTotalPrice)
+            HelperDatabase.InsertPaymentRecord(bookingId, CustomerResult.CustomerId, finalTotalPrice)
 
-            Dim result = MessageBox.Show("Booking and payment recorded successfully! Do you want to review your bookings?",
-                             "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+            Dim result = MessageBox.Show("Booking and payment recorded successfully! Do you want to review your customer details?",
+                                 "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
             If result = DialogResult.Yes Then
-                Dim customerViewForm As New FormCustomerView()
+                Dim customerViewForm As New FormCustomerView(CurrentUser.CustomerId)
                 customerViewForm.Show()
             End If
         Else
             MessageBox.Show("Booking failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
-
 
     Private Sub PopulatePaymentDetails()
         lblCustomerContainer.Text = txtCustomerName.Text

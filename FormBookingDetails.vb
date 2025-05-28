@@ -6,7 +6,7 @@
 
         If dt.Rows.Count > 0 Then
             ' Populate the form with the retrieved booking details
-            lblCustomerName.Text = "Customer: " & dt.Rows(0)("customer_name").ToString()
+            'lblCustomerName.Text = "Customer: " & dt.Rows(0)("customer_name").ToString()
             lblEventPlace.Text = "Event Place: " & dt.Rows(0)("event_place").ToString()
             lblEventType.Text = "Event Type: " & dt.Rows(0)("event_type").ToString()
             lblNumGuests.Text = "Guests: " & dt.Rows(0)("num_guests").ToString()

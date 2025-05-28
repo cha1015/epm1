@@ -195,19 +195,27 @@ Public Class FormCustomerView
         Dim showPending = cbPending.Checked
         Dim showRejected = cbRejected.Checked
         Dim showPaid = cbPaid.Checked
+        Dim showApproved = cbApproved.Checked
 
         filteredBookings = filteredBookings.Where(Function(row)
                                                       Dim status = row("status").ToString().ToLower()
+                                                      Dim paymentStatus = If(IsDBNull(row("payment_status")), "", row("payment_status").ToString().ToLower())
+
+                                                      ' Pending
                                                       If status = "pending" AndAlso showPending Then Return True
+
+                                                      ' Rejected
                                                       If status = "rejected" AndAlso showRejected Then Return True
-                                                      If status = "approved" OrElse status = "paid" Then
-                                                          ' Consider booking as paid if payment_status is "Paid"
-                                                          Dim paymentStatus = If(IsDBNull(row("payment_status")), "", row("payment_status").ToString().ToLower())
-                                                          If (status = "approved" AndAlso paymentStatus = "paid" AndAlso showPaid) Then Return True
-                                                          If (status = "approved" AndAlso paymentStatus <> "paid" AndAlso showPending) Then Return True
-                                                      End If
+
+                                                      ' Paid (either status is "paid" or status is "approved" and payment_status is "paid")
+                                                      If ((status = "paid") OrElse (status = "approved" AndAlso paymentStatus = "paid")) AndAlso showPaid Then Return True
+
+                                                      ' Approved (status is "approved" and payment_status is not "paid")
+                                                      If (status = "approved" AndAlso paymentStatus <> "paid" AndAlso showApproved) Then Return True
+
                                                       Return False
                                                   End Function)
+
 
         ' Search filtering
         Dim searchText = txtSearch.Text.Trim().ToLower()
@@ -294,27 +302,16 @@ Public Class FormCustomerView
             Dim detailsFont As New Font(quicheFont.FontFamily, 9, FontStyle.Regular)
             Dim y As Integer = 8
 
-            ' Customer Name (top left)
+            ' Row 1: Customer Name (left), Booking ID (right)
             Dim customerName As String = If(dataRow.Table.Columns.Contains("customer_name"), dataRow("customer_name").ToString(), CurrentUser.Username)
             Dim lblCustomerName As New Label()
             lblCustomerName.Text = "Customer Name: " & customerName
             lblCustomerName.Font = detailsFont
             lblCustomerName.ForeColor = Color.Black
             lblCustomerName.Location = New Point(10, y)
-            lblCustomerName.Size = New Size(380, 18)
+            lblCustomerName.Size = New Size(180, 18)
             panel2.Controls.Add(lblCustomerName)
-            y += 20
 
-            ' Customer ID
-            Dim lblCustomerId As New Label()
-            lblCustomerId.Text = "Customer ID: " & CurrentUser.CustomerId.ToString()
-            lblCustomerId.Font = detailsFont
-            lblCustomerId.ForeColor = Color.Black
-            lblCustomerId.Location = New Point(10, y)
-            lblCustomerId.Size = New Size(180, 18)
-            panel2.Controls.Add(lblCustomerId)
-
-            ' Booking ID
             Dim lblBookingId As New Label()
             lblBookingId.Text = "Booking ID: " & dataRow("booking_id").ToString()
             lblBookingId.Font = detailsFont
@@ -324,16 +321,33 @@ Public Class FormCustomerView
             panel2.Controls.Add(lblBookingId)
             y += 20
 
-            ' Date
+            ' Row 2: Customer ID (left), Event Date (right)
+            Dim lblCustomerId As New Label()
+            lblCustomerId.Text = "Customer ID: " & CurrentUser.CustomerId.ToString()
+            lblCustomerId.Font = detailsFont
+            lblCustomerId.ForeColor = Color.Black
+            lblCustomerId.Location = New Point(10, y)
+            lblCustomerId.Size = New Size(180, 18)
+            panel2.Controls.Add(lblCustomerId)
+
             Dim lblEventDate As New Label()
             lblEventDate.Text = "Date: " & Convert.ToDateTime(dataRow("event_date")).ToString("yyyy-MM-dd")
             lblEventDate.Font = detailsFont
             lblEventDate.ForeColor = Color.Black
-            lblEventDate.Location = New Point(10, y)
+            lblEventDate.Location = New Point(200, y)
             lblEventDate.Size = New Size(180, 18)
             panel2.Controls.Add(lblEventDate)
+            y += 20
 
-            ' Time
+            ' Row 3: Payment ID (left), Event Time (right)
+            Dim lblPaymentId As New Label()
+            lblPaymentId.Text = "Payment ID: " & If(IsDBNull(dataRow("payment_id")), "N/A", dataRow("payment_id").ToString())
+            lblPaymentId.Font = detailsFont
+            lblPaymentId.ForeColor = Color.Black
+            lblPaymentId.Location = New Point(10, y)
+            lblPaymentId.Size = New Size(180, 18)
+            panel2.Controls.Add(lblPaymentId)
+
             Dim lblEventTime As New Label()
             lblEventTime.Text = "Time: " & dataRow("event_time").ToString() & " - " & dataRow("event_end_time").ToString()
             lblEventTime.Font = detailsFont
@@ -343,33 +357,24 @@ Public Class FormCustomerView
             panel2.Controls.Add(lblEventTime)
             y += 20
 
-            ' Payment ID
-            Dim lblPaymentId As New Label()
-            lblPaymentId.Text = "Payment ID: " & If(IsDBNull(dataRow("payment_id")), "N/A", dataRow("payment_id").ToString())
-            lblPaymentId.Font = detailsFont
-            lblPaymentId.ForeColor = Color.Black
-            lblPaymentId.Location = New Point(10, y)
-            lblPaymentId.Size = New Size(180, 18)
-            panel2.Controls.Add(lblPaymentId)
-
-            ' Payment Date
+            ' Row 4: Payment Date (left), Amount Paid (right)
             Dim lblPaymentDate As New Label()
             lblPaymentDate.Text = "Payment Date: " & If(IsDBNull(dataRow("payment_date")), "N/A", Convert.ToDateTime(dataRow("payment_date")).ToString("yyyy-MM-dd"))
             lblPaymentDate.Font = detailsFont
             lblPaymentDate.ForeColor = Color.Black
-            lblPaymentDate.Location = New Point(200, y)
+            lblPaymentDate.Location = New Point(10, y)
             lblPaymentDate.Size = New Size(180, 18)
             panel2.Controls.Add(lblPaymentDate)
-            y += 20
 
-            ' Amount Paid
             Dim lblAmountPaid As New Label()
             lblAmountPaid.Text = "Amount Paid: " & If(IsDBNull(dataRow("amount_paid")), "N/A", "₱" & Convert.ToDecimal(dataRow("amount_paid")).ToString("F2"))
             lblAmountPaid.Font = detailsFont
             lblAmountPaid.ForeColor = Color.Black
-            lblAmountPaid.Location = New Point(10, y)
+            lblAmountPaid.Location = New Point(200, y)
             lblAmountPaid.Size = New Size(180, 18)
             panel2.Controls.Add(lblAmountPaid)
+
+
 
             panel.Controls.Add(panel2)
 
@@ -395,6 +400,7 @@ Public Class FormCustomerView
 
             If isPaid Then
                 ' Paid: show "Paid" centered, no price
+                panel3.Size = New Size(189, 152)
                 Dim lblPaid As New Label()
                 lblPaid.Text = "Paid"
                 lblPaid.Font = New Font(quicheFont.FontFamily, 18, FontStyle.Bold)
@@ -408,18 +414,22 @@ Public Class FormCustomerView
                 lblStatus.Text = If(isApproved, "Approved", "Pending")
                 lblStatus.Font = New Font(quicheFont.FontFamily, 13, FontStyle.Bold)
                 lblStatus.ForeColor = If(isApproved, Color.SeaGreen, Color.OrangeRed)
-                lblStatus.Dock = DockStyle.Top
-                lblStatus.Height = 76
+                lblStatus.Dock = DockStyle.Fill
                 lblStatus.TextAlign = ContentAlignment.MiddleCenter
                 panel3.Controls.Add(lblStatus)
 
-                Dim lblAmountToPay As New Label()
-                lblAmountToPay.Text = "₱" & toPay.ToString("F2")
-                lblAmountToPay.Font = New Font(quicheFont.FontFamily, 15, FontStyle.Bold)
-                lblAmountToPay.ForeColor = Color.Black
-                lblAmountToPay.Dock = DockStyle.Fill
-                lblAmountToPay.TextAlign = ContentAlignment.TopCenter
-                panel3.Controls.Add(lblAmountToPay)
+                If isApproved Then
+                    panel3.Size = New Size(189, 126)
+                    Dim lblAmountToPay As New Label()
+                    lblAmountToPay.Text = "₱" & toPay.ToString("F2")
+                    lblAmountToPay.Font = New Font(quicheFont.FontFamily, 15, FontStyle.Bold)
+                    lblAmountToPay.ForeColor = Color.Black
+                    lblAmountToPay.Dock = DockStyle.Bottom
+                    lblAmountToPay.Height = 38
+                    lblAmountToPay.TextAlign = ContentAlignment.MiddleCenter
+                    panel3.Controls.Add(lblAmountToPay)
+                End If
+
             ElseIf isRejected Then
                 Dim lblRejected As New Label()
                 lblRejected.Text = "Rejected"
@@ -449,8 +459,8 @@ Public Class FormCustomerView
             Dim btnPay As New Button()
             btnPay.Text = "Pay"
             btnPay.Location = New Point(766, 146)
-            btnPay.Size = New Size(87, 20)
-            btnPay.Font = New Font(detailsFont.FontFamily, 8, FontStyle.Regular)
+            btnPay.Size = New Size(87, 22)
+            btnPay.Font = New Font(detailsFont.FontFamily, 7, FontStyle.Regular)
             btnPay.BackColor = Color.FromArgb(220, 240, 220)
             btnPay.FlatStyle = FlatStyle.Flat
             btnPay.Enabled = isApproved AndAlso Not isPaid
@@ -472,7 +482,6 @@ Public Class FormCustomerView
                 Return
             End If
 
-            ' Update database using DBHelper
             Dim paymentId = dataRow("payment_id")
             Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
             Dim parameters As New Dictionary(Of String, Object) From {
@@ -482,9 +491,24 @@ Public Class FormCustomerView
                 {"@payment_id", paymentId}
             }
             DBHelper.ExecuteQuery(updateQuery, parameters)
+
+            ' Also update the booking status to "paid" BEFORE reloading bookings
+            Dim bookingId = dataRow("booking_id")
+            Dim updateBookingQuery As String = "UPDATE bookings SET status = @status WHERE booking_id = @booking_id"
+            Dim bookingParams As New Dictionary(Of String, Object) From {
+                {"@status", "paid"},
+                {"@booking_id", bookingId}
+            }
+            DBHelper.ExecuteQuery(updateBookingQuery, bookingParams)
+
             MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             LoadAllBookings()
             PopulateBookingPanels()
+
+
+
+
+
         End Sub
 
             If isApproved AndAlso Not isPaid Then
@@ -497,7 +521,6 @@ Public Class FormCustomerView
     End Sub
 
 
-    ' Helper: Set a rounded rectangle region for a panel
     Private Sub SetPanelRoundedRect(p As Panel, cornerRadius As Integer)
         Dim path As New Drawing2D.GraphicsPath()
         path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
@@ -508,10 +531,9 @@ Public Class FormCustomerView
         p.Region = New Region(path)
     End Sub
 
-    ' Helper: Make PictureBox rounded rectangle (not ellipse)
     Private Sub MakePictureBoxRoundedRect(sender As Object, e As PaintEventArgs)
         Dim pb As PictureBox = CType(sender, PictureBox)
-        Dim cornerRadius As Integer = 32 ' Less round than ellipse
+        Dim cornerRadius As Integer = 32
         Dim path As New Drawing2D.GraphicsPath()
         path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
         path.AddArc(pb.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
@@ -546,8 +568,8 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        Me.Close()
         FormMain.Show()
+        Me.Hide()
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
@@ -574,8 +596,16 @@ Public Class FormCustomerView
         PopulateBookingPanels()
     End Sub
 
+    Private Sub cbApproved_CheckedChanged(sender As Object, e As EventArgs) Handles cbApproved.CheckedChanged
+        PopulateBookingPanels()
+    End Sub
+
+
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
         PopulateBookingPanels()
     End Sub
 
+    Private Sub FlowLayoutPanel1_Paint(sender As Object, e As PaintEventArgs) Handles FlowLayoutPanel1.Paint
+
+    End Sub
 End Class
