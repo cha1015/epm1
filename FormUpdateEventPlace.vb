@@ -1,101 +1,84 @@
 ﻿Public Class FormUpdateEventPlace
-    Private _row As DataRow
-
-    Public Sub New(row As DataRow)
-        InitializeComponent()
-        _row = row
-    End Sub
+    ' Assume this property is set by FormAdminCenter before showing this form.
+    Public Property SelectedPlaceId As Integer
 
     Private Sub FormUpdateEventPlace_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If _row Is Nothing Then
-            MessageBox.Show("DataRow is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
-        End If
+        ' Retrieve the event place data using a parameterized SELECT query.
+        Dim query As String = "SELECT * FROM eventplace WHERE place_id = @place_id"
+        Dim parameters As New Dictionary(Of String, Object) From {
+            {"@place_id", SelectedPlaceId}
+        }
 
-        ' Debugging: log the columns to verify if 'features' and 'opening_hours' exist
-        For Each column As DataColumn In _row.Table.Columns
-            Debug.WriteLine("Column: " & column.ColumnName & " Value: " & _row(column).ToString())
-        Next
+        Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
-        If _row IsNot Nothing Then
-            txtPlaceID.Text = _row("place_id").ToString()
-            txtEventPlace.Text = _row("event_place").ToString()
-            txtEventType.Text = _row("event_type").ToString()
-            txtCapacity.Text = _row("capacity").ToString()
+        If dt.Rows.Count > 0 Then
+            Dim row As DataRow = dt.Rows(0)
 
-            ' Check if the 'features' column exists before assigning its value
-            If _row.Table.Columns.Contains("features") Then
-                txtFeatures.Text = If(_row("features") IsNot DBNull.Value, _row("features").ToString(), String.Empty)
-            Else
-                txtFeatures.Text = String.Empty
-                MessageBox.Show("Column 'features' not found in the data row.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
+            ' Populate controls with values from the database.
+            txtPlaceID.Text = row("place_id").ToString()
+            txtEventPlace.Text = row("event_place").ToString()
+            txtEventType.Text = row("event_type").ToString()
+            txtCapacity.Text = row("capacity").ToString()
 
-            ' Check if the 'opening_hours' column exists before assigning its value
-            If _row.Table.Columns.Contains("opening_hours") Then
-                txtOpeningHours.Text = If(_row("opening_hours") IsNot DBNull.Value, _row("opening_hours").ToString(), String.Empty)
-            Else
-                txtOpeningHours.Text = String.Empty
-                MessageBox.Show("Column 'opening_hours' not found in the data row.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
+            ' Converting price to a decimal and then formatting it with two decimals.
+            txtPricePerDay.Text = Convert.ToDecimal(row("price_per_Day")).ToString("F2")
+            txtFeatures.Text = row("features").ToString()
+            txtImageUrl.Text = row("image_url").ToString()
 
-            txtPricePerDay.Text = _row("price_per_day").ToString()
-            txtDescription.Text = _row("description").ToString()
-            txtImageUrl.Text = _row("image_url").ToString()
+            ' For time fields, we convert to DateTime. You might add TryParseExact similar to FormBooking
+            ' if your data might have single or double digit hours.
+            txtOpeningHours.Text = Convert.ToDateTime(row("opening_hours")).ToString("HH:mm")
+            txtClosingHours.Text = Convert.ToDateTime(row("closing_hours")).ToString("HH:mm")
 
-            ' Ensure the 'closing_hours' and 'available_days' are also checked
-            If _row.Table.Columns.Contains("closing_hours") Then
-                txtClosingHours.Text = If(_row("closing_hours") IsNot DBNull.Value, _row("closing_hours").ToString(), String.Empty)
-            Else
-                txtClosingHours.Text = String.Empty
-            End If
-
-            If _row.Table.Columns.Contains("available_days") Then
-                txtAvailableDays.Text = If(_row("available_days") IsNot DBNull.Value, _row("available_days").ToString(), String.Empty)
-            Else
-                txtAvailableDays.Text = String.Empty
-            End If
+            txtAvailableDays.Text = row("available_days").ToString()
+            txtDescription.Text = row("description").ToString()
+        Else
+            MessageBox.Show("No event place record found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 
     Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
-        If String.IsNullOrWhiteSpace(txtPlaceID.Text) Then
-            MessageBox.Show("Please select an event place to update.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
+        ' Build the UPDATE SQL command using parameters.
+        Dim query As String = "UPDATE eventplace SET 
+                                event_place = @event_place, 
+                                event_type = @event_type, 
+                                capacity = @capacity, 
+                                features = @features, 
+                                price_per_Day = @price_per_Day, 
+                                description = @description, 
+                                image_url = @image_url, 
+                                opening_hours = @opening_hours, 
+                                closing_hours = @closing_hours, 
+                                available_days = @available_days 
+                             WHERE place_id = @place_id"
 
-        ' Format the opening and closing hours
-        Dim openingHours As String = HelperValidation.FormatTime(txtOpeningHours.Text)
-        Dim closingHours As String = HelperValidation.FormatTime(txtClosingHours.Text)
-        If String.IsNullOrEmpty(openingHours) OrElse String.IsNullOrEmpty(closingHours) Then Exit Sub
+        Dim parameters As New Dictionary(Of String, Object)
+        parameters.Add("@event_place", txtEventPlace.Text)
+        parameters.Add("@event_type", txtEventType.Text)
+        parameters.Add("@capacity", Convert.ToInt32(txtCapacity.Text))
+        parameters.Add("@features", txtFeatures.Text)
+        parameters.Add("@price_per_Day", Convert.ToDecimal(txtPricePerDay.Text))
+        parameters.Add("@description", txtDescription.Text)
+        parameters.Add("@image_url", txtImageUrl.Text)
 
-        ' Prepare the update query
-        Dim query As String = "UPDATE eventplace SET event_place = @event_place, event_type = @event_type, capacity = @capacity, features = @features, price_per_day = @price_per_day, description = @description, image_url = @image_url, opening_hours = @opening_hours, closing_hours = @closing_hours, available_days = @available_days WHERE place_id = @place_id"
+        ' Convert the provided times to strings in "HH:mm:ss" format.
+        ' You can extend this by checking formats (as in FormBooking) if needed.
+        parameters.Add("@opening_hours", DateTime.Parse(txtOpeningHours.Text).ToString("HH:mm:ss"))
+        parameters.Add("@closing_hours", DateTime.Parse(txtClosingHours.Text).ToString("HH:mm:ss"))
 
-        ' Prepare parameters for the query
-        Dim parameters As New Dictionary(Of String, Object) From {
-            {"@place_id", txtPlaceID.Text},
-            {"@event_place", txtEventPlace.Text},
-            {"@event_type", txtEventType.Text},
-            {"@capacity", If(Not IsNumeric(txtCapacity.Text), DBNull.Value, txtCapacity.Text)},
-            {"@features", If(String.IsNullOrWhiteSpace(txtFeatures.Text), DBNull.Value, txtFeatures.Text)},
-            {"@price_per_day", If(Not IsNumeric(txtPricePerDay.Text), DBNull.Value, txtPricePerDay.Text)},
-            {"@description", txtDescription.Text},
-            {"@image_url", txtImageUrl.Text},
-            {"@opening_hours", openingHours},
-            {"@closing_hours", closingHours},
-            {"@available_days", txtAvailableDays.Text}
-        }
+        ' available_days should be entered in a valid format matching your SET definition.
+        parameters.Add("@available_days", txtAvailableDays.Text)
+        parameters.Add("@place_id", Convert.ToInt32(txtPlaceID.Text))
 
-        ' Execute the query to update the event place
+        ' Execute the update command and notify the admin.
         Dim rowsAffected As Integer = DBHelper.ExecuteQuery(query, parameters)
+
         If rowsAffected > 0 Then
-            MessageBox.Show("Event place updated successfully.")
-            ' Reload the event places in the Admin Center
-            Dim formAdminCenter As New FormAdminCenter()
-            formAdminCenter.LoadSearchResults()
+            MessageBox.Show("Event Place details updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ' Optionally, refresh the admin center or close this form.
+            Me.Close()
         Else
-            MessageBox.Show("Update failed. No rows were affected. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Failed to update event place details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 End Class

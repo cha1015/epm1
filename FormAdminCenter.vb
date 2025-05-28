@@ -61,11 +61,13 @@ Public Class FormAdminCenter
         Dim btn As Button = DirectCast(sender, Button)
         Dim row As DataRow = DirectCast(btn.Tag, DataRow)
 
-        Dim updateForm As New FormUpdateEventPlace(row)
+        Dim updateForm As New FormUpdateEventPlace()
+        updateForm.SelectedPlaceId = Convert.ToInt32(row("place_id"))
         updateForm.ShowDialog()
 
         LoadSearchResults()
     End Sub
+
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Dim btn As Button = DirectCast(sender, Button)
