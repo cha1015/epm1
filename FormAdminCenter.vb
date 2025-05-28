@@ -11,14 +11,12 @@ Public Class FormAdminCenter
         HelperNavigation.RegisterNewForm(Me)
         lblUsername.Text = CurrentUser.Username
 
-
         ' Load all datasets into FlowLayoutPanels and Chart:
         LoadSearchResults()         ' Event Places (with update/delete)
         LoadPendingBookings()         ' Pending Bookings (with Approve/Reject)
         LoadAvailability()            ' Availability of Event Places
         LoadRevenueReports()          ' Revenue per Event Place
         LoadInvoices()                ' Invoices with Accept Payment
-        'LoadBookedDates()             ' Booked Dates
         LoadCustomerCount()           ' Customer Count
         LoadCustomerRecords()         ' Customer Records
         LoadBookingStatusChart()      ' Booking Status Chart
@@ -34,6 +32,17 @@ Public Class FormAdminCenter
             AddHandler field.TextChanged, Sub(senderObj, args) HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
             AddHandler field.Leave, Sub(senderObj, args) HelperValidation.RemoveAsteriskOnInput(senderObj, labels, texts)
         Next
+    End Sub
+
+    ' Add DateChanged event handler for the MonthCalendar control
+    Private Sub mcBookings_DateChanged(sender As Object, e As DateRangeEventArgs) Handles mcBookings.DateChanged
+        Dim selectedDate As Date = e.Start
+
+        ' Update the chart and flow panels based on the selected date
+        UpdateBookingStatusChart(selectedDate)
+        UpdateRevenueReports(selectedDate)
+        UpdateAvailability(selectedDate)
+        UpdatePendingBookings(selectedDate)
     End Sub
 
 #Region "Data Loading using HelperResultsDisplay (FlowLayoutPanels)"
@@ -93,14 +102,15 @@ Public Class FormAdminCenter
 
     '--- Load Revenue Reports
     Private Sub LoadRevenueReports()
-        Dim query As String = "SELECT e.event_place, SUM(b.total_price) AS total_revenue " &
-                              "FROM eventplace e " &
-                              "JOIN bookings b ON e.place_id = b.place_id " &
-                              "WHERE b.status='Approved' " &
-                              "GROUP BY e.place_id"
+        Dim query As String = "SELECT e.event_place, " &
+                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
+                          "FROM eventplace e " &
+                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'Approved' " &
+                          "GROUP BY e.place_id"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
     End Sub
+
 
     '--- Load Invoices
     Private Sub LoadInvoices()
@@ -110,12 +120,27 @@ Public Class FormAdminCenter
         HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
     End Sub
 
-    '--- Load Booked Dates
-    'Private Sub LoadBookedDates()
-    '    Dim query As String = "SELECT DISTINCT event_date FROM bookings WHERE status='Approved'"
-    '    Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-    '    HelperResultsDisplay.PopulateBookedDates(flpBookedDates, dt)
-    'End Sub
+    ' ------------------ Load Booked Dates ------------------
+    Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
+        Dim bookedDates As New List(Of Date)
+        Dim query As String = "SELECT event_date, event_end_date FROM Bookings WHERE place_id = @place_id"
+
+        Dim params As New Dictionary(Of String, Object) From {{"@place_id", placeId}}
+
+        Dim dt As DataTable = DBHelper.GetDataTable(query, params)
+        For Each row As DataRow In dt.Rows
+            Dim startDate As Date = Convert.ToDateTime(row("event_date"))
+            Dim endDate As Date = Convert.ToDateTime(row("event_end_date"))
+
+            ' Add all dates in the range to the booked list
+            For Each d As Date In Enumerable.Range(0, (endDate - startDate).Days + 1).Select(Function(i) startDate.AddDays(i))
+                bookedDates.Add(d)
+            Next
+        Next
+
+        Return bookedDates
+    End Function
+
 
     '--- Load Customer Count
     Private Sub LoadCustomerCount()
@@ -146,6 +171,63 @@ Public Class FormAdminCenter
         Next
         chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
         chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
+    End Sub
+
+#End Region
+
+#Region "Data Updates Based on Selected Date"
+
+    '--- Update the Booking Status Chart for the selected date
+    Private Sub UpdateBookingStatusChart(selectedDate As Date)
+        chartTotalStatus.Series.Clear()
+        Dim statusSeries As New Series("BookingStatus") With {
+            .ChartType = SeriesChartType.Bar,
+            .LabelFormat = "0"
+        }
+        chartTotalStatus.Series.Add(statusSeries)
+
+        ' Update query to filter by selected date
+        Dim query As String = "SELECT status, COUNT(*) AS count FROM bookings WHERE event_date = @selectedDate GROUP BY status"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+
+        For Each row As DataRow In dt.Rows
+            statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
+        Next
+        chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
+        chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
+    End Sub
+
+    '--- Update Revenue Reports for the selected date
+    Private Sub UpdateRevenueReports(selectedDate As Date)
+        Dim query As String = "SELECT e.event_place, " &
+                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
+                          "FROM eventplace e " &
+                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status='Approved' AND b.event_date = @selectedDate " &
+                          "GROUP BY e.place_id"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
+    End Sub
+
+    '--- Update Availability for the selected date
+    Private Sub UpdateAvailability(selectedDate As Date)
+        Dim query As String = "SELECT e.event_place, " &
+                              "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved' AND b.event_date = @selectedDate) " &
+                              "THEN 'Booked' ELSE 'Available' END AS Availability " &
+                              "FROM eventplace e"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+        HelperResultsDisplay.PopulateAvailability(flpAvailability, dt)
+    End Sub
+
+    '--- Update Pending Bookings for the selected date
+    Private Sub UpdatePendingBookings(selectedDate As Date)
+        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
+                              "FROM bookings b " &
+                              "JOIN customers c ON b.customer_id = c.customer_id " &
+                              "JOIN eventplace e ON b.place_id = e.place_id " &
+                              "WHERE b.status = 'Pending' AND b.event_date = @selectedDate " &
+                              "ORDER BY b.event_date ASC"
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+        HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
     End Sub
 
 #End Region
@@ -319,16 +401,20 @@ Public Class FormAdminCenter
 
     ' Show booking details
     Public Sub ShowBookingDetails(ByVal row As DataRow)
-
         If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
             ' Create a new form if it doesn't exist
             bookingDetailsForm = New FormBookingDetails()
         End If
 
+        ' Ensure the bookingId is valid
+        Dim bookingId As Integer = Convert.ToInt32(row("booking_id"))
+        Debug.Print("Booking ID: " & bookingId.ToString())
+
         ' Load the booking details into the form
-        bookingDetailsForm.LoadBookingDetails(CInt(row("booking_id")))
+        bookingDetailsForm.LoadBookingDetails(bookingId)
         bookingDetailsForm.ShowDialog()
     End Sub
+
 
     ' Hide booking details
     Public Sub HideBookingDetails()

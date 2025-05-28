@@ -43,18 +43,19 @@ Public Class FormCustomerView
     End Function
 
     Private Sub LoadBookings()
-        Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
+        Debug.WriteLine($"Loading bookings for CustomerId: @customerId")
 
         dgvPaymentHistory.ClearSelection()
 
+        ' Log query parameters
+        Debug.WriteLine($"Executing Query with customer_id: @customerId")
+
         Dim query As String = "SELECT b.booking_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status 
-                       FROM bookings b
-                       JOIN eventplace p ON b.place_id = p.place_id 
-                       WHERE b.customer_id = @customer_id
-                       ORDER BY b.event_date DESC"
+                           FROM bookings b
+                           JOIN eventplace p ON b.place_id = p.place_id 
+                           WHERE b.customer_id = @customer_id
+                           ORDER BY b.event_date DESC"
 
-
-        ' Use a parameterized query
         Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
 
         Try
@@ -73,6 +74,7 @@ Public Class FormCustomerView
                 btnSelectBooking.Enabled = True
                 btnConfirmPayment.Enabled = True
             Else
+                ' No bookings found, provide a message
                 Dim dtPlaceholder As New DataTable()
                 dtPlaceholder.Columns.Add("Message", GetType(String))
                 dtPlaceholder.Rows.Add("No bookings found. Start by booking an event!")
@@ -86,7 +88,6 @@ Public Class FormCustomerView
             MessageBox.Show("Error loading bookings: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
 
 
     Private Sub LoadPaymentHistory()

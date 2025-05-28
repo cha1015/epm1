@@ -87,7 +87,7 @@ Public Class FormLogIn
                         CurrentUser.CustomerId = CurrentUser.UserID
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
-                        Me.Close()
+                        Me.Hide()
                     Case Else
                         lblGeneralError.Text = "Invalid role detected! Contact support."
                         lblGeneralError.Visible = True
