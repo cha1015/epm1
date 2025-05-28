@@ -39,6 +39,9 @@ Partial Class FormCustomerView
         Me.btnclose = New System.Windows.Forms.Button()
         Me.btnminimize = New System.Windows.Forms.Button()
         Me.DraggablePanel1 = New epm1.DraggablePanel()
+        Me.cbPaid = New System.Windows.Forms.CheckBox()
+        Me.cbRejected = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -226,6 +229,39 @@ Partial Class FormCustomerView
         Me.DraggablePanel1.Size = New System.Drawing.Size(902, 25)
         Me.DraggablePanel1.TabIndex = 68
         '
+        'cbPaid
+        '
+        Me.cbPaid.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbPaid.Location = New System.Drawing.Point(828, 88)
+        Me.cbPaid.Name = "cbPaid"
+        Me.cbPaid.Size = New System.Drawing.Size(68, 21)
+        Me.cbPaid.TabIndex = 75
+        Me.cbPaid.Text = "Paid"
+        Me.cbPaid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.cbPaid.UseVisualStyleBackColor = True
+        '
+        'cbRejected
+        '
+        Me.cbRejected.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbRejected.Location = New System.Drawing.Point(754, 88)
+        Me.cbRejected.Name = "cbRejected"
+        Me.cbRejected.Size = New System.Drawing.Size(68, 21)
+        Me.cbRejected.TabIndex = 76
+        Me.cbRejected.Text = "Rejected"
+        Me.cbRejected.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.cbRejected.UseVisualStyleBackColor = True
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.CheckBox1.Location = New System.Drawing.Point(680, 88)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(68, 21)
+        Me.CheckBox1.TabIndex = 77
+        Me.CheckBox1.Text = "Pending"
+        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'FormCustomerView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -234,6 +270,9 @@ Partial Class FormCustomerView
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.ControlBox = False
+        Me.Controls.Add(Me.CheckBox1)
+        Me.Controls.Add(Me.cbRejected)
+        Me.Controls.Add(Me.cbPaid)
         Me.Controls.Add(Me.btnminimize)
         Me.Controls.Add(Me.btnclose)
         Me.Controls.Add(Me.DraggablePanel1)
@@ -274,4 +313,7 @@ Partial Class FormCustomerView
     Friend WithEvents DraggablePanel1 As DraggablePanel
     Friend WithEvents btnclose As Button
     Friend WithEvents btnminimize As Button
+    Friend WithEvents cbPaid As CheckBox
+    Friend WithEvents cbRejected As CheckBox
+    Friend WithEvents CheckBox1 As CheckBox
 End Class

@@ -17,7 +17,6 @@ Public Class FormAdminCenter
             LoadAvailability()
             LoadRevenueReports()
             LoadInvoices()
-            LoadBookedDates()
             LoadCustomerCount()
             LoadCustomerRecords()
             LoadBookingStatusChart()

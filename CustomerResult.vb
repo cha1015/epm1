@@ -1,4 +1,4 @@
 ﻿Public Class CustomerResult
-    Public Property CustomerId As Integer
-    Public Property ErrorMessage As String
+    Public Shared Property CustomerId As Integer
+    Public Shared Property ErrorMessage As String
 End Class

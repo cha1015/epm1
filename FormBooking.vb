@@ -189,21 +189,19 @@ Public Class FormBooking
                                        chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
 
         ' Use the logged-in user's customer ID
-        Dim customerId As Integer = CurrentUser.CustomerId
+        Dim CustomerId As Integer = CurrentUser.CustomerId
 
-        If customerResult.CustomerId <= 0 Then
-            MessageBox.Show($"Customer creation failed! Error: {customerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        If CustomerResult.CustomerId <= 0 Then
+            MessageBox.Show($"Customer creation failed! Error: {CustomerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
         ' Link the new customer to the current user
-        HelperDatabase.InsertUserCustomer(CurrentUser.UserID, customerResult.CustomerId)
+        HelperDatabase.InsertUserCustomer(CurrentUser.UserID, CustomerResult.CustomerId)
 
         ' Call PlaceBooking with the complete time strings and using 'numGuests' as an integer
-        Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerResult.CustomerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, dtpEventDateEnd.Value.Date, finalTotalPrice)
+        Dim bookingId As Integer = HelperDatabase.PlaceBooking(CustomerResult.CustomerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, dtpEventDateEnd.Value.Date, finalTotalPrice)
 
-        ' Place the booking for the current user
-        Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, finalTotalPrice)
 
         If bookingId > 0 Then
             HelperDatabase.SaveBookingServices(bookingId, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
