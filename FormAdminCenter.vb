@@ -73,10 +73,13 @@ Public Class FormAdminCenter
                           "JOIN customers c ON b.customer_id = c.customer_id " &
                           "JOIN eventplace e ON b.place_id = e.place_id " &
                           "WHERE b.status = 'Pending' ORDER BY b.event_date ASC"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+            HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
+        Catch ex As MySqlException
+            MessageBox.Show("Error loading pending bookings: " & ex.Message)
+        End Try
 
-        ' Populate the pending bookings panel
-        HelperResultsDisplay.PopulatePendingBookings(flpPendingBookings, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
     End Sub
 
 
@@ -87,8 +90,13 @@ Public Class FormAdminCenter
                               "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved') " &
                               "THEN 'Booked' ELSE 'Available' END AS Availability " &
                               "FROM eventplace e"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateAvailability(flpAvailability, dt)
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+            HelperResultsDisplay.PopulateAvailability(flpAvailability, dt)
+        Catch ex As MySqlException
+            MessageBox.Show("Error loading availability: " & ex.Message)
+        End Try
+
     End Sub
 
     '--- Load Revenue Reports
@@ -98,37 +106,62 @@ Public Class FormAdminCenter
                               "JOIN bookings b ON e.place_id = b.place_id " &
                               "WHERE b.status='Approved' " &
                               "GROUP BY e.place_id"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+            HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
+        Catch ex As MySqlException
+            MessageBox.Show("Error loading revenue reports: " & ex.Message)
+        End Try
+
     End Sub
 
     '--- Load Invoices
     Private Sub LoadInvoices()
         Dim query As String = "SELECT invoice_id, user_id, event_place, total_amount, payment_status, invoice_data " &
                               "FROM invoices WHERE payment_status='Pending' ORDER BY invoice_data ASC"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+            HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
+        Catch ex As MySqlException
+            MessageBox.Show("Error loading invoices: " & ex.Message)
+        End Try
+
     End Sub
 
     '--- Load Booked Dates
     Private Sub LoadBookedDates()
         Dim query As String = "SELECT DISTINCT event_date FROM bookings WHERE status='Approved'"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateBookedDates(flpBookedDates, dt)
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+            HelperResultsDisplay.PopulateBookedDates(flpBookedDates, dt)
+        Catch ex As MySqlException
+            MessageBox.Show("Error loading booked dates: " & ex.Message)
+        End Try
+
     End Sub
 
     '--- Load Customer Count
     Private Sub LoadCustomerCount()
         Dim query As String = "SELECT COUNT(*) FROM customers"
-        Dim count As Object = DBHelper.ExecuteScalarQuery(query, New Dictionary(Of String, Object))
-        lblNumCustomersContainer.Text = If(count IsNot Nothing, count.ToString(), "0")
+        Try
+            Dim count As Object = DBHelper.ExecuteScalarQuery(query, New Dictionary(Of String, Object))
+            lblNumCustomersContainer.Text = If(count IsNot Nothing, count.ToString(), "0")
+        Catch ex As MySqlException
+            MessageBox.Show("Error loading customer count: " & ex.Message)
+        End Try
+
     End Sub
 
     '--- Load Customer Records
     Private Sub LoadCustomerRecords()
         Dim query As String = "SELECT customer_id, name, age, birthday, sex, address FROM customers ORDER BY name ASC"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateCustomerRecords(flpCustomerRecords, dt)
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+            HelperResultsDisplay.PopulateCustomerRecords(flpCustomerRecords, dt)
+        Catch ex As MySqlException
+            MessageBox.Show("Error loading customer records: " & ex.Message)
+        End Try
+
     End Sub
 
     '--- Load Booking Status Chart
@@ -140,10 +173,15 @@ Public Class FormAdminCenter
         }
         chartTotalStatus.Series.Add(statusSeries)
         Dim query As String = "SELECT status, COUNT(*) AS count FROM bookings GROUP BY status"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        For Each row As DataRow In dt.Rows
-            statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
-        Next
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+            For Each row As DataRow In dt.Rows
+                statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Error loading booking status chart: " & ex.Message)
+        End Try
+
         chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
         chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
     End Sub
@@ -206,9 +244,14 @@ Public Class FormAdminCenter
 #Region "Event Place Add/Update/Delete and Field Validation"
 
     Private Function EventPlaceExists(eventPlaceName As String) As Boolean
-        Dim result As Object = DBHelper.ExecuteScalarQuery("SELECT COUNT(*) FROM eventplace WHERE event_place=@name",
-                                                            New Dictionary(Of String, Object) From {{"@name", eventPlaceName}})
-        Return Convert.ToInt32(result) > 0
+        Try
+            Dim result As Object = DBHelper.ExecuteScalarQuery("SELECT COUNT(*) FROM eventplace WHERE event_place=@name", New Dictionary(Of String, Object) From {{"@name", eventPlaceName}})
+            Return Convert.ToInt32(result) > 0
+        Catch ex As Exception
+            MessageBox.Show("Error checking event place existence: " & ex.Message)
+            Return False
+        End Try
+
     End Function
 
     '--- Add a new event place

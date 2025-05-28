@@ -23,17 +23,13 @@ Partial Class FormCustomerView
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.lblPaymentSection = New System.Windows.Forms.Label()
-        Me.dgvPaymentHistory = New System.Windows.Forms.DataGridView()
         Me.btnConfirmPayment = New System.Windows.Forms.Button()
-        Me.dgvCurrentBooking = New System.Windows.Forms.DataGridView()
         Me.lblCurrentBooking = New System.Windows.Forms.Label()
         Me.btnLogOut = New System.Windows.Forms.Button()
         Me.lblRole = New System.Windows.Forms.Label()
         Me.btnEdit = New System.Windows.Forms.Button()
         Me.lblUsername = New System.Windows.Forms.Label()
         Me.txtPaymentAmount = New System.Windows.Forms.TextBox()
-        CType(Me.dgvPaymentHistory, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.dgvCurrentBooking, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblPaymentSection
@@ -47,15 +43,6 @@ Partial Class FormCustomerView
         Me.lblPaymentSection.TabIndex = 58
         Me.lblPaymentSection.Text = "Payment Section"
         '
-        'dgvPaymentHistory
-        '
-        Me.dgvPaymentHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvPaymentHistory.Location = New System.Drawing.Point(43, 264)
-        Me.dgvPaymentHistory.Name = "dgvPaymentHistory"
-        Me.dgvPaymentHistory.RowHeadersWidth = 51
-        Me.dgvPaymentHistory.Size = New System.Drawing.Size(863, 169)
-        Me.dgvPaymentHistory.TabIndex = 57
-        '
         'btnConfirmPayment
         '
         Me.btnConfirmPayment.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -65,15 +52,6 @@ Partial Class FormCustomerView
         Me.btnConfirmPayment.TabIndex = 56
         Me.btnConfirmPayment.Text = "Confirm Payment"
         Me.btnConfirmPayment.UseVisualStyleBackColor = True
-        '
-        'dgvCurrentBooking
-        '
-        Me.dgvCurrentBooking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCurrentBooking.Location = New System.Drawing.Point(43, 104)
-        Me.dgvCurrentBooking.Name = "dgvCurrentBooking"
-        Me.dgvCurrentBooking.RowHeadersWidth = 51
-        Me.dgvCurrentBooking.Size = New System.Drawing.Size(863, 124)
-        Me.dgvCurrentBooking.TabIndex = 53
         '
         'lblCurrentBooking
         '
@@ -145,9 +123,7 @@ Partial Class FormCustomerView
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.Controls.Add(Me.txtPaymentAmount)
         Me.Controls.Add(Me.lblPaymentSection)
-        Me.Controls.Add(Me.dgvPaymentHistory)
         Me.Controls.Add(Me.btnConfirmPayment)
-        Me.Controls.Add(Me.dgvCurrentBooking)
         Me.Controls.Add(Me.lblCurrentBooking)
         Me.Controls.Add(Me.btnLogOut)
         Me.Controls.Add(Me.lblRole)
@@ -156,16 +132,12 @@ Partial Class FormCustomerView
         Me.Name = "FormCustomerView"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormCustomerView"
-        CType(Me.dgvPaymentHistory, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.dgvCurrentBooking, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
     Friend WithEvents lblPaymentSection As Label
-    Friend WithEvents dgvPaymentHistory As DataGridView
     Friend WithEvents btnConfirmPayment As Button
-    Friend WithEvents dgvCurrentBooking As DataGridView
     Friend WithEvents lblCurrentBooking As Label
     Friend WithEvents btnLogOut As Button
     Friend WithEvents lblRole As Label
