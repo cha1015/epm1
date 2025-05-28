@@ -22,9 +22,9 @@ Partial Class FormAdminCenter
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnLogOut = New System.Windows.Forms.Button()
@@ -313,18 +313,18 @@ Partial Class FormAdminCenter
         '
         'chartTotalStatus
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.chartTotalStatus.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.chartTotalStatus.Legends.Add(Legend1)
+        ChartArea3.Name = "ChartArea1"
+        Me.chartTotalStatus.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.chartTotalStatus.Legends.Add(Legend3)
         Me.chartTotalStatus.Location = New System.Drawing.Point(8, 207)
         Me.chartTotalStatus.Margin = New System.Windows.Forms.Padding(4)
         Me.chartTotalStatus.Name = "chartTotalStatus"
         Me.chartTotalStatus.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.chartTotalStatus.Series.Add(Series1)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.chartTotalStatus.Series.Add(Series3)
         Me.chartTotalStatus.Size = New System.Drawing.Size(314, 300)
         Me.chartTotalStatus.TabIndex = 41
         Me.chartTotalStatus.Text = "Chart1"
@@ -834,6 +834,7 @@ Partial Class FormAdminCenter
         '
         'flpAvailable
         '
+        Me.flpAvailable.AutoScroll = True
         Me.flpAvailable.Location = New System.Drawing.Point(6, 6)
         Me.flpAvailable.Name = "flpAvailable"
         Me.flpAvailable.Size = New System.Drawing.Size(581, 457)
@@ -852,6 +853,7 @@ Partial Class FormAdminCenter
         '
         'flpBooked
         '
+        Me.flpBooked.AutoScroll = True
         Me.flpBooked.Location = New System.Drawing.Point(7, 6)
         Me.flpBooked.Name = "flpBooked"
         Me.flpBooked.Size = New System.Drawing.Size(580, 453)

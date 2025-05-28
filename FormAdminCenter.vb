@@ -52,6 +52,7 @@ Public Class FormAdminCenter
 
     '--- Load Event Places (Search Results)
     Private Sub LoadSearchResults()
+        ' Updated query to calculate status dynamically
         Dim query As String = "SELECT place_id, event_place, event_type, capacity, price_per_day, description, image_url, " &
                           "CASE WHEN EXISTS (SELECT 1 FROM bookings WHERE bookings.place_id = eventplace.place_id) " &
                           "THEN 'Booked' ELSE 'Available' END AS status " &
@@ -93,7 +94,7 @@ Public Class FormAdminCenter
                                                      txtAvailableDays, txtDescription,
                                                      txtPlaceID, btnUpdate, btnDelete)
 
-        ' Populate booked event places into flpBookedDates
+        ' Populate booked event places into flpBooked
         HelperResultsDisplay.PopulateEventPlacesForAdmin(flpBooked, bookedPlaces, False,
                                                      txtEventPlace, txtEventType, txtCapacity,
                                                      txtPricePerDay, txtFeatures, txtImageUrl,
@@ -101,7 +102,6 @@ Public Class FormAdminCenter
                                                      txtAvailableDays, txtDescription,
                                                      txtPlaceID, btnUpdate, btnDelete)
     End Sub
-
 
     '--- Load Pending Bookings
     Private Sub LoadPendingBookings()

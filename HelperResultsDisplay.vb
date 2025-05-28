@@ -671,6 +671,8 @@ Public Class HelperResultsDisplay
 
         ' Populate the FlowLayoutPanel with the event place panels
         PopulateFlowPanel(flpResults, dt, createPanel)
+        Debug.WriteLine("Populating event places... Total rows: " & dt.Rows.Count)
+
     End Sub
 
 End Class
