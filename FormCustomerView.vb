@@ -6,42 +6,67 @@ Imports System.Text
 Public Class FormCustomerView
 
     Private customerId As Integer
-
-    ' Constructor to accept customer ID
     Public Sub New(ByVal id As Integer)
         InitializeComponent()
-        customerId = id ' Store passed customer ID
+        customerId = id
     End Sub
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dgvCurrentBooking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         dgvPaymentHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        customerId = CurrentUser.CustomerId
 
+        ' Ensure correct customerId based on the current user
+        customerId = GetCustomerIdByUserId(CurrentUser.UserID)
+
+        Debug.WriteLine($"CustomerId in FormCustomerView_Load: {customerId}")
 
         lblUsername.Text = CurrentUser.Username
         LoadBookings()
         LoadPaymentHistory()
     End Sub
 
+    Private Function GetCustomerIdByUserId(userId As Integer) As Integer
+        Dim query As String = "SELECT customer_id FROM usercustomers WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", userId}}
+
+        Try
+            Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
+            If dt.Rows.Count > 0 Then
+                Return Convert.ToInt32(dt.Rows(0)("customer_id"))
+            Else
+                Return -1 ' or handle error appropriately
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error fetching customer ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1
+        End Try
+    End Function
+
     Private Sub LoadBookings()
         Debug.WriteLine($"Loading bookings for CustomerId: {customerId}")
 
         dgvPaymentHistory.ClearSelection()
 
-
-        Dim query As String = $"SELECT b.booking_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status 
+        Dim query As String = "SELECT b.booking_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status 
                        FROM bookings b
                        JOIN eventplace p ON b.place_id = p.place_id 
-                       WHERE b.customer_id = {customerId}
+                       WHERE b.customer_id = @customer_id
                        ORDER BY b.event_date DESC"
 
 
+        ' Use a parameterized query
         Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", customerId}}
 
         Try
+            ' Retrieve data
             Dim dtBookings As DataTable = DBHelper.GetDataTable(query, parameters)
 
+            ' Debugging: Check if dtBookings contains rows
+            If dtBookings Is Nothing OrElse dtBookings.Rows.Count = 0 Then
+                Debug.WriteLine("No bookings found.")
+            Else
+                Debug.WriteLine($"Found {dtBookings.Rows.Count} bookings.")
+            End If
 
             If dtBookings.Rows.Count > 0 Then
                 dgvCurrentBooking.DataSource = dtBookings
@@ -49,7 +74,6 @@ Public Class FormCustomerView
                 btnConfirmPayment.Enabled = True
             Else
                 Dim dtPlaceholder As New DataTable()
-
                 dtPlaceholder.Columns.Add("Message", GetType(String))
                 dtPlaceholder.Rows.Add("No bookings found. Start by booking an event!")
                 dgvCurrentBooking.DataSource = dtPlaceholder
@@ -59,9 +83,10 @@ Public Class FormCustomerView
             End If
 
         Catch ex As MySqlException
+            MessageBox.Show("Error loading bookings: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-
     End Sub
+
 
 
     Private Sub LoadPaymentHistory()
