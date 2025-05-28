@@ -1,7 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.Data
 Imports System.Text
-
+Imports System.Drawing.Text
 Public Class FormCustomerView
 
     Private user_id As Integer
@@ -33,101 +33,10 @@ Public Class FormCustomerView
 
     Public Sub New()
         InitializeComponent()
-        CreatePlaceBrowserPanel()
+
     End Sub
 
-    Private Sub CreatePlaceBrowserPanel()
-        pnlPlaceBrowser = New Panel()
-        pnlPlaceBrowser.Size = New Size(863, 124)
-        pnlPlaceBrowser.Location = New Point(43, 104)
-        pnlPlaceBrowser.BorderStyle = BorderStyle.None
-        pnlPlaceBrowser.Visible = False
-        pnlPlaceBrowser.BackgroundImageLayout = ImageLayout.Stretch
-        AddHandler pnlPlaceBrowser.Paint, AddressOf MakePanelRound
 
-        Dim pnlInfoArea As New Panel()
-        pnlInfoArea.Size = New Size(520, 122)
-        pnlInfoArea.Location = New Point(50, 1)
-        pnlInfoArea.BackColor = Color.Transparent
-
-        lblPlaceName = New Label()
-        lblPlaceName.Font = New Font("Arial", 20, FontStyle.Bold)
-        lblPlaceName.ForeColor = Color.FromArgb(60, 40, 20)
-        lblPlaceName.BackColor = Color.Transparent
-        lblPlaceName.Size = New Size(480, 36)
-        lblPlaceName.Location = New Point(20, 8)
-        lblPlaceName.TextAlign = ContentAlignment.MiddleLeft
-
-        lblPaymentId = New Label()
-        lblPaymentId.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblPaymentId.ForeColor = Color.Black
-        lblPaymentId.BackColor = Color.Transparent
-        lblPaymentId.Size = New Size(250, 20)
-        lblPaymentId.Location = New Point(20, 53)
-
-        lblAmountToPay = New Label()
-        lblAmountToPay.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblAmountToPay.ForeColor = Color.Black
-        lblAmountToPay.BackColor = Color.Transparent
-        lblAmountToPay.Size = New Size(250, 20)
-        lblAmountToPay.Location = New Point(20, 73)
-
-        lblAmountPaid = New Label()
-        lblAmountPaid.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblAmountPaid.ForeColor = Color.Black
-        lblAmountPaid.BackColor = Color.Transparent
-        lblAmountPaid.Size = New Size(250, 20)
-        lblAmountPaid.Location = New Point(20, 93)
-
-        lblPaymentDate = New Label()
-        lblPaymentDate.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblPaymentDate.ForeColor = Color.Black
-        lblPaymentDate.BackColor = Color.Transparent
-        lblPaymentDate.Size = New Size(250, 20)
-        lblPaymentDate.Location = New Point(270, 53)
-
-        lblPaymentStatus = New Label()
-        lblPaymentStatus.Font = New Font("Arial", 10, FontStyle.Bold)
-        lblPaymentStatus.ForeColor = Color.Black
-        lblPaymentStatus.BackColor = Color.Transparent
-        lblPaymentStatus.Size = New Size(250, 20)
-        lblPaymentStatus.Location = New Point(270, 73)
-
-        pnlInfoArea.Controls.Add(lblPlaceName)
-        pnlInfoArea.Controls.Add(lblPaymentId)
-        pnlInfoArea.Controls.Add(lblAmountToPay)
-        pnlInfoArea.Controls.Add(lblAmountPaid)
-        pnlInfoArea.Controls.Add(lblPaymentDate)
-        pnlInfoArea.Controls.Add(lblPaymentStatus)
-
-        btnPrevPlace = New Button()
-        btnPrevPlace.Text = "◀"
-        btnPrevPlace.Size = New Size(40, 40)
-        btnPrevPlace.Location = New Point(10, 42)
-        btnPrevPlace.BackColor = Color.White
-        btnPrevPlace.FlatStyle = FlatStyle.Flat
-        btnPrevPlace.FlatAppearance.BorderSize = 0
-        btnPrevPlace.Visible = True
-        AddHandler btnPrevPlace.Click, AddressOf BtnPrevPlace_Click
-        AddHandler btnPrevPlace.Paint, AddressOf MakeButtonRound
-
-        btnNextPlace = New Button()
-        btnNextPlace.Text = "▶"
-        btnNextPlace.Size = New Size(40, 40)
-        btnNextPlace.Location = New Point(805, 42)
-        btnNextPlace.BackColor = Color.White
-        btnNextPlace.FlatStyle = FlatStyle.Flat
-        btnNextPlace.FlatAppearance.BorderSize = 0
-        btnNextPlace.Visible = True
-        AddHandler btnNextPlace.Click, AddressOf BtnNextPlace_Click
-        AddHandler btnNextPlace.Paint, AddressOf MakeButtonRound
-
-        pnlPlaceBrowser.Controls.Add(pnlInfoArea)
-        pnlPlaceBrowser.Controls.Add(btnPrevPlace)
-        pnlPlaceBrowser.Controls.Add(btnNextPlace)
-        Me.Controls.Add(pnlPlaceBrowser)
-        pnlPlaceBrowser.BringToFront()
-    End Sub
 
     Private Sub BtnPrevPlace_Click(sender As Object, e As EventArgs)
         Debug.WriteLine("Prev button clicked")
@@ -150,17 +59,22 @@ Public Class FormCustomerView
     Public Sub New(ByVal id As Integer)
         InitializeComponent()
         customer_id = id
-        CreatePlaceBrowserPanel()
     End Sub
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        pnlPlaceBrowser.Visible = True
         customer_id = CurrentUser.CustomerId
         LoadAllBookings()
-        currentBookingIndex = 0
-        customer_id = CurrentUser.CustomerId
-        UpdatePlaceBrowserPanel()
+        PopulateBookingPanels()
+        Dim prop As Reflection.PropertyInfo = GetType(Panel).GetProperty("DoubleBuffered", Reflection.BindingFlags.Instance Or Reflection.BindingFlags.NonPublic)
+        prop.SetValue(FlowLayoutPanel1, True, Nothing)
+
     End Sub
+
+    Private Sub SetPanelDoubleBuffered(p As Panel)
+        Dim prop = GetType(Panel).GetProperty("DoubleBuffered", Reflection.BindingFlags.Instance Or Reflection.BindingFlags.NonPublic)
+        prop.SetValue(p, True, Nothing)
+    End Sub
+
 
 
     Private Sub LoadAllBookings()
@@ -247,5 +161,275 @@ Public Class FormCustomerView
         path.CloseFigure()
         panel.Region = New Region(path)
     End Sub
+
+
+
+    ' At the class level
+    Private quicheFont As Font = Nothing
+
+    Private Sub LoadCustomFont()
+        If quicheFont IsNot Nothing Then Return
+        Try
+            ' If the font is installed on the system:
+            quicheFont = New Font("FONTSPRING DEMO - Quiche Sans", 12, FontStyle.Bold)
+        Catch
+            ' If the font is embedded as a resource (e.g., Resources.QuicheSans), use PrivateFontCollection:
+            'Dim pfc As New PrivateFontCollection()
+            'pfc.AddFontFile("path_to_your_font_file.ttf")
+            'quicheFont = New Font(pfc.Families(0), 12, FontStyle.Bold)
+            ' (Uncomment and adjust if using embedded font)
+            quicheFont = New Font("Arial", 12, FontStyle.Bold) ' fallback
+        End Try
+    End Sub
+
+    Private Sub PopulateBookingPanels()
+        LoadCustomFont()
+        FlowLayoutPanel1.Controls.Clear()
+        FlowLayoutPanel1.Visible = True
+
+        If allBookings.Count = 0 Then
+            Dim lblNoBooking As New Label()
+            lblNoBooking.Text = "No booking data"
+            lblNoBooking.Font = New Font(quicheFont.FontFamily, 14, FontStyle.Bold)
+            lblNoBooking.ForeColor = Color.FromArgb(60, 40, 20)
+            lblNoBooking.BackColor = Color.Transparent
+            lblNoBooking.Size = New Size(864, 181)
+            lblNoBooking.TextAlign = ContentAlignment.MiddleCenter
+            FlowLayoutPanel1.Controls.Add(lblNoBooking)
+            Return
+        End If
+
+        For Each dataRow As DataRow In allBookings
+            ' Main panel
+            Dim panel As New Panel()
+            panel.Size = New Size(864, 181)
+            panel.Margin = New Padding(10)
+            panel.BackColor = Color.FromArgb(245, 245, 250)
+            panel.BorderStyle = BorderStyle.None
+            AddHandler panel.Paint, AddressOf MakePanelRound
+            SetPanelDoubleBuffered(panel)
+
+            ' PictureBox
+            Dim pb As New PictureBox()
+            pb.Location = New Point(13, 13)
+            pb.Size = New Size(218, 152)
+            pb.SizeMode = PictureBoxSizeMode.StretchImage
+            Dim placeId As Integer = Convert.ToInt32(dataRow("place_id"))
+            Dim imageName As String = "_" & placeId.ToString()
+            pb.Image = TryCast(My.Resources.ResourceManager.GetObject(imageName), Image)
+            pb.BackColor = Color.White
+            pb.BorderStyle = BorderStyle.None
+            panel.Controls.Add(pb)
+
+            ' Panel1: Place Name
+            Dim panel1 As New Panel()
+            panel1.Location = New Point(246, 14)
+            panel1.Size = New Size(405, 50)
+            panel1.BackColor = Color.FromArgb(255, 255, 255, 220)
+            panel1.BorderStyle = BorderStyle.None
+            AddHandler panel1.Paint, AddressOf MakePanelRound
+            SetPanelDoubleBuffered(panel1)
+
+            Dim lblPlaceName As New Label()
+            lblPlaceName.Text = dataRow("event_place").ToString()
+            lblPlaceName.Font = New Font(quicheFont.FontFamily, 18, FontStyle.Bold)
+            lblPlaceName.ForeColor = Color.FromArgb(40, 30, 20)
+            lblPlaceName.Dock = DockStyle.Fill
+            lblPlaceName.TextAlign = ContentAlignment.MiddleLeft
+            panel1.Controls.Add(lblPlaceName)
+            panel.Controls.Add(panel1)
+
+            ' Panel2: Details
+            Dim panel2 As New Panel()
+            panel2.Location = New Point(246, 71)
+            panel2.Size = New Size(405, 95)
+            panel2.BackColor = Color.FromArgb(245, 245, 245, 200)
+            panel2.BorderStyle = BorderStyle.None
+            AddHandler panel2.Paint, AddressOf MakePanelRound
+
+            Dim detailsFont As New Font(quicheFont.FontFamily, 9, FontStyle.Regular)
+            Dim y As Integer = 8
+            SetPanelDoubleBuffered(panel2)
+
+            ' Customer ID only (top left)
+            Dim lblCustomerId As New Label()
+            lblCustomerId.Text = "Customer ID: " & CurrentUser.CustomerId.ToString()
+            lblCustomerId.Font = detailsFont
+            lblCustomerId.ForeColor = Color.FromArgb(60, 40, 20)
+            lblCustomerId.Location = New Point(10, y)
+            lblCustomerId.Size = New Size(180, 18)
+            panel2.Controls.Add(lblCustomerId)
+            y += 20
+
+            ' Booking ID and Date (side by side)
+            Dim lblBookingId As New Label()
+            lblBookingId.Text = "Booking ID: " & dataRow("booking_id").ToString()
+            lblBookingId.Font = detailsFont
+            lblBookingId.ForeColor = Color.FromArgb(60, 40, 20)
+            lblBookingId.Location = New Point(10, y)
+            lblBookingId.Size = New Size(180, 18)
+            panel2.Controls.Add(lblBookingId)
+
+            Dim lblEventDate As New Label()
+            lblEventDate.Text = "Date: " & Convert.ToDateTime(dataRow("event_date")).ToString("yyyy-MM-dd")
+            lblEventDate.Font = detailsFont
+            lblEventDate.ForeColor = Color.FromArgb(60, 40, 20)
+            lblEventDate.Location = New Point(200, y)
+            lblEventDate.Size = New Size(200, 18)
+            panel2.Controls.Add(lblEventDate)
+            y += 20
+
+            ' Event Time and Payment ID (side by side)
+            Dim lblEventTime As New Label()
+            lblEventTime.Text = "Time: " & dataRow("event_time").ToString() & " - " & dataRow("event_end_time").ToString()
+            lblEventTime.Font = detailsFont
+            lblEventTime.ForeColor = Color.FromArgb(60, 40, 20)
+            lblEventTime.Location = New Point(10, y)
+            lblEventTime.Size = New Size(180, 18)
+            panel2.Controls.Add(lblEventTime)
+
+            Dim lblPaymentId As New Label()
+            lblPaymentId.Text = "Payment ID: " & If(IsDBNull(dataRow("payment_id")), "N/A", dataRow("payment_id").ToString())
+            lblPaymentId.Font = detailsFont
+            lblPaymentId.ForeColor = Color.FromArgb(60, 40, 20)
+            lblPaymentId.Location = New Point(200, y)
+            lblPaymentId.Size = New Size(200, 18)
+            panel2.Controls.Add(lblPaymentId)
+            y += 20
+
+            ' Payment Date and Amount Paid (side by side)
+            Dim lblPaymentDate As New Label()
+            lblPaymentDate.Text = "Payment Date: " & If(IsDBNull(dataRow("payment_date")), "N/A", Convert.ToDateTime(dataRow("payment_date")).ToString("yyyy-MM-dd"))
+            lblPaymentDate.Font = detailsFont
+            lblPaymentDate.ForeColor = Color.FromArgb(60, 40, 20)
+            lblPaymentDate.Location = New Point(10, y)
+            lblPaymentDate.Size = New Size(180, 18)
+            panel2.Controls.Add(lblPaymentDate)
+
+            Dim lblAmountPaid As New Label()
+            lblAmountPaid.Text = "Amount Paid: " & If(IsDBNull(dataRow("amount_paid")), "N/A", "₱" & Convert.ToDecimal(dataRow("amount_paid")).ToString("F2"))
+            lblAmountPaid.Font = detailsFont
+            lblAmountPaid.ForeColor = Color.FromArgb(60, 40, 20)
+            lblAmountPaid.Location = New Point(200, y)
+            lblAmountPaid.Size = New Size(200, 18)
+            panel2.Controls.Add(lblAmountPaid)
+
+            panel.Controls.Add(panel2)
+
+
+
+            ' Panel3: Approval & Price
+            Dim panel3 As New Panel()
+            panel3.Location = New Point(664, 14)
+            panel3.Size = New Size(189, 120)
+            panel3.BackColor = Color.FromArgb(255, 255, 255, 230)
+            panel3.BorderStyle = BorderStyle.None
+            AddHandler panel3.Paint, AddressOf MakePanelRound
+            SetPanelDoubleBuffered(panel3)
+
+            Dim lblApproval As New Label()
+            Dim isApproved As Boolean = dataRow("status").ToString().ToLower() = "approved"
+            lblApproval.Text = If(isApproved, "Approved", "Pending")
+            lblApproval.Font = New Font(quicheFont.FontFamily, 13, FontStyle.Bold)
+            lblApproval.ForeColor = If(isApproved, Color.SeaGreen, Color.OrangeRed)
+            lblApproval.Location = New Point(20, 20)
+            lblApproval.Size = New Size(150, 24)
+            lblApproval.TextAlign = ContentAlignment.MiddleCenter
+            panel3.Controls.Add(lblApproval)
+
+            Dim lblAmountToPay As New Label()
+            lblAmountToPay.Text = "₱" & If(IsDBNull(dataRow("amount_to_pay")), "0.00", Convert.ToDecimal(dataRow("amount_to_pay")).ToString("F2"))
+            lblAmountToPay.Font = New Font(quicheFont.FontFamily, 15, FontStyle.Bold)
+            lblAmountToPay.ForeColor = Color.FromArgb(60, 40, 20)
+            lblAmountToPay.Location = New Point(20, 60)
+            lblAmountToPay.Size = New Size(150, 30)
+            lblAmountToPay.TextAlign = ContentAlignment.MiddleCenter
+            panel3.Controls.Add(lblAmountToPay)
+
+            panel.Controls.Add(panel3)
+
+            ' TextBox1: Payment input
+            Dim txtPayment As New TextBox()
+            txtPayment.Location = New Point(664, 146)
+            txtPayment.Size = New Size(94, 20)
+            txtPayment.Font = detailsFont
+            txtPayment.Visible = isApproved
+
+            ' Button1: Pay
+            Dim btnPay As New Button()
+            btnPay.Text = "Pay"
+            btnPay.Location = New Point(766, 146)
+            btnPay.Size = New Size(87, 20)
+            btnPay.Font = detailsFont
+            btnPay.BackColor = Color.FromArgb(220, 240, 220)
+            btnPay.FlatStyle = FlatStyle.Flat
+            btnPay.Enabled = isApproved
+            btnPay.Visible = isApproved
+
+            ' If already paid, show as paid and disable payment
+            Dim isPaid As Boolean = False
+            If Not IsDBNull(dataRow("amount_paid")) AndAlso Not IsDBNull(dataRow("amount_to_pay")) Then
+                Dim paid = Convert.ToDecimal(dataRow("amount_paid"))
+                Dim toPay = Convert.ToDecimal(dataRow("amount_to_pay"))
+                If paid >= toPay AndAlso toPay > 0 Then
+                    isPaid = True
+                End If
+            End If
+            If isPaid Then
+                btnPay.Enabled = False
+                btnPay.Text = "Paid"
+                txtPayment.Visible = False
+                Dim lblPaid As New Label()
+                lblPaid.Text = "Paid"
+                lblPaid.Font = New Font(quicheFont.FontFamily, 10, FontStyle.Bold)
+                lblPaid.ForeColor = Color.SeaGreen
+                lblPaid.Location = New Point(664, 146)
+                lblPaid.Size = New Size(94, 20)
+                panel.Controls.Add(lblPaid)
+            End If
+
+            ' Payment logic
+            AddHandler btnPay.Click,
+                Sub(senderBtn, eBtn)
+                    Dim payAmount As Decimal
+                    If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
+                        MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        Return
+                    End If
+                    Dim toPay = Convert.ToDecimal(dataRow("amount_to_pay"))
+                    Dim paid = If(IsDBNull(dataRow("amount_paid")), 0D, Convert.ToDecimal(dataRow("amount_paid")))
+                    If paid + payAmount > toPay Then
+                        MessageBox.Show("Payment exceeds required amount.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Return
+                    End If
+
+                    ' Update database
+                    Dim paymentId = dataRow("payment_id")
+                    Dim newPaid = paid + payAmount
+                    Dim updateQuery As String = "UPDATE payments SET amount_paid = @amount_paid, payment_date = @payment_date, payment_status = @payment_status WHERE payment_id = @payment_id"
+                    Dim parameters As New Dictionary(Of String, Object) From {
+                        {"@amount_paid", newPaid},
+                        {"@payment_date", DateTime.Now},
+                        {"@payment_status", If(newPaid >= toPay, "Paid", "Partial")},
+                        {"@payment_id", paymentId}
+                    }
+                    'DBHelper.ExecuteNonQuery(updateQuery, parameters)
+                    MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    LoadAllBookings()
+                    PopulateBookingPanels()
+                End Sub
+
+            If isApproved AndAlso Not isPaid Then
+                panel.Controls.Add(txtPayment)
+                panel.Controls.Add(btnPay)
+            End If
+
+            FlowLayoutPanel1.Controls.Add(panel)
+        Next
+    End Sub
+
+
+
+
 
 End Class

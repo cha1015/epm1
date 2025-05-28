@@ -22,11 +22,6 @@ epm1
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
-<member name="P:epm1.My.Resources.Resources._1">
-<summary>
-  Looks up a localized resource of type System.Drawing.Bitmap.
-</summary>
-</member>
 <member name="P:epm1.My.Resources.Resources._10">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
@@ -153,6 +148,21 @@ epm1
 </summary>
 </member>
 <member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__1_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__1_1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__2_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__2_1">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
