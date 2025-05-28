@@ -23,6 +23,7 @@ Public Class FormAdminCenter
         LoadCustomerCount()          ' Customer Count
         LoadCustomerRecords()        ' Customer Records
         LoadBookingStatusChart()     ' Booking Status Chart
+        LoadInvoiceGrid()
 
         ' Set up field indicators and validation for event place data entry.
         Dim labels = {lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
@@ -320,26 +321,66 @@ Public Class FormAdminCenter
 
     '--- Load Revenue Reports
     Private Sub LoadRevenueReports()
-        Dim query As String = "SELECT e.event_place, " &
-                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
-                          "FROM eventplace e " &
-                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'Approved' " &
-                          "GROUP BY e.place_id"
+        Dim query As String = "
+        SELECT 
+            e.event_place, 
+            IFNULL(SUM(b.total_price), 0) AS total_revenue
+        FROM eventplace e
+        LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'paid'
+        GROUP BY e.place_id
+    "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
+
+        Dim revenuePerPlace As New Dictionary(Of String, Decimal)()
+        For Each row As DataRow In dt.Rows
+            Dim placeName As String = row("event_place").ToString()
+            Dim totalRevenue As Decimal = Convert.ToDecimal(row("total_revenue"))
+            revenuePerPlace(placeName) = totalRevenue
+        Next
+
+        ' --- Populate Chart1 ---
+        Chart1.Series.Clear()
+        Dim series As New DataVisualization.Charting.Series("Revenue")
+        series.ChartType = DataVisualization.Charting.SeriesChartType.Bar
+
+        For Each kvp In revenuePerPlace
+            series.Points.AddXY(kvp.Key, kvp.Value)
+        Next
+
+        Chart1.Series.Add(series)
+        If Chart1.ChartAreas.Count = 0 Then
+            Chart1.ChartAreas.Add(New DataVisualization.Charting.ChartArea("Default"))
+        End If
+        Chart1.ChartAreas(0).AxisX.Title = "Event Place"
+        Chart1.ChartAreas(0).AxisY.Title = "Total Revenue"
+        Chart1.ChartAreas(0).AxisY.LabelStyle.Format = "₱#,##0"
+        Chart1.Invalidate()
+
     End Sub
+
+
 
 
     '--- Load Invoices
     Private Sub LoadInvoices()
-        Dim query As String = "SELECT invoice_id, user_id, event_place, total_amount, payment_status, invoice_date
-        FROM invoices
-        WHERE payment_status = 'Pending'
-        ORDER BY invoice_date ASC
-        "
+        Dim query As String = "
+        SELECT 
+            b.booking_id, 
+            c.name AS customer_name, 
+            e.event_place, 
+            b.total_price AS amount_paid, 
+            b.payment_date
+        FROM bookings b
+        JOIN customers c ON b.customer_id = c.customer_id
+        JOIN eventplace e ON b.place_id = e.place_id
+        WHERE b.status = 'paid'
+        ORDER BY b.payment_date DESC
+    "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
     End Sub
+
 
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
@@ -420,14 +461,18 @@ Public Class FormAdminCenter
 
     '--- Update Revenue Reports for the selected date
     Private Sub UpdateRevenueReports(selectedDate As Date)
-        Dim query As String = "SELECT e.event_place, " &
-                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
-                          "FROM eventplace e " &
-                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status='Approved' AND b.event_date = @selectedDate " &
-                          "GROUP BY e.place_id"
+        Dim query As String = "
+        SELECT 
+            e.event_place, 
+            IFNULL(SUM(b.total_price), 0) AS total_revenue
+        FROM eventplace e
+        LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'paid' AND b.event_date = @selectedDate
+        GROUP BY e.place_id
+    "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
         HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
     End Sub
+
 
 
     '--- Update Availability for the selected date
@@ -719,4 +764,44 @@ Public Class FormAdminCenter
         editForm.ShowDialog()
     End Sub
 
+    Private Sub Chart1_Click(sender As Object, e As EventArgs) Handles Chart1.Click
+
+    End Sub
+
+    '---Invoice Data Grid---
+    Private Sub LoadInvoiceGrid()
+        Dim query As String = "
+        SELECT 
+            c.customer_id,
+            c.name AS customer_name,
+            c.email AS customer_email,
+            b.booking_id,
+            pay.payment_id,
+            e.event_place,
+            IFNULL(GROUP_CONCAT(s.service_name ORDER BY s.service_name), '') AS services_availed,
+            pay.amount_paid,
+            pay.payment_date
+        FROM bookings b
+        JOIN customers c ON b.customer_id = c.customer_id
+        JOIN eventplace e ON b.place_id = e.place_id
+        LEFT JOIN payments pay ON pay.booking_id = b.booking_id
+        LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
+        LEFT JOIN services s ON bs.service_id = s.service_id
+        WHERE b.status = 'paid'
+        GROUP BY b.booking_id, pay.payment_id
+        ORDER BY pay.payment_date DESC
+    "
+
+        ' Get data
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Add to FlowLayoutPanel
+        flpInvoices.Controls.Clear() ' Optional: clear previous controls
+        flpInvoices.Controls.Add(dgvInvoice)
+    End Sub
+
+
+    Private Sub tpInvoicesAndPayments_Click(sender As Object, e As EventArgs) Handles tpInvoicesAndPayments.Click
+
+    End Sub
 End Class
