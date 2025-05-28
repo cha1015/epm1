@@ -1,9 +1,12 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.Data
-Imports System.Security.Cryptography
 Imports System.Text
 Imports System.Drawing.Text
 Public Class FormCustomerView
+
+    Private currentFilter As String = "all" ' Options: "pending", "rejected", "approved", "paid"
+
+
 
     Private user_id As Integer
     Private pnlPlaceBrowser As Panel
@@ -48,9 +51,13 @@ Public Class FormCustomerView
         End If
     End Sub
 
-    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
-        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
-        editForm.ShowDialog()
+    Private Sub BtnNextPlace_Click(sender As Object, e As EventArgs)
+        Debug.WriteLine("Next button clicked")
+        If allBookings.Count <= 1 Then Return
+        If currentBookingIndex < allBookings.Count - 1 Then
+            currentBookingIndex += 1
+            UpdatePlaceBrowserPanel()
+        End If
     End Sub
 
     Public Sub New(ByVal id As Integer)
@@ -95,18 +102,7 @@ Public Class FormCustomerView
         Next
         Debug.WriteLine($"Loaded {allBookings.Count} bookings for customer {CurrentUser.CustomerId}")
     End Sub
-    Private Sub btnSelectBooking_Click_1(sender As Object, e As EventArgs) Handles btnSelectBooking.Click
-        If dgvPaymentHistory.SelectedRows.Count = 0 Then
-            MessageBox.Show("Please select a payment to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
 
-        Dim paymentStatus As String = dgvPaymentHistory.SelectedRows(0).Cells("payment_status").Value.ToString()
-        Dim paymentId As Integer = Convert.ToInt32(dgvPaymentHistory.SelectedRows(0).Cells("payment_id").Value)
-
-        If paymentStatus = "Pending" Then
-            Dim query As String = "UPDATE payments SET payment_status = 'Paid', payment_date = NOW(), amount_paid = amount_to_pay WHERE payment_id = @payment_id"
-            Dim parameters As New Dictionary(Of String, Object) From {{"@payment_id", paymentId}}
 
 
     Private Sub ShowNoBookingPanel()
@@ -139,39 +135,40 @@ Public Class FormCustomerView
             Return
         End If
 
-        If paymentStatus = "Approved" Then
-            Dim paymentId As Integer = Convert.ToInt32(dgvPaymentHistory.SelectedRows(0).Cells("payment_id").Value)
+        Debug.WriteLine($"Showing booking {currentBookingIndex + 1} of {allBookings.Count}")
 
-            Dim query As String = "UPDATE payments SET amount_paid = @amountPaid, payment_status = 'Paid', payment_date = NOW() WHERE payment_id = @payment_id"
-            Dim parameters As New Dictionary(Of String, Object) From {
-            {"@payment_id", paymentId},
-            {"@amountPaid", amountPaid}
-        }
+        Dim dataRow As DataRow = allBookings(currentBookingIndex)
+        Dim placeId As Integer = Convert.ToInt32(dataRow("place_id"))
+        Dim imageName As String = "_" & placeId.ToString()
+        Dim img As Image = TryCast(My.Resources.ResourceManager.GetObject(imageName), Image)
+        pnlPlaceBrowser.BackgroundImage = img
 
-            Try
-                DBHelper.ExecuteQuery(query, parameters)
-                MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadPaymentHistory()
-            Catch ex As MySqlException
-                MessageBox.Show("Payment processing error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        Else
-            MessageBox.Show("You can only pay for approved bookings.", "Payment Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End If
+        lblPlaceName.Text = dataRow("event_place").ToString()
+        lblPaymentId.Text = "Payment ID: " & If(IsDBNull(dataRow("payment_id")), "N/A", dataRow("payment_id").ToString())
+        lblAmountToPay.Text = "Amount to Pay: " & If(IsDBNull(dataRow("amount_to_pay")), "N/A", "₱" & Convert.ToDecimal(dataRow("amount_to_pay")).ToString("F2"))
+        lblAmountPaid.Text = "Amount Paid: " & If(IsDBNull(dataRow("amount_paid")), "N/A", "₱" & Convert.ToDecimal(dataRow("amount_paid")).ToString("F2"))
+        lblPaymentDate.Text = "Payment Date: " & If(IsDBNull(dataRow("payment_date")), "N/A", Convert.ToDateTime(dataRow("payment_date")).ToString("yyyy-MM-dd"))
+        lblPaymentStatus.Text = "Status: " & If(IsDBNull(dataRow("payment_status")), "N/A", dataRow("payment_status").ToString())
+        pnlPlaceBrowser.Visible = True
     End Sub
 
-    Private Sub dgvCurrentBooking_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCurrentBooking.CellClick
-        dgvCurrentBooking.Rows(e.RowIndex).Selected = True
+    Private Sub MakeButtonRound(sender As Object, e As PaintEventArgs)
+        Dim btn As Button = CType(sender, Button)
+        Dim path As New Drawing2D.GraphicsPath()
+        path.AddEllipse(0, 0, btn.Width, btn.Height)
+        btn.Region = New Region(path)
     End Sub
 
-    Private Sub dgvPaymentHistory_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvPaymentHistory.CellClick
-        dgvPaymentHistory.Rows(e.RowIndex).Selected = True
-    End Sub
-
-    Private Sub txtPaymentAmount_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtPaymentAmount.KeyPress
-        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
-            e.Handled = True
-        End If
+    Private Sub MakePanelRound(sender As Object, e As PaintEventArgs)
+        Dim panel As Panel = CType(sender, Panel)
+        Dim cornerRadius As Integer = 30
+        Dim path As New Drawing2D.GraphicsPath()
+        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
+        path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
+        path.AddArc(panel.Width - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
+        path.AddArc(0, panel.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
+        path.CloseFigure()
+        panel.Region = New Region(path)
     End Sub
 
     ' At the class level
@@ -196,32 +193,30 @@ Public Class FormCustomerView
 
         ' --- Filtering logic ---
         Dim filteredBookings = allBookings.AsEnumerable()
-        Debug.WriteLine("Filtered bookings: " & filteredBookings.Count())
-
-        ' Status filtering
-        Dim showPending = cbPending.Checked
-        Dim showRejected = cbRejected.Checked
-        Dim showPaid = cbPaid.Checked
-        Dim showApproved = cbApproved.Checked
 
         filteredBookings = filteredBookings.Where(Function(row)
                                                       Dim status = row("status").ToString().ToLower()
                                                       Dim paymentStatus = If(IsDBNull(row("payment_status")), "", row("payment_status").ToString().ToLower())
 
-                                                      ' Pending
-                                                      If status = "pending" AndAlso showPending Then Return True
-
-                                                      ' Rejected
-                                                      If status = "rejected" AndAlso showRejected Then Return True
-
-                                                      ' Paid (either status is "paid" or status is "approved" and payment_status is "paid")
-                                                      If ((status = "paid") OrElse (status = "approved" AndAlso paymentStatus = "paid")) AndAlso showPaid Then Return True
-
-                                                      ' Approved (status is "approved" and payment_status is not "paid")
-                                                      If (status = "approved" AndAlso paymentStatus <> "paid" AndAlso showApproved) Then Return True
-
-                                                      Return False
+                                                      Select Case currentFilter
+                                                          Case "pending"
+                                                              lblSelected.Text = "Currently Viewing: Pending Bookings"
+                                                              Return status = "pending"
+                                                          Case "rejected"
+                                                              lblSelected.Text = "Currently Viewing: Rejected Bookings"
+                                                              Return status = "rejected"
+                                                          Case "paid"
+                                                              lblSelected.Text = "Currently Viewing: Paid Bookings"
+                                                              Return (status = "paid") OrElse (status = "approved" AndAlso paymentStatus = "paid")
+                                                          Case "approved"
+                                                              lblSelected.Text = "Currently Viewing: Approved Bookings"
+                                                              Return status = "approved" AndAlso paymentStatus <> "paid"
+                                                          Case Else
+                                                              lblSelected.Text = "Select what to view!"
+                                                              Return False
+                                                      End Select
                                                   End Function)
+
 
 
         ' Search filtering
@@ -246,7 +241,7 @@ Public Class FormCustomerView
 
         If Not filteredBookings.Any() Then
             Dim lblNoBooking As New Label()
-            lblNoBooking.Text = "No booking data"
+            lblNoBooking.Text = ""
             lblNoBooking.Font = New Font(quicheFont.FontFamily, 14, FontStyle.Bold)
             lblNoBooking.ForeColor = Color.Black
             lblNoBooking.BackColor = Color.Transparent
@@ -591,28 +586,29 @@ Public Class FormCustomerView
         Me.WindowState = FormWindowState.Minimized
     End Sub
 
-    Private Sub cbPending_CheckedChanged(sender As Object, e As EventArgs) Handles cbPending.CheckedChanged
-        PopulateBookingPanels()
-    End Sub
-
-    Private Sub cbRejected_CheckedChanged(sender As Object, e As EventArgs) Handles cbRejected.CheckedChanged
-        PopulateBookingPanels()
-    End Sub
-
-    Private Sub cbPaid_CheckedChanged(sender As Object, e As EventArgs) Handles cbPaid.CheckedChanged
-        PopulateBookingPanels()
-    End Sub
-
-    Private Sub cbApproved_CheckedChanged(sender As Object, e As EventArgs) Handles cbApproved.CheckedChanged
-        PopulateBookingPanels()
-    End Sub
-
-
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
         PopulateBookingPanels()
     End Sub
 
-    Private Sub FlowLayoutPanel1_Paint(sender As Object, e As PaintEventArgs) Handles FlowLayoutPanel1.Paint
-
+    Private Sub btnPending_Click(sender As Object, e As EventArgs) Handles btnPending.Click
+        currentFilter = "pending"
+        PopulateBookingPanels()
     End Sub
+
+    Private Sub btnRejected_Click(sender As Object, e As EventArgs) Handles btnRejected.Click
+        currentFilter = "rejected"
+        PopulateBookingPanels()
+    End Sub
+
+    Private Sub btnApproved_Click(sender As Object, e As EventArgs) Handles btnApproved.Click
+        currentFilter = "approved"
+        PopulateBookingPanels()
+    End Sub
+
+    Private Sub btnPaid_Click(sender As Object, e As EventArgs) Handles btnPaid.Click
+        currentFilter = "paid"
+        PopulateBookingPanels()
+    End Sub
+
+
 End Class

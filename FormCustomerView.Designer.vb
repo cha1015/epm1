@@ -38,11 +38,12 @@ Partial Class FormCustomerView
         Me.btnLogOut = New System.Windows.Forms.Button()
         Me.btnclose = New System.Windows.Forms.Button()
         Me.btnminimize = New System.Windows.Forms.Button()
-        Me.cbPaid = New System.Windows.Forms.CheckBox()
-        Me.cbRejected = New System.Windows.Forms.CheckBox()
-        Me.cbPending = New System.Windows.Forms.CheckBox()
         Me.txtSearch = New System.Windows.Forms.TextBox()
-        Me.cbApproved = New System.Windows.Forms.CheckBox()
+        Me.btnPending = New System.Windows.Forms.Button()
+        Me.btnRejected = New System.Windows.Forms.Button()
+        Me.btnApproved = New System.Windows.Forms.Button()
+        Me.btnPaid = New System.Windows.Forms.Button()
+        Me.lblSelected = New System.Windows.Forms.Label()
         Me.DraggablePanel1 = New epm1.DraggablePanel()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -223,51 +224,6 @@ Partial Class FormCustomerView
         Me.btnminimize.TabIndex = 70
         Me.btnminimize.UseVisualStyleBackColor = False
         '
-        'cbPaid
-        '
-        Me.cbPaid.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbPaid.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gray
-        Me.cbPaid.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.cbPaid.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbPaid.Location = New System.Drawing.Point(828, 92)
-        Me.cbPaid.Name = "cbPaid"
-        Me.cbPaid.Size = New System.Drawing.Size(68, 21)
-        Me.cbPaid.TabIndex = 75
-        Me.cbPaid.Text = "Paid"
-        Me.cbPaid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.cbPaid.ThreeState = True
-        Me.cbPaid.UseVisualStyleBackColor = True
-        '
-        'cbRejected
-        '
-        Me.cbRejected.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbRejected.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gray
-        Me.cbRejected.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.cbRejected.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbRejected.Location = New System.Drawing.Point(680, 92)
-        Me.cbRejected.Name = "cbRejected"
-        Me.cbRejected.Size = New System.Drawing.Size(68, 21)
-        Me.cbRejected.TabIndex = 76
-        Me.cbRejected.Text = "Rejected"
-        Me.cbRejected.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.cbRejected.ThreeState = True
-        Me.cbRejected.UseVisualStyleBackColor = True
-        '
-        'cbPending
-        '
-        Me.cbPending.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbPending.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gray
-        Me.cbPending.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.cbPending.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbPending.Location = New System.Drawing.Point(606, 92)
-        Me.cbPending.Name = "cbPending"
-        Me.cbPending.Size = New System.Drawing.Size(68, 21)
-        Me.cbPending.TabIndex = 77
-        Me.cbPending.Text = "Pending"
-        Me.cbPending.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.cbPending.ThreeState = True
-        Me.cbPending.UseVisualStyleBackColor = True
-        '
         'txtSearch
         '
         Me.txtSearch.BackColor = System.Drawing.Color.Gainsboro
@@ -278,20 +234,67 @@ Partial Class FormCustomerView
         Me.txtSearch.Size = New System.Drawing.Size(222, 13)
         Me.txtSearch.TabIndex = 78
         '
-        'cbApproved
+        'btnPending
         '
-        Me.cbApproved.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbApproved.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gray
-        Me.cbApproved.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.cbApproved.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbApproved.Location = New System.Drawing.Point(754, 92)
-        Me.cbApproved.Name = "cbApproved"
-        Me.cbApproved.Size = New System.Drawing.Size(68, 21)
-        Me.cbApproved.TabIndex = 79
-        Me.cbApproved.Text = "Approved"
-        Me.cbApproved.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.cbApproved.ThreeState = True
-        Me.cbApproved.UseVisualStyleBackColor = True
+        Me.btnPending.BackColor = System.Drawing.Color.Transparent
+        Me.btnPending.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnPending.FlatAppearance.BorderSize = 0
+        Me.btnPending.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPending.ForeColor = System.Drawing.Color.Transparent
+        Me.btnPending.Location = New System.Drawing.Point(639, 96)
+        Me.btnPending.Name = "btnPending"
+        Me.btnPending.Size = New System.Drawing.Size(59, 16)
+        Me.btnPending.TabIndex = 79
+        Me.btnPending.UseVisualStyleBackColor = False
+        '
+        'btnRejected
+        '
+        Me.btnRejected.BackColor = System.Drawing.Color.Transparent
+        Me.btnRejected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnRejected.FlatAppearance.BorderSize = 0
+        Me.btnRejected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRejected.ForeColor = System.Drawing.Color.Transparent
+        Me.btnRejected.Location = New System.Drawing.Point(706, 96)
+        Me.btnRejected.Name = "btnRejected"
+        Me.btnRejected.Size = New System.Drawing.Size(59, 16)
+        Me.btnRejected.TabIndex = 80
+        Me.btnRejected.UseVisualStyleBackColor = False
+        '
+        'btnApproved
+        '
+        Me.btnApproved.BackColor = System.Drawing.Color.Transparent
+        Me.btnApproved.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnApproved.FlatAppearance.BorderSize = 0
+        Me.btnApproved.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnApproved.ForeColor = System.Drawing.Color.Transparent
+        Me.btnApproved.Location = New System.Drawing.Point(774, 96)
+        Me.btnApproved.Name = "btnApproved"
+        Me.btnApproved.Size = New System.Drawing.Size(59, 16)
+        Me.btnApproved.TabIndex = 81
+        Me.btnApproved.UseVisualStyleBackColor = False
+        '
+        'btnPaid
+        '
+        Me.btnPaid.BackColor = System.Drawing.Color.Transparent
+        Me.btnPaid.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnPaid.FlatAppearance.BorderSize = 0
+        Me.btnPaid.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPaid.ForeColor = System.Drawing.Color.Transparent
+        Me.btnPaid.Location = New System.Drawing.Point(841, 96)
+        Me.btnPaid.Name = "btnPaid"
+        Me.btnPaid.Size = New System.Drawing.Size(59, 16)
+        Me.btnPaid.TabIndex = 82
+        Me.btnPaid.UseVisualStyleBackColor = False
+        '
+        'lblSelected
+        '
+        Me.lblSelected.AutoSize = True
+        Me.lblSelected.Font = New System.Drawing.Font("Cinzel", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSelected.Location = New System.Drawing.Point(363, 97)
+        Me.lblSelected.Name = "lblSelected"
+        Me.lblSelected.Size = New System.Drawing.Size(11, 15)
+        Me.lblSelected.TabIndex = 83
+        Me.lblSelected.Text = "-"
         '
         'DraggablePanel1
         '
@@ -305,15 +308,16 @@ Partial Class FormCustomerView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.epm1.My.Resources.Resources.CUSTOMER_VIEW__4_
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.CUSTOMER_VIEW__4_1
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(944, 501)
         Me.ControlBox = False
-        Me.Controls.Add(Me.cbApproved)
+        Me.Controls.Add(Me.lblSelected)
+        Me.Controls.Add(Me.btnPaid)
+        Me.Controls.Add(Me.btnApproved)
+        Me.Controls.Add(Me.btnRejected)
+        Me.Controls.Add(Me.btnPending)
         Me.Controls.Add(Me.txtSearch)
-        Me.Controls.Add(Me.cbPending)
-        Me.Controls.Add(Me.cbRejected)
-        Me.Controls.Add(Me.cbPaid)
         Me.Controls.Add(Me.btnminimize)
         Me.Controls.Add(Me.btnclose)
         Me.Controls.Add(Me.DraggablePanel1)
@@ -354,9 +358,10 @@ Partial Class FormCustomerView
     Friend WithEvents DraggablePanel1 As DraggablePanel
     Friend WithEvents btnclose As Button
     Friend WithEvents btnminimize As Button
-    Friend WithEvents cbPaid As CheckBox
-    Friend WithEvents cbRejected As CheckBox
-    Friend WithEvents cbPending As CheckBox
     Friend WithEvents txtSearch As TextBox
-    Friend WithEvents cbApproved As CheckBox
+    Friend WithEvents btnPending As Button
+    Friend WithEvents btnRejected As Button
+    Friend WithEvents btnApproved As Button
+    Friend WithEvents btnPaid As Button
+    Friend WithEvents lblSelected As Label
 End Class
