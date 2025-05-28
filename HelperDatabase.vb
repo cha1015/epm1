@@ -115,28 +115,41 @@ Public Class HelperDatabase
 
     ' ------------------ Place a New Booking ------------------
     Public Shared Function PlaceBooking(customerId As Integer, placeId As Integer, numGuests As Integer, eventDateStart As Date,
-                                    eventStartTime As String, eventEndTime As String, totalPrice As Decimal) As Integer
+                                eventStartTime As String, eventEndTime As String, totalPrice As Decimal) As Integer
 
-        ' Check for duplicate booking BEFORE inserting
         Dim checkQuery As String = "SELECT COUNT(*) FROM Bookings WHERE place_id = @place_id AND event_date = @event_date"
         Dim checkParams As New Dictionary(Of String, Object) From {{"@place_id", placeId}, {"@event_date", eventDateStart}}
 
         If Convert.ToInt32(DBHelper.ExecuteScalarQuery(checkQuery, checkParams)) > 0 Then
-            Return -1 ' Indicates duplicate booking
+            Return -1
         End If
 
-        ' Convert start and end times to 24-hour format
-        Dim eventStart As DateTime = DateTime.ParseExact(eventStartTime, "h:mm tt", CultureInfo.InvariantCulture)
-        Dim eventEnd As DateTime = DateTime.ParseExact(eventEndTime, "h:mm tt", CultureInfo.InvariantCulture)
+        If eventStartTime.Length <= 2 AndAlso eventStartTime.All(AddressOf Char.IsDigit) Then
+            eventStartTime = eventStartTime.PadLeft(2, "0"c) & ":00"
+        End If
+        If eventEndTime.Length <= 2 AndAlso eventEndTime.All(AddressOf Char.IsDigit) Then
+            eventEndTime = eventEndTime.PadLeft(2, "0"c) & ":00"
+        End If
 
-        ' Convert to HH:mm:ss for storage in the database
+        Dim formats As String() = {"h:mm tt", "hh:mm tt", "H:mm", "HH:mm", "HH:mm:ss"}
+        Dim eventStart As DateTime
+        Dim eventEnd As DateTime
+
+        If Not DateTime.TryParseExact(eventStartTime, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStart) Then
+            Throw New FormatException($"Invalid eventStartTime format: '{eventStartTime}'")
+        End If
+
+        If Not DateTime.TryParseExact(eventEndTime, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEnd) Then
+            Throw New FormatException($"Invalid eventEndTime format: '{eventEndTime}'")
+        End If
+
+
         Dim formattedStartTime As String = eventStart.ToString("HH:mm:ss")
         Dim formattedEndTime As String = eventEnd.ToString("HH:mm:ss")
 
-        ' Proceed with booking insertion
         Dim query As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, total_price) 
-                            VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price); 
-                            SELECT LAST_INSERT_ID();"
+                        VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @total_price); 
+                        SELECT LAST_INSERT_ID();"
 
         Dim params As New Dictionary(Of String, Object) From {
         {"@customer_id", customerId},

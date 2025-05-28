@@ -171,7 +171,7 @@ Public Class FormCustomerView
         End Try
 
         LoadRelevantPlaceIndices()
-
+        UpdatePlaceBrowserPanel()
     End Sub
 
     Private Sub LoadBookings()
@@ -415,6 +415,21 @@ Public Class FormCustomerView
         lblNoBooking.Name = "lblNoBooking"
         pnlPlaceBrowser.Controls.Add(lblNoBooking)
         lblNoBooking.BringToFront()
+        pnlPlaceBrowser.Visible = True
+    End Sub
+    Private Sub UpdatePlaceBrowserPanel()
+        If relevantPlaceIndices.Count = 0 Then
+            ShowNoBookingPanel()
+            Return
+        End If
+
+        ' Example: Set label values based on currentPlaceIndex or current booking/payment
+        lblPlaceName.Text = placeNames(currentPlaceIndex - 1)
+        ' Set other labels (lblPaymentId, lblAmountToPay, etc.) here based on your data
+
+        For Each ctrl As Control In pnlPlaceBrowser.Controls
+            ctrl.Visible = True
+        Next
         pnlPlaceBrowser.Visible = True
     End Sub
 
