@@ -349,6 +349,13 @@ Public Class FormBooking
             Exit Sub
         End If
 
+        ' Ensure the number of guests is greater than 0
+        Dim numGuests As Integer
+        If Not Integer.TryParse(txtNumGuests.Text, numGuests) OrElse numGuests <= 0 Then
+            MessageBox.Show("Number of guests must be greater than zero.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
         Dim eventStartTime As DateTime, eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime
         Dim timeFormat As String = "h:mm tt"
         DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime)
