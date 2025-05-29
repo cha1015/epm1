@@ -287,86 +287,38 @@ Public Class FormAdminCenter
 
     '--- Load Revenue Reports
     Private Sub LoadRevenueReports()
-        Dim query As String = "
-        SELECT 
-            e.event_place, 
-            IFNULL(SUM(b.total_price), 0) AS total_revenue
-        FROM eventplace e
-        LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'paid'
-        GROUP BY e.place_id
-    "
+        Dim query As String = "SELECT e.event_place, " &
+                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
+                          "FROM eventplace e " &
+                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'Approved' " &
+                          "GROUP BY e.place_id"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
-
-        Dim revenuePerPlace As New Dictionary(Of String, Decimal)()
-        For Each row As DataRow In dt.Rows
-            Dim placeName As String = row("event_place").ToString()
-            Dim totalRevenue As Decimal = Convert.ToDecimal(row("total_revenue"))
-            revenuePerPlace(placeName) = totalRevenue
-        Next
-
-        ' --- Populate Chart1 ---
-        Chart1.Series.Clear()
-        Dim series As New DataVisualization.Charting.Series("Revenue")
-        series.ChartType = DataVisualization.Charting.SeriesChartType.Bar
-
-        For Each kvp In revenuePerPlace
-            series.Points.AddXY(kvp.Key, kvp.Value)
-        Next
-
-        Chart1.Series.Add(series)
-        If Chart1.ChartAreas.Count = 0 Then
-            Chart1.ChartAreas.Add(New DataVisualization.Charting.ChartArea("Default"))
-        End If
-        Chart1.ChartAreas(0).AxisX.Title = "Event Place"
-        Chart1.ChartAreas(0).AxisY.Title = "Total Revenue"
-        Chart1.ChartAreas(0).AxisY.LabelStyle.Format = "₱#,##0"
-        Chart1.Invalidate()
-
     End Sub
-
-
 
 
     '--- Load Invoices
     Private Sub LoadInvoices()
-        Dim query As String = "
-    SELECT 
-        p.payment_id,
-        c.name AS customer_name,
-        b.event_date,
-        b.event_place,
-        i.invoice_date,
-        p.amount_paid,
-        p.payment_date,
-        p.payment_status
-    FROM payments p
-    JOIN bookings b ON p.booking_id = b.booking_id
-    JOIN invoices i ON i.invoice_id = b.invoice_id
-    JOIN customers c ON b.customer_id = c.customer_id
-    WHERE p.payment_status = 'Paid'
-    ORDER BY p.payment_date DESC
-    "
-
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object)())
-        dgvInvoice.DataSource = dt
-        dgvInvoice.Refresh()
+        Dim query As String = "SELECT invoice_id, user_id, event_place, total_amount, payment_status, invoice_date
+        FROM invoices
+        WHERE payment_status = 'Pending'
+        ORDER BY invoice_date ASC
+        "
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+        'HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
     End Sub
-
-
-
 
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
         Dim bookedDates As New List(Of Date)
-        Dim query As String = "SELECT event_date, SELECT * FROM Bookings WHERE place_id = @place_id"
+        Dim query As String = "SELECT event_date, event_end_date FROM Bookings WHERE place_id = @place_id"
 
         Dim params As New Dictionary(Of String, Object) From {{"@place_id", placeId}}
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, params)
         For Each row As DataRow In dt.Rows
             Dim startDate As Date = Convert.ToDateTime(row("event_date"))
-            Dim endDate As Date = Convert.ToDateTime(row(""))
+            Dim endDate As Date = Convert.ToDateTime(row("event_end_date"))
 
             ' Add all dates in the range to the booked list
             For Each d As Date In Enumerable.Range(0, (endDate - startDate).Days + 1).Select(Function(i) startDate.AddDays(i))
@@ -394,49 +346,6 @@ Public Class FormAdminCenter
 
 
 #End Region
-
-#Region "Data Updates Based on Selected Date"
-
-    '--- Update Revenue Reports for the selected date
-    Private Sub UpdateRevenueReports(selectedDate As Date)
-        Dim query As String = "SELECT e.event_place, " &
-                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
-                          "FROM eventplace e " &
-                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status='Approved' AND b.event_date = @selectedDate " &
-                          "GROUP BY e.place_id"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
-        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
-    End Sub
-
-
-    '--- Update Availability for the selected date
-    Private Sub UpdateAvailability(selectedDate As Date)
-        Dim query As String = "SELECT e.event_place, " &
-                          "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved' AND b.event_date = @selectedDate) " &
-                          "THEN 'Booked' ELSE 'Available' END AS Availability " &
-                          "FROM eventplace e"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
-
-        ' Retrieve the FlowLayoutPanels for available and booked event places
-        Dim flpAvailable As FlowLayoutPanel = CType(tcAvailability.TabPages("tpAvailable").Controls("flpAvailable"), FlowLayoutPanel)
-        Dim flpBooked As FlowLayoutPanel = CType(tcAvailability.TabPages("tpBooked").Controls("flpBooked"), FlowLayoutPanel)
-
-        ' Separate the data into available and booked places
-        Dim availablePlaces As DataTable = dt.Clone()
-        Dim bookedPlaces As DataTable = dt.Clone()
-
-        For Each row As DataRow In dt.Rows
-            If row("Availability").ToString() = "Available" Then
-                availablePlaces.ImportRow(row)
-            Else
-                bookedPlaces.ImportRow(row)
-            End If
-        Next
-
-        ' Populate the FlowLayoutPanels with the sorted event places
-        HelperResultsDisplay.PopulateAvailability(flpAvailable, availablePlaces)
-        HelperResultsDisplay.PopulateAvailability(flpBooked, bookedPlaces)
-    End Sub
 
 
 #Region "Event Handlers for Booking Approval/Payment"
@@ -524,9 +433,9 @@ Public Class FormAdminCenter
         Dim confirmResult As DialogResult = MessageBox.Show("Are you sure you want to add this event place?", "Confirm Add", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If confirmResult = DialogResult.No Then Exit Sub
 
-        ' Set the formatted opening and closing time for display in the labels
-        lblOpeningHours.Text = openingTime
-        lblClosingHours.Text = closingTime
+        ' Proceed with insertion logic
+        Dim openingTimeRaw As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}".Trim()
+        Dim closingTimeRaw As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}".Trim()
 
         ' Validate and convert time format
         Dim timeFormats() As String = {"h:mm tt", "hh:mm tt"}
@@ -593,7 +502,6 @@ Public Class FormAdminCenter
             Dim openingTime As String = parsedOpening.ToString("HH:mm:ss")
             Dim closingTime As String = parsedClosing.ToString("HH:mm:ss")
 
-            ' SQL query to update event place information
             Dim query As String = "UPDATE eventplace SET event_place = @event_place, event_type = @event_type, capacity = @capacity, features = @features, price_per_day = @price_per_day, description = @description, image_url = @image_url, opening_hours = @opening_hours, closing_hours = @closing_hours, available_days = @available_days WHERE place_id = @place_id"
 
             Dim parameters As New Dictionary(Of String, Object) From {
@@ -739,41 +647,4 @@ Public Class FormAdminCenter
         editForm.ShowDialog()
     End Sub
 
-    Private Sub Chart1_Click(sender As Object, e As EventArgs) Handles Chart1.Click
-
-    End Sub
-
-    '---Invoice Data Grid---
-    Private Sub LoadInvoiceGrid()
-        Dim query As String = "
-        SELECT 
-            c.customer_id,
-            c.name AS customer_name,
-            c.email AS customer_email,
-            b.booking_id,
-            pay.payment_id,
-            e.event_place,
-            IFNULL(GROUP_CONCAT(s.service_name ORDER BY s.service_name), '') AS services_availed,
-            pay.amount_paid,
-            pay.payment_date
-        FROM bookings b
-        JOIN customers c ON b.customer_id = c.customer_id
-        JOIN eventplace e ON b.place_id = e.place_id
-        LEFT JOIN payments pay ON pay.booking_id = b.booking_id
-        LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
-        LEFT JOIN services s ON bs.service_id = s.service_id
-        WHERE b.status = 'paid'
-        GROUP BY b.booking_id, pay.payment_id
-        ORDER BY pay.payment_date DESC
-    "
-
-        ' Get data
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-
-    End Sub
-
-
-    Private Sub tpInvoicesAndPayments_Click(sender As Object, e As EventArgs) Handles tpInvoicesAndPayments.Click
-
-    End Sub
 End Class

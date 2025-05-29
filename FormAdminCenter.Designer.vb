@@ -73,8 +73,7 @@ Partial Class FormAdminCenter
         Me.tpInvoicesAndPayments = New System.Windows.Forms.TabPage()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.flpRevenueReports = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
-        Me.dgvInvoice = New System.Windows.Forms.DataGridView()
+
         Me.tpCustomerRecords = New System.Windows.Forms.TabPage()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblNumCustomersContainer = New System.Windows.Forms.Label()
@@ -98,8 +97,7 @@ Partial Class FormAdminCenter
         Me.GroupBox1.SuspendLayout()
         Me.tpInvoicesAndPayments.SuspendLayout()
         Me.flpRevenueReports.SuspendLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.dgvInvoice, System.ComponentModel.ISupportInitialize).BeginInit()
+
         Me.tpCustomerRecords.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -657,7 +655,6 @@ Partial Class FormAdminCenter
         '
         'tpInvoicesAndPayments
         '
-        Me.tpInvoicesAndPayments.Controls.Add(Me.dgvInvoice)
         Me.tpInvoicesAndPayments.Controls.Add(Me.Label1)
         Me.tpInvoicesAndPayments.Controls.Add(Me.flpRevenueReports)
         Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 28)
@@ -680,7 +677,6 @@ Partial Class FormAdminCenter
         '
         'flpRevenueReports
         '
-        Me.flpRevenueReports.Controls.Add(Me.Chart1)
         Me.flpRevenueReports.Location = New System.Drawing.Point(6, 22)
         Me.flpRevenueReports.Name = "flpRevenueReports"
         Me.flpRevenueReports.Size = New System.Drawing.Size(284, 392)
@@ -688,28 +684,9 @@ Partial Class FormAdminCenter
         '
         'Chart1
         '
-        Me.Chart1.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Bottom
-        ChartArea1.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(3, 3)
-        Me.Chart1.Name = "Chart1"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(288, 392)
-        Me.Chart1.TabIndex = 0
-        Me.Chart1.Text = "Chart1"
         '
         'dgvInvoice
         '
-        Me.dgvInvoice.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvInvoice.Location = New System.Drawing.Point(305, 25)
-        Me.dgvInvoice.Name = "dgvInvoice"
-        Me.dgvInvoice.Size = New System.Drawing.Size(607, 389)
-        Me.dgvInvoice.TabIndex = 0
         '
         'tpCustomerRecords
         '
@@ -866,8 +843,6 @@ Partial Class FormAdminCenter
         Me.tpInvoicesAndPayments.ResumeLayout(False)
         Me.tpInvoicesAndPayments.PerformLayout()
         Me.flpRevenueReports.ResumeLayout(False)
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.dgvInvoice, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpCustomerRecords.ResumeLayout(False)
         Me.tpCustomerRecords.PerformLayout()
         Me.ResumeLayout(False)
