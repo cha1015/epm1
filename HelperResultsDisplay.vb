@@ -721,32 +721,36 @@ Public Class HelperResultsDisplay
     End Sub
 
     ' Modified PopulateEventPlacesForAdmin method
-    Public Shared Sub PopulateEventPlacesForAdmin(ByVal flpAvailable As FlowLayoutPanel,
-                                               ByVal dt As DataTable,
-                                               ByVal isAvailable As Boolean,
-                                               ByVal txtEventPlace As TextBox,
-                                               ByVal txtEventType As TextBox,
-                                               ByVal txtCapacity As TextBox,
-                                               ByVal txtPricePerDay As TextBox,
-                                               ByVal txtFeatures As TextBox,
-                                               ByVal txtImageUrl As TextBox,
-                                               ByVal cbStartHour As ComboBox,
-                                               ByVal cbStartMinutes As ComboBox,
-                                               ByVal cbStartAMPM As ComboBox,
-                                               ByVal cbEndHour As ComboBox,
-                                               ByVal cbEndMinutes As ComboBox,
-                                               ByVal cbEndAMPM As ComboBox,
-                                               ByVal txtAvailableDays As TextBox,
-                                               ByVal txtDescription As TextBox,
-                                               ByVal txtPlaceID As TextBox,
-                                               ByVal btnUpdate As Button,
-                                               ByVal btnDelete As Button)
-        Dim scrollbarWidth As Integer = SystemInformation.VerticalScrollBarWidth
-        Dim availableWidth As Integer = flpAvailable.Width - scrollbarWidth - (10 * 6)
-        Dim panelWidth As Integer = availableWidth \ 3
-        Dim panelHeight As Integer = 180 ' Adjusted height for name and image only
+    Public Shared Sub PopulateEventPlacesForAdmin(ByVal flpEventPlaces As FlowLayoutPanel,
+                                                  ByVal dt As DataTable,
+                                                  ByVal txtEventPlace As TextBox,
+                                                  ByVal txtEventType As TextBox,
+                                                  ByVal txtCapacity As TextBox,
+                                                  ByVal txtPricePerDay As TextBox,
+                                                  ByVal txtFeatures As TextBox,
+                                                  ByVal txtImageUrl As TextBox,
+                                                  ByVal cbStartHour As ComboBox,
+                                                  ByVal cbStartMinutes As ComboBox,
+                                                  ByVal cbStartAMPM As ComboBox,
+                                                  ByVal cbEndHour As ComboBox,
+                                                  ByVal cbEndMinutes As ComboBox,
+                                                  ByVal cbEndAMPM As ComboBox,
+                                                  ByVal txtAvailableDays As TextBox,
+                                                  ByVal txtDescription As TextBox,
+                                                  ByVal txtPlaceID As TextBox,
+                                                  ByVal btnUpdate As Button,
+                                                  ByVal btnDelete As Button)
 
-        ' Create the event place panel
+        ' Clear the FlowLayoutPanel before adding new controls
+        flpEventPlaces.Controls.Clear()
+
+        ' Compute the dimensions for each panel
+        Dim scrollbarWidth As Integer = SystemInformation.VerticalScrollBarWidth
+        Dim availableWidth As Integer = flpEventPlaces.Width - scrollbarWidth - (10 * 6)
+        Dim panelWidth As Integer = availableWidth \ 3
+        Dim panelHeight As Integer = 180 ' Adjusted height for image and name
+
+        ' Create the event place panel for each DataRow
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
                                                          Dim panel As New Panel()
                                                          panel.Size = New Size(panelWidth, panelHeight)
@@ -755,9 +759,10 @@ Public Class HelperResultsDisplay
 
                                                          ' PictureBox for event image
                                                          Dim pb As New PictureBox()
-                                                         pb.Size = New Size(panelWidth, 120) ' Adjust height of image section
+                                                         pb.Size = New Size(panelWidth, 120) ' Adjust height for image section
                                                          pb.Location = New Point(0, 0)
                                                          pb.SizeMode = PictureBoxSizeMode.StretchImage
+
                                                          Dim imagePath As String = row("image_url").ToString().Trim()
                                                          Dim defaultImagePath As String = "C:\event images\No Image.png"
                                                          If String.IsNullOrEmpty(imagePath) OrElse Not IO.File.Exists(imagePath) Then
@@ -773,37 +778,53 @@ Public Class HelperResultsDisplay
                                                          Dim lblName As New Label()
                                                          lblName.AutoSize = False
                                                          lblName.Size = New Size(panelWidth, 22)
-                                                         lblName.Location = New Point(0, 120) ' Adjusted to fit below the image
+                                                         lblName.Location = New Point(0, 120) ' Position just below the image
                                                          lblName.Text = row("event_place").ToString()
                                                          lblName.Font = New Font("Poppins", 10, FontStyle.Bold)
 
-                                                         ' Click handler to load the event place details into fields
+                                                         panel.Controls.Add(pb)
+                                                         panel.Controls.Add(lblName)
+
+                                                         ' Set the background color based on availability
+                                                         Dim availStatus As String = row("Availability").ToString().ToLower()
+                                                         If availStatus = "available" Then
+                                                             panel.BackColor = Color.LightGreen
+                                                         Else
+                                                             panel.BackColor = Color.Orange
+                                                         End If
+
+                                                         ' Click handler to load event place details into fields
                                                          AddHandler panel.Click, Sub(sender, e)
-                                                                                     ' Populate the fields with the clicked event place's details
                                                                                      txtEventPlace.Text = row("event_place").ToString()
                                                                                      txtEventType.Text = row("event_type").ToString()
                                                                                      txtCapacity.Text = row("capacity").ToString()
                                                                                      txtPricePerDay.Text = row("price_per_day").ToString()
-                                                                                     txtFeatures.Text = row("features").ToString()
+                                                                                     If dt.Columns.Contains("features") Then
+                                                                                         txtFeatures.Text = row("features").ToString()
+                                                                                     Else
+                                                                                         txtFeatures.Text = "Column not found!"
+                                                                                     End If
+
                                                                                      txtImageUrl.Text = row("image_url").ToString()
                                                                                      txtAvailableDays.Text = row("available_days").ToString()
                                                                                      txtDescription.Text = row("description").ToString()
                                                                                      txtPlaceID.Text = row("place_id").ToString()
 
                                                                                      ' Populate the opening and closing hours
-                                                                                     Dim openingTime As DateTime = Convert.ToDateTime(row("opening_hours"))
-                                                                                     Dim closingTime As DateTime = Convert.ToDateTime(row("closing_hours"))
+                                                                                     Dim openingTimeSpan As TimeSpan = CType(row("opening_hours"), TimeSpan)
+                                                                                     Dim closingTimeSpan As TimeSpan = CType(row("closing_hours"), TimeSpan)
+                                                                                     Dim openingTime As DateTime = DateTime.Today.Add(openingTimeSpan)
+                                                                                     Dim closingTime As DateTime = DateTime.Today.Add(closingTimeSpan)
 
                                                                                      cbStartHour.SelectedItem = openingTime.ToString("hh")
                                                                                      cbStartMinutes.SelectedItem = openingTime.ToString("mm")
                                                                                      cbStartAMPM.SelectedItem = openingTime.ToString("tt")
-
                                                                                      cbEndHour.SelectedItem = closingTime.ToString("hh")
                                                                                      cbEndMinutes.SelectedItem = closingTime.ToString("mm")
                                                                                      cbEndAMPM.SelectedItem = closingTime.ToString("tt")
 
-                                                                                     ' Show Update/Delete buttons only if event place is available
-                                                                                     If isAvailable Then
+                                                                                     ' Show Update/Delete buttons only if the event place is available
+                                                                                     If availStatus = "available" Then
                                                                                          btnUpdate.Visible = True
                                                                                          btnDelete.Visible = True
                                                                                      Else
@@ -812,14 +833,14 @@ Public Class HelperResultsDisplay
                                                                                      End If
                                                                                  End Sub
 
-                                                         panel.Controls.Add(pb)
-                                                         panel.Controls.Add(lblName)
-
                                                          Return panel
                                                      End Function
 
-        ' Populate the FlowLayoutPanel with the event place panels
-        PopulateFlowPanel(flpAvailable, dt, createPanel)
+        ' Loop through each DataRow and add the created panel to the single FlowLayoutPanel
+        For Each row As DataRow In dt.Rows
+            Dim panel As Panel = createPanel(row)
+            flpEventPlaces.Controls.Add(panel)
+        Next
     End Sub
 
 End Class

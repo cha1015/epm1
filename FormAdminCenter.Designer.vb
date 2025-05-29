@@ -40,11 +40,6 @@ Partial Class FormAdminCenter
         Me.tpAll = New System.Windows.Forms.TabPage()
         Me.flpAll = New System.Windows.Forms.FlowLayoutPanel()
         Me.tpEventPlaceMgmt = New System.Windows.Forms.TabPage()
-        Me.tcAvailability = New System.Windows.Forms.TabControl()
-        Me.tpAvailable = New System.Windows.Forms.TabPage()
-        Me.flpAvailable = New System.Windows.Forms.FlowLayoutPanel()
-        Me.tpBooked = New System.Windows.Forms.TabPage()
-        Me.flpBooked = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.txtPlaceID = New System.Windows.Forms.TextBox()
         Me.lblPlaceID = New System.Windows.Forms.Label()
@@ -87,6 +82,7 @@ Partial Class FormAdminCenter
         Me.cbStartMinutes = New System.Windows.Forms.ComboBox()
         Me.cbStartHour = New System.Windows.Forms.ComboBox()
         Me.lblErrorClosingHours = New System.Windows.Forms.Label()
+        Me.flpEventPlaces = New System.Windows.Forms.FlowLayoutPanel()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpBookings.SuspendLayout()
         Me.tcPendApprRej.SuspendLayout()
@@ -95,9 +91,6 @@ Partial Class FormAdminCenter
         Me.tpRejected.SuspendLayout()
         Me.tpAll.SuspendLayout()
         Me.tpEventPlaceMgmt.SuspendLayout()
-        Me.tcAvailability.SuspendLayout()
-        Me.tpAvailable.SuspendLayout()
-        Me.tpBooked.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.tpInvoicesAndPayments.SuspendLayout()
         Me.tpCustomerRecords.SuspendLayout()
@@ -298,7 +291,7 @@ Partial Class FormAdminCenter
         'tpEventPlaceMgmt
         '
         Me.tpEventPlaceMgmt.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.tpEventPlaceMgmt.Controls.Add(Me.tcAvailability)
+        Me.tpEventPlaceMgmt.Controls.Add(Me.flpEventPlaces)
         Me.tpEventPlaceMgmt.Controls.Add(Me.GroupBox1)
         Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 28)
         Me.tpEventPlaceMgmt.Margin = New System.Windows.Forms.Padding(4)
@@ -307,54 +300,6 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1220, 524)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
-        '
-        'tcAvailability
-        '
-        Me.tcAvailability.Controls.Add(Me.tpAvailable)
-        Me.tcAvailability.Controls.Add(Me.tpBooked)
-        Me.tcAvailability.Location = New System.Drawing.Point(7, 3)
-        Me.tcAvailability.Name = "tcAvailability"
-        Me.tcAvailability.SelectedIndex = 0
-        Me.tcAvailability.Size = New System.Drawing.Size(601, 514)
-        Me.tcAvailability.TabIndex = 47
-        '
-        'tpAvailable
-        '
-        Me.tpAvailable.Controls.Add(Me.flpAvailable)
-        Me.tpAvailable.Location = New System.Drawing.Point(4, 28)
-        Me.tpAvailable.Name = "tpAvailable"
-        Me.tpAvailable.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpAvailable.Size = New System.Drawing.Size(593, 482)
-        Me.tpAvailable.TabIndex = 0
-        Me.tpAvailable.Text = "Available"
-        Me.tpAvailable.UseVisualStyleBackColor = True
-        '
-        'flpAvailable
-        '
-        Me.flpAvailable.AutoScroll = True
-        Me.flpAvailable.Location = New System.Drawing.Point(6, 6)
-        Me.flpAvailable.Name = "flpAvailable"
-        Me.flpAvailable.Size = New System.Drawing.Size(581, 470)
-        Me.flpAvailable.TabIndex = 1
-        '
-        'tpBooked
-        '
-        Me.tpBooked.Controls.Add(Me.flpBooked)
-        Me.tpBooked.Location = New System.Drawing.Point(4, 28)
-        Me.tpBooked.Name = "tpBooked"
-        Me.tpBooked.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpBooked.Size = New System.Drawing.Size(593, 482)
-        Me.tpBooked.TabIndex = 1
-        Me.tpBooked.Text = "Booked"
-        Me.tpBooked.UseVisualStyleBackColor = True
-        '
-        'flpBooked
-        '
-        Me.flpBooked.AutoScroll = True
-        Me.flpBooked.Location = New System.Drawing.Point(7, 6)
-        Me.flpBooked.Name = "flpBooked"
-        Me.flpBooked.Size = New System.Drawing.Size(581, 470)
-        Me.flpBooked.TabIndex = 0
         '
         'GroupBox1
         '
@@ -432,9 +377,8 @@ Partial Class FormAdminCenter
         Me.lblErrorCapacity.Location = New System.Drawing.Point(256, 121)
         Me.lblErrorCapacity.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorCapacity.Name = "lblErrorCapacity"
-        Me.lblErrorCapacity.Size = New System.Drawing.Size(15, 19)
+        Me.lblErrorCapacity.Size = New System.Drawing.Size(0, 19)
         Me.lblErrorCapacity.TabIndex = 31
-        Me.lblErrorCapacity.Text = "-"
         '
         'lblErrorOpeningHours
         '
@@ -442,9 +386,8 @@ Partial Class FormAdminCenter
         Me.lblErrorOpeningHours.Location = New System.Drawing.Point(422, 231)
         Me.lblErrorOpeningHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorOpeningHours.Name = "lblErrorOpeningHours"
-        Me.lblErrorOpeningHours.Size = New System.Drawing.Size(15, 19)
+        Me.lblErrorOpeningHours.Size = New System.Drawing.Size(0, 19)
         Me.lblErrorOpeningHours.TabIndex = 30
-        Me.lblErrorOpeningHours.Text = "-"
         '
         'lblErrorPrice
         '
@@ -452,9 +395,8 @@ Partial Class FormAdminCenter
         Me.lblErrorPrice.Location = New System.Drawing.Point(256, 149)
         Me.lblErrorPrice.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorPrice.Name = "lblErrorPrice"
-        Me.lblErrorPrice.Size = New System.Drawing.Size(15, 19)
+        Me.lblErrorPrice.Size = New System.Drawing.Size(0, 19)
         Me.lblErrorPrice.TabIndex = 32
-        Me.lblErrorPrice.Text = "-"
         '
         'btnAdd
         '
@@ -872,9 +814,16 @@ Partial Class FormAdminCenter
         Me.lblErrorClosingHours.Location = New System.Drawing.Point(422, 259)
         Me.lblErrorClosingHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorClosingHours.Name = "lblErrorClosingHours"
-        Me.lblErrorClosingHours.Size = New System.Drawing.Size(15, 19)
+        Me.lblErrorClosingHours.Size = New System.Drawing.Size(0, 19)
         Me.lblErrorClosingHours.TabIndex = 82
-        Me.lblErrorClosingHours.Text = "-"
+        '
+        'flpEventPlaces
+        '
+        Me.flpEventPlaces.AutoScroll = True
+        Me.flpEventPlaces.Location = New System.Drawing.Point(18, 19)
+        Me.flpEventPlaces.Name = "flpEventPlaces"
+        Me.flpEventPlaces.Size = New System.Drawing.Size(581, 492)
+        Me.flpEventPlaces.TabIndex = 2
         '
         'FormAdminCenter
         '
@@ -900,9 +849,6 @@ Partial Class FormAdminCenter
         Me.tpRejected.ResumeLayout(False)
         Me.tpAll.ResumeLayout(False)
         Me.tpEventPlaceMgmt.ResumeLayout(False)
-        Me.tcAvailability.ResumeLayout(False)
-        Me.tpAvailable.ResumeLayout(False)
-        Me.tpBooked.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.tpInvoicesAndPayments.ResumeLayout(False)
@@ -967,11 +913,6 @@ Partial Class FormAdminCenter
     Friend WithEvents flpAll As FlowLayoutPanel
     Friend WithEvents Label1 As Label
     Friend WithEvents flpRevenueReports As FlowLayoutPanel
-    Friend WithEvents tcAvailability As TabControl
-    Friend WithEvents tpAvailable As TabPage
-    Friend WithEvents flpAvailable As FlowLayoutPanel
-    Friend WithEvents tpBooked As TabPage
-    Friend WithEvents flpBooked As FlowLayoutPanel
     Friend WithEvents cbEndAMPM As ComboBox
     Friend WithEvents cbEndMinutes As ComboBox
     Friend WithEvents cbEndHour As ComboBox
@@ -979,4 +920,5 @@ Partial Class FormAdminCenter
     Friend WithEvents cbStartMinutes As ComboBox
     Friend WithEvents cbStartHour As ComboBox
     Friend WithEvents lblErrorClosingHours As Label
+    Friend WithEvents flpEventPlaces As FlowLayoutPanel
 End Class
