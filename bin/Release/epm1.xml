@@ -147,6 +147,56 @@ epm1
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:epm1.My.Resources.Resources.close">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__1_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__1_1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__2_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__2_1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__3_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__4_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.CUSTOMER_VIEW__4_1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.minimize">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:epm1.My.Resources.Resources.round_button">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.

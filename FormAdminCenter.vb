@@ -559,16 +559,6 @@ Public Class FormAdminCenter
 
         ' Validate if the opening and closing hours are valid.
         If String.IsNullOrEmpty(openingTime) OrElse String.IsNullOrEmpty(closingTime) Then Exit Sub
-        ' Create formatted opening and closing time from ComboBoxes
-        Dim openingTime As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
-        Dim closingTime As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
-
-        ' Set the formatted opening and closing time for display in the labels
-        lblOpeningHours.Text = openingTime
-        lblClosingHours.Text = closingTime
-
-        ' Validate if the opening and closing hours are valid.
-        If String.IsNullOrEmpty(openingTime) OrElse String.IsNullOrEmpty(closingTime) Then Exit Sub
 
         ' Check if the event place already exists.
         If EventPlaceExists(txtEventPlace.Text) Then
@@ -605,9 +595,6 @@ Public Class FormAdminCenter
             Exit Sub
         End If
 
-        ' Get the opening and closing times from the ComboBoxes
-        Dim openingTime As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
-        Dim closingTime As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
         ' Get the opening and closing times from the ComboBoxes
         Dim openingTime As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
         Dim closingTime As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"

@@ -219,6 +219,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormBooking.resx">
       <DependentUpon>FormBooking.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormBookingDetails.resx">
       <DependentUpon>FormBookingDetails.vb</DependentUpon>

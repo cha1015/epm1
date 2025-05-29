@@ -50,3 +50,4 @@ C:\Users\khorc\source\repos\epm2\obj\Release\epm1.vbproj.Up2Date
 C:\Users\khorc\source\repos\epm2\obj\Release\epm1.exe
 C:\Users\khorc\source\repos\epm2\obj\Release\epm1.xml
 C:\Users\khorc\source\repos\epm2\obj\Release\epm1.pdb
+C:\Users\khorc\source\repos\epm2\obj\Release\epm1.FormCustomerDetails.resources

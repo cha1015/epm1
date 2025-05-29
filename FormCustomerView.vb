@@ -67,6 +67,7 @@ Public Class FormCustomerView
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         customer_id = CurrentUser.CustomerId
+        Debug.WriteLine("customer_id used for query: " & customer_id)
         LoadAllBookings()
         PopulateBookingPanels()
         Dim prop As Reflection.PropertyInfo = GetType(Panel).GetProperty("DoubleBuffered", Reflection.BindingFlags.Instance Or Reflection.BindingFlags.NonPublic)
@@ -82,19 +83,22 @@ Public Class FormCustomerView
     End Sub
 
 
-
     Private Sub LoadAllBookings()
         allBookings.Clear()
+        Debug.WriteLine("customer_id used for query: " & CurrentUser.CustomerId)
 
-        Dim query As String = "SELECT b.booking_id, b.place_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status, " &
-                      "pay.payment_id, pay.amount_to_pay, pay.amount_paid, pay.payment_date, pay.payment_status, " &
-                      "b.customer_id, c.name " &
-                      "FROM bookings b " &
-                      "LEFT JOIN payments pay ON pay.booking_id = b.booking_id " &
-                      "JOIN eventplace p ON b.place_id = p.place_id " &
-                      "JOIN customers c ON b.customer_id = c.customer_id " &
-                      "ORDER BY b.event_date DESC, b.booking_id DESC"
-        Dim parameters As Dictionary(Of String, Object) = Nothing
+        Dim query As String = "
+        SELECT b.booking_id, b.place_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status,
+               pay.payment_id, pay.amount_to_pay, pay.amount_paid, pay.payment_date, pay.payment_status,
+               b.customer_id, c.name AS customer_name
+        FROM bookings b
+        LEFT JOIN payments pay ON pay.booking_id = b.booking_id
+        JOIN eventplace p ON b.place_id = p.place_id
+        JOIN customers c ON b.customer_id = c.customer_id
+        WHERE b.customer_id = @customer_id
+        ORDER BY b.event_date DESC, b.booking_id DESC
+    "
+        Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", CurrentUser.CustomerId}}
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
         For Each row As DataRow In dt.Rows
@@ -102,6 +106,11 @@ Public Class FormCustomerView
         Next
         Debug.WriteLine($"Loaded {allBookings.Count} bookings for customer {CurrentUser.CustomerId}")
     End Sub
+
+
+
+
+
 
 
 
@@ -610,5 +619,7 @@ Public Class FormCustomerView
         PopulateBookingPanels()
     End Sub
 
+    Private Sub FlowLayoutPanel1_Paint(sender As Object, e As PaintEventArgs) Handles FlowLayoutPanel1.Paint
 
+    End Sub
 End Class

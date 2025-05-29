@@ -102,7 +102,13 @@ Public Class FormLogIn
                         Me.Close()
                         FormAdminCenter.Show()
                     Case "User"
-                        CurrentUser.CustomerId = CurrentUser.UserID
+                        ' Set CustomerId based on DB lookup
+                        Dim customerData As DataTable = HelperDatabase.GetCustomerData(CurrentUser.UserID)
+                        If customerData.Rows.Count > 0 Then
+                            CurrentUser.CustomerId = Convert.ToInt32(customerData.Rows(0)("customer_id"))
+                        Else
+                            CurrentUser.CustomerId = -1
+                        End If
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
