@@ -347,63 +347,6 @@ Public Class FormAdminCenter
 
 #End Region
 
-    '#Region "Data Updates Based on Selected Date"
-
-    '    '--- Update Revenue Reports for the selected date
-    '    Private Sub UpdateRevenueReports(selectedDate As Date)
-    '        Dim query As String = "SELECT e.event_place, " &
-    '                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
-    '                          "FROM eventplace e " &
-    '                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status='Approved' AND b.event_date = @selectedDate " &
-    '                          "GROUP BY e.place_id"
-    '        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
-    '        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
-    '    End Sub
-
-
-    '    '--- Update Availability for the selected date
-    '    Private Sub UpdateAvailability(selectedDate As Date)
-    '        Dim query As String = "SELECT e.event_place, " &
-    '                          "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved' AND b.event_date = @selectedDate) " &
-    '                          "THEN 'Booked' ELSE 'Available' END AS Availability " &
-    '                          "FROM eventplace e"
-    '        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
-
-    '        ' Retrieve the FlowLayoutPanels for available and booked event places
-    '        Dim flpAvailable As FlowLayoutPanel = CType(tcAvailability.TabPages("tpAvailable").Controls("flpAvailable"), FlowLayoutPanel)
-    '        Dim flpBooked As FlowLayoutPanel = CType(tcAvailability.TabPages("tpBooked").Controls("flpBooked"), FlowLayoutPanel)
-
-    '        ' Separate the data into available and booked places
-    '        Dim availablePlaces As DataTable = dt.Clone()
-    '        Dim bookedPlaces As DataTable = dt.Clone()
-
-    '        For Each row As DataRow In dt.Rows
-    '            If row("Availability").ToString() = "Available" Then
-    '                availablePlaces.ImportRow(row)
-    '            Else
-    '                bookedPlaces.ImportRow(row)
-    '            End If
-    '        Next
-
-    '        ' Populate the FlowLayoutPanels with the sorted event places
-    '        HelperResultsDisplay.PopulateAvailability(flpAvailable, availablePlaces)
-    '        HelperResultsDisplay.PopulateAvailability(flpBooked, bookedPlaces)
-    '    End Sub
-
-
-    '    '--- Update Pending Bookings for the selected date
-    '    Private Sub UpdatePendingBookings(selectedDate As Date)
-    '        Dim query As String = "SELECT b.booking_id, c.name, e.event_place, b.event_date, b.event_time, b.event_end_time, b.total_price, b.status " &
-    '                              "FROM bookings b " &
-    '                              "JOIN customers c ON b.customer_id = c.customer_id " &
-    '                              "JOIN eventplace e ON b.place_id = e.place_id " &
-    '                              "WHERE b.status = 'Pending' AND b.event_date = @selectedDate " &
-    '                              "ORDER BY b.event_date ASC"
-    '        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
-    '        HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
-    '    End Sub
-
-    '#End Region
 
 #Region "Event Handlers for Booking Approval/Payment"
 
