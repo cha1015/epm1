@@ -22,7 +22,7 @@ Public Class FormAdminCenter
         LoadInvoices()               ' Invoices with Accept Payment
         LoadCustomerCount()          ' Customer Count
         LoadCustomerRecords()        ' Customer Records
-        LoadBookingStatusChart()     ' Booking Status Chart
+        'LoadBookingStatusChart()     ' Booking Status Chart
 
         ' Set up field indicators and validation for event place data entry.
         Dim labels = {lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
@@ -38,11 +38,11 @@ Public Class FormAdminCenter
     End Sub
 
     ' Add DateChanged event handler for the MonthCalendar control
-    Private Sub mcBookings_DateChanged(sender As Object, e As DateRangeEventArgs) Handles mcBookings.DateChanged
+    Private Sub mcBookings_DateChanged(sender As Object, e As DateRangeEventArgs)
         Dim selectedDate As Date = e.Start
 
         ' Update the chart and flow panels based on the selected date
-        UpdateBookingStatusChart(selectedDate)
+        'UpdateBookingStatusChart(selectedDate)
         UpdateRevenueReports(selectedDate)
         UpdateAvailability(selectedDate)
         UpdatePendingBookings(selectedDate)
@@ -143,6 +143,7 @@ Public Class FormAdminCenter
 
         ' Populate the pending bookings panel
         HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
+        flpPending.Refresh()
 
         ' Update the tab label based on the number of pending bookings
         UpdateTabLabel(tpPendings, flpPending)
@@ -378,45 +379,45 @@ Public Class FormAdminCenter
     End Sub
 
     '--- Load Booking Status Chart
-    Private Sub LoadBookingStatusChart()
-        chartTotalStatus.Series.Clear()
-        Dim statusSeries As New Series("BookingStatus") With {
-            .ChartType = SeriesChartType.Bar,
-            .LabelFormat = "0"
-        }
-        chartTotalStatus.Series.Add(statusSeries)
-        Dim query As String = "SELECT status, COUNT(*) AS count FROM bookings GROUP BY status"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        For Each row As DataRow In dt.Rows
-            statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
-        Next
-        chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
-        chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
-    End Sub
+    'Private Sub LoadBookingStatusChart()
+    '    chartTotalStatus.Series.Clear()
+    '    Dim statusSeries As New Series("BookingStatus") With {
+    '        .ChartType = SeriesChartType.Bar,
+    '        .LabelFormat = "0"
+    '    }
+    '    chartTotalStatus.Series.Add(statusSeries)
+    '    Dim query As String = "SELECT status, COUNT(*) AS count FROM bookings GROUP BY status"
+    '    Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+    '    For Each row As DataRow In dt.Rows
+    '        statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
+    '    Next
+    '    chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
+    '    chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
+    'End Sub
 
 #End Region
 
 #Region "Data Updates Based on Selected Date"
 
     '--- Update the Booking Status Chart for the selected date
-    Private Sub UpdateBookingStatusChart(selectedDate As Date)
-        chartTotalStatus.Series.Clear()
-        Dim statusSeries As New Series("BookingStatus") With {
-            .ChartType = SeriesChartType.Bar,
-            .LabelFormat = "0"
-        }
-        chartTotalStatus.Series.Add(statusSeries)
+    'Private Sub UpdateBookingStatusChart(selectedDate As Date)
+    '    chartTotalStatus.Series.Clear()
+    '    Dim statusSeries As New Series("BookingStatus") With {
+    '        .ChartType = SeriesChartType.Bar,
+    '        .LabelFormat = "0"
+    '    }
+    '    chartTotalStatus.Series.Add(statusSeries)
 
-        ' Update query to filter by selected date
-        Dim query As String = "SELECT status, COUNT(*) AS count FROM bookings WHERE event_date = @selectedDate GROUP BY status"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
+    '    ' Update query to filter by selected date
+    '    Dim query As String = "SELECT status, COUNT(*) AS count FROM bookings WHERE event_date = @selectedDate GROUP BY status"
+    '    Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object) From {{"@selectedDate", selectedDate}})
 
-        For Each row As DataRow In dt.Rows
-            statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
-        Next
-        chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
-        chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
-    End Sub
+    '    For Each row As DataRow In dt.Rows
+    '        statusSeries.Points.AddXY(row("status").ToString(), Convert.ToInt32(row("count")))
+    '    Next
+    '    chartTotalStatus.ChartAreas(0).AxisY.Interval = 1
+    '    chartTotalStatus.ChartAreas(0).AxisY.LabelStyle.Format = "0"
+    'End Sub
 
     '--- Update Revenue Reports for the selected date
     Private Sub UpdateRevenueReports(selectedDate As Date)
@@ -489,7 +490,7 @@ Public Class FormAdminCenter
             MessageBox.Show("Failed to approve booking.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
         LoadPendingBookings()
-        LoadBookingStatusChart()
+        'LoadBookingStatusChart()
         LoadAvailability()
         ' After approving or rejecting the booking, reload the panels
         LoadApprovedBookings()
@@ -510,7 +511,7 @@ Public Class FormAdminCenter
             MessageBox.Show("Failed to reject booking.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
         LoadPendingBookings()
-        LoadBookingStatusChart()
+        'LoadBookingStatusChart()
         LoadAvailability()
         ' After approving or rejecting the booking, reload the panels
         LoadApprovedBookings()

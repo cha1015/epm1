@@ -22,9 +22,6 @@ Partial Class FormAdminCenter
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnLogOut = New System.Windows.Forms.Button()
@@ -42,9 +39,6 @@ Partial Class FormAdminCenter
         Me.flpRejected = New System.Windows.Forms.FlowLayoutPanel()
         Me.tpAll = New System.Windows.Forms.TabPage()
         Me.flpAll = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.chartTotalStatus = New System.Windows.Forms.DataVisualization.Charting.Chart()
-        Me.mcBookings = New System.Windows.Forms.MonthCalendar()
         Me.tpEventPlaceMgmt = New System.Windows.Forms.TabPage()
         Me.tcAvailability = New System.Windows.Forms.TabControl()
         Me.tpAvailable = New System.Windows.Forms.TabPage()
@@ -95,7 +89,6 @@ Partial Class FormAdminCenter
         Me.tpApproved.SuspendLayout()
         Me.tpRejected.SuspendLayout()
         Me.tpAll.SuspendLayout()
-        CType(Me.chartTotalStatus, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpEventPlaceMgmt.SuspendLayout()
         Me.tcAvailability.SuspendLayout()
         Me.tpAvailable.SuspendLayout()
@@ -200,9 +193,6 @@ Partial Class FormAdminCenter
         'tpBookings
         '
         Me.tpBookings.Controls.Add(Me.tcPendApprRej)
-        Me.tpBookings.Controls.Add(Me.Label11)
-        Me.tpBookings.Controls.Add(Me.chartTotalStatus)
-        Me.tpBookings.Controls.Add(Me.mcBookings)
         Me.tpBookings.Location = New System.Drawing.Point(4, 28)
         Me.tpBookings.Margin = New System.Windows.Forms.Padding(4)
         Me.tpBookings.Name = "tpBookings"
@@ -218,10 +208,10 @@ Partial Class FormAdminCenter
         Me.tcPendApprRej.Controls.Add(Me.tpApproved)
         Me.tcPendApprRej.Controls.Add(Me.tpRejected)
         Me.tcPendApprRej.Controls.Add(Me.tpAll)
-        Me.tcPendApprRej.Location = New System.Drawing.Point(329, 7)
+        Me.tcPendApprRej.Location = New System.Drawing.Point(7, 7)
         Me.tcPendApprRej.Name = "tcPendApprRej"
         Me.tcPendApprRej.SelectedIndex = 0
-        Me.tcPendApprRej.Size = New System.Drawing.Size(883, 510)
+        Me.tcPendApprRej.Size = New System.Drawing.Size(1205, 510)
         Me.tcPendApprRej.TabIndex = 45
         '
         'tpPendings
@@ -230,7 +220,7 @@ Partial Class FormAdminCenter
         Me.tpPendings.Location = New System.Drawing.Point(4, 28)
         Me.tpPendings.Name = "tpPendings"
         Me.tpPendings.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpPendings.Size = New System.Drawing.Size(875, 478)
+        Me.tpPendings.Size = New System.Drawing.Size(1197, 478)
         Me.tpPendings.TabIndex = 0
         Me.tpPendings.Text = "Pendings"
         Me.tpPendings.UseVisualStyleBackColor = True
@@ -240,7 +230,7 @@ Partial Class FormAdminCenter
         Me.flpPending.Location = New System.Drawing.Point(7, 7)
         Me.flpPending.Margin = New System.Windows.Forms.Padding(4)
         Me.flpPending.Name = "flpPending"
-        Me.flpPending.Size = New System.Drawing.Size(861, 461)
+        Me.flpPending.Size = New System.Drawing.Size(1183, 461)
         Me.flpPending.TabIndex = 1
         '
         'tpApproved
@@ -249,7 +239,7 @@ Partial Class FormAdminCenter
         Me.tpApproved.Location = New System.Drawing.Point(4, 28)
         Me.tpApproved.Name = "tpApproved"
         Me.tpApproved.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpApproved.Size = New System.Drawing.Size(875, 478)
+        Me.tpApproved.Size = New System.Drawing.Size(1197, 478)
         Me.tpApproved.TabIndex = 1
         Me.tpApproved.Text = "Approved"
         Me.tpApproved.UseVisualStyleBackColor = True
@@ -259,7 +249,7 @@ Partial Class FormAdminCenter
         Me.flpApproved.Location = New System.Drawing.Point(7, 7)
         Me.flpApproved.Margin = New System.Windows.Forms.Padding(4)
         Me.flpApproved.Name = "flpApproved"
-        Me.flpApproved.Size = New System.Drawing.Size(861, 461)
+        Me.flpApproved.Size = New System.Drawing.Size(1183, 461)
         Me.flpApproved.TabIndex = 2
         '
         'tpRejected
@@ -268,7 +258,7 @@ Partial Class FormAdminCenter
         Me.tpRejected.Location = New System.Drawing.Point(4, 28)
         Me.tpRejected.Name = "tpRejected"
         Me.tpRejected.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpRejected.Size = New System.Drawing.Size(875, 475)
+        Me.tpRejected.Size = New System.Drawing.Size(1197, 478)
         Me.tpRejected.TabIndex = 2
         Me.tpRejected.Text = "Rejected"
         Me.tpRejected.UseVisualStyleBackColor = True
@@ -278,7 +268,7 @@ Partial Class FormAdminCenter
         Me.flpRejected.Location = New System.Drawing.Point(7, 7)
         Me.flpRejected.Margin = New System.Windows.Forms.Padding(4)
         Me.flpRejected.Name = "flpRejected"
-        Me.flpRejected.Size = New System.Drawing.Size(861, 461)
+        Me.flpRejected.Size = New System.Drawing.Size(1183, 461)
         Me.flpRejected.TabIndex = 2
         '
         'tpAll
@@ -287,7 +277,7 @@ Partial Class FormAdminCenter
         Me.tpAll.Location = New System.Drawing.Point(4, 28)
         Me.tpAll.Name = "tpAll"
         Me.tpAll.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpAll.Size = New System.Drawing.Size(875, 478)
+        Me.tpAll.Size = New System.Drawing.Size(1197, 478)
         Me.tpAll.TabIndex = 3
         Me.tpAll.Text = "All"
         Me.tpAll.UseVisualStyleBackColor = True
@@ -297,43 +287,8 @@ Partial Class FormAdminCenter
         Me.flpAll.Location = New System.Drawing.Point(7, 7)
         Me.flpAll.Margin = New System.Windows.Forms.Padding(4)
         Me.flpAll.Name = "flpAll"
-        Me.flpAll.Size = New System.Drawing.Size(861, 461)
+        Me.flpAll.Size = New System.Drawing.Size(1183, 461)
         Me.flpAll.TabIndex = 2
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.ForeColor = System.Drawing.Color.Black
-        Me.Label11.Location = New System.Drawing.Point(4, 184)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(43, 19)
-        Me.Label11.TabIndex = 42
-        Me.Label11.Text = "Status"
-        '
-        'chartTotalStatus
-        '
-        ChartArea2.Name = "ChartArea1"
-        Me.chartTotalStatus.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.chartTotalStatus.Legends.Add(Legend2)
-        Me.chartTotalStatus.Location = New System.Drawing.Point(8, 207)
-        Me.chartTotalStatus.Margin = New System.Windows.Forms.Padding(4)
-        Me.chartTotalStatus.Name = "chartTotalStatus"
-        Me.chartTotalStatus.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.chartTotalStatus.Series.Add(Series2)
-        Me.chartTotalStatus.Size = New System.Drawing.Size(314, 300)
-        Me.chartTotalStatus.TabIndex = 41
-        Me.chartTotalStatus.Text = "Chart1"
-        '
-        'mcBookings
-        '
-        Me.mcBookings.Location = New System.Drawing.Point(13, 13)
-        Me.mcBookings.Name = "mcBookings"
-        Me.mcBookings.TabIndex = 5
         '
         'tpEventPlaceMgmt
         '
@@ -877,13 +832,11 @@ Partial Class FormAdminCenter
         Me.Text = "FormAdminCenter"
         Me.tcAdminCenter.ResumeLayout(False)
         Me.tpBookings.ResumeLayout(False)
-        Me.tpBookings.PerformLayout()
         Me.tcPendApprRej.ResumeLayout(False)
         Me.tpPendings.ResumeLayout(False)
         Me.tpApproved.ResumeLayout(False)
         Me.tpRejected.ResumeLayout(False)
         Me.tpAll.ResumeLayout(False)
-        CType(Me.chartTotalStatus, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpEventPlaceMgmt.ResumeLayout(False)
         Me.tcAvailability.ResumeLayout(False)
         Me.tpAvailable.ResumeLayout(False)
@@ -943,9 +896,6 @@ Partial Class FormAdminCenter
     Friend WithEvents flpInvoices As FlowLayoutPanel
     Friend WithEvents txtPlaceID As TextBox
     Friend WithEvents lblPlaceID As Label
-    Friend WithEvents Label11 As Label
-    Friend WithEvents chartTotalStatus As DataVisualization.Charting.Chart
-    Friend WithEvents mcBookings As MonthCalendar
     Friend WithEvents tcPendApprRej As TabControl
     Friend WithEvents tpPendings As TabPage
     Friend WithEvents flpPending As FlowLayoutPanel
