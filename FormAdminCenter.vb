@@ -353,21 +353,29 @@ Public Class FormAdminCenter
     '--- Load Invoices
     Private Sub LoadInvoices()
         Dim query As String = "
-        SELECT 
-            b.booking_id, 
-            c.name AS customer_name, 
-            e.event_place, 
-            b.total_price AS amount_paid, 
-            b.payment_date
-        FROM bookings b
-        JOIN customers c ON b.customer_id = c.customer_id
-        JOIN eventplace e ON b.place_id = e.place_id
-        WHERE b.status = 'paid'
-        ORDER BY b.payment_date DESC
+    SELECT 
+        p.payment_id,
+        c.name AS customer_name,
+        b.event_date,
+        b.event_place,
+        i.invoice_date,
+        p.amount_paid,
+        p.payment_date,
+        p.payment_status
+    FROM payments p
+    JOIN bookings b ON p.booking_id = b.booking_id
+    JOIN invoices i ON i.invoice_id = b.invoice_id
+    JOIN customers c ON b.customer_id = c.customer_id
+    WHERE p.payment_status = 'Paid'
+    ORDER BY p.payment_date DESC
     "
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
+
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object)())
+        dgvInvoice.DataSource = dt
+        dgvInvoice.Refresh()
     End Sub
+
+
 
 
     ' ------------------ Load Booked Dates ------------------
@@ -777,9 +785,6 @@ Public Class FormAdminCenter
         ' Get data
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
-        ' Add to FlowLayoutPanel
-        flpInvoices.Controls.Clear() ' Optional: clear previous controls
-        flpInvoices.Controls.Add(dgvInvoice)
     End Sub
 
 

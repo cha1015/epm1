@@ -25,9 +25,6 @@ Partial Class FormAdminCenter
         Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnLogOut = New System.Windows.Forms.Button()
@@ -81,13 +78,12 @@ Partial Class FormAdminCenter
         Me.tpInvoicesAndPayments = New System.Windows.Forms.TabPage()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.flpRevenueReports = New System.Windows.Forms.FlowLayoutPanel()
-        Me.flpInvoices = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.dgvInvoice = New System.Windows.Forms.DataGridView()
         Me.tpCustomerRecords = New System.Windows.Forms.TabPage()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblNumCustomersContainer = New System.Windows.Forms.Label()
         Me.flpCustomerRecords = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
-        Me.dgvInvoice = New System.Windows.Forms.DataGridView()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpBookings.SuspendLayout()
         Me.tcPendApprRej.SuspendLayout()
@@ -102,10 +98,9 @@ Partial Class FormAdminCenter
         Me.GroupBox1.SuspendLayout()
         Me.tpInvoicesAndPayments.SuspendLayout()
         Me.flpRevenueReports.SuspendLayout()
-        Me.flpInvoices.SuspendLayout()
-        Me.tpCustomerRecords.SuspendLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvInvoice, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpCustomerRecords.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnNext
@@ -299,8 +294,6 @@ Partial Class FormAdminCenter
         Me.flpAll.Size = New System.Drawing.Size(1183, 461)
         Me.flpAll.TabIndex = 2
         '
-        'chartTotalStatus
-        '
         'tpEventPlaceMgmt
         '
         Me.tpEventPlaceMgmt.BackColor = System.Drawing.Color.WhiteSmoke
@@ -308,8 +301,8 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.Controls.Add(Me.GroupBox1)
         Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 28)
         Me.tpEventPlaceMgmt.Name = "tpEventPlaceMgmt"
-        Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
-        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(913, 420)
+        Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1220, 524)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
         '
@@ -362,7 +355,7 @@ Partial Class FormAdminCenter
         Me.flpBooked.TabIndex = 0
         '
         'GroupBox1
-
+        '
         Me.GroupBox1.Controls.Add(Me.txtPlaceID)
         Me.GroupBox1.Controls.Add(Me.lblPlaceID)
         Me.GroupBox1.Controls.Add(Me.lblErrorCapacity)
@@ -715,13 +708,13 @@ Partial Class FormAdminCenter
         '
         'tpInvoicesAndPayments
         '
+        Me.tpInvoicesAndPayments.Controls.Add(Me.dgvInvoice)
         Me.tpInvoicesAndPayments.Controls.Add(Me.Label1)
         Me.tpInvoicesAndPayments.Controls.Add(Me.flpRevenueReports)
-        Me.tpInvoicesAndPayments.Controls.Add(Me.flpInvoices)
         Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 28)
         Me.tpInvoicesAndPayments.Name = "tpInvoicesAndPayments"
-        Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
-        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(913, 420)
+        Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(1220, 524)
         Me.tpInvoicesAndPayments.TabIndex = 5
         Me.tpInvoicesAndPayments.Text = "Invoices and Payments"
         Me.tpInvoicesAndPayments.UseVisualStyleBackColor = True
@@ -744,13 +737,30 @@ Partial Class FormAdminCenter
         Me.flpRevenueReports.Size = New System.Drawing.Size(284, 392)
         Me.flpRevenueReports.TabIndex = 44
         '
-        'flpInvoices
+        'Chart1
         '
-        Me.flpInvoices.Controls.Add(Me.dgvInvoice)
-        Me.flpInvoices.Location = New System.Drawing.Point(296, 22)
-        Me.flpInvoices.Name = "flpInvoices"
-        Me.flpInvoices.Size = New System.Drawing.Size(610, 392)
-        Me.flpInvoices.TabIndex = 0
+        Me.Chart1.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Bottom
+        ChartArea1.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend1)
+        Me.Chart1.Location = New System.Drawing.Point(3, 3)
+        Me.Chart1.Name = "Chart1"
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.Chart1.Series.Add(Series1)
+        Me.Chart1.Size = New System.Drawing.Size(288, 392)
+        Me.Chart1.TabIndex = 0
+        Me.Chart1.Text = "Chart1"
+        '
+        'dgvInvoice
+        '
+        Me.dgvInvoice.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvInvoice.Location = New System.Drawing.Point(305, 25)
+        Me.dgvInvoice.Name = "dgvInvoice"
+        Me.dgvInvoice.Size = New System.Drawing.Size(607, 389)
+        Me.dgvInvoice.TabIndex = 0
         '
         'tpCustomerRecords
         '
@@ -796,31 +806,6 @@ Partial Class FormAdminCenter
         Me.flpCustomerRecords.Size = New System.Drawing.Size(900, 371)
         Me.flpCustomerRecords.TabIndex = 0
         '
-        'Chart1
-        '
-        Me.Chart1.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Bottom
-        ChartArea2.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend2)
-        Me.Chart1.Location = New System.Drawing.Point(3, 3)
-        Me.Chart1.Name = "Chart1"
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.Chart1.Series.Add(Series2)
-        Me.Chart1.Size = New System.Drawing.Size(288, 392)
-        Me.Chart1.TabIndex = 0
-        Me.Chart1.Text = "Chart1"
-        '
-        'dgvInvoice
-        '
-        Me.dgvInvoice.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvInvoice.Location = New System.Drawing.Point(3, 3)
-        Me.dgvInvoice.Name = "dgvInvoice"
-        Me.dgvInvoice.Size = New System.Drawing.Size(607, 389)
-        Me.dgvInvoice.TabIndex = 0
-        '
         'FormAdminCenter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -852,11 +837,10 @@ Partial Class FormAdminCenter
         Me.tpInvoicesAndPayments.ResumeLayout(False)
         Me.tpInvoicesAndPayments.PerformLayout()
         Me.flpRevenueReports.ResumeLayout(False)
-        Me.flpInvoices.ResumeLayout(False)
-        Me.tpCustomerRecords.ResumeLayout(False)
-        Me.tpCustomerRecords.PerformLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvInvoice, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tpCustomerRecords.ResumeLayout(False)
+        Me.tpCustomerRecords.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -901,7 +885,6 @@ Partial Class FormAdminCenter
     Friend WithEvents Label4 As Label
     Friend WithEvents lblNumCustomersContainer As Label
     Friend WithEvents flpCustomerRecords As FlowLayoutPanel
-    Friend WithEvents flpInvoices As FlowLayoutPanel
     Friend WithEvents txtPlaceID As TextBox
     Friend WithEvents lblPlaceID As Label
     Friend WithEvents tcPendApprRej As TabControl
