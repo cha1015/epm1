@@ -409,5 +409,23 @@
   <ItemGroup>
     <None Include="Resources\btnConfirmEdit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGMain%28updated%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BgBooking%28updated%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bgCustomerAdminInfo%28updated%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGCustomerAdminInfo%28Info%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGInfo2%28updated%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BGInfo3%28updated%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

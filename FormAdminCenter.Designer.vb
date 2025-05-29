@@ -91,6 +91,7 @@ Partial Class FormAdminCenter
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblNumCustomersContainer = New System.Windows.Forms.Label()
         Me.flpCustomerRecords = New System.Windows.Forms.FlowLayoutPanel()
+        Me.btnMain = New System.Windows.Forms.Button()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpBookings.SuspendLayout()
         Me.tcPendApprRej.SuspendLayout()
@@ -143,10 +144,10 @@ Partial Class FormAdminCenter
         Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogOut.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogOut.ForeColor = System.Drawing.Color.Black
-        Me.btnLogOut.Location = New System.Drawing.Point(1141, 53)
+        Me.btnLogOut.Location = New System.Drawing.Point(1131, 53)
         Me.btnLogOut.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnLogOut.Name = "btnLogOut"
-        Me.btnLogOut.Size = New System.Drawing.Size(88, 23)
+        Me.btnLogOut.Size = New System.Drawing.Size(120, 30)
         Me.btnLogOut.TabIndex = 93
         Me.btnLogOut.UseVisualStyleBackColor = False
         '
@@ -159,10 +160,10 @@ Partial Class FormAdminCenter
         Me.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnEdit.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnEdit.ForeColor = System.Drawing.Color.Black
-        Me.btnEdit.Location = New System.Drawing.Point(1141, 25)
+        Me.btnEdit.Location = New System.Drawing.Point(1131, 20)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnEdit.Name = "btnEdit"
-        Me.btnEdit.Size = New System.Drawing.Size(88, 23)
+        Me.btnEdit.Size = New System.Drawing.Size(120, 30)
         Me.btnEdit.TabIndex = 92
         Me.btnEdit.UseVisualStyleBackColor = False
         '
@@ -206,12 +207,12 @@ Partial Class FormAdminCenter
         Me.tcAdminCenter.Controls.Add(Me.tpInvoicesAndPayments)
         Me.tcAdminCenter.Controls.Add(Me.tpCustomerRecords)
         Me.tcAdminCenter.Font = New System.Drawing.Font("Cinzel", 8.0!, System.Drawing.FontStyle.Bold)
-        Me.tcAdminCenter.Location = New System.Drawing.Point(13, 104)
+        Me.tcAdminCenter.Location = New System.Drawing.Point(30, 104)
         Me.tcAdminCenter.Margin = New System.Windows.Forms.Padding(4)
         Me.tcAdminCenter.Multiline = True
         Me.tcAdminCenter.Name = "tcAdminCenter"
         Me.tcAdminCenter.SelectedIndex = 0
-        Me.tcAdminCenter.Size = New System.Drawing.Size(1233, 500)
+        Me.tcAdminCenter.Size = New System.Drawing.Size(1201, 476)
         Me.tcAdminCenter.TabIndex = 95
         '
         'tpBookings
@@ -225,7 +226,7 @@ Partial Class FormAdminCenter
         Me.tpBookings.Margin = New System.Windows.Forms.Padding(4)
         Me.tpBookings.Name = "tpBookings"
         Me.tpBookings.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpBookings.Size = New System.Drawing.Size(1225, 469)
+        Me.tpBookings.Size = New System.Drawing.Size(1193, 445)
         Me.tpBookings.TabIndex = 6
         Me.tpBookings.Text = "Bookings"
         Me.tpBookings.UseVisualStyleBackColor = True
@@ -239,7 +240,7 @@ Partial Class FormAdminCenter
         Me.tcPendApprRej.Location = New System.Drawing.Point(287, 0)
         Me.tcPendApprRej.Name = "tcPendApprRej"
         Me.tcPendApprRej.SelectedIndex = 0
-        Me.tcPendApprRej.Size = New System.Drawing.Size(935, 459)
+        Me.tcPendApprRej.Size = New System.Drawing.Size(931, 459)
         Me.tcPendApprRej.TabIndex = 45
         '
         'tpPendings
@@ -249,7 +250,7 @@ Partial Class FormAdminCenter
         Me.tpPendings.Location = New System.Drawing.Point(4, 27)
         Me.tpPendings.Name = "tpPendings"
         Me.tpPendings.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpPendings.Size = New System.Drawing.Size(927, 428)
+        Me.tpPendings.Size = New System.Drawing.Size(923, 428)
         Me.tpPendings.TabIndex = 0
         Me.tpPendings.Text = "Pendings"
         Me.tpPendings.UseVisualStyleBackColor = True
@@ -268,7 +269,7 @@ Partial Class FormAdminCenter
         Me.tpApproved.Location = New System.Drawing.Point(4, 27)
         Me.tpApproved.Name = "tpApproved"
         Me.tpApproved.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpApproved.Size = New System.Drawing.Size(927, 428)
+        Me.tpApproved.Size = New System.Drawing.Size(923, 428)
         Me.tpApproved.TabIndex = 1
         Me.tpApproved.Text = "Approved"
         Me.tpApproved.UseVisualStyleBackColor = True
@@ -288,7 +289,7 @@ Partial Class FormAdminCenter
         Me.tpRejected.Location = New System.Drawing.Point(4, 27)
         Me.tpRejected.Name = "tpRejected"
         Me.tpRejected.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpRejected.Size = New System.Drawing.Size(927, 428)
+        Me.tpRejected.Size = New System.Drawing.Size(923, 428)
         Me.tpRejected.TabIndex = 2
         Me.tpRejected.Text = "Rejected"
         Me.tpRejected.UseVisualStyleBackColor = True
@@ -309,7 +310,7 @@ Partial Class FormAdminCenter
         Me.tpAll.Location = New System.Drawing.Point(4, 27)
         Me.tpAll.Name = "tpAll"
         Me.tpAll.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpAll.Size = New System.Drawing.Size(927, 428)
+        Me.tpAll.Size = New System.Drawing.Size(923, 428)
         Me.tpAll.TabIndex = 3
         Me.tpAll.Text = "All"
         Me.tpAll.UseVisualStyleBackColor = True
@@ -368,7 +369,7 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.Margin = New System.Windows.Forms.Padding(4)
         Me.tpEventPlaceMgmt.Name = "tpEventPlaceMgmt"
         Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1225, 469)
+        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1193, 445)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
         '
@@ -834,7 +835,7 @@ Partial Class FormAdminCenter
         Me.tpInvoicesAndPayments.Margin = New System.Windows.Forms.Padding(4)
         Me.tpInvoicesAndPayments.Name = "tpInvoicesAndPayments"
         Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(1225, 469)
+        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(1193, 445)
         Me.tpInvoicesAndPayments.TabIndex = 5
         Me.tpInvoicesAndPayments.Text = "Invoices and Payments"
         Me.tpInvoicesAndPayments.UseVisualStyleBackColor = True
@@ -877,7 +878,7 @@ Partial Class FormAdminCenter
         Me.tpCustomerRecords.Margin = New System.Windows.Forms.Padding(4)
         Me.tpCustomerRecords.Name = "tpCustomerRecords"
         Me.tpCustomerRecords.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpCustomerRecords.Size = New System.Drawing.Size(1225, 469)
+        Me.tpCustomerRecords.Size = New System.Drawing.Size(1193, 445)
         Me.tpCustomerRecords.TabIndex = 4
         Me.tpCustomerRecords.Text = "Customer Records"
         '
@@ -913,13 +914,27 @@ Partial Class FormAdminCenter
         Me.flpCustomerRecords.Size = New System.Drawing.Size(1200, 447)
         Me.flpCustomerRecords.TabIndex = 0
         '
+        'btnMain
+        '
+        Me.btnMain.BackColor = System.Drawing.Color.Transparent
+        Me.btnMain.BackgroundImage = Global.epm1.My.Resources.Resources.BttnChinomsOrBackToMain
+        Me.btnMain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnMain.FlatAppearance.BorderSize = 0
+        Me.btnMain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnMain.Location = New System.Drawing.Point(3, 24)
+        Me.btnMain.Name = "btnMain"
+        Me.btnMain.Size = New System.Drawing.Size(225, 55)
+        Me.btnMain.TabIndex = 96
+        Me.btnMain.UseVisualStyleBackColor = False
+        '
         'FormAdminCenter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BGadmin_updated_
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BGMain_updated_
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1259, 617)
+        Me.Controls.Add(Me.btnMain)
         Me.Controls.Add(Me.tcAdminCenter)
         Me.Controls.Add(Me.btnLogOut)
         Me.Controls.Add(Me.btnEdit)
@@ -1020,4 +1035,5 @@ Partial Class FormAdminCenter
     Friend WithEvents Label4 As Label
     Friend WithEvents lblNumCustomersContainer As Label
     Friend WithEvents flpCustomerRecords As FlowLayoutPanel
+    Friend WithEvents btnMain As Button
 End Class

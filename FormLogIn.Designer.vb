@@ -70,10 +70,10 @@ Partial Class FormLogIn
         Me.btnLogIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogIn.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogIn.ForeColor = System.Drawing.Color.Black
-        Me.btnLogIn.Location = New System.Drawing.Point(551, 475)
+        Me.btnLogIn.Location = New System.Drawing.Point(543, 475)
         Me.btnLogIn.Margin = New System.Windows.Forms.Padding(4)
         Me.btnLogIn.Name = "btnLogIn"
-        Me.btnLogIn.Size = New System.Drawing.Size(161, 34)
+        Me.btnLogIn.Size = New System.Drawing.Size(180, 40)
         Me.btnLogIn.TabIndex = 36
         Me.btnLogIn.UseVisualStyleBackColor = False
         '
@@ -95,12 +95,12 @@ Partial Class FormLogIn
         '
         Me.txtEmail.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtEmail.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtEmail.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEmail.Font = New System.Drawing.Font("Poppins Light", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEmail.ForeColor = System.Drawing.Color.DimGray
-        Me.txtEmail.Location = New System.Drawing.Point(421, 258)
+        Me.txtEmail.Location = New System.Drawing.Point(412, 257)
         Me.txtEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(404, 17)
+        Me.txtEmail.Size = New System.Drawing.Size(428, 23)
         Me.txtEmail.TabIndex = 32
         '
         'lnklblSignUp
@@ -122,13 +122,13 @@ Partial Class FormLogIn
         '
         Me.txtPass.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtPass.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtPass.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPass.Font = New System.Drawing.Font("Poppins Light", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPass.ForeColor = System.Drawing.Color.DimGray
-        Me.txtPass.Location = New System.Drawing.Point(421, 315)
+        Me.txtPass.Location = New System.Drawing.Point(412, 313)
         Me.txtPass.Margin = New System.Windows.Forms.Padding(4)
         Me.txtPass.Name = "txtPass"
         Me.txtPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPass.Size = New System.Drawing.Size(361, 17)
+        Me.txtPass.Size = New System.Drawing.Size(385, 23)
         Me.txtPass.TabIndex = 33
         '
         'lblGeneralError

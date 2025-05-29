@@ -130,9 +130,6 @@
   <data name="Welcome" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Welcome.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="round button" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\round button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="bgMain1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bgMain1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -151,8 +148,8 @@
   <data name="BGCustomerView" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BGCustomerView.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BttnFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BttnFilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BGCustomerAdminInfo(Info)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BGCustomerAdminInfo(Info).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BttnSeek" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BttnSeek.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -175,6 +172,9 @@
   <data name="Sign Up" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Sign Up.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BGInfo2(updated)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BGInfo2(updated).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="LOADING (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LOADING (1).gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -193,11 +193,14 @@
   <data name="BGinfoPlain1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BGinfoPlain1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BttnAdd" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BttnAdd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="round button" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\round button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Main w_ no panel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main w_ no panel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BttnAdd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BttnAdd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="plainbg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\plainbg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,8 +223,20 @@
   <data name="Sign Up (nolbl)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Sign Up (nolbl).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BttnFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BttnFilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BgBooking(updated)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BgBooking(updated).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BGplain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BGplain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="btnConfirmEdit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\btnConfirmEdit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BGMain(updated)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BGMain(updated).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BGbooking" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BGbooking.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -244,6 +259,9 @@
   <data name="BGCustomerAdminInfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BGCustomerAdminInfo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="bgCustomerAdminInfo(updated)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bgCustomerAdminInfo(updated).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="bg Booking (Updated)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bg Booking (Updated).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -265,7 +283,7 @@
   <data name="BttnClearAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BttnClearAll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="btnConfirmEdit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\btnConfirmEdit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BGInfo3(updated)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BGInfo3(updated).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -53,6 +53,7 @@ Partial Class FormMain
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.HiddenTextBox = New System.Windows.Forms.TextBox()
+        Me.btnMain = New System.Windows.Forms.Button()
         Me.pnlSignUpLogIn.SuspendLayout()
         Me.pnlAccount.SuspendLayout()
         Me.pnlFilter.SuspendLayout()
@@ -86,7 +87,7 @@ Partial Class FormMain
         Me.pnlSignUpLogIn.BackColor = System.Drawing.Color.Transparent
         Me.pnlSignUpLogIn.Controls.Add(Me.btnLogIn)
         Me.pnlSignUpLogIn.Controls.Add(Me.btnSignUp)
-        Me.pnlSignUpLogIn.Location = New System.Drawing.Point(1093, 11)
+        Me.pnlSignUpLogIn.Location = New System.Drawing.Point(1104, 11)
         Me.pnlSignUpLogIn.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.pnlSignUpLogIn.Name = "pnlSignUpLogIn"
         Me.pnlSignUpLogIn.Size = New System.Drawing.Size(143, 78)
@@ -100,10 +101,10 @@ Partial Class FormMain
         Me.btnLogIn.FlatAppearance.BorderSize = 0
         Me.btnLogIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogIn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnLogIn.Location = New System.Drawing.Point(37, 44)
+        Me.btnLogIn.Location = New System.Drawing.Point(20, 42)
         Me.btnLogIn.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnLogIn.Name = "btnLogIn"
-        Me.btnLogIn.Size = New System.Drawing.Size(88, 23)
+        Me.btnLogIn.Size = New System.Drawing.Size(120, 30)
         Me.btnLogIn.TabIndex = 1
         Me.btnLogIn.UseVisualStyleBackColor = False
         '
@@ -115,10 +116,10 @@ Partial Class FormMain
         Me.btnSignUp.FlatAppearance.BorderSize = 0
         Me.btnSignUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSignUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSignUp.Location = New System.Drawing.Point(37, 17)
+        Me.btnSignUp.Location = New System.Drawing.Point(19, 10)
         Me.btnSignUp.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnSignUp.Name = "btnSignUp"
-        Me.btnSignUp.Size = New System.Drawing.Size(88, 23)
+        Me.btnSignUp.Size = New System.Drawing.Size(120, 30)
         Me.btnSignUp.TabIndex = 0
         Me.btnSignUp.UseVisualStyleBackColor = False
         '
@@ -273,7 +274,7 @@ Partial Class FormMain
         Me.pnlAccount.Controls.Add(Me.btnCustomerView)
         Me.pnlAccount.Controls.Add(Me.lblUser)
         Me.pnlAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.pnlAccount.Location = New System.Drawing.Point(987, 14)
+        Me.pnlAccount.Location = New System.Drawing.Point(978, 14)
         Me.pnlAccount.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.pnlAccount.Name = "pnlAccount"
         Me.pnlAccount.Size = New System.Drawing.Size(284, 78)
@@ -287,10 +288,10 @@ Partial Class FormMain
         Me.btnLogOut.FlatAppearance.BorderSize = 0
         Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnLogOut.Location = New System.Drawing.Point(149, 41)
+        Me.btnLogOut.Location = New System.Drawing.Point(140, 38)
         Me.btnLogOut.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnLogOut.Name = "btnLogOut"
-        Me.btnLogOut.Size = New System.Drawing.Size(88, 23)
+        Me.btnLogOut.Size = New System.Drawing.Size(120, 30)
         Me.btnLogOut.TabIndex = 40
         Me.btnLogOut.UseVisualStyleBackColor = False
         '
@@ -299,7 +300,7 @@ Partial Class FormMain
         Me.lblUsername.AutoSize = True
         Me.lblUsername.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.White
-        Me.lblUsername.Location = New System.Drawing.Point(12, 18)
+        Me.lblUsername.Location = New System.Drawing.Point(26, 19)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(78, 18)
         Me.lblUsername.TabIndex = 37
@@ -314,10 +315,10 @@ Partial Class FormMain
         Me.btnCustomerView.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCustomerView.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCustomerView.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnCustomerView.Location = New System.Drawing.Point(149, 14)
+        Me.btnCustomerView.Location = New System.Drawing.Point(140, 6)
         Me.btnCustomerView.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnCustomerView.Name = "btnCustomerView"
-        Me.btnCustomerView.Size = New System.Drawing.Size(88, 23)
+        Me.btnCustomerView.Size = New System.Drawing.Size(120, 30)
         Me.btnCustomerView.TabIndex = 2
         Me.btnCustomerView.UseVisualStyleBackColor = False
         '
@@ -326,7 +327,7 @@ Partial Class FormMain
         Me.lblUser.AutoSize = True
         Me.lblUser.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUser.ForeColor = System.Drawing.Color.White
-        Me.lblUser.Location = New System.Drawing.Point(12, 42)
+        Me.lblUser.Location = New System.Drawing.Point(26, 42)
         Me.lblUser.Name = "lblUser"
         Me.lblUser.Size = New System.Drawing.Size(39, 18)
         Me.lblUser.TabIndex = 39
@@ -457,13 +458,27 @@ Partial Class FormMain
         Me.HiddenTextBox.Size = New System.Drawing.Size(100, 15)
         Me.HiddenTextBox.TabIndex = 56
         '
+        'btnMain
+        '
+        Me.btnMain.BackColor = System.Drawing.Color.Transparent
+        Me.btnMain.BackgroundImage = Global.epm1.My.Resources.Resources.BttnChinomsOrBackToMain
+        Me.btnMain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnMain.FlatAppearance.BorderSize = 0
+        Me.btnMain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnMain.Location = New System.Drawing.Point(3, 24)
+        Me.btnMain.Name = "btnMain"
+        Me.btnMain.Size = New System.Drawing.Size(225, 55)
+        Me.btnMain.TabIndex = 97
+        Me.btnMain.UseVisualStyleBackColor = False
+        '
         'FormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.epm1.My.Resources.Resources.MainBG
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BGMain_updated_
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1259, 617)
+        Me.Controls.Add(Me.btnMain)
         Me.Controls.Add(Me.HiddenTextBox)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
@@ -521,4 +536,5 @@ Partial Class FormMain
     Friend WithEvents btnBack As Button
     Friend WithEvents btnNext As Button
     Friend WithEvents HiddenTextBox As TextBox
+    Friend WithEvents btnMain As Button
 End Class

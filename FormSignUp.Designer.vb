@@ -75,10 +75,10 @@ Partial Class FormSignUp
         Me.btnSignUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSignUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSignUp.ForeColor = System.Drawing.Color.Black
-        Me.btnSignUp.Location = New System.Drawing.Point(587, 348)
+        Me.btnSignUp.Location = New System.Drawing.Point(581, 342)
         Me.btnSignUp.Margin = New System.Windows.Forms.Padding(4)
         Me.btnSignUp.Name = "btnSignUp"
-        Me.btnSignUp.Size = New System.Drawing.Size(161, 34)
+        Me.btnSignUp.Size = New System.Drawing.Size(160, 40)
         Me.btnSignUp.TabIndex = 8
         Me.btnSignUp.UseVisualStyleBackColor = False
         '
@@ -193,10 +193,10 @@ Partial Class FormSignUp
         Me.btnProceed.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnProceed.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnProceed.ForeColor = System.Drawing.Color.Black
-        Me.btnProceed.Location = New System.Drawing.Point(477, 313)
+        Me.btnProceed.Location = New System.Drawing.Point(434, 311)
         Me.btnProceed.Margin = New System.Windows.Forms.Padding(4)
         Me.btnProceed.Name = "btnProceed"
-        Me.btnProceed.Size = New System.Drawing.Size(117, 27)
+        Me.btnProceed.Size = New System.Drawing.Size(160, 40)
         Me.btnProceed.TabIndex = 80
         Me.btnProceed.UseVisualStyleBackColor = False
         '
@@ -225,13 +225,14 @@ Partial Class FormSignUp
         Me.cmbSex.AutoCompleteCustomSource.AddRange(New String() {"Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"})
         Me.cmbSex.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
         Me.cmbSex.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.cmbSex.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbSex.Font = New System.Drawing.Font("Poppins Light", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbSex.ForeColor = System.Drawing.Color.Gray
         Me.cmbSex.FormattingEnabled = True
         Me.cmbSex.Items.AddRange(New Object() {"Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"})
         Me.cmbSex.Location = New System.Drawing.Point(275, 208)
         Me.cmbSex.Margin = New System.Windows.Forms.Padding(4)
         Me.cmbSex.Name = "cmbSex"
-        Me.cmbSex.Size = New System.Drawing.Size(319, 24)
+        Me.cmbSex.Size = New System.Drawing.Size(319, 29)
         Me.cmbSex.TabIndex = 74
         '
         'lblAddress
@@ -260,11 +261,12 @@ Partial Class FormSignUp
         '
         'txtAddress
         '
-        Me.txtAddress.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAddress.Font = New System.Drawing.Font("Poppins Light", 8.0!)
+        Me.txtAddress.ForeColor = System.Drawing.Color.Gray
         Me.txtAddress.Location = New System.Drawing.Point(275, 250)
         Me.txtAddress.Margin = New System.Windows.Forms.Padding(4)
         Me.txtAddress.Name = "txtAddress"
-        Me.txtAddress.Size = New System.Drawing.Size(319, 24)
+        Me.txtAddress.Size = New System.Drawing.Size(319, 27)
         Me.txtAddress.TabIndex = 75
         '
         'lblAge
@@ -307,22 +309,22 @@ Partial Class FormSignUp
         '
         'txtFirstName
         '
-        Me.txtFirstName.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtFirstName.ForeColor = System.Drawing.Color.Black
+        Me.txtFirstName.Font = New System.Drawing.Font("Poppins Light", 8.0!)
+        Me.txtFirstName.ForeColor = System.Drawing.Color.Gray
         Me.txtFirstName.Location = New System.Drawing.Point(275, 62)
         Me.txtFirstName.Margin = New System.Windows.Forms.Padding(4)
         Me.txtFirstName.Name = "txtFirstName"
-        Me.txtFirstName.Size = New System.Drawing.Size(319, 24)
+        Me.txtFirstName.Size = New System.Drawing.Size(319, 27)
         Me.txtFirstName.TabIndex = 68
         '
         'txtLastName
         '
-        Me.txtLastName.Font = New System.Drawing.Font("Cinzel", 7.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtLastName.ForeColor = System.Drawing.Color.Black
+        Me.txtLastName.Font = New System.Drawing.Font("Poppins Light", 8.0!)
+        Me.txtLastName.ForeColor = System.Drawing.Color.Gray
         Me.txtLastName.Location = New System.Drawing.Point(275, 97)
         Me.txtLastName.Margin = New System.Windows.Forms.Padding(4)
         Me.txtLastName.Name = "txtLastName"
-        Me.txtLastName.Size = New System.Drawing.Size(319, 24)
+        Me.txtLastName.Size = New System.Drawing.Size(319, 27)
         Me.txtLastName.TabIndex = 69
         '
         'tpAccountDetails
@@ -385,7 +387,7 @@ Partial Class FormSignUp
         '
         Me.lblPwStrength.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPwStrength.ForeColor = System.Drawing.Color.Gray
-        Me.lblPwStrength.Location = New System.Drawing.Point(406, 149)
+        Me.lblPwStrength.Location = New System.Drawing.Point(318, 149)
         Me.lblPwStrength.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPwStrength.Name = "lblPwStrength"
         Me.lblPwStrength.Size = New System.Drawing.Size(342, 23)
@@ -514,56 +516,56 @@ Partial Class FormSignUp
         Me.cmbRole.AutoCompleteCustomSource.AddRange(New String() {"User", "Admin"})
         Me.cmbRole.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
         Me.cmbRole.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.cmbRole.Font = New System.Drawing.Font("Cinzel", 7.2!)
+        Me.cmbRole.Font = New System.Drawing.Font("Poppins Light", 8.0!)
         Me.cmbRole.ForeColor = System.Drawing.Color.Black
         Me.cmbRole.FormattingEnabled = True
         Me.cmbRole.Items.AddRange(New Object() {"User", "Admin"})
         Me.cmbRole.Location = New System.Drawing.Point(225, 295)
         Me.cmbRole.Margin = New System.Windows.Forms.Padding(4)
         Me.cmbRole.Name = "cmbRole"
-        Me.cmbRole.Size = New System.Drawing.Size(256, 24)
+        Me.cmbRole.Size = New System.Drawing.Size(256, 31)
         Me.cmbRole.TabIndex = 62
         '
         'txtEmail
         '
-        Me.txtEmail.Font = New System.Drawing.Font("Cinzel", 7.2!)
+        Me.txtEmail.Font = New System.Drawing.Font("Poppins Light", 8.0!)
         Me.txtEmail.ForeColor = System.Drawing.Color.Black
         Me.txtEmail.Location = New System.Drawing.Point(225, 114)
         Me.txtEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(319, 24)
+        Me.txtEmail.Size = New System.Drawing.Size(319, 27)
         Me.txtEmail.TabIndex = 59
         '
         'txtUsername
         '
-        Me.txtUsername.Font = New System.Drawing.Font("Cinzel", 7.2!)
+        Me.txtUsername.Font = New System.Drawing.Font("Poppins Light", 8.0!)
         Me.txtUsername.ForeColor = System.Drawing.Color.Black
         Me.txtUsername.Location = New System.Drawing.Point(225, 55)
         Me.txtUsername.Margin = New System.Windows.Forms.Padding(4)
         Me.txtUsername.Name = "txtUsername"
-        Me.txtUsername.Size = New System.Drawing.Size(319, 24)
+        Me.txtUsername.Size = New System.Drawing.Size(319, 27)
         Me.txtUsername.TabIndex = 58
         '
         'txtPass
         '
-        Me.txtPass.Font = New System.Drawing.Font("Cinzel", 7.2!)
+        Me.txtPass.Font = New System.Drawing.Font("Poppins Light", 8.0!)
         Me.txtPass.ForeColor = System.Drawing.Color.Black
         Me.txtPass.Location = New System.Drawing.Point(225, 176)
         Me.txtPass.Margin = New System.Windows.Forms.Padding(4)
         Me.txtPass.Name = "txtPass"
         Me.txtPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPass.Size = New System.Drawing.Size(295, 24)
+        Me.txtPass.Size = New System.Drawing.Size(295, 27)
         Me.txtPass.TabIndex = 60
         '
         'txtConfPass
         '
-        Me.txtConfPass.Font = New System.Drawing.Font("Cinzel", 7.2!)
+        Me.txtConfPass.Font = New System.Drawing.Font("Poppins Light", 8.0!)
         Me.txtConfPass.ForeColor = System.Drawing.Color.Black
         Me.txtConfPass.Location = New System.Drawing.Point(225, 236)
         Me.txtConfPass.Margin = New System.Windows.Forms.Padding(4)
         Me.txtConfPass.Name = "txtConfPass"
         Me.txtConfPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtConfPass.Size = New System.Drawing.Size(295, 24)
+        Me.txtConfPass.Size = New System.Drawing.Size(295, 27)
         Me.txtConfPass.TabIndex = 61
         '
         'FormSignUp

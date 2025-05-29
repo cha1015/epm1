@@ -106,6 +106,7 @@ Partial Class FormBooking
         Me.chkSinger = New System.Windows.Forms.CheckBox()
         Me.chkVideoke = New System.Windows.Forms.CheckBox()
         Me.chkDancer = New System.Windows.Forms.CheckBox()
+        Me.btnMain = New System.Windows.Forms.Button()
         Me.tpCustomerDetails.SuspendLayout()
         CType(Me.pb, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpPaymentDetails.SuspendLayout()
@@ -1032,6 +1033,7 @@ Partial Class FormBooking
         '
         'dtpEventDateEnd
         '
+        Me.dtpEventDateEnd.CalendarFont = New System.Drawing.Font("Poppins", 7.0!)
         Me.dtpEventDateEnd.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpEventDateEnd.Location = New System.Drawing.Point(177, 165)
         Me.dtpEventDateEnd.Margin = New System.Windows.Forms.Padding(4)
@@ -1063,6 +1065,7 @@ Partial Class FormBooking
         '
         'dtpEventDateStart
         '
+        Me.dtpEventDateStart.CalendarFont = New System.Drawing.Font("Poppins", 7.0!)
         Me.dtpEventDateStart.CalendarForeColor = System.Drawing.Color.Black
         Me.dtpEventDateStart.CalendarTitleForeColor = System.Drawing.Color.Black
         Me.dtpEventDateStart.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1164,13 +1167,27 @@ Partial Class FormBooking
         Me.chkDancer.Text = "Dancer (₱140 per guest)"
         Me.chkDancer.UseVisualStyleBackColor = True
         '
+        'btnMain
+        '
+        Me.btnMain.BackColor = System.Drawing.Color.Transparent
+        Me.btnMain.BackgroundImage = Global.epm1.My.Resources.Resources.BttnChinomsOrBackToMain
+        Me.btnMain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnMain.FlatAppearance.BorderSize = 0
+        Me.btnMain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnMain.Location = New System.Drawing.Point(3, 24)
+        Me.btnMain.Name = "btnMain"
+        Me.btnMain.Size = New System.Drawing.Size(225, 55)
+        Me.btnMain.TabIndex = 98
+        Me.btnMain.UseVisualStyleBackColor = False
+        '
         'FormBooking
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BGbooking
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BgBooking_updated_
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1259, 617)
+        Me.Controls.Add(Me.btnMain)
         Me.Controls.Add(Me.pb)
         Me.Controls.Add(Me.pnlEventInfo)
         Me.Controls.Add(Me.btnNext)
@@ -1277,4 +1294,5 @@ Partial Class FormBooking
     Friend WithEvents btnCustomerProceed As Button
     Friend WithEvents btnPlaceBooking As Button
     Friend WithEvents lblAv As Label
+    Friend WithEvents btnMain As Button
 End Class

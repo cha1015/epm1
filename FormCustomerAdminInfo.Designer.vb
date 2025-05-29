@@ -59,6 +59,7 @@ Partial Class FormCustomerAdminInfo
         Me.tcSignUp = New System.Windows.Forms.TabControl()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.pnlPass.SuspendLayout()
         Me.tpPersonalInfo.SuspendLayout()
         Me.tpAccountDetails.SuspendLayout()
@@ -76,7 +77,7 @@ Partial Class FormCustomerAdminInfo
         Me.pnlPass.Controls.Add(Me.btnShowConfPass)
         Me.pnlPass.Controls.Add(Me.txtPass)
         Me.pnlPass.Controls.Add(Me.txtConfPass)
-        Me.pnlPass.Location = New System.Drawing.Point(233, 225)
+        Me.pnlPass.Location = New System.Drawing.Point(234, 211)
         Me.pnlPass.Margin = New System.Windows.Forms.Padding(4)
         Me.pnlPass.Name = "pnlPass"
         Me.pnlPass.Size = New System.Drawing.Size(752, 204)
@@ -87,7 +88,7 @@ Partial Class FormCustomerAdminInfo
         Me.btnConfirmPasswordChange.Location = New System.Drawing.Point(519, 144)
         Me.btnConfirmPasswordChange.Margin = New System.Windows.Forms.Padding(4)
         Me.btnConfirmPasswordChange.Name = "btnConfirmPasswordChange"
-        Me.btnConfirmPasswordChange.Size = New System.Drawing.Size(145, 40)
+        Me.btnConfirmPasswordChange.Size = New System.Drawing.Size(160, 40)
         Me.btnConfirmPasswordChange.TabIndex = 77
         Me.btnConfirmPasswordChange.Text = "Change Password"
         Me.btnConfirmPasswordChange.UseVisualStyleBackColor = True
@@ -202,10 +203,10 @@ Partial Class FormCustomerAdminInfo
         Me.btnConfirmEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnConfirmEdit.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnConfirmEdit.ForeColor = System.Drawing.Color.Black
-        Me.btnConfirmEdit.Location = New System.Drawing.Point(993, 395)
+        Me.btnConfirmEdit.Location = New System.Drawing.Point(994, 375)
         Me.btnConfirmEdit.Margin = New System.Windows.Forms.Padding(4)
         Me.btnConfirmEdit.Name = "btnConfirmEdit"
-        Me.btnConfirmEdit.Size = New System.Drawing.Size(145, 40)
+        Me.btnConfirmEdit.Size = New System.Drawing.Size(160, 40)
         Me.btnConfirmEdit.TabIndex = 8
         Me.btnConfirmEdit.UseVisualStyleBackColor = False
         '
@@ -214,7 +215,7 @@ Partial Class FormCustomerAdminInfo
         Me.lblEmailError.AutoSize = True
         Me.lblEmailError.Font = New System.Drawing.Font("Poppins", 8.0!)
         Me.lblEmailError.ForeColor = System.Drawing.Color.Gray
-        Me.lblEmailError.Location = New System.Drawing.Point(756, 103)
+        Me.lblEmailError.Location = New System.Drawing.Point(757, 89)
         Me.lblEmailError.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEmailError.Name = "lblEmailError"
         Me.lblEmailError.Size = New System.Drawing.Size(150, 25)
@@ -226,7 +227,7 @@ Partial Class FormCustomerAdminInfo
         Me.lblUsernameError.AutoSize = True
         Me.lblUsernameError.Font = New System.Drawing.Font("Poppins", 8.0!)
         Me.lblUsernameError.ForeColor = System.Drawing.Color.Gray
-        Me.lblUsernameError.Location = New System.Drawing.Point(723, 39)
+        Me.lblUsernameError.Location = New System.Drawing.Point(724, 25)
         Me.lblUsernameError.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblUsernameError.Name = "lblUsernameError"
         Me.lblUsernameError.Size = New System.Drawing.Size(185, 25)
@@ -253,7 +254,7 @@ Partial Class FormCustomerAdminInfo
         Me.tpPersonalInfo.Margin = New System.Windows.Forms.Padding(4)
         Me.tpPersonalInfo.Name = "tpPersonalInfo"
         Me.tpPersonalInfo.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpPersonalInfo.Size = New System.Drawing.Size(1203, 458)
+        Me.tpPersonalInfo.Size = New System.Drawing.Size(1201, 454)
         Me.tpPersonalInfo.TabIndex = 0
         Me.tpPersonalInfo.Text = "Personal Information"
         Me.tpPersonalInfo.UseVisualStyleBackColor = True
@@ -412,10 +413,10 @@ Partial Class FormCustomerAdminInfo
         '
         'btnChangePass
         '
-        Me.btnChangePass.Location = New System.Drawing.Point(239, 172)
+        Me.btnChangePass.Location = New System.Drawing.Point(237, 158)
         Me.btnChangePass.Margin = New System.Windows.Forms.Padding(4)
         Me.btnChangePass.Name = "btnChangePass"
-        Me.btnChangePass.Size = New System.Drawing.Size(145, 40)
+        Me.btnChangePass.Size = New System.Drawing.Size(160, 40)
         Me.btnChangePass.TabIndex = 75
         Me.btnChangePass.Text = "Change Password"
         Me.btnChangePass.UseVisualStyleBackColor = True
@@ -426,7 +427,7 @@ Partial Class FormCustomerAdminInfo
         Me.lblEmail.BackColor = System.Drawing.Color.Transparent
         Me.lblEmail.Font = New System.Drawing.Font("Cinzel", 8.0!, System.Drawing.FontStyle.Bold)
         Me.lblEmail.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.lblEmail.Location = New System.Drawing.Point(239, 103)
+        Me.lblEmail.Location = New System.Drawing.Point(240, 89)
         Me.lblEmail.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEmail.Name = "lblEmail"
         Me.lblEmail.Size = New System.Drawing.Size(52, 19)
@@ -439,7 +440,7 @@ Partial Class FormCustomerAdminInfo
         Me.lblUsername.BackColor = System.Drawing.Color.Transparent
         Me.lblUsername.Font = New System.Drawing.Font("Cinzel", 8.0!, System.Drawing.FontStyle.Bold)
         Me.lblUsername.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.lblUsername.Location = New System.Drawing.Point(239, 39)
+        Me.lblUsername.Location = New System.Drawing.Point(240, 25)
         Me.lblUsername.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(85, 19)
@@ -450,7 +451,7 @@ Partial Class FormCustomerAdminInfo
         '
         Me.txtUsername.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtUsername.ForeColor = System.Drawing.Color.Black
-        Me.txtUsername.Location = New System.Drawing.Point(239, 70)
+        Me.txtUsername.Location = New System.Drawing.Point(240, 56)
         Me.txtUsername.Margin = New System.Windows.Forms.Padding(4)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(675, 28)
@@ -472,7 +473,7 @@ Partial Class FormCustomerAdminInfo
         Me.tpAccountDetails.Margin = New System.Windows.Forms.Padding(4)
         Me.tpAccountDetails.Name = "tpAccountDetails"
         Me.tpAccountDetails.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpAccountDetails.Size = New System.Drawing.Size(1203, 458)
+        Me.tpAccountDetails.Size = New System.Drawing.Size(1201, 454)
         Me.tpAccountDetails.TabIndex = 1
         Me.tpAccountDetails.Text = "Account Details"
         Me.tpAccountDetails.UseVisualStyleBackColor = True
@@ -481,7 +482,7 @@ Partial Class FormCustomerAdminInfo
         '
         Me.txtEmail.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEmail.ForeColor = System.Drawing.Color.Black
-        Me.txtEmail.Location = New System.Drawing.Point(239, 130)
+        Me.txtEmail.Location = New System.Drawing.Point(240, 116)
         Me.txtEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.txtEmail.Name = "txtEmail"
         Me.txtEmail.Size = New System.Drawing.Size(675, 28)
@@ -492,11 +493,11 @@ Partial Class FormCustomerAdminInfo
         Me.tcSignUp.Controls.Add(Me.tpPersonalInfo)
         Me.tcSignUp.Controls.Add(Me.tpAccountDetails)
         Me.tcSignUp.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tcSignUp.Location = New System.Drawing.Point(24, 104)
+        Me.tcSignUp.Location = New System.Drawing.Point(26, 108)
         Me.tcSignUp.Margin = New System.Windows.Forms.Padding(4)
         Me.tcSignUp.Name = "tcSignUp"
         Me.tcSignUp.SelectedIndex = 0
-        Me.tcSignUp.Size = New System.Drawing.Size(1211, 489)
+        Me.tcSignUp.Size = New System.Drawing.Size(1209, 485)
         Me.tcSignUp.TabIndex = 110
         '
         'btnNext
@@ -527,13 +528,27 @@ Partial Class FormCustomerAdminInfo
         Me.btnBack.TabIndex = 108
         Me.btnBack.UseVisualStyleBackColor = False
         '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.Transparent
+        Me.Button1.BackgroundImage = Global.epm1.My.Resources.Resources.BttnChinomsOrBackToMain
+        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.Button1.FlatAppearance.BorderSize = 0
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button1.Location = New System.Drawing.Point(3, 24)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(225, 55)
+        Me.Button1.TabIndex = 111
+        Me.Button1.UseVisualStyleBackColor = False
+        '
         'FormCustomerAdminInfo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.epm1.My.Resources.Resources.info_bg
+        Me.BackgroundImage = Global.epm1.My.Resources.Resources.BGInfo3_updated_
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1259, 617)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.tcSignUp)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
@@ -588,4 +603,5 @@ Partial Class FormCustomerAdminInfo
     Friend WithEvents tcSignUp As TabControl
     Friend WithEvents btnNext As Button
     Friend WithEvents btnBack As Button
+    Friend WithEvents Button1 As Button
 End Class
