@@ -143,7 +143,7 @@ Public Class HelperResultsDisplay
         Dim serviceNamesList As New List(Of String)()
 
         ' Log the service names being processed
-        Debug.WriteLine("Processing service names: " & String.Join(", ", names))
+        'Debug.WriteLine("Processing service names: " & String.Join(", ", names))
 
         ' Loop through the service names and add them directly to the list
         For Each serviceName As String In names
@@ -155,13 +155,13 @@ Public Class HelperResultsDisplay
                 ' Or you could simply add the name if you're confident it's correct
                 serviceNamesList.Add(serviceName)
                 ' Log the service name found
-                Debug.WriteLine("Added service name: " & serviceName)
+                'Debug.WriteLine("Added service name: " & serviceName)
             End If
         Next
 
         ' Return the service names as a comma-separated string
         Dim result As String = String.Join(", ", serviceNamesList)
-        Debug.WriteLine("Returning service names: " & result)
+        'Debug.WriteLine("Returning service names: " & result)
         Return result
     End Function
 
