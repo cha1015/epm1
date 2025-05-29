@@ -44,7 +44,7 @@ Public Class FormBooking
             "N/A",
             $"{ConvertTo12HourFormat(OpeningHours)} - {ConvertTo12HourFormat(ClosingHours)}")
 
-        lblAvailableDaysContainer.Text = $"Available: {HelperEvent.FormatAvailableDays(AvailableDays)}"
+        lblAvailableDaysContainer.Text = $"{HelperEvent.FormatAvailableDays(AvailableDays)}"
 
         dtpEventDateStart.Value = Date.Today
         dtpEventDateStart.MinDate = Date.Today

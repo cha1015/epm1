@@ -176,4 +176,8 @@ Partial Class FormBookingDetails
     Friend WithEvents lblEventType As Label
     Friend WithEvents lblEventPlace As Label
     Friend WithEvents lblCustomerName As Label
+
+    Private Sub FormBookingDetails_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
 End Class

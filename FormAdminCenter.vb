@@ -536,7 +536,7 @@ Public Class FormAdminCenter
         Debug.Print("Booking ID: " & bookingId.ToString())
 
         ' Load the booking details into the form
-        bookingDetailsForm.LoadBookingDetails(bookingId)
+        'bookingDetailsForm.LoadBookingDetails(bookingId)
         bookingDetailsForm.ShowDialog()
     End Sub
 

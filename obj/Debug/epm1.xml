@@ -52,6 +52,11 @@ epm1
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:epm1.My.Resources.Resources.BGCustomerAdminInfo">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:epm1.My.Resources.Resources.BGCustomerView">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
@@ -78,6 +83,11 @@ epm1
 </summary>
 </member>
 <member name="P:epm1.My.Resources.Resources.BGplain">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.btnConfirmEdit">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
@@ -203,6 +213,11 @@ epm1
 </summary>
 </member>
 <member name="P:epm1.My.Resources.Resources.BttnUpdate">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.info_bg">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
