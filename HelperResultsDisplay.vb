@@ -636,28 +636,71 @@ Public Class HelperResultsDisplay
                                                          panel.BorderStyle = BorderStyle.FixedSingle
                                                          panel.Margin = New Padding(10)
 
+                                                         ' Label for customer name
                                                          Dim lblName As New Label With {
-                                                             .Text = row("name").ToString(),
-                                                             .Location = New Point(5, 5),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = row("name").ToString(),
+                                                         .Location = New Point(5, 5),
+                                                         .AutoSize = True
+                                                     }
+                                                         ' Label for age
                                                          Dim lblAge As New Label With {
-                                                             .Text = "Age: " & row("age").ToString(),
-                                                             .Location = New Point(5, 25),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = "Age: " & row("age").ToString(),
+                                                         .Location = New Point(5, 25),
+                                                         .AutoSize = True
+                                                     }
+                                                         ' Label for address
                                                          Dim lblAddress As New Label With {
-                                                             .Text = "Address: " & row("address").ToString(),
-                                                             .Location = New Point(5, 45),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = "Address: " & row("address").ToString(),
+                                                         .Location = New Point(5, 45),
+                                                         .AutoSize = True
+                                                     }
+
                                                          panel.Controls.Add(lblName)
                                                          panel.Controls.Add(lblAge)
                                                          panel.Controls.Add(lblAddress)
+
+                                                         ' Add click event to open customer details
+                                                         AddHandler panel.Click, Sub(sender, e)
+                                                                                     ShowCustomerDetails(row)
+                                                                                 End Sub
+
                                                          Return panel
                                                      End Function
+
         PopulateFlowPanel(flpCustomerRecords, dt, createPanel)
     End Sub
+
+    ' This method will be called when a customer panel is clicked to show their details
+    Public Shared Sub ShowCustomerDetails(row As DataRow)
+        ' Create a new form to show customer details
+        Dim customerDetailsForm As New FormCustomerDetails()
+
+        ' Set the personal information in the form
+        customerDetailsForm.lblCustomerName.Text = row("name").ToString()
+        customerDetailsForm.lblBirthday.Text = row("birthday").ToString()
+        customerDetailsForm.lblAge.Text = row("age").ToString()
+        customerDetailsForm.lblSex.Text = row("sex").ToString()
+        customerDetailsForm.lblAddress.Text = row("address").ToString()
+
+        ' Retrieve account details from the User table or related tables
+        Dim userId As Integer = row("customer_id")  ' Assuming 'customer_id' is the linking field
+        Dim accountDetails As DataTable = DBHelper.GetDataTable("SELECT username, email FROM Users WHERE customer_id = @customer_id", New Dictionary(Of String, Object) From {{"@customer_id", userId}})
+        If accountDetails.Rows.Count > 0 Then
+            customerDetailsForm.lblUsername.Text = accountDetails.Rows(0)("username").ToString()
+            customerDetailsForm.lblEmail.Text = accountDetails.Rows(0)("email").ToString()
+        End If
+
+        ' Load the bookings for the customer
+        Dim bookings As DataTable = DBHelper.GetDataTable("SELECT booking_id, event_place, event_date, total_price, status FROM bookings WHERE customer_id = @customer_id", New Dictionary(Of String, Object) From {{"@customer_id", userId}})
+        For Each booking As DataRow In bookings.Rows
+            ' For each booking, show details like event place, booking date, cost, status, etc.
+            customerDetailsForm.AddBookingDetails(booking)
+        Next
+
+        ' Show the customer details form
+        customerDetailsForm.ShowDialog()
+    End Sub
+
 
     '--- Specialized method for Booked Dates ---
     Public Shared Sub PopulateBookedDates(ByVal flpBookedDates As FlowLayoutPanel, ByVal dt As DataTable)
@@ -678,24 +721,28 @@ Public Class HelperResultsDisplay
     End Sub
 
     ' Modified PopulateEventPlacesForAdmin method
-    Public Shared Sub PopulateEventPlacesForAdmin(ByVal flpResults As FlowLayoutPanel,
-                                                   ByVal dt As DataTable,
-                                                   ByVal isAvailable As Boolean,
-                                                   ByVal txtEventPlace As TextBox,
-                                                   ByVal txtEventType As TextBox,
-                                                   ByVal txtCapacity As TextBox,
-                                                   ByVal txtPricePerDay As TextBox,
-                                                   ByVal txtFeatures As TextBox,
-                                                   ByVal txtImageUrl As TextBox,
-                                                   ByVal txtOpeningHours As TextBox,
-                                                   ByVal txtClosingHours As TextBox,
-                                                   ByVal txtAvailableDays As TextBox,
-                                                   ByVal txtDescription As TextBox,
-                                                   ByVal txtPlaceID As TextBox,
-                                                   ByVal btnUpdate As Button,
-                                                   ByVal btnDelete As Button)
+    Public Shared Sub PopulateEventPlacesForAdmin(ByVal flpAvailable As FlowLayoutPanel,
+                                               ByVal dt As DataTable,
+                                               ByVal isAvailable As Boolean,
+                                               ByVal txtEventPlace As TextBox,
+                                               ByVal txtEventType As TextBox,
+                                               ByVal txtCapacity As TextBox,
+                                               ByVal txtPricePerDay As TextBox,
+                                               ByVal txtFeatures As TextBox,
+                                               ByVal txtImageUrl As TextBox,
+                                               ByVal cbStartHour As ComboBox,
+                                               ByVal cbStartMinutes As ComboBox,
+                                               ByVal cbStartAMPM As ComboBox,
+                                               ByVal cbEndHour As ComboBox,
+                                               ByVal cbEndMinutes As ComboBox,
+                                               ByVal cbEndAMPM As ComboBox,
+                                               ByVal txtAvailableDays As TextBox,
+                                               ByVal txtDescription As TextBox,
+                                               ByVal txtPlaceID As TextBox,
+                                               ByVal btnUpdate As Button,
+                                               ByVal btnDelete As Button)
         Dim scrollbarWidth As Integer = SystemInformation.VerticalScrollBarWidth
-        Dim availableWidth As Integer = flpResults.Width - scrollbarWidth - (10 * 6)
+        Dim availableWidth As Integer = flpAvailable.Width - scrollbarWidth - (10 * 6)
         Dim panelWidth As Integer = availableWidth \ 3
         Dim panelHeight As Integer = 180 ' Adjusted height for name and image only
 
@@ -739,11 +786,21 @@ Public Class HelperResultsDisplay
                                                                                      txtPricePerDay.Text = row("price_per_day").ToString()
                                                                                      txtFeatures.Text = row("features").ToString()
                                                                                      txtImageUrl.Text = row("image_url").ToString()
-                                                                                     txtOpeningHours.Text = row("opening_hours").ToString()
-                                                                                     txtClosingHours.Text = row("closing_hours").ToString()
                                                                                      txtAvailableDays.Text = row("available_days").ToString()
                                                                                      txtDescription.Text = row("description").ToString()
                                                                                      txtPlaceID.Text = row("place_id").ToString()
+
+                                                                                     ' Populate the opening and closing hours
+                                                                                     Dim openingTime As DateTime = Convert.ToDateTime(row("opening_hours"))
+                                                                                     Dim closingTime As DateTime = Convert.ToDateTime(row("closing_hours"))
+
+                                                                                     cbStartHour.SelectedItem = openingTime.ToString("hh")
+                                                                                     cbStartMinutes.SelectedItem = openingTime.ToString("mm")
+                                                                                     cbStartAMPM.SelectedItem = openingTime.ToString("tt")
+
+                                                                                     cbEndHour.SelectedItem = closingTime.ToString("hh")
+                                                                                     cbEndMinutes.SelectedItem = closingTime.ToString("mm")
+                                                                                     cbEndAMPM.SelectedItem = closingTime.ToString("tt")
 
                                                                                      ' Show Update/Delete buttons only if event place is available
                                                                                      If isAvailable Then
@@ -762,8 +819,7 @@ Public Class HelperResultsDisplay
                                                      End Function
 
         ' Populate the FlowLayoutPanel with the event place panels
-        PopulateFlowPanel(flpResults, dt, createPanel)
-
+        PopulateFlowPanel(flpAvailable, dt, createPanel)
     End Sub
 
 End Class

@@ -56,9 +56,7 @@ Partial Class FormAdminCenter
         Me.btnUpdate = New System.Windows.Forms.Button()
         Me.txtAvailableDays = New System.Windows.Forms.TextBox()
         Me.lblAvailableDays = New System.Windows.Forms.Label()
-        Me.txtClosingHours = New System.Windows.Forms.TextBox()
         Me.lblClosingHours = New System.Windows.Forms.Label()
-        Me.txtOpeningHours = New System.Windows.Forms.TextBox()
         Me.lblOpeningHours = New System.Windows.Forms.Label()
         Me.txtImageUrl = New System.Windows.Forms.TextBox()
         Me.lblImageUrl = New System.Windows.Forms.Label()
@@ -82,6 +80,13 @@ Partial Class FormAdminCenter
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblNumCustomersContainer = New System.Windows.Forms.Label()
         Me.flpCustomerRecords = New System.Windows.Forms.FlowLayoutPanel()
+        Me.cbEndAMPM = New System.Windows.Forms.ComboBox()
+        Me.cbEndMinutes = New System.Windows.Forms.ComboBox()
+        Me.cbEndHour = New System.Windows.Forms.ComboBox()
+        Me.cbStartAMPM = New System.Windows.Forms.ComboBox()
+        Me.cbStartMinutes = New System.Windows.Forms.ComboBox()
+        Me.cbStartHour = New System.Windows.Forms.ComboBox()
+        Me.lblErrorClosingHours = New System.Windows.Forms.Label()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpBookings.SuspendLayout()
         Me.tcPendApprRej.SuspendLayout()
@@ -353,6 +358,13 @@ Partial Class FormAdminCenter
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.lblErrorClosingHours)
+        Me.GroupBox1.Controls.Add(Me.cbEndAMPM)
+        Me.GroupBox1.Controls.Add(Me.cbEndMinutes)
+        Me.GroupBox1.Controls.Add(Me.cbEndHour)
+        Me.GroupBox1.Controls.Add(Me.cbStartAMPM)
+        Me.GroupBox1.Controls.Add(Me.cbStartMinutes)
+        Me.GroupBox1.Controls.Add(Me.cbStartHour)
         Me.GroupBox1.Controls.Add(Me.txtPlaceID)
         Me.GroupBox1.Controls.Add(Me.lblPlaceID)
         Me.GroupBox1.Controls.Add(Me.lblErrorCapacity)
@@ -363,9 +375,7 @@ Partial Class FormAdminCenter
         Me.GroupBox1.Controls.Add(Me.btnUpdate)
         Me.GroupBox1.Controls.Add(Me.txtAvailableDays)
         Me.GroupBox1.Controls.Add(Me.lblAvailableDays)
-        Me.GroupBox1.Controls.Add(Me.txtClosingHours)
         Me.GroupBox1.Controls.Add(Me.lblClosingHours)
-        Me.GroupBox1.Controls.Add(Me.txtOpeningHours)
         Me.GroupBox1.Controls.Add(Me.lblOpeningHours)
         Me.GroupBox1.Controls.Add(Me.txtImageUrl)
         Me.GroupBox1.Controls.Add(Me.lblImageUrl)
@@ -429,7 +439,7 @@ Partial Class FormAdminCenter
         'lblErrorOpeningHours
         '
         Me.lblErrorOpeningHours.AutoSize = True
-        Me.lblErrorOpeningHours.Location = New System.Drawing.Point(552, 234)
+        Me.lblErrorOpeningHours.Location = New System.Drawing.Point(422, 231)
         Me.lblErrorOpeningHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorOpeningHours.Name = "lblErrorOpeningHours"
         Me.lblErrorOpeningHours.Size = New System.Drawing.Size(15, 19)
@@ -494,7 +504,7 @@ Partial Class FormAdminCenter
         Me.txtAvailableDays.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtAvailableDays.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAvailableDays.ForeColor = System.Drawing.Color.Black
-        Me.txtAvailableDays.Location = New System.Drawing.Point(137, 255)
+        Me.txtAvailableDays.Location = New System.Drawing.Point(137, 291)
         Me.txtAvailableDays.Margin = New System.Windows.Forms.Padding(4)
         Me.txtAvailableDays.Name = "txtAvailableDays"
         Me.txtAvailableDays.Size = New System.Drawing.Size(407, 17)
@@ -505,48 +515,24 @@ Partial Class FormAdminCenter
         Me.lblAvailableDays.AutoSize = True
         Me.lblAvailableDays.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblAvailableDays.ForeColor = System.Drawing.Color.Black
-        Me.lblAvailableDays.Location = New System.Drawing.Point(8, 255)
+        Me.lblAvailableDays.Location = New System.Drawing.Point(8, 291)
         Me.lblAvailableDays.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblAvailableDays.Name = "lblAvailableDays"
         Me.lblAvailableDays.Size = New System.Drawing.Size(89, 19)
         Me.lblAvailableDays.TabIndex = 26
         Me.lblAvailableDays.Text = "Available Days"
         '
-        'txtClosingHours
-        '
-        Me.txtClosingHours.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.txtClosingHours.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtClosingHours.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtClosingHours.ForeColor = System.Drawing.Color.Black
-        Me.txtClosingHours.Location = New System.Drawing.Point(433, 228)
-        Me.txtClosingHours.Margin = New System.Windows.Forms.Padding(4)
-        Me.txtClosingHours.Name = "txtClosingHours"
-        Me.txtClosingHours.Size = New System.Drawing.Size(111, 17)
-        Me.txtClosingHours.TabIndex = 25
-        '
         'lblClosingHours
         '
         Me.lblClosingHours.AutoSize = True
         Me.lblClosingHours.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblClosingHours.ForeColor = System.Drawing.Color.Black
-        Me.lblClosingHours.Location = New System.Drawing.Point(312, 228)
+        Me.lblClosingHours.Location = New System.Drawing.Point(8, 250)
         Me.lblClosingHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblClosingHours.Name = "lblClosingHours"
         Me.lblClosingHours.Size = New System.Drawing.Size(85, 19)
         Me.lblClosingHours.TabIndex = 24
         Me.lblClosingHours.Text = "Closing Hours"
-        '
-        'txtOpeningHours
-        '
-        Me.txtOpeningHours.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.txtOpeningHours.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtOpeningHours.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtOpeningHours.ForeColor = System.Drawing.Color.Black
-        Me.txtOpeningHours.Location = New System.Drawing.Point(137, 228)
-        Me.txtOpeningHours.Margin = New System.Windows.Forms.Padding(4)
-        Me.txtOpeningHours.Name = "txtOpeningHours"
-        Me.txtOpeningHours.Size = New System.Drawing.Size(111, 17)
-        Me.txtOpeningHours.TabIndex = 23
         '
         'lblOpeningHours
         '
@@ -614,7 +600,7 @@ Partial Class FormAdminCenter
         Me.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtDescription.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDescription.ForeColor = System.Drawing.Color.Black
-        Me.txtDescription.Location = New System.Drawing.Point(137, 283)
+        Me.txtDescription.Location = New System.Drawing.Point(137, 319)
         Me.txtDescription.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDescription.Multiline = True
         Me.txtDescription.Name = "txtDescription"
@@ -626,7 +612,7 @@ Partial Class FormAdminCenter
         Me.lblDescription.AutoSize = True
         Me.lblDescription.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDescription.ForeColor = System.Drawing.Color.Black
-        Me.lblDescription.Location = New System.Drawing.Point(8, 278)
+        Me.lblDescription.Location = New System.Drawing.Point(8, 314)
         Me.lblDescription.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDescription.Name = "lblDescription"
         Me.lblDescription.Size = New System.Drawing.Size(72, 19)
@@ -788,7 +774,7 @@ Partial Class FormAdminCenter
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.Black
-        Me.Label4.Location = New System.Drawing.Point(1075, 490)
+        Me.Label4.Location = New System.Drawing.Point(1110, 501)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(99, 19)
         Me.Label4.TabIndex = 34
@@ -799,7 +785,7 @@ Partial Class FormAdminCenter
         Me.lblNumCustomersContainer.AutoSize = True
         Me.lblNumCustomersContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNumCustomersContainer.ForeColor = System.Drawing.Color.Black
-        Me.lblNumCustomersContainer.Location = New System.Drawing.Point(1075, 468)
+        Me.lblNumCustomersContainer.Location = New System.Drawing.Point(1110, 482)
         Me.lblNumCustomersContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblNumCustomersContainer.Name = "lblNumCustomersContainer"
         Me.lblNumCustomersContainer.Size = New System.Drawing.Size(16, 19)
@@ -813,6 +799,82 @@ Partial Class FormAdminCenter
         Me.flpCustomerRecords.Name = "flpCustomerRecords"
         Me.flpCustomerRecords.Size = New System.Drawing.Size(1200, 457)
         Me.flpCustomerRecords.TabIndex = 0
+        '
+        'cbEndAMPM
+        '
+        Me.cbEndAMPM.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndAMPM.FormattingEnabled = True
+        Me.cbEndAMPM.Items.AddRange(New Object() {"AM", "PM"})
+        Me.cbEndAMPM.Location = New System.Drawing.Point(327, 256)
+        Me.cbEndAMPM.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbEndAMPM.Name = "cbEndAMPM"
+        Me.cbEndAMPM.Size = New System.Drawing.Size(87, 27)
+        Me.cbEndAMPM.TabIndex = 81
+        '
+        'cbEndMinutes
+        '
+        Me.cbEndMinutes.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndMinutes.FormattingEnabled = True
+        Me.cbEndMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
+        Me.cbEndMinutes.Location = New System.Drawing.Point(232, 256)
+        Me.cbEndMinutes.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbEndMinutes.Name = "cbEndMinutes"
+        Me.cbEndMinutes.Size = New System.Drawing.Size(87, 27)
+        Me.cbEndMinutes.TabIndex = 80
+        '
+        'cbEndHour
+        '
+        Me.cbEndHour.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndHour.FormattingEnabled = True
+        Me.cbEndHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
+        Me.cbEndHour.Location = New System.Drawing.Point(137, 256)
+        Me.cbEndHour.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbEndHour.Name = "cbEndHour"
+        Me.cbEndHour.Size = New System.Drawing.Size(87, 27)
+        Me.cbEndHour.TabIndex = 79
+        '
+        'cbStartAMPM
+        '
+        Me.cbStartAMPM.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartAMPM.FormattingEnabled = True
+        Me.cbStartAMPM.Items.AddRange(New Object() {"AM", "PM"})
+        Me.cbStartAMPM.Location = New System.Drawing.Point(327, 222)
+        Me.cbStartAMPM.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbStartAMPM.Name = "cbStartAMPM"
+        Me.cbStartAMPM.Size = New System.Drawing.Size(87, 27)
+        Me.cbStartAMPM.TabIndex = 78
+        '
+        'cbStartMinutes
+        '
+        Me.cbStartMinutes.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartMinutes.FormattingEnabled = True
+        Me.cbStartMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
+        Me.cbStartMinutes.Location = New System.Drawing.Point(232, 222)
+        Me.cbStartMinutes.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbStartMinutes.Name = "cbStartMinutes"
+        Me.cbStartMinutes.Size = New System.Drawing.Size(87, 27)
+        Me.cbStartMinutes.TabIndex = 77
+        '
+        'cbStartHour
+        '
+        Me.cbStartHour.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartHour.FormattingEnabled = True
+        Me.cbStartHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
+        Me.cbStartHour.Location = New System.Drawing.Point(137, 222)
+        Me.cbStartHour.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbStartHour.Name = "cbStartHour"
+        Me.cbStartHour.Size = New System.Drawing.Size(87, 27)
+        Me.cbStartHour.TabIndex = 76
+        '
+        'lblErrorClosingHours
+        '
+        Me.lblErrorClosingHours.AutoSize = True
+        Me.lblErrorClosingHours.Location = New System.Drawing.Point(422, 259)
+        Me.lblErrorClosingHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lblErrorClosingHours.Name = "lblErrorClosingHours"
+        Me.lblErrorClosingHours.Size = New System.Drawing.Size(15, 19)
+        Me.lblErrorClosingHours.TabIndex = 82
+        Me.lblErrorClosingHours.Text = "-"
         '
         'FormAdminCenter
         '
@@ -863,9 +925,7 @@ Partial Class FormAdminCenter
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents txtAvailableDays As TextBox
     Friend WithEvents lblAvailableDays As Label
-    Friend WithEvents txtClosingHours As TextBox
     Friend WithEvents lblClosingHours As Label
-    Friend WithEvents txtOpeningHours As TextBox
     Friend WithEvents lblOpeningHours As Label
     Friend WithEvents txtImageUrl As TextBox
     Friend WithEvents lblImageUrl As Label
@@ -912,4 +972,11 @@ Partial Class FormAdminCenter
     Friend WithEvents flpAvailable As FlowLayoutPanel
     Friend WithEvents tpBooked As TabPage
     Friend WithEvents flpBooked As FlowLayoutPanel
+    Friend WithEvents cbEndAMPM As ComboBox
+    Friend WithEvents cbEndMinutes As ComboBox
+    Friend WithEvents cbEndHour As ComboBox
+    Friend WithEvents cbStartAMPM As ComboBox
+    Friend WithEvents cbStartMinutes As ComboBox
+    Friend WithEvents cbStartHour As ComboBox
+    Friend WithEvents lblErrorClosingHours As Label
 End Class
