@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormLogIn
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class FormLogIn
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.lblPassword = New System.Windows.Forms.Label()
         Me.lblEmail = New System.Windows.Forms.Label()
@@ -32,7 +32,6 @@ Partial Class FormLogIn
         Me.lblGeneralError = New System.Windows.Forms.Label()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
-        Me.cbRememberMe = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'lblPassword
@@ -41,9 +40,10 @@ Partial Class FormLogIn
         Me.lblPassword.BackColor = System.Drawing.Color.Transparent
         Me.lblPassword.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPassword.ForeColor = System.Drawing.Color.Black
-        Me.lblPassword.Location = New System.Drawing.Point(217, 202)
+        Me.lblPassword.Location = New System.Drawing.Point(289, 249)
+        Me.lblPassword.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.Size = New System.Drawing.Size(77, 25)
+        Me.lblPassword.Size = New System.Drawing.Size(61, 19)
         Me.lblPassword.TabIndex = 40
         Me.lblPassword.Text = "Password"
         '
@@ -53,9 +53,10 @@ Partial Class FormLogIn
         Me.lblEmail.BackColor = System.Drawing.Color.Transparent
         Me.lblEmail.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblEmail.ForeColor = System.Drawing.Color.Black
-        Me.lblEmail.Location = New System.Drawing.Point(217, 139)
+        Me.lblEmail.Location = New System.Drawing.Point(289, 171)
+        Me.lblEmail.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEmail.Name = "lblEmail"
-        Me.lblEmail.Size = New System.Drawing.Size(48, 25)
+        Me.lblEmail.Size = New System.Drawing.Size(39, 19)
         Me.lblEmail.TabIndex = 39
         Me.lblEmail.Text = "Email"
         '
@@ -66,9 +67,10 @@ Partial Class FormLogIn
         Me.btnLogIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogIn.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogIn.ForeColor = System.Drawing.Color.Black
-        Me.btnLogIn.Location = New System.Drawing.Point(686, 411)
+        Me.btnLogIn.Location = New System.Drawing.Point(915, 506)
+        Me.btnLogIn.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnLogIn.Name = "btnLogIn"
-        Me.btnLogIn.Size = New System.Drawing.Size(231, 57)
+        Me.btnLogIn.Size = New System.Drawing.Size(308, 70)
         Me.btnLogIn.TabIndex = 36
         Me.btnLogIn.Text = "Log In"
         Me.btnLogIn.UseVisualStyleBackColor = False
@@ -80,9 +82,10 @@ Partial Class FormLogIn
         Me.btnShowPass.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnShowPass.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnShowPass.ForeColor = System.Drawing.Color.Black
-        Me.btnShowPass.Location = New System.Drawing.Point(641, 229)
+        Me.btnShowPass.Location = New System.Drawing.Point(855, 282)
+        Me.btnShowPass.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnShowPass.Name = "btnShowPass"
-        Me.btnShowPass.Size = New System.Drawing.Size(86, 28)
+        Me.btnShowPass.Size = New System.Drawing.Size(115, 34)
         Me.btnShowPass.TabIndex = 38
         Me.btnShowPass.Text = "Show"
         Me.btnShowPass.UseVisualStyleBackColor = False
@@ -91,9 +94,10 @@ Partial Class FormLogIn
         '
         Me.txtEmail.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEmail.ForeColor = System.Drawing.Color.Black
-        Me.txtEmail.Location = New System.Drawing.Point(217, 161)
+        Me.txtEmail.Location = New System.Drawing.Point(289, 198)
+        Me.txtEmail.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(510, 28)
+        Me.txtEmail.Size = New System.Drawing.Size(679, 24)
         Me.txtEmail.TabIndex = 32
         '
         'lnklblSignUp
@@ -102,9 +106,10 @@ Partial Class FormLogIn
         Me.lnklblSignUp.BackColor = System.Drawing.Color.Transparent
         Me.lnklblSignUp.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lnklblSignUp.ForeColor = System.Drawing.Color.Black
-        Me.lnklblSignUp.Location = New System.Drawing.Point(217, 361)
+        Me.lnklblSignUp.Location = New System.Drawing.Point(289, 444)
+        Me.lnklblSignUp.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lnklblSignUp.Name = "lnklblSignUp"
-        Me.lnklblSignUp.Size = New System.Drawing.Size(233, 25)
+        Me.lnklblSignUp.Size = New System.Drawing.Size(182, 19)
         Me.lnklblSignUp.TabIndex = 35
         Me.lnklblSignUp.TabStop = True
         Me.lnklblSignUp.Text = "Don't have an account? Sign Up"
@@ -113,57 +118,49 @@ Partial Class FormLogIn
         '
         Me.txtPass.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPass.ForeColor = System.Drawing.Color.Black
-        Me.txtPass.Location = New System.Drawing.Point(217, 229)
+        Me.txtPass.Location = New System.Drawing.Point(289, 282)
+        Me.txtPass.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtPass.Name = "txtPass"
         Me.txtPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPass.Size = New System.Drawing.Size(417, 28)
+        Me.txtPass.Size = New System.Drawing.Size(555, 24)
         Me.txtPass.TabIndex = 33
         '
         'lblGeneralError
         '
         Me.lblGeneralError.AutoSize = True
         Me.lblGeneralError.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGeneralError.Location = New System.Drawing.Point(217, 311)
+        Me.lblGeneralError.Location = New System.Drawing.Point(289, 383)
+        Me.lblGeneralError.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblGeneralError.Name = "lblGeneralError"
-        Me.lblGeneralError.Size = New System.Drawing.Size(140, 25)
+        Me.lblGeneralError.Size = New System.Drawing.Size(112, 19)
         Me.lblGeneralError.TabIndex = 42
         Me.lblGeneralError.Text = "Invalid credentials."
         '
         'btnNext
         '
-        Me.btnNext.Location = New System.Drawing.Point(62, 12)
+        Me.btnNext.Location = New System.Drawing.Point(83, 15)
+        Me.btnNext.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(42, 23)
+        Me.btnNext.Size = New System.Drawing.Size(56, 28)
         Me.btnNext.TabIndex = 89
         Me.btnNext.Text = "→"
         Me.btnNext.UseVisualStyleBackColor = True
         '
         'btnBack
         '
-        Me.btnBack.Location = New System.Drawing.Point(14, 11)
+        Me.btnBack.Location = New System.Drawing.Point(19, 14)
+        Me.btnBack.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnBack.Name = "btnBack"
-        Me.btnBack.Size = New System.Drawing.Size(42, 23)
+        Me.btnBack.Size = New System.Drawing.Size(56, 28)
         Me.btnBack.TabIndex = 88
         Me.btnBack.Text = "←"
         Me.btnBack.UseVisualStyleBackColor = True
         '
-        'cbRememberMe
-        '
-        Me.cbRememberMe.AutoSize = True
-        Me.cbRememberMe.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbRememberMe.Location = New System.Drawing.Point(217, 264)
-        Me.cbRememberMe.Name = "cbRememberMe"
-        Me.cbRememberMe.Size = New System.Drawing.Size(126, 27)
-        Me.cbRememberMe.TabIndex = 90
-        Me.cbRememberMe.Text = "Remember Me"
-        Me.cbRememberMe.UseVisualStyleBackColor = True
-        '
         'FormLogIn
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(944, 501)
-        Me.Controls.Add(Me.cbRememberMe)
+        Me.ClientSize = New System.Drawing.Size(1259, 617)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.lblGeneralError)
@@ -174,6 +171,7 @@ Partial Class FormLogIn
         Me.Controls.Add(Me.txtEmail)
         Me.Controls.Add(Me.lnklblSignUp)
         Me.Controls.Add(Me.txtPass)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormLogIn"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormLogIn"
@@ -191,5 +189,4 @@ Partial Class FormLogIn
     Friend WithEvents lblGeneralError As Label
     Friend WithEvents btnNext As Button
     Friend WithEvents btnBack As Button
-    Friend WithEvents cbRememberMe As CheckBox
 End Class

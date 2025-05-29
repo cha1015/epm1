@@ -12,24 +12,24 @@ Public Class FormLogIn
         txtEmail.Text = ""
         txtPass.Text = ""
 
-        AddHandler txtEmail.TextChanged, AddressOf DetectEmailAndPromptPassword
+        'AddHandler txtEmail.TextChanged, AddressOf DetectEmailAndPromptPassword
     End Sub
 
-    Private Sub DetectEmailAndPromptPassword(sender As Object, e As EventArgs)
-        Dim enteredEmail = txtEmail.Text
+    'Private Sub DetectEmailAndPromptPassword(sender As Object, e As EventArgs)
+    '    Dim enteredEmail = txtEmail.Text
 
-        If Not String.IsNullOrWhiteSpace(enteredEmail) Then
-            If My.Settings.RememberMe AndAlso enteredEmail.ToLower().StartsWith(My.Settings.RememberedEmail.ToLower()) Then
-                Dim result = MessageBox.Show($"We detected that {My.Settings.RememberedEmail} is associated with this email. Would you like to auto-fill your password?",
-                                         "Auto-fill Password", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '    If Not String.IsNullOrWhiteSpace(enteredEmail) Then
+    '        If My.Settings.RememberMe AndAlso enteredEmail.ToLower().StartsWith(My.Settings.RememberedEmail.ToLower()) Then
+    '            Dim result = MessageBox.Show($"We detected that {My.Settings.RememberedEmail} is associated with this email. Would you like to auto-fill your password?",
+    '                                     "Auto-fill Password", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
-                If result = DialogResult.Yes Then
-                    txtPass.Text = My.Settings.RememberedPassword
-                    cbRememberMe.Checked = True
-                End If
-            End If
-        End If
-    End Sub
+    '            If result = DialogResult.Yes Then
+    '                txtPass.Text = My.Settings.RememberedPassword
+    '                cbRememberMe.Checked = True
+    '            End If
+    '        End If
+    '    End If
+    'End Sub
 
 
     Private Sub btnLogIn_Click(sender As Object, e As EventArgs) Handles btnLogIn.Click
@@ -76,17 +76,17 @@ Public Class FormLogIn
 
                 lblGeneralError.Visible = False
 
-                If cbRememberMe.Checked Then
-                    My.Settings.RememberMe = True
-                    My.Settings.RememberedEmail = txtEmail.Text
-                    My.Settings.RememberedPassword = txtPass.Text
-                    My.Settings.Save()
-                Else
-                    My.Settings.RememberMe = False
-                    My.Settings.RememberedEmail = String.Empty
-                    My.Settings.RememberedPassword = String.Empty
-                    My.Settings.Save()
-                End If
+                'If cbRememberMe.Checked Then
+                '    My.Settings.RememberMe = True
+                '    My.Settings.RememberedEmail = txtEmail.Text
+                '    My.Settings.RememberedPassword = txtPass.Text
+                '    My.Settings.Save()
+                'Else
+                '    My.Settings.RememberMe = False
+                '    My.Settings.RememberedEmail = String.Empty
+                '    My.Settings.RememberedPassword = String.Empty
+                '    My.Settings.Save()
+                'End If
 
                 Select Case CurrentUser.Role
                     Case "Admin"
@@ -173,18 +173,18 @@ Public Class FormLogIn
         HelperNavigation.GoNext(Me)
     End Sub
 
-    Private Sub cbRememberMe_CheckedChanged(sender As Object, e As EventArgs) Handles cbRememberMe.CheckedChanged
-        If cbRememberMe.Checked Then
-            My.Settings.RememberMe = True
-            My.Settings.RememberedEmail = txtEmail.Text
-            My.Settings.RememberedPassword = txtPass.Text
-        Else
-            My.Settings.RememberMe = False
-            My.Settings.RememberedEmail = String.Empty
-            My.Settings.RememberedPassword = String.Empty
-        End If
+    'Private Sub cbRememberMe_CheckedChanged(sender As Object, e As EventArgs)
+    '    If cbRememberMe.Checked Then
+    '        My.Settings.RememberMe = True
+    '        My.Settings.RememberedEmail = txtEmail.Text
+    '        My.Settings.RememberedPassword = txtPass.Text
+    '    Else
+    '        My.Settings.RememberMe = False
+    '        My.Settings.RememberedEmail = String.Empty
+    '        My.Settings.RememberedPassword = String.Empty
+    '    End If
 
-        My.Settings.Save()
-    End Sub
+    '    My.Settings.Save()
+    'End Sub
 
 End Class
