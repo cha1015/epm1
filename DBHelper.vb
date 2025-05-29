@@ -2,7 +2,7 @@
 Imports MySql.Data.MySqlClient
 
 Module DBHelper
-    Private ReadOnly connectionString As String = "Server=localhost;Database=event_management;User ID=root;Password=044221;Pooling=True;"
+    Private ReadOnly connectionString As String = "Server=localhost;Database=event_management;User ID=root;Password=MySQLRootPassword123;Pooling=True;"
 
     Public Function GetConnection() As MySqlConnection
         Return New MySqlConnection(connectionString)
@@ -17,7 +17,7 @@ Module DBHelper
                     For Each param In parameters
                         command.Parameters.AddWithValue(param.Key, param.Value)
                     Next
-                    rowsAffected = command.ExecuteNonQuery() ' Get affected rows
+                    rowsAffected = command.ExecuteNonQuery()
                 End Using
             Catch ex As MySqlException
                 MessageBox.Show("Database error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -25,8 +25,6 @@ Module DBHelper
         End Using
         Return rowsAffected
     End Function
-
-
 
     Public Function ExecuteScalarQuery(ByVal query As String, ByVal parameters As Dictionary(Of String, Object)) As Object
         Dim result As Object = Nothing
@@ -45,6 +43,7 @@ Module DBHelper
         End Using
         Return result
     End Function
+
 
     Public Function GetDataTable(query As String, parameters As Dictionary(Of String, Object)) As DataTable
         Dim dt As New DataTable()

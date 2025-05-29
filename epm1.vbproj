@@ -427,5 +427,17 @@
   <ItemGroup>
     <None Include="Resources\BGInfo3%28updated%29.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\close.png" />
+    <Content Include="Resources\CUSTOMER VIEW %281%29.png" />
+    <Content Include="Resources\CUSTOMER VIEW %281%291.png" />
+    <Content Include="Resources\CUSTOMER VIEW %282%29.png" />
+    <Content Include="Resources\CUSTOMER VIEW %282%291.png" />
+    <Content Include="Resources\CUSTOMER VIEW %283%29.png" />
+    <Content Include="Resources\CUSTOMER VIEW %284%29.png" />
+    <Content Include="Resources\CUSTOMER VIEW %284%291.png" />
+    <Content Include="Resources\CUSTOMER VIEW.png" />
+    <Content Include="Resources\minimize.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -29,7 +29,7 @@ Public Class FormMain
         LoadSearchResults()
         UpdatePanelVisibility()
         AdjustResultsPanel()
-        HiddenTextBox.Location = New Point(-100, -100) ' Moves it off the visible area
+        HiddenTextBox.Location = New Point(-100, -100)
         HiddenTextBox.Visible = False
         HiddenTextBox.Focus()
         HiddenTextBox.Select()
@@ -73,7 +73,7 @@ Public Class FormMain
 
     Private Sub AdjustResultsPanel()
         If pnlFilter.Visible Then
-            flpResults.Width = Me.Width '- pnlFilter.Width
+            flpResults.Width = Me.Width
             If pnlFilter.Visible = False Then
                 flpResults.Location = New Point(0, flpResults.Location.Y)
                 flpResults.Width = Me.Width
@@ -270,6 +270,21 @@ Public Class FormMain
         Dim capacity As Integer = CInt(row("capacity"))
         Dim pricePerDay As Decimal = CDec(row("price_per_day"))
 
+        ' Get the opening and closing hours
+        Dim openingHours As String = row("opening_hours").ToString()
+        Dim closingHours As String = row("closing_hours").ToString()
+
+        ' Validate the opening and closing hours formats
+        If Not IsValidTimeFormat(openingHours) Then
+            MessageBox.Show("Invalid opening hour format. Please check the format (hh:mm AM/PM or HH:mm 24-hour).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
+        If Not IsValidTimeFormat(closingHours) Then
+            MessageBox.Show("Invalid closing hour format. Please check the format (hh:mm AM/PM or HH:mm 24-hour).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
         Dim bookingForm As New FormBooking(CurrentUser.UserID, placeId) With {
     .EventPlaceName = row("event_place").ToString(),
     .EventPlaceCapacity = CInt(row("capacity")),
@@ -285,6 +300,17 @@ Public Class FormMain
         bookingForm.ShowDialog()
         Me.Hide()
     End Sub
+
+    Private Function IsValidTimeFormat(time As String) As Boolean
+        Dim parsedTime As DateTime
+        If DateTime.TryParseExact(time, "hh:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedTime) Then
+            Return True
+        End If
+        If DateTime.TryParseExact(time, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedTime) Then
+            Return True
+        End If
+        Return False
+    End Function
 
     Private Sub btnApply_Click(sender As Object, e As EventArgs) Handles btnApply.Click
         LoadSearchResults()
@@ -306,13 +332,11 @@ Public Class FormMain
     Private Sub btnLogIn_Click(sender As Object, e As EventArgs) Handles btnLogIn.Click
         Dim loginForm As New FormLogIn()
         If loginForm.ShowDialog() = DialogResult.OK Then
-            ' For Admins, open the Admin Center and hide FormMain.
             If CurrentUser.Role = "Admin" Then
-                Dim adminForm As New FormAdminCenter()
-                adminForm.Show()
+                'Dim adminForm As New FormAdminCenter()
+                'adminForm.Show()
                 Me.Hide()
             ElseIf CurrentUser.CustomerId > 0 Then
-                ' For Users, update the UI to reflect the logged-in state.
                 UpdatePanelVisibility()
                 pnlAccount.Visible = True
                 pnlSignUpLogIn.Visible = False
@@ -373,22 +397,28 @@ Public Class FormMain
     End Sub
 
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
-        CurrentUser.UserID = -1
-        CurrentUser.Username = String.Empty
-        CurrentUser.Email = String.Empty
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
-        CurrentUser.Role = String.Empty
-        CurrentUser.CustomerId = -1
+        If result = DialogResult.Yes Then
+            CurrentUser.UserID = -1
+            CurrentUser.Username = String.Empty
+            CurrentUser.Email = String.Empty
+            CurrentUser.Role = String.Empty
+            CurrentUser.CustomerId = -1
 
-        pnlSignUpLogIn.Visible = True
-        pnlAccount.Visible = False
-        btnSignUp.Visible = True
-        btnLogIn.Visible = True
-        btnCustomerView.Visible = False
+            pnlSignUpLogIn.Visible = True
+            pnlAccount.Visible = False
+            btnSignUp.Visible = True
+            btnLogIn.Visible = True
 
-        UpdatePanelVisibility()
-        Me.Refresh()
-        Application.DoEvents()
+            UpdatePanelVisibility()
+            Me.Refresh()
+            Application.DoEvents()
+
+            Dim mainForm As New FormMain()
+            mainForm.Show()
+            Me.Hide() '
+        End If
     End Sub
 
     Private Sub ClearFilters()
@@ -415,13 +445,13 @@ Public Class FormMain
 
         Dim query As String = "SELECT username FROM Admins WHERE admin_id=@adminId"
         Dim parameters As New Dictionary(Of String, Object) From {
-    {"@adminId", CurrentUser.UserID} ' Ensure this holds the correct admin ID
+    {"@adminId", CurrentUser.UserID}
 }
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
         If dt.Rows.Count > 0 Then
-            lblUsername.Text = dt.Rows(0)("username").ToString() ' Update Admin Name label dynamically
+            lblUsername.Text = dt.Rows(0)("username").ToString()
         End If
     End Sub
 
