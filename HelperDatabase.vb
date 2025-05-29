@@ -232,34 +232,33 @@ Public Class HelperDatabase
 
     Public Shared Function GetBookingDetails(bookingId As Integer) As DataTable
         Dim query As String = "
-        SELECT 
-            b.booking_id, 
-            b.customer_id, 
-            e.event_place, 
-            b.event_type, 
-            b.num_guests, 
-            b.event_date, 
-            b.event_end_date, 
-            b.event_time, 
-            b.event_end_time, 
-            b.total_price, 
-            b.status, 
-            b.services_availed, 
-            MAX(p.payment_status) AS payment_status,  -- Use MAX() to get a single payment status
-            i.invoice_date,  
-            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed  -- Corrected join
-        FROM bookings b
-        JOIN customers c ON b.customer_id = c.customer_id
-        JOIN eventplace e ON b.place_id = e.place_id
-        LEFT JOIN payments p ON b.booking_id = p.booking_id
-        LEFT JOIN invoices i ON b.booking_id = i.invoice_id  
-        LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
-        LEFT JOIN services s ON bs.service_id = s.service_id  -- Added join with services table
-        WHERE b.booking_id = @booking_id
-        GROUP BY b.booking_id, b.customer_id, e.event_place, b.event_type, b.num_guests, b.event_date, b.event_end_date, 
-                 b.event_time, b.event_end_time, b.total_price, b.status, b.services_availed, i.invoice_date
-        "
-
+    SELECT 
+        b.booking_id, 
+        b.customer_id, 
+        e.event_place, 
+        b.event_type, 
+        b.num_guests, 
+        b.event_date, 
+        b.event_end_date, 
+        b.event_time, 
+        b.event_end_time, 
+        b.total_price, 
+        b.status, 
+        b.services_availed, 
+        MAX(p.payment_status) AS payment_status,  
+        i.invoice_date,  
+        GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+    FROM bookings b
+    JOIN customers c ON b.customer_id = c.customer_id
+    JOIN eventplace e ON b.place_id = e.place_id  -- Added JOIN for event_place
+    LEFT JOIN payments p ON b.booking_id = p.booking_id
+    LEFT JOIN invoices i ON b.booking_id = i.invoice_id  
+    LEFT JOIN bookingservices bs ON b.booking_id = bs.booking_id
+    LEFT JOIN services s ON bs.service_id = s.service_id
+    WHERE b.booking_id = @booking_id
+    GROUP BY b.booking_id, b.customer_id, e.event_place, b.event_type, b.num_guests, 
+             b.event_date, b.event_end_date, b.event_time, b.event_end_time, 
+             b.total_price, b.status, b.services_availed, i.invoice_date"
         Dim parameters As New Dictionary(Of String, Object) From {{"@booking_id", bookingId}}
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
@@ -270,5 +269,6 @@ Public Class HelperDatabase
 
         Return dt
     End Function
+
 
 End Class

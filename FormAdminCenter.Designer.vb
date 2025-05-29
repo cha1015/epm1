@@ -45,9 +45,6 @@ Partial Class FormAdminCenter
         Me.flpRejected = New System.Windows.Forms.FlowLayoutPanel()
         Me.tpAll = New System.Windows.Forms.TabPage()
         Me.flpAll = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.chartTotalStatus = New System.Windows.Forms.DataVisualization.Charting.Chart()
-        Me.mcBookings = New System.Windows.Forms.MonthCalendar()
         Me.tpEventPlaceMgmt = New System.Windows.Forms.TabPage()
         Me.tcAvailability = New System.Windows.Forms.TabControl()
         Me.tpAvailable = New System.Windows.Forms.TabPage()
@@ -65,9 +62,7 @@ Partial Class FormAdminCenter
         Me.btnUpdate = New System.Windows.Forms.Button()
         Me.txtAvailableDays = New System.Windows.Forms.TextBox()
         Me.lblAvailableDays = New System.Windows.Forms.Label()
-        Me.txtClosingHours = New System.Windows.Forms.TextBox()
         Me.lblClosingHours = New System.Windows.Forms.Label()
-        Me.txtOpeningHours = New System.Windows.Forms.TextBox()
         Me.lblOpeningHours = New System.Windows.Forms.Label()
         Me.txtImageUrl = New System.Windows.Forms.TextBox()
         Me.lblImageUrl = New System.Windows.Forms.Label()
@@ -98,6 +93,13 @@ Partial Class FormAdminCenter
         Me.cbStartMinutes = New System.Windows.Forms.ComboBox()
         Me.cbStartHour = New System.Windows.Forms.ComboBox()
         Me.lblErrorClosingHours = New System.Windows.Forms.Label()
+        Me.cbEndAMPM = New System.Windows.Forms.ComboBox()
+        Me.cbEndMinutes = New System.Windows.Forms.ComboBox()
+        Me.cbEndHour = New System.Windows.Forms.ComboBox()
+        Me.cbStartAMPM = New System.Windows.Forms.ComboBox()
+        Me.cbStartMinutes = New System.Windows.Forms.ComboBox()
+        Me.cbStartHour = New System.Windows.Forms.ComboBox()
+        Me.lblErrorClosingHours = New System.Windows.Forms.Label()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.dgvInvoice = New System.Windows.Forms.DataGridView()
         Me.tcAdminCenter.SuspendLayout()
@@ -107,7 +109,6 @@ Partial Class FormAdminCenter
         Me.tpApproved.SuspendLayout()
         Me.tpRejected.SuspendLayout()
         Me.tpAll.SuspendLayout()
-        CType(Me.chartTotalStatus, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpEventPlaceMgmt.SuspendLayout()
         Me.tcAvailability.SuspendLayout()
         Me.tpAvailable.SuspendLayout()
@@ -216,9 +217,6 @@ Partial Class FormAdminCenter
         'tpBookings
         '
         Me.tpBookings.Controls.Add(Me.tcPendApprRej)
-        Me.tpBookings.Controls.Add(Me.Label11)
-        Me.tpBookings.Controls.Add(Me.chartTotalStatus)
-        Me.tpBookings.Controls.Add(Me.mcBookings)
         Me.tpBookings.Location = New System.Drawing.Point(4, 28)
         Me.tpBookings.Name = "tpBookings"
         Me.tpBookings.Padding = New System.Windows.Forms.Padding(4)
@@ -929,6 +927,82 @@ Partial Class FormAdminCenter
         Me.lblErrorClosingHours.TabIndex = 82
         Me.lblErrorClosingHours.Text = "-"
         '
+        'cbEndAMPM
+        '
+        Me.cbEndAMPM.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndAMPM.FormattingEnabled = True
+        Me.cbEndAMPM.Items.AddRange(New Object() {"AM", "PM"})
+        Me.cbEndAMPM.Location = New System.Drawing.Point(327, 256)
+        Me.cbEndAMPM.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbEndAMPM.Name = "cbEndAMPM"
+        Me.cbEndAMPM.Size = New System.Drawing.Size(87, 27)
+        Me.cbEndAMPM.TabIndex = 81
+        '
+        'cbEndMinutes
+        '
+        Me.cbEndMinutes.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndMinutes.FormattingEnabled = True
+        Me.cbEndMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
+        Me.cbEndMinutes.Location = New System.Drawing.Point(232, 256)
+        Me.cbEndMinutes.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbEndMinutes.Name = "cbEndMinutes"
+        Me.cbEndMinutes.Size = New System.Drawing.Size(87, 27)
+        Me.cbEndMinutes.TabIndex = 80
+        '
+        'cbEndHour
+        '
+        Me.cbEndHour.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndHour.FormattingEnabled = True
+        Me.cbEndHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
+        Me.cbEndHour.Location = New System.Drawing.Point(137, 256)
+        Me.cbEndHour.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbEndHour.Name = "cbEndHour"
+        Me.cbEndHour.Size = New System.Drawing.Size(87, 27)
+        Me.cbEndHour.TabIndex = 79
+        '
+        'cbStartAMPM
+        '
+        Me.cbStartAMPM.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartAMPM.FormattingEnabled = True
+        Me.cbStartAMPM.Items.AddRange(New Object() {"AM", "PM"})
+        Me.cbStartAMPM.Location = New System.Drawing.Point(327, 222)
+        Me.cbStartAMPM.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbStartAMPM.Name = "cbStartAMPM"
+        Me.cbStartAMPM.Size = New System.Drawing.Size(87, 27)
+        Me.cbStartAMPM.TabIndex = 78
+        '
+        'cbStartMinutes
+        '
+        Me.cbStartMinutes.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartMinutes.FormattingEnabled = True
+        Me.cbStartMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
+        Me.cbStartMinutes.Location = New System.Drawing.Point(232, 222)
+        Me.cbStartMinutes.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbStartMinutes.Name = "cbStartMinutes"
+        Me.cbStartMinutes.Size = New System.Drawing.Size(87, 27)
+        Me.cbStartMinutes.TabIndex = 77
+        '
+        'cbStartHour
+        '
+        Me.cbStartHour.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartHour.FormattingEnabled = True
+        Me.cbStartHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
+        Me.cbStartHour.Location = New System.Drawing.Point(137, 222)
+        Me.cbStartHour.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbStartHour.Name = "cbStartHour"
+        Me.cbStartHour.Size = New System.Drawing.Size(87, 27)
+        Me.cbStartHour.TabIndex = 76
+        '
+        'lblErrorClosingHours
+        '
+        Me.lblErrorClosingHours.AutoSize = True
+        Me.lblErrorClosingHours.Location = New System.Drawing.Point(422, 259)
+        Me.lblErrorClosingHours.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lblErrorClosingHours.Name = "lblErrorClosingHours"
+        Me.lblErrorClosingHours.Size = New System.Drawing.Size(15, 19)
+        Me.lblErrorClosingHours.TabIndex = 82
+        Me.lblErrorClosingHours.Text = "-"
+        '
         'Chart1
         '
         Me.Chart1.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Bottom
@@ -1053,6 +1127,13 @@ Partial Class FormAdminCenter
     Friend WithEvents flpAvailable As FlowLayoutPanel
     Friend WithEvents tpBooked As TabPage
     Friend WithEvents flpBooked As FlowLayoutPanel
+    Friend WithEvents cbEndAMPM As ComboBox
+    Friend WithEvents cbEndMinutes As ComboBox
+    Friend WithEvents cbEndHour As ComboBox
+    Friend WithEvents cbStartAMPM As ComboBox
+    Friend WithEvents cbStartMinutes As ComboBox
+    Friend WithEvents cbStartHour As ComboBox
+    Friend WithEvents lblErrorClosingHours As Label
     Friend WithEvents cbEndAMPM As ComboBox
     Friend WithEvents cbEndMinutes As ComboBox
     Friend WithEvents cbEndHour As ComboBox

@@ -22,7 +22,6 @@ Public Class FormAdminCenter
         LoadInvoices()               ' Invoices with Accept Payment
         LoadCustomerCount()          ' Customer Count
         LoadCustomerRecords()        ' Customer Records
-        LoadInvoiceGrid()
 
         ' Set up field indicators and validation for event place data entry.
         Dim labels = {lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
@@ -38,6 +37,7 @@ Public Class FormAdminCenter
     End Sub
 
     ' Add DateChanged event handler for the MonthCalendar control
+
 #Region "Data Loading using HelperResultsDisplay (FlowLayoutPanels)"
 
     '--- Load Event Places (Search Results)
@@ -407,7 +407,6 @@ Public Class FormAdminCenter
     End Sub
 
 
-
 #End Region
 
 #Region "Data Updates Based on Selected Date"
@@ -553,6 +552,20 @@ Public Class FormAdminCenter
         ' Set the formatted opening and closing time for display in the labels
         lblOpeningHours.Text = openingTime
         lblClosingHours.Text = closingTime
+        ' Validate the opening and closing hours based on the ComboBoxes.
+        If Not HelperValidation.IsValidTimeSelection(cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, String.Empty, String.Empty) Then
+            Exit Sub
+        End If
+
+        ' Validate if the opening and closing hours are valid.
+        If String.IsNullOrEmpty(openingTime) OrElse String.IsNullOrEmpty(closingTime) Then Exit Sub
+        ' Create formatted opening and closing time from ComboBoxes
+        Dim openingTime As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
+        Dim closingTime As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
+
+        ' Set the formatted opening and closing time for display in the labels
+        lblOpeningHours.Text = openingTime
+        lblClosingHours.Text = closingTime
 
         ' Validate if the opening and closing hours are valid.
         If String.IsNullOrEmpty(openingTime) OrElse String.IsNullOrEmpty(closingTime) Then Exit Sub
@@ -595,10 +608,17 @@ Public Class FormAdminCenter
         ' Get the opening and closing times from the ComboBoxes
         Dim openingTime As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
         Dim closingTime As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
+        ' Get the opening and closing times from the ComboBoxes
+        Dim openingTime As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"
+        Dim closingTime As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
 
         ' Check if the times are empty
         If String.IsNullOrEmpty(openingTime) OrElse String.IsNullOrEmpty(closingTime) Then Exit Sub
 
+        ' Check if the times are empty
+        If String.IsNullOrEmpty(openingTime) OrElse String.IsNullOrEmpty(closingTime) Then Exit Sub
+
+        ' SQL query to update event place information
         ' SQL query to update event place information
         Dim query As String = "UPDATE eventplace SET event_place = @event_place, event_type = @event_type, capacity = @capacity, features = @features, price_per_day = @price_per_day, description = @description, image_url = @image_url, opening_hours = @opening_hours, closing_hours = @closing_hours, available_days = @available_days WHERE place_id = @place_id"
 

@@ -135,6 +135,12 @@
     <Compile Include="FormBookingDetails.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormCustomerDetails.Designer.vb">
+      <DependentUpon>FormCustomerDetails.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCustomerDetails.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormCustomerView.Designer.vb">
       <DependentUpon>FormCustomerView.vb</DependentUpon>
     </Compile>
@@ -220,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormCustomerAdminInfo.resx">
       <DependentUpon>FormCustomerAdminInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCustomerDetails.resx">
+      <DependentUpon>FormCustomerDetails.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCustomerView.resx">
       <DependentUpon>FormCustomerView.vb</DependentUpon>
