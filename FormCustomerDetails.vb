@@ -71,4 +71,8 @@
         ' Add the panel to the FlowLayoutPanel for bookings
         flpBookings.Controls.Add(panel)
     End Sub
+
+    Private Sub FormCustomerDetails_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
 End Class

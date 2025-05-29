@@ -22,9 +22,6 @@ Partial Class FormAdminCenter
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnLogOut = New System.Windows.Forms.Button()
@@ -43,6 +40,7 @@ Partial Class FormAdminCenter
         Me.tpAll = New System.Windows.Forms.TabPage()
         Me.flpAll = New System.Windows.Forms.FlowLayoutPanel()
         Me.tpEventPlaceMgmt = New System.Windows.Forms.TabPage()
+        Me.flpEventPlaces = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.txtPlaceID = New System.Windows.Forms.TextBox()
         Me.lblPlaceID = New System.Windows.Forms.Label()
@@ -71,13 +69,14 @@ Partial Class FormAdminCenter
         Me.txtPricePerDay = New System.Windows.Forms.TextBox()
         Me.txtCapacity = New System.Windows.Forms.TextBox()
         Me.tpInvoicesAndPayments = New System.Windows.Forms.TabPage()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lblSearch = New System.Windows.Forms.Label()
+        Me.txtSearch = New System.Windows.Forms.TextBox()
+        Me.dgvPaidBookings = New System.Windows.Forms.DataGridView()
+        Me.lblRevenue = New System.Windows.Forms.Label()
         Me.flpRevenueReports = New System.Windows.Forms.FlowLayoutPanel()
-
         Me.tpCustomerRecords = New System.Windows.Forms.TabPage()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblNumCustomersContainer = New System.Windows.Forms.Label()
-        Me.flpCustomerRecords = New System.Windows.Forms.FlowLayoutPanel()
         Me.cbEndAMPM = New System.Windows.Forms.ComboBox()
         Me.cbEndMinutes = New System.Windows.Forms.ComboBox()
         Me.cbEndHour = New System.Windows.Forms.ComboBox()
@@ -85,7 +84,9 @@ Partial Class FormAdminCenter
         Me.cbStartMinutes = New System.Windows.Forms.ComboBox()
         Me.cbStartHour = New System.Windows.Forms.ComboBox()
         Me.lblErrorClosingHours = New System.Windows.Forms.Label()
-        Me.flpEventPlaces = New System.Windows.Forms.FlowLayoutPanel()
+        Me.dgvCustomerRec = New System.Windows.Forms.DataGridView()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtSearchCustomer = New System.Windows.Forms.TextBox()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpBookings.SuspendLayout()
         Me.tcPendApprRej.SuspendLayout()
@@ -96,9 +97,9 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.tpInvoicesAndPayments.SuspendLayout()
-        Me.flpRevenueReports.SuspendLayout()
-
+        CType(Me.dgvPaidBookings, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpCustomerRecords.SuspendLayout()
+        CType(Me.dgvCustomerRec, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btnNext
@@ -158,7 +159,7 @@ Partial Class FormAdminCenter
         Me.lblRole.BackColor = System.Drawing.Color.Transparent
         Me.lblRole.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRole.ForeColor = System.Drawing.Color.Black
-        Me.lblRole.Location = New System.Drawing.Point(888, 42)
+        Me.lblRole.Location = New System.Drawing.Point(860, 41)
         Me.lblRole.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRole.Name = "lblRole"
         Me.lblRole.Size = New System.Drawing.Size(44, 19)
@@ -171,7 +172,7 @@ Partial Class FormAdminCenter
         Me.lblUsername.BackColor = System.Drawing.Color.Transparent
         Me.lblUsername.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.Black
-        Me.lblUsername.Location = New System.Drawing.Point(888, 17)
+        Me.lblUsername.Location = New System.Drawing.Point(860, 16)
         Me.lblUsername.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(80, 19)
@@ -190,7 +191,7 @@ Partial Class FormAdminCenter
         Me.tcAdminCenter.Multiline = True
         Me.tcAdminCenter.Name = "tcAdminCenter"
         Me.tcAdminCenter.SelectedIndex = 0
-        Me.tcAdminCenter.Size = New System.Drawing.Size(1228, 556)
+        Me.tcAdminCenter.Size = New System.Drawing.Size(1224, 556)
         Me.tcAdminCenter.TabIndex = 94
         '
         'tpBookings
@@ -199,7 +200,7 @@ Partial Class FormAdminCenter
         Me.tpBookings.Location = New System.Drawing.Point(4, 28)
         Me.tpBookings.Name = "tpBookings"
         Me.tpBookings.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpBookings.Size = New System.Drawing.Size(1220, 524)
+        Me.tpBookings.Size = New System.Drawing.Size(1216, 524)
         Me.tpBookings.TabIndex = 6
         Me.tpBookings.Text = "Bookings"
         Me.tpBookings.UseVisualStyleBackColor = True
@@ -300,9 +301,17 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 28)
         Me.tpEventPlaceMgmt.Name = "tpEventPlaceMgmt"
         Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1220, 524)
+        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(1216, 524)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
+        '
+        'flpEventPlaces
+        '
+        Me.flpEventPlaces.AutoScroll = True
+        Me.flpEventPlaces.Location = New System.Drawing.Point(18, 19)
+        Me.flpEventPlaces.Name = "flpEventPlaces"
+        Me.flpEventPlaces.Size = New System.Drawing.Size(581, 492)
+        Me.flpEventPlaces.TabIndex = 2
         '
         'GroupBox1
         '
@@ -655,50 +664,85 @@ Partial Class FormAdminCenter
         '
         'tpInvoicesAndPayments
         '
-        Me.tpInvoicesAndPayments.Controls.Add(Me.Label1)
+        Me.tpInvoicesAndPayments.Controls.Add(Me.lblSearch)
+        Me.tpInvoicesAndPayments.Controls.Add(Me.txtSearch)
+        Me.tpInvoicesAndPayments.Controls.Add(Me.dgvPaidBookings)
+        Me.tpInvoicesAndPayments.Controls.Add(Me.lblRevenue)
         Me.tpInvoicesAndPayments.Controls.Add(Me.flpRevenueReports)
         Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 28)
         Me.tpInvoicesAndPayments.Name = "tpInvoicesAndPayments"
         Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(1220, 524)
+        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(1216, 524)
         Me.tpInvoicesAndPayments.TabIndex = 5
         Me.tpInvoicesAndPayments.Text = "Invoices and Payments"
         Me.tpInvoicesAndPayments.UseVisualStyleBackColor = True
         '
-        'Label1
+        'lblSearch
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(8, 4)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(57, 19)
-        Me.Label1.TabIndex = 45
-        Me.Label1.Text = "Revenue"
+        Me.lblSearch.AutoSize = True
+        Me.lblSearch.BackColor = System.Drawing.Color.Transparent
+        Me.lblSearch.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSearch.ForeColor = System.Drawing.Color.Black
+        Me.lblSearch.Location = New System.Drawing.Point(943, 2)
+        Me.lblSearch.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lblSearch.Name = "lblSearch"
+        Me.lblSearch.Size = New System.Drawing.Size(47, 19)
+        Me.lblSearch.TabIndex = 95
+        Me.lblSearch.Text = "Search"
+        '
+        'txtSearch
+        '
+        Me.txtSearch.BackColor = System.Drawing.Color.Gainsboro
+        Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtSearch.ForeColor = System.Drawing.Color.Black
+        Me.txtSearch.Location = New System.Drawing.Point(994, 3)
+        Me.txtSearch.Name = "txtSearch"
+        Me.txtSearch.Size = New System.Drawing.Size(222, 17)
+        Me.txtSearch.TabIndex = 79
+        '
+        'dgvPaidBookings
+        '
+        Me.dgvPaidBookings.AllowUserToAddRows = False
+        Me.dgvPaidBookings.AllowUserToDeleteRows = False
+        Me.dgvPaidBookings.BackgroundColor = System.Drawing.Color.Gainsboro
+        Me.dgvPaidBookings.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.dgvPaidBookings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvPaidBookings.Location = New System.Drawing.Point(310, 22)
+        Me.dgvPaidBookings.Name = "dgvPaidBookings"
+        Me.dgvPaidBookings.ReadOnly = True
+        Me.dgvPaidBookings.Size = New System.Drawing.Size(904, 496)
+        Me.dgvPaidBookings.TabIndex = 46
+        '
+        'lblRevenue
+        '
+        Me.lblRevenue.AutoSize = True
+        Me.lblRevenue.Location = New System.Drawing.Point(8, 4)
+        Me.lblRevenue.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lblRevenue.Name = "lblRevenue"
+        Me.lblRevenue.Size = New System.Drawing.Size(57, 19)
+        Me.lblRevenue.TabIndex = 45
+        Me.lblRevenue.Text = "Revenue"
         '
         'flpRevenueReports
         '
-        Me.flpRevenueReports.Location = New System.Drawing.Point(6, 22)
+        Me.flpRevenueReports.Location = New System.Drawing.Point(-1, 22)
         Me.flpRevenueReports.Name = "flpRevenueReports"
-        Me.flpRevenueReports.Size = New System.Drawing.Size(284, 392)
+        Me.flpRevenueReports.Size = New System.Drawing.Size(299, 496)
         Me.flpRevenueReports.TabIndex = 44
-        '
-        'Chart1
-        '
-        '
-        'dgvInvoice
-        '
         '
         'tpCustomerRecords
         '
         Me.tpCustomerRecords.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.tpCustomerRecords.Controls.Add(Me.Label2)
+        Me.tpCustomerRecords.Controls.Add(Me.txtSearchCustomer)
+        Me.tpCustomerRecords.Controls.Add(Me.dgvCustomerRec)
         Me.tpCustomerRecords.Controls.Add(Me.Label4)
         Me.tpCustomerRecords.Controls.Add(Me.lblNumCustomersContainer)
-        Me.tpCustomerRecords.Controls.Add(Me.flpCustomerRecords)
         Me.tpCustomerRecords.Location = New System.Drawing.Point(4, 28)
         Me.tpCustomerRecords.Margin = New System.Windows.Forms.Padding(4)
         Me.tpCustomerRecords.Name = "tpCustomerRecords"
         Me.tpCustomerRecords.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpCustomerRecords.Size = New System.Drawing.Size(1220, 524)
+        Me.tpCustomerRecords.Size = New System.Drawing.Size(1216, 524)
         Me.tpCustomerRecords.TabIndex = 4
         Me.tpCustomerRecords.Text = "Customer Records"
         '
@@ -707,7 +751,7 @@ Partial Class FormAdminCenter
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.Black
-        Me.Label4.Location = New System.Drawing.Point(1110, 501)
+        Me.Label4.Location = New System.Drawing.Point(1064, 8)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(99, 19)
         Me.Label4.TabIndex = 34
@@ -718,19 +762,12 @@ Partial Class FormAdminCenter
         Me.lblNumCustomersContainer.AutoSize = True
         Me.lblNumCustomersContainer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNumCustomersContainer.ForeColor = System.Drawing.Color.Black
-        Me.lblNumCustomersContainer.Location = New System.Drawing.Point(1110, 482)
+        Me.lblNumCustomersContainer.Location = New System.Drawing.Point(1179, 9)
         Me.lblNumCustomersContainer.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblNumCustomersContainer.Name = "lblNumCustomersContainer"
         Me.lblNumCustomersContainer.Size = New System.Drawing.Size(16, 19)
         Me.lblNumCustomersContainer.TabIndex = 33
         Me.lblNumCustomersContainer.Text = "0"
-        '
-        'flpCustomerRecords
-        '
-        Me.flpCustomerRecords.Location = New System.Drawing.Point(7, 6)
-        Me.flpCustomerRecords.Name = "flpCustomerRecords"
-        Me.flpCustomerRecords.Size = New System.Drawing.Size(900, 371)
-        Me.flpCustomerRecords.TabIndex = 0
         '
         'cbEndAMPM
         '
@@ -807,19 +844,47 @@ Partial Class FormAdminCenter
         Me.lblErrorClosingHours.Size = New System.Drawing.Size(0, 19)
         Me.lblErrorClosingHours.TabIndex = 82
         '
-        'flpEventPlaces
+        'dgvCustomerRec
         '
-        Me.flpEventPlaces.AutoScroll = True
-        Me.flpEventPlaces.Location = New System.Drawing.Point(18, 19)
-        Me.flpEventPlaces.Name = "flpEventPlaces"
-        Me.flpEventPlaces.Size = New System.Drawing.Size(581, 492)
-        Me.flpEventPlaces.TabIndex = 2
+        Me.dgvCustomerRec.AllowUserToAddRows = False
+        Me.dgvCustomerRec.AllowUserToDeleteRows = False
+        Me.dgvCustomerRec.BackgroundColor = System.Drawing.Color.Gainsboro
+        Me.dgvCustomerRec.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.dgvCustomerRec.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvCustomerRec.Location = New System.Drawing.Point(0, 36)
+        Me.dgvCustomerRec.Name = "dgvCustomerRec"
+        Me.dgvCustomerRec.ReadOnly = True
+        Me.dgvCustomerRec.Size = New System.Drawing.Size(1220, 488)
+        Me.dgvCustomerRec.TabIndex = 35
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.BackColor = System.Drawing.Color.Transparent
+        Me.Label2.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.Black
+        Me.Label2.Location = New System.Drawing.Point(8, 9)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(47, 19)
+        Me.Label2.TabIndex = 97
+        Me.Label2.Text = "Search"
+        '
+        'txtSearchCustomer
+        '
+        Me.txtSearchCustomer.BackColor = System.Drawing.Color.Gainsboro
+        Me.txtSearchCustomer.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtSearchCustomer.ForeColor = System.Drawing.Color.Black
+        Me.txtSearchCustomer.Location = New System.Drawing.Point(59, 10)
+        Me.txtSearchCustomer.Name = "txtSearchCustomer"
+        Me.txtSearchCustomer.Size = New System.Drawing.Size(222, 17)
+        Me.txtSearchCustomer.TabIndex = 96
         '
         'FormAdminCenter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(944, 501)
+        Me.ClientSize = New System.Drawing.Size(1252, 620)
         Me.Controls.Add(Me.btnLogOut)
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.lblRole)
@@ -842,9 +907,10 @@ Partial Class FormAdminCenter
         Me.GroupBox1.PerformLayout()
         Me.tpInvoicesAndPayments.ResumeLayout(False)
         Me.tpInvoicesAndPayments.PerformLayout()
-        Me.flpRevenueReports.ResumeLayout(False)
+        CType(Me.dgvPaidBookings, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpCustomerRecords.ResumeLayout(False)
         Me.tpCustomerRecords.PerformLayout()
+        CType(Me.dgvCustomerRec, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -888,7 +954,6 @@ Partial Class FormAdminCenter
     Friend WithEvents tpBookings As TabPage
     Friend WithEvents Label4 As Label
     Friend WithEvents lblNumCustomersContainer As Label
-    Friend WithEvents flpCustomerRecords As FlowLayoutPanel
     Friend WithEvents txtPlaceID As TextBox
     Friend WithEvents lblPlaceID As Label
     Friend WithEvents tcPendApprRej As TabControl
@@ -900,7 +965,7 @@ Partial Class FormAdminCenter
     Friend WithEvents flpApproved As FlowLayoutPanel
     Friend WithEvents flpRejected As FlowLayoutPanel
     Friend WithEvents flpAll As FlowLayoutPanel
-    Friend WithEvents Label1 As Label
+    Friend WithEvents lblRevenue As Label
     Friend WithEvents flpRevenueReports As FlowLayoutPanel
     Friend WithEvents cbEndAMPM As ComboBox
     Friend WithEvents cbEndMinutes As ComboBox
@@ -910,4 +975,10 @@ Partial Class FormAdminCenter
     Friend WithEvents cbStartHour As ComboBox
     Friend WithEvents lblErrorClosingHours As Label
     Friend WithEvents flpEventPlaces As FlowLayoutPanel
+    Friend WithEvents dgvPaidBookings As DataGridView
+    Friend WithEvents txtSearch As TextBox
+    Friend WithEvents lblSearch As Label
+    Friend WithEvents dgvCustomerRec As DataGridView
+    Friend WithEvents Label2 As Label
+    Friend WithEvents txtSearchCustomer As TextBox
 End Class

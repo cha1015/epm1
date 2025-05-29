@@ -569,28 +569,60 @@ Public Class HelperResultsDisplay
 
     '--- Specialized method for Revenue Reports ---
     Public Shared Sub PopulateRevenueReports(ByVal flpRevenueReports As FlowLayoutPanel, ByVal dt As DataTable)
+        ' Create a dictionary to store event places and their total revenue
+        Dim revenueDictionary As New Dictionary(Of String, Decimal)
+
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
                                                          Dim panel As New Panel()
                                                          panel.Size = New Size(250, 60)
                                                          panel.BorderStyle = BorderStyle.FixedSingle
                                                          panel.Margin = New Padding(10)
 
+                                                         Dim eventPlace As String = row("event_place").ToString()
+                                                         Dim totalRevenue As Decimal = Convert.ToDecimal(row("total_revenue"))
+
+                                                         ' Store data in the dictionary
+                                                         revenueDictionary(eventPlace) = totalRevenue
+
                                                          Dim lblEvent As New Label With {
-                                                             .Text = row("event_place").ToString(),
-                                                             .Location = New Point(5, 5),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = eventPlace,
+                                                         .Location = New Point(5, 5),
+                                                         .AutoSize = True
+                                                     }
                                                          Dim lblRevenue As New Label With {
-                                                             .Text = "Revenue: " & row("total_revenue").ToString(),
-                                                             .Location = New Point(5, 30),
-                                                             .AutoSize = True
-                                                         }
+                                                         .Text = "Revenue: ₱" & totalRevenue.ToString("N0"),
+                                                         .Location = New Point(5, 30),
+                                                         .AutoSize = True
+                                                     }
                                                          panel.Controls.Add(lblEvent)
                                                          panel.Controls.Add(lblRevenue)
                                                          Return panel
                                                      End Function
+
         PopulateFlowPanel(flpRevenueReports, dt, createPanel)
     End Sub
+
+    '--- Function to Get Revenue Dictionary
+    Public Shared Function GetRevenueDictionary() As Dictionary(Of String, Decimal)
+        Dim query As String = "SELECT e.event_place, " &
+                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
+                          "FROM eventplace e " &
+                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'Approved' " &
+                          "GROUP BY e.place_id"
+
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+        Dim revenueDictionary As New Dictionary(Of String, Decimal)
+
+        For Each row As DataRow In dt.Rows
+            Dim eventPlace As String = row("event_place").ToString()
+            Dim totalRevenue As Decimal = Convert.ToDecimal(row("total_revenue"))
+            revenueDictionary(eventPlace) = totalRevenue
+        Next
+
+        Return revenueDictionary
+    End Function
+
+
 
     '--- Specialized method for Invoices (with Accept Payment handler) ---
     Public Shared Sub PopulateInvoices(ByVal flpInvoices As FlowLayoutPanel, ByVal dt As DataTable, ByVal paymentHandler As EventHandler)

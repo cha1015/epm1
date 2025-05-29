@@ -289,12 +289,14 @@ Partial Class FormCustomerView
         'lblSelected
         '
         Me.lblSelected.AutoSize = True
+        Me.lblSelected.BackColor = System.Drawing.Color.Transparent
         Me.lblSelected.Font = New System.Drawing.Font("Cinzel", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSelected.Location = New System.Drawing.Point(363, 97)
+        Me.lblSelected.Location = New System.Drawing.Point(369, 94)
         Me.lblSelected.Name = "lblSelected"
         Me.lblSelected.Size = New System.Drawing.Size(11, 15)
         Me.lblSelected.TabIndex = 83
         Me.lblSelected.Text = "-"
+        Me.lblSelected.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'DraggablePanel1
         '

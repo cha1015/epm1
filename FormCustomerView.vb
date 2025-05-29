@@ -622,4 +622,8 @@ Public Class FormCustomerView
     Private Sub FlowLayoutPanel1_Paint(sender As Object, e As PaintEventArgs) Handles FlowLayoutPanel1.Paint
 
     End Sub
+
+    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+
+    End Sub
 End Class

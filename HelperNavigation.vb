@@ -23,7 +23,11 @@
                 previousForm.WindowState = FormWindowState.Normal
             End If
 
-            previousForm.Show()
+            Try
+                previousForm.Show()
+            Catch
+                FormMain.Show()
+            End Try
             previousForm.BringToFront()
             previousForm.Activate()
 

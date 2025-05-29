@@ -7,6 +7,11 @@ Imports System.Windows.Forms.DataVisualization.Charting
 
 Public Class FormAdminCenter
 
+    Private totalRevenueLabel As Label = Nothing
+    Private paidBookingsTable As DataTable
+    Private usersTable As DataTable
+
+
     Private Sub FormAdminCenter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HelperNavigation.RegisterNewForm(Me)
         lblUsername.Text = CurrentUser.Username
@@ -22,6 +27,8 @@ Public Class FormAdminCenter
         LoadInvoices()               ' Invoices with Accept Payment
         LoadCustomerCount()          ' Customer Count
         LoadCustomerRecords()        ' Customer Records
+        LoadPaidBookings()
+
 
         ' Set up field indicators and validation for event place data entry.
         Dim labels = {lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
@@ -287,14 +294,28 @@ Public Class FormAdminCenter
 
     '--- Load Revenue Reports
     Private Sub LoadRevenueReports()
-        Dim query As String = "SELECT e.event_place, " &
-                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
-                          "FROM eventplace e " &
-                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'Approved' " &
-                          "GROUP BY e.place_id"
+        ' Get the total revenue from payments table where payment_status is Paid
+        Dim query As String = "SELECT IFNULL(SUM(amount_paid), 0) AS total_revenue FROM payments WHERE payment_status = 'Paid'"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, dt)
+
+        Dim totalRevenue As Decimal = 0
+        If dt.Rows.Count > 0 AndAlso Not IsDBNull(dt.Rows(0)("total_revenue")) Then
+            totalRevenue = Convert.ToDecimal(dt.Rows(0)("total_revenue"))
+        End If
+
+        ' Format with peso sign and commas
+        lblRevenue.Text = $"Revenue: ₱{totalRevenue:N0}"
+
+        Dim perPlaceQuery As String = "SELECT e.event_place, IFNULL(SUM(p.amount_paid), 0) AS total_revenue " &
+            "FROM eventplace e " &
+            "LEFT JOIN bookings b ON e.place_id = b.place_id " &
+            "LEFT JOIN payments p ON b.booking_id = p.booking_id AND p.payment_status = 'Paid' " &
+            "GROUP BY e.place_id"
+        Dim perPlaceDt As DataTable = DBHelper.GetDataTable(perPlaceQuery, New Dictionary(Of String, Object))
+        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, perPlaceDt)
     End Sub
+
+
 
 
     '--- Load Invoices
@@ -307,6 +328,43 @@ Public Class FormAdminCenter
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         'HelperResultsDisplay.PopulateInvoices(flpInvoices, dt, AddressOf AcceptPayment_Click)
     End Sub
+
+    '--- Load Paid Bookings
+    Private Sub LoadPaidBookings()
+        Dim query As String = "
+        SELECT 
+            b.customer_id, 
+            u.username,
+            u.email,
+            b.booking_id, 
+            b.place_id, 
+            b.total_price, 
+            b.services_availed, 
+            b.num_guests, 
+            b.event_date
+        FROM bookings b
+        LEFT JOIN customers c ON b.customer_id = c.customer_id
+        LEFT JOIN users u ON c.user_id = u.user_id
+        WHERE b.status = 'paid'
+        ORDER BY b.event_date ASC"
+        paidBookingsTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Set "N/A" for any blank or null cell in the table
+        For Each row As DataRow In paidBookingsTable.Rows
+            For Each col As DataColumn In paidBookingsTable.Columns
+                If row.IsNull(col) OrElse String.IsNullOrWhiteSpace(row(col).ToString()) Then
+                    row(col) = "N/A"
+                End If
+            Next
+        Next
+
+        dgvPaidBookings.DataSource = paidBookingsTable
+        Debug.Print("Paid Bookings: " & paidBookingsTable.Rows.Count)
+    End Sub
+
+
+
+
 
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
@@ -332,17 +390,71 @@ Public Class FormAdminCenter
 
     '--- Load Customer Count
     Private Sub LoadCustomerCount()
-        Dim query As String = "SELECT COUNT(*) FROM customers"
+        Dim query As String = "SELECT COUNT(*) FROM users"
         Dim count As Object = DBHelper.ExecuteScalarQuery(query, New Dictionary(Of String, Object))
         lblNumCustomersContainer.Text = If(count IsNot Nothing, count.ToString(), "0")
     End Sub
 
     '--- Load Customer Records
     Private Sub LoadCustomerRecords()
-        Dim query As String = "SELECT customer_id, name, age, birthday, sex, address FROM customers ORDER BY name ASC"
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateCustomerRecords(flpCustomerRecords, dt)
+        Dim query As String = "SELECT 
+        user_id, 
+        first_name, 
+        last_name, 
+        username, 
+        email, 
+        role, 
+        birthday, 
+        age, 
+        sex, 
+        address 
+    FROM users 
+    ORDER BY first_name, last_name ASC"
+        usersTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+
+        ' Set "N/A" for any blank or null cell in the table
+        For Each row As DataRow In usersTable.Rows
+            For Each col As DataColumn In usersTable.Columns
+                If row.IsNull(col) OrElse String.IsNullOrWhiteSpace(row(col).ToString()) Then
+                    row(col) = "N/A"
+                End If
+            Next
+        Next
+
+        dgvCustomerRec.DataSource = usersTable
+
+        With dgvCustomerRec
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+            .AutoResizeColumns()
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        End With
     End Sub
+
+    Private Sub FilterCustomerRecords()
+        If usersTable Is Nothing Then Return
+
+        Dim searchText As String = txtSearchCustomer.Text.Trim().Replace("'", "''")
+        If String.IsNullOrEmpty(searchText) Then
+            dgvCustomerRec.DataSource = usersTable
+        Else
+            Dim filter As String =
+            $"CONVERT(user_id, 'System.String') LIKE '%{searchText}%' OR " &
+            $"first_name LIKE '%{searchText}%' OR " &
+            $"last_name LIKE '%{searchText}%' OR " &
+            $"username LIKE '%{searchText}%' OR " &
+            $"email LIKE '%{searchText}%' OR " &
+            $"role LIKE '%{searchText}%' OR " &
+            $"CONVERT(birthday, 'System.String') LIKE '%{searchText}%' OR " &
+            $"CONVERT(age, 'System.String') LIKE '%{searchText}%' OR " &
+            $"sex LIKE '%{searchText}%' OR " &
+            $"address LIKE '%{searchText}%'"
+
+            Dim dv As New DataView(usersTable)
+            dv.RowFilter = filter
+            dgvCustomerRec.DataSource = dv
+        End If
+    End Sub
+
 
 
 #End Region
@@ -618,7 +730,7 @@ Public Class FormAdminCenter
 
             Dim mainForm As New FormMain()
             mainForm.Show()
-            Me.Hide()
+            Me.Close()
         End If
     End Sub
 
@@ -645,6 +757,43 @@ Public Class FormAdminCenter
     Private Sub btnEditInformation_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
         editForm.ShowDialog()
+    End Sub
+
+    Private Sub FilterPaidBookings()
+        If paidBookingsTable Is Nothing Then Return
+
+        Dim searchText As String = txtSearch.Text.Trim().Replace("'", "''")
+        If String.IsNullOrEmpty(searchText) Then
+            dgvPaidBookings.DataSource = paidBookingsTable
+        Else
+            Dim filter As String = $"CONVERT(customer_id, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(booking_id, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(place_id, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(total_price, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(services_availed, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(num_guests, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(event_date, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(username, 'System.String') LIKE '%{searchText}%' OR " &
+                       $"CONVERT(email, 'System.String') LIKE '%{searchText}%'"
+
+            Dim dv As New DataView(paidBookingsTable)
+            dv.RowFilter = filter
+            dgvPaidBookings.DataSource = dv
+        End If
+    End Sub
+    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+        FilterPaidBookings()
+    End Sub
+
+    Private Sub tpCustomerRecords_Click(sender As Object, e As EventArgs) Handles tpCustomerRecords.Click
+
+    End Sub
+
+    Private Sub tpInvoicesAndPayments_Click(sender As Object, e As EventArgs) Handles tpInvoicesAndPayments.Click
+
+    End Sub
+    Private Sub txtSearchCustomer_TextChanged(sender As Object, e As EventArgs) Handles txtSearchCustomer.TextChanged
+        FilterCustomerRecords()
     End Sub
 
 End Class
