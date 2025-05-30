@@ -170,7 +170,7 @@ Partial Class FormAdminCenter
         Me.lblRole.ForeColor = System.Drawing.Color.White
         Me.lblRole.Location = New System.Drawing.Point(746, 43)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(46, 13)
+        Me.lblRole.Size = New System.Drawing.Size(46, 15)
         Me.lblRole.TabIndex = 91
         Me.lblRole.Text = "Admin"
         '
@@ -182,7 +182,7 @@ Partial Class FormAdminCenter
         Me.lblUsername.ForeColor = System.Drawing.Color.White
         Me.lblUsername.Location = New System.Drawing.Point(746, 27)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(84, 13)
+        Me.lblUsername.Size = New System.Drawing.Size(80, 15)
         Me.lblUsername.TabIndex = 90
         Me.lblUsername.Text = "Admin Name"
         '
@@ -225,10 +225,10 @@ Partial Class FormAdminCenter
         '
         Me.tpBookings.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpBookings.Controls.Add(Me.tcPendApprRej)
-        Me.tpBookings.Location = New System.Drawing.Point(4, 22)
+        Me.tpBookings.Location = New System.Drawing.Point(4, 30)
         Me.tpBookings.Name = "tpBookings"
         Me.tpBookings.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpBookings.Size = New System.Drawing.Size(913, 393)
+        Me.tpBookings.Size = New System.Drawing.Size(913, 385)
         Me.tpBookings.TabIndex = 6
         Me.tpBookings.Text = "Bookings"
         Me.tpBookings.UseVisualStyleBackColor = True
@@ -250,11 +250,11 @@ Partial Class FormAdminCenter
         '
         Me.tpPendings.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpPendings.Controls.Add(Me.flpPending)
-        Me.tpPendings.Location = New System.Drawing.Point(4, 22)
+        Me.tpPendings.Location = New System.Drawing.Point(4, 30)
         Me.tpPendings.Margin = New System.Windows.Forms.Padding(2)
         Me.tpPendings.Name = "tpPendings"
         Me.tpPendings.Padding = New System.Windows.Forms.Padding(2)
-        Me.tpPendings.Size = New System.Drawing.Size(896, 353)
+        Me.tpPendings.Size = New System.Drawing.Size(896, 345)
         Me.tpPendings.TabIndex = 0
         Me.tpPendings.Text = "Pendings"
         Me.tpPendings.UseVisualStyleBackColor = True
@@ -272,11 +272,11 @@ Partial Class FormAdminCenter
         '
         Me.tpApproved.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpApproved.Controls.Add(Me.flpApproved)
-        Me.tpApproved.Location = New System.Drawing.Point(4, 22)
+        Me.tpApproved.Location = New System.Drawing.Point(4, 24)
         Me.tpApproved.Margin = New System.Windows.Forms.Padding(2)
         Me.tpApproved.Name = "tpApproved"
         Me.tpApproved.Padding = New System.Windows.Forms.Padding(2)
-        Me.tpApproved.Size = New System.Drawing.Size(896, 353)
+        Me.tpApproved.Size = New System.Drawing.Size(896, 351)
         Me.tpApproved.TabIndex = 1
         Me.tpApproved.Text = "Approved"
         Me.tpApproved.UseVisualStyleBackColor = True
@@ -294,11 +294,11 @@ Partial Class FormAdminCenter
         '
         Me.tpRejected.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpRejected.Controls.Add(Me.flpRejected)
-        Me.tpRejected.Location = New System.Drawing.Point(4, 22)
+        Me.tpRejected.Location = New System.Drawing.Point(4, 30)
         Me.tpRejected.Margin = New System.Windows.Forms.Padding(2)
         Me.tpRejected.Name = "tpRejected"
         Me.tpRejected.Padding = New System.Windows.Forms.Padding(2)
-        Me.tpRejected.Size = New System.Drawing.Size(896, 353)
+        Me.tpRejected.Size = New System.Drawing.Size(896, 345)
         Me.tpRejected.TabIndex = 2
         Me.tpRejected.Text = "Rejected"
         Me.tpRejected.UseVisualStyleBackColor = True
@@ -316,11 +316,11 @@ Partial Class FormAdminCenter
         '
         Me.tpAll.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpAll.Controls.Add(Me.flpAll)
-        Me.tpAll.Location = New System.Drawing.Point(4, 22)
+        Me.tpAll.Location = New System.Drawing.Point(4, 24)
         Me.tpAll.Margin = New System.Windows.Forms.Padding(2)
         Me.tpAll.Name = "tpAll"
         Me.tpAll.Padding = New System.Windows.Forms.Padding(2)
-        Me.tpAll.Size = New System.Drawing.Size(896, 353)
+        Me.tpAll.Size = New System.Drawing.Size(896, 351)
         Me.tpAll.TabIndex = 3
         Me.tpAll.Text = "All"
         Me.tpAll.UseVisualStyleBackColor = True
@@ -339,10 +339,10 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpEventPlaceMgmt.Controls.Add(Me.flpEventPlaces)
         Me.tpEventPlaceMgmt.Controls.Add(Me.GroupBox1)
-        Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 22)
+        Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 24)
         Me.tpEventPlaceMgmt.Name = "tpEventPlaceMgmt"
         Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(913, 393)
+        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(913, 391)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
         '
@@ -404,6 +404,7 @@ Partial Class FormAdminCenter
         'lblErrorClosingHours
         '
         Me.lblErrorClosingHours.AutoSize = True
+        Me.lblErrorClosingHours.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblErrorClosingHours.Location = New System.Drawing.Point(316, 215)
         Me.lblErrorClosingHours.Name = "lblErrorClosingHours"
         Me.lblErrorClosingHours.Size = New System.Drawing.Size(0, 19)
@@ -413,6 +414,7 @@ Partial Class FormAdminCenter
         '
         Me.cbEndAMPM.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbEndAMPM.Font = New System.Drawing.Font("Poppins", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndAMPM.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.cbEndAMPM.FormattingEnabled = True
         Me.cbEndAMPM.Items.AddRange(New Object() {"AM", "PM"})
         Me.cbEndAMPM.Location = New System.Drawing.Point(245, 213)
@@ -424,6 +426,7 @@ Partial Class FormAdminCenter
         '
         Me.cbEndMinutes.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbEndMinutes.Font = New System.Drawing.Font("Poppins", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndMinutes.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.cbEndMinutes.FormattingEnabled = True
         Me.cbEndMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
         Me.cbEndMinutes.Location = New System.Drawing.Point(174, 213)
@@ -435,6 +438,7 @@ Partial Class FormAdminCenter
         '
         Me.cbEndHour.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbEndHour.Font = New System.Drawing.Font("Poppins", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbEndHour.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.cbEndHour.FormattingEnabled = True
         Me.cbEndHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
         Me.cbEndHour.Location = New System.Drawing.Point(103, 213)
@@ -446,6 +450,7 @@ Partial Class FormAdminCenter
         '
         Me.cbStartAMPM.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbStartAMPM.Font = New System.Drawing.Font("Poppins", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartAMPM.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.cbStartAMPM.FormattingEnabled = True
         Me.cbStartAMPM.Items.AddRange(New Object() {"AM", "PM"})
         Me.cbStartAMPM.Location = New System.Drawing.Point(245, 185)
@@ -457,6 +462,7 @@ Partial Class FormAdminCenter
         '
         Me.cbStartMinutes.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbStartMinutes.Font = New System.Drawing.Font("Poppins", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartMinutes.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.cbStartMinutes.FormattingEnabled = True
         Me.cbStartMinutes.Items.AddRange(New Object() {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"})
         Me.cbStartMinutes.Location = New System.Drawing.Point(174, 185)
@@ -468,6 +474,7 @@ Partial Class FormAdminCenter
         '
         Me.cbStartHour.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbStartHour.Font = New System.Drawing.Font("Poppins", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbStartHour.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.cbStartHour.FormattingEnabled = True
         Me.cbStartHour.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
         Me.cbStartHour.Location = New System.Drawing.Point(103, 185)
@@ -480,7 +487,7 @@ Partial Class FormAdminCenter
         Me.txtPlaceID.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtPlaceID.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtPlaceID.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPlaceID.ForeColor = System.Drawing.Color.Black
+        Me.txtPlaceID.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtPlaceID.Location = New System.Drawing.Point(103, 20)
         Me.txtPlaceID.Name = "txtPlaceID"
         Me.txtPlaceID.Size = New System.Drawing.Size(305, 17)
@@ -500,6 +507,7 @@ Partial Class FormAdminCenter
         'lblErrorCapacity
         '
         Me.lblErrorCapacity.AutoSize = True
+        Me.lblErrorCapacity.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblErrorCapacity.Location = New System.Drawing.Point(192, 98)
         Me.lblErrorCapacity.Name = "lblErrorCapacity"
         Me.lblErrorCapacity.Size = New System.Drawing.Size(0, 19)
@@ -508,6 +516,7 @@ Partial Class FormAdminCenter
         'lblErrorOpeningHours
         '
         Me.lblErrorOpeningHours.AutoSize = True
+        Me.lblErrorOpeningHours.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblErrorOpeningHours.Location = New System.Drawing.Point(316, 193)
         Me.lblErrorOpeningHours.Name = "lblErrorOpeningHours"
         Me.lblErrorOpeningHours.Size = New System.Drawing.Size(0, 19)
@@ -516,6 +525,7 @@ Partial Class FormAdminCenter
         'lblErrorPrice
         '
         Me.lblErrorPrice.AutoSize = True
+        Me.lblErrorPrice.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblErrorPrice.Location = New System.Drawing.Point(192, 121)
         Me.lblErrorPrice.Name = "lblErrorPrice"
         Me.lblErrorPrice.Size = New System.Drawing.Size(0, 19)
@@ -568,7 +578,7 @@ Partial Class FormAdminCenter
         Me.txtAvailableDays.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtAvailableDays.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtAvailableDays.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAvailableDays.ForeColor = System.Drawing.Color.Black
+        Me.txtAvailableDays.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtAvailableDays.Location = New System.Drawing.Point(103, 241)
         Me.txtAvailableDays.Name = "txtAvailableDays"
         Me.txtAvailableDays.Size = New System.Drawing.Size(305, 17)
@@ -612,7 +622,7 @@ Partial Class FormAdminCenter
         Me.txtImageUrl.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtImageUrl.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtImageUrl.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtImageUrl.ForeColor = System.Drawing.Color.Black
+        Me.txtImageUrl.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtImageUrl.Location = New System.Drawing.Point(103, 162)
         Me.txtImageUrl.Name = "txtImageUrl"
         Me.txtImageUrl.Size = New System.Drawing.Size(305, 17)
@@ -645,7 +655,7 @@ Partial Class FormAdminCenter
         Me.txtFeatures.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtFeatures.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtFeatures.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtFeatures.ForeColor = System.Drawing.Color.Black
+        Me.txtFeatures.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtFeatures.Location = New System.Drawing.Point(103, 139)
         Me.txtFeatures.Name = "txtFeatures"
         Me.txtFeatures.Size = New System.Drawing.Size(305, 17)
@@ -656,7 +666,7 @@ Partial Class FormAdminCenter
         Me.txtDescription.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtDescription.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription.ForeColor = System.Drawing.Color.Black
+        Me.txtDescription.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtDescription.Location = New System.Drawing.Point(103, 264)
         Me.txtDescription.Multiline = True
         Me.txtDescription.Name = "txtDescription"
@@ -679,7 +689,7 @@ Partial Class FormAdminCenter
         Me.txtEventType.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtEventType.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtEventType.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtEventType.ForeColor = System.Drawing.Color.Black
+        Me.txtEventType.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtEventType.Location = New System.Drawing.Point(103, 68)
         Me.txtEventType.Name = "txtEventType"
         Me.txtEventType.Size = New System.Drawing.Size(305, 17)
@@ -701,7 +711,7 @@ Partial Class FormAdminCenter
         Me.txtEventPlace.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtEventPlace.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtEventPlace.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtEventPlace.ForeColor = System.Drawing.Color.Black
+        Me.txtEventPlace.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtEventPlace.Location = New System.Drawing.Point(103, 43)
         Me.txtEventPlace.Name = "txtEventPlace"
         Me.txtEventPlace.Size = New System.Drawing.Size(305, 17)
@@ -745,7 +755,7 @@ Partial Class FormAdminCenter
         Me.txtPricePerDay.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtPricePerDay.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtPricePerDay.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPricePerDay.ForeColor = System.Drawing.Color.Black
+        Me.txtPricePerDay.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtPricePerDay.Location = New System.Drawing.Point(103, 116)
         Me.txtPricePerDay.Name = "txtPricePerDay"
         Me.txtPricePerDay.Size = New System.Drawing.Size(83, 17)
@@ -756,7 +766,7 @@ Partial Class FormAdminCenter
         Me.txtCapacity.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtCapacity.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtCapacity.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCapacity.ForeColor = System.Drawing.Color.Black
+        Me.txtCapacity.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtCapacity.Location = New System.Drawing.Point(103, 92)
         Me.txtCapacity.Name = "txtCapacity"
         Me.txtCapacity.Size = New System.Drawing.Size(83, 17)
@@ -770,10 +780,10 @@ Partial Class FormAdminCenter
         Me.tpInvoicesAndPayments.Controls.Add(Me.txtSearch)
         Me.tpInvoicesAndPayments.Controls.Add(Me.lblRevenue)
         Me.tpInvoicesAndPayments.Controls.Add(Me.flpRevenueReports)
-        Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 22)
+        Me.tpInvoicesAndPayments.Location = New System.Drawing.Point(4, 24)
         Me.tpInvoicesAndPayments.Name = "tpInvoicesAndPayments"
         Me.tpInvoicesAndPayments.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(913, 393)
+        Me.tpInvoicesAndPayments.Size = New System.Drawing.Size(913, 391)
         Me.tpInvoicesAndPayments.TabIndex = 5
         Me.tpInvoicesAndPayments.Text = "Invoices and Payments"
         Me.tpInvoicesAndPayments.UseVisualStyleBackColor = True
@@ -811,7 +821,7 @@ Partial Class FormAdminCenter
         Me.txtSearch.ForeColor = System.Drawing.Color.Black
         Me.txtSearch.Location = New System.Drawing.Point(685, 6)
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(222, 14)
+        Me.txtSearch.Size = New System.Drawing.Size(222, 15)
         Me.txtSearch.TabIndex = 96
         '
         'lblRevenue
@@ -820,7 +830,7 @@ Partial Class FormAdminCenter
         Me.lblRevenue.Location = New System.Drawing.Point(25, 6)
         Me.lblRevenue.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRevenue.Name = "lblRevenue"
-        Me.lblRevenue.Size = New System.Drawing.Size(56, 13)
+        Me.lblRevenue.Size = New System.Drawing.Size(56, 15)
         Me.lblRevenue.TabIndex = 47
         Me.lblRevenue.Text = "Revenue"
         '
@@ -840,10 +850,10 @@ Partial Class FormAdminCenter
         Me.tpCustomerRecords.Controls.Add(Me.lblNumCustomersContainer)
         Me.tpCustomerRecords.Controls.Add(Me.Label2)
         Me.tpCustomerRecords.Controls.Add(Me.txtSearchCustomer)
-        Me.tpCustomerRecords.Location = New System.Drawing.Point(4, 22)
+        Me.tpCustomerRecords.Location = New System.Drawing.Point(4, 24)
         Me.tpCustomerRecords.Name = "tpCustomerRecords"
         Me.tpCustomerRecords.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpCustomerRecords.Size = New System.Drawing.Size(913, 393)
+        Me.tpCustomerRecords.Size = New System.Drawing.Size(913, 391)
         Me.tpCustomerRecords.TabIndex = 4
         Me.tpCustomerRecords.Text = "Customer Records"
         '
@@ -900,10 +910,10 @@ Partial Class FormAdminCenter
         '
         Me.txtSearchCustomer.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtSearchCustomer.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtSearchCustomer.ForeColor = System.Drawing.Color.Black
+        Me.txtSearchCustomer.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtSearchCustomer.Location = New System.Drawing.Point(54, 6)
         Me.txtSearchCustomer.Name = "txtSearchCustomer"
-        Me.txtSearchCustomer.Size = New System.Drawing.Size(222, 14)
+        Me.txtSearchCustomer.Size = New System.Drawing.Size(222, 15)
         Me.txtSearchCustomer.TabIndex = 98
         '
         'FormAdminCenter

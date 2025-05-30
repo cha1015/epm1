@@ -406,4 +406,7 @@ Public Class FormBooking
         HelperNavigation.GoNext(Me)
     End Sub
 
+    Private Sub tpBookingDetails_Click(sender As Object, e As EventArgs) Handles tpBookingDetails.Click
+
+    End Sub
 End Class

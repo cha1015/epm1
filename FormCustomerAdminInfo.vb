@@ -299,4 +299,12 @@ Imports System.Security.Cryptography
             ' Revert the password change panel visibility
             pnlPass.Visible = False
         End Sub
+
+    Private Sub tpPersonalInfo_Click(sender As Object, e As EventArgs) Handles tpPersonalInfo.Click
+
+    End Sub
+
+    Private Sub txtUsername_TextChanged(sender As Object, e As EventArgs) Handles txtUsername.TextChanged
+
+    End Sub
 End Class

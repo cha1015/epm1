@@ -68,7 +68,7 @@ Partial Class FormMain
         Me.Label11.Location = New System.Drawing.Point(43, 102)
         Me.Label11.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(53, 13)
+        Me.Label11.Size = New System.Drawing.Size(53, 15)
         Me.Label11.TabIndex = 80
         Me.Label11.Text = "Sort By"
         '
@@ -135,7 +135,7 @@ Partial Class FormMain
         Me.Label4.Location = New System.Drawing.Point(6, 255)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(39, 13)
+        Me.Label4.Size = New System.Drawing.Size(39, 15)
         Me.Label4.TabIndex = 73
         Me.Label4.Text = "Price"
         '
@@ -148,7 +148,7 @@ Partial Class FormMain
         Me.Label3.Location = New System.Drawing.Point(7, 210)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(64, 13)
+        Me.Label3.Size = New System.Drawing.Size(61, 15)
         Me.Label3.TabIndex = 72
         Me.Label3.Text = "Capacity"
         '
@@ -161,7 +161,7 @@ Partial Class FormMain
         Me.Label2.Location = New System.Drawing.Point(7, 117)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(90, 13)
+        Me.Label2.Size = New System.Drawing.Size(85, 15)
         Me.Label2.TabIndex = 71
         Me.Label2.Text = "Available On"
         '
@@ -232,13 +232,13 @@ Partial Class FormMain
         Me.cbSort.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbSort.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.cbSort.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbSort.ForeColor = System.Drawing.Color.DarkGray
+        Me.cbSort.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.cbSort.FormattingEnabled = True
         Me.cbSort.Items.AddRange(New Object() {"Alphabetical (A-Z)", "Alphabetical (Z-A)", "Capacity (Lowest to Highest)", "Capacity (Highest to Lowest)", "Price (Lowest to Highest)", "Price (Highest to Lowest)"})
         Me.cbSort.Location = New System.Drawing.Point(100, 95)
         Me.cbSort.Margin = New System.Windows.Forms.Padding(2)
         Me.cbSort.Name = "cbSort"
-        Me.cbSort.Size = New System.Drawing.Size(224, 30)
+        Me.cbSort.Size = New System.Drawing.Size(224, 29)
         Me.cbSort.TabIndex = 56
         '
         'txtMinPrice
@@ -319,7 +319,7 @@ Partial Class FormMain
         Me.lblUsername.Location = New System.Drawing.Point(12, 13)
         Me.lblUsername.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(74, 19)
+        Me.lblUsername.Size = New System.Drawing.Size(69, 19)
         Me.lblUsername.TabIndex = 37
         Me.lblUsername.Text = "Username"
         '
@@ -347,7 +347,7 @@ Partial Class FormMain
         Me.lblUser.Location = New System.Drawing.Point(12, 32)
         Me.lblUser.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblUser.Name = "lblUser"
-        Me.lblUser.Size = New System.Drawing.Size(34, 13)
+        Me.lblUser.Size = New System.Drawing.Size(34, 15)
         Me.lblUser.TabIndex = 39
         Me.lblUser.Text = "User"
         '
@@ -374,7 +374,7 @@ Partial Class FormMain
         Me.txtSearch.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtSearch.Font = New System.Drawing.Font("Poppins", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSearch.ForeColor = System.Drawing.Color.DimGray
+        Me.txtSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtSearch.Location = New System.Drawing.Point(229, 32)
         Me.txtSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSearch.Name = "txtSearch"
@@ -400,7 +400,7 @@ Partial Class FormMain
         Me.Label1.Location = New System.Drawing.Point(7, 10)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(73, 13)
+        Me.Label1.Size = New System.Drawing.Size(72, 15)
         Me.Label1.TabIndex = 70
         Me.Label1.Text = "Event Type"
         '

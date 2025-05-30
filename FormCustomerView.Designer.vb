@@ -56,7 +56,7 @@ Partial Class FormCustomerView
         Me.lblSelected.Font = New System.Drawing.Font("Cinzel", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSelected.Location = New System.Drawing.Point(356, 94)
         Me.lblSelected.Name = "lblSelected"
-        Me.lblSelected.Size = New System.Drawing.Size(11, 13)
+        Me.lblSelected.Size = New System.Drawing.Size(11, 15)
         Me.lblSelected.TabIndex = 98
         Me.lblSelected.Text = "-"
         Me.lblSelected.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -117,7 +117,7 @@ Partial Class FormCustomerView
         '
         Me.txtSearch.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtSearch.ForeColor = System.Drawing.Color.Black
+        Me.txtSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtSearch.Location = New System.Drawing.Point(93, 98)
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.Size = New System.Drawing.Size(222, 13)
@@ -241,7 +241,7 @@ Partial Class FormCustomerView
         Me.lblRole.ForeColor = System.Drawing.Color.White
         Me.lblRole.Location = New System.Drawing.Point(743, 43)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(46, 13)
+        Me.lblRole.Size = New System.Drawing.Size(46, 15)
         Me.lblRole.TabIndex = 85
         Me.lblRole.Text = "Admin"
         '
@@ -266,7 +266,7 @@ Partial Class FormCustomerView
         Me.lblUsername.ForeColor = System.Drawing.Color.White
         Me.lblUsername.Location = New System.Drawing.Point(743, 23)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(81, 13)
+        Me.lblUsername.Size = New System.Drawing.Size(81, 15)
         Me.lblUsername.TabIndex = 84
         Me.lblUsername.Text = "Admin Name"
         '

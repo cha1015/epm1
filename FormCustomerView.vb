@@ -274,8 +274,7 @@ Public Class FormCustomerView
             pb.Image = TryCast(My.Resources.ResourceManager.GetObject(imageName), Image)
             pb.BackColor = Color.White
             pb.BorderStyle = BorderStyle.None
-            AddHandler pb.Paint, AddressOf MakePictureBoxRoundedRect
-            panel.Controls.Add(pb)
+
 
             ' Panel1: Place Name (rounded rectangle, set region directly)
             Dim panel1 As New Panel()
@@ -284,7 +283,6 @@ Public Class FormCustomerView
             panel1.BackColor = Color.FromArgb(255, 206, 200, 189)
             panel1.BorderStyle = BorderStyle.None
             SetPanelDoubleBuffered(panel1)
-            SetPanelRoundedRect(panel1, 18) ' Set region directly
 
             Dim lblPlaceName As New Label()
             lblPlaceName.Text = dataRow("event_place").ToString()
@@ -526,27 +524,15 @@ Public Class FormCustomerView
     End Sub
 
 
-    Private Sub SetPanelRoundedRect(p As Panel, cornerRadius As Integer)
-        Dim path As New Drawing2D.GraphicsPath()
-        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
-        path.AddArc(p.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
-        path.AddArc(p.Width - cornerRadius, p.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
-        path.AddArc(0, p.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
-        path.CloseFigure()
-        p.Region = New Region(path)
+    Private Sub SetPanelRect(p As Panel)
+        p.Region = New Region(New Rectangle(0, 0, p.Width, p.Height))
     End Sub
 
-    Private Sub MakePictureBoxRoundedRect(sender As Object, e As PaintEventArgs)
+    Private Sub MakePictureBoxRect(sender As Object, e As PaintEventArgs)
         Dim pb As PictureBox = CType(sender, PictureBox)
-        Dim cornerRadius As Integer = 32
-        Dim path As New Drawing2D.GraphicsPath()
-        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
-        path.AddArc(pb.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
-        path.AddArc(pb.Width - cornerRadius, pb.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
-        path.AddArc(0, pb.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
-        path.CloseFigure()
-        pb.Region = New Region(path)
+        pb.Region = New Region(New Rectangle(0, 0, pb.Width, pb.Height))
     End Sub
+
 
 
     Private Sub lblUsername_Click(sender As Object, e As EventArgs) Handles lblUsername.Click
@@ -618,6 +604,10 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+
+    End Sub
+
+    Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
 
     End Sub
 End Class
