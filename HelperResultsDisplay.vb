@@ -630,80 +630,6 @@ Public Class HelperResultsDisplay
         PopulateFlowPanel(flpInvoices, dt, createPanel)
     End Sub
 
-    '--- Specialized method for Customer Records ---
-    'Public Shared Sub PopulateCustomerRecords(ByVal flpCustomerRecords As FlowLayoutPanel, ByVal dt As DataTable)
-    '    Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
-    '                                                     Dim panel As New Panel()
-    '                                                     panel.Size = New Size(300, 80)
-    '                                                     panel.BorderStyle = BorderStyle.FixedSingle
-    '                                                     panel.Margin = New Padding(10)
-
-    '                                                     ' Label for customer name
-    '                                                     Dim lblName As New Label With {
-    '                                                     .Text = row("name").ToString(),
-    '                                                     .Location = New Point(5, 5),
-    '                                                     .AutoSize = True
-    '                                                 }
-    '                                                     ' Label for age
-    '                                                     Dim lblAge As New Label With {
-    '                                                     .Text = "Age: " & row("age").ToString(),
-    '                                                     .Location = New Point(5, 25),
-    '                                                     .AutoSize = True
-    '                                                 }
-    '                                                     ' Label for address
-    '                                                     Dim lblAddress As New Label With {
-    '                                                     .Text = "Address: " & row("address").ToString(),
-    '                                                     .Location = New Point(5, 45),
-    '                                                     .AutoSize = True
-    '                                                 }
-
-    '                                                     panel.Controls.Add(lblName)
-    '                                                     panel.Controls.Add(lblAge)
-    '                                                     panel.Controls.Add(lblAddress)
-
-    '                                                     ' Add click event to open customer details
-    '                                                     AddHandler panel.Click, Sub(sender, e)
-    '                                                                                 ShowCustomerDetails(row)
-    '                                                                             End Sub
-
-    '                                                     Return panel
-    '                                                 End Function
-
-    '    PopulateFlowPanel(flpCustomerRecords, dt, createPanel)
-    'End Sub
-
-    ' This method will be called when a customer panel is clicked to show their details
-    'Public Shared Sub ShowCustomerDetails(row As DataRow)
-    '    ' Create a new form to show customer details
-    '    Dim customerDetailsForm As New FormCustomerDetails()
-
-    '    ' Set the personal information in the form
-    '    customerDetailsForm.lblCustomerName.Text = row("name").ToString()
-    '    customerDetailsForm.lblBirthday.Text = row("birthday").ToString()
-    '    customerDetailsForm.lblAge.Text = row("age").ToString()
-    '    customerDetailsForm.lblSex.Text = row("sex").ToString()
-    '    customerDetailsForm.lblAddress.Text = row("address").ToString()
-
-    '    ' Retrieve account details from the User table or related tables
-    '    Dim userId As Integer = row("customer_id")  ' Assuming 'customer_id' is the linking field
-    '    Dim accountDetails As DataTable = DBHelper.GetDataTable("SELECT username, email FROM Users WHERE customer_id = @customer_id", New Dictionary(Of String, Object) From {{"@customer_id", userId}})
-    '    If accountDetails.Rows.Count > 0 Then
-    '        customerDetailsForm.lblUsername.Text = accountDetails.Rows(0)("username").ToString()
-    '        customerDetailsForm.lblEmail.Text = accountDetails.Rows(0)("email").ToString()
-    '    End If
-
-    '    ' Load the bookings for the customer
-    '    Dim bookings As DataTable = DBHelper.GetDataTable("SELECT booking_id, event_place, event_date, total_price, status FROM bookings WHERE customer_id = @customer_id", New Dictionary(Of String, Object) From {{"@customer_id", userId}})
-    '    For Each booking As DataRow In bookings.Rows
-    '        ' For each booking, show details like event place, booking date, cost, status, etc.
-    '        customerDetailsForm.AddBookingDetails(booking)
-    '    Next
-
-    '    ' Show the customer details form
-    '    customerDetailsForm.ShowDialog()
-    'End Sub
-
-
     '--- Specialized method for Booked Dates ---
     Public Shared Sub PopulateBookedDates(ByVal flpBookedDates As FlowLayoutPanel, ByVal dt As DataTable)
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
@@ -740,19 +666,17 @@ Public Class HelperResultsDisplay
                                                   ByVal txtAvailableDays As TextBox,
                                                   ByVal txtDescription As TextBox,
                                                   ByVal txtPlaceID As TextBox,
+                                                  ByVal btnAdd As Button,
                                                   ByVal btnUpdate As Button,
                                                   ByVal btnDelete As Button)
 
-        ' Clear the FlowLayoutPanel before adding new controls
         flpEventPlaces.Controls.Clear()
 
-        ' Compute the dimensions for each panel
         Dim scrollbarWidth As Integer = SystemInformation.VerticalScrollBarWidth
         Dim availableWidth As Integer = flpEventPlaces.Width - scrollbarWidth - (10 * 6)
         Dim panelWidth As Integer = availableWidth \ 3
         Dim panelHeight As Integer = 180 ' Adjusted height for image and name
 
-        ' Create the event place panel for each DataRow
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
                                                          Dim panel As New Panel()
                                                          panel.Size = New Size(panelWidth, panelHeight)
@@ -827,9 +751,11 @@ Public Class HelperResultsDisplay
 
                                                                                      ' Show Update/Delete buttons only if the event place is available
                                                                                      If availStatus = "available" Then
+                                                                                         btnAdd.Visible = False
                                                                                          btnUpdate.Visible = True
                                                                                          btnDelete.Visible = True
                                                                                      Else
+                                                                                         btnAdd.Visible = False
                                                                                          btnUpdate.Visible = False
                                                                                          btnDelete.Visible = False
                                                                                      End If

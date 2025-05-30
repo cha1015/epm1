@@ -70,7 +70,7 @@ Partial Class FormCustomerView
         Me.btnPaid.ForeColor = System.Drawing.Color.Transparent
         Me.btnPaid.Location = New System.Drawing.Point(839, 96)
         Me.btnPaid.Name = "btnPaid"
-        Me.btnPaid.Size = New System.Drawing.Size(59, 16)
+        Me.btnPaid.Size = New System.Drawing.Size(61, 16)
         Me.btnPaid.TabIndex = 97
         Me.btnPaid.UseVisualStyleBackColor = False
         '
@@ -107,9 +107,9 @@ Partial Class FormCustomerView
         Me.btnPending.FlatAppearance.BorderSize = 0
         Me.btnPending.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnPending.ForeColor = System.Drawing.Color.Transparent
-        Me.btnPending.Location = New System.Drawing.Point(634, 96)
+        Me.btnPending.Location = New System.Drawing.Point(635, 98)
         Me.btnPending.Name = "btnPending"
-        Me.btnPending.Size = New System.Drawing.Size(59, 16)
+        Me.btnPending.Size = New System.Drawing.Size(68, 14)
         Me.btnPending.TabIndex = 94
         Me.btnPending.UseVisualStyleBackColor = False
         '
@@ -156,9 +156,9 @@ Partial Class FormCustomerView
         Me.btnLogOut.FlatAppearance.BorderSize = 0
         Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogOut.ForeColor = System.Drawing.Color.Transparent
-        Me.btnLogOut.Location = New System.Drawing.Point(839, 50)
+        Me.btnLogOut.Location = New System.Drawing.Point(853, 43)
         Me.btnLogOut.Name = "btnLogOut"
-        Me.btnLogOut.Size = New System.Drawing.Size(97, 23)
+        Me.btnLogOut.Size = New System.Drawing.Size(83, 24)
         Me.btnLogOut.TabIndex = 90
         Me.btnLogOut.UseVisualStyleBackColor = False
         '
@@ -252,9 +252,9 @@ Partial Class FormCustomerView
         Me.btnEdit.FlatAppearance.BorderSize = 0
         Me.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnEdit.ForeColor = System.Drawing.Color.Transparent
-        Me.btnEdit.Location = New System.Drawing.Point(837, 23)
+        Me.btnEdit.Location = New System.Drawing.Point(853, 12)
         Me.btnEdit.Name = "btnEdit"
-        Me.btnEdit.Size = New System.Drawing.Size(97, 23)
+        Me.btnEdit.Size = New System.Drawing.Size(81, 25)
         Me.btnEdit.TabIndex = 86
         Me.btnEdit.UseVisualStyleBackColor = False
         '

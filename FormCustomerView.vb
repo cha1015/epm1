@@ -6,8 +6,6 @@ Public Class FormCustomerView
 
     Private currentFilter As String = "all" ' Options: "pending", "rejected", "approved", "paid"
 
-
-
     Private user_id As Integer
     Private pnlPlaceBrowser As Panel
     Private lblPlaceName As Label
@@ -39,8 +37,6 @@ Public Class FormCustomerView
         InitializeComponent()
 
     End Sub
-
-
 
     Private Sub BtnPrevPlace_Click(sender As Object, e As EventArgs)
         Debug.WriteLine("Prev button clicked")
@@ -108,6 +104,12 @@ Public Class FormCustomerView
     End Sub
 
 
+
+
+
+
+
+
     Private Sub ShowNoBookingPanel()
         pnlPlaceBrowser.BackgroundImage = Nothing
         pnlPlaceBrowser.BackColor = Color.Beige
@@ -116,7 +118,7 @@ Public Class FormCustomerView
         Next
         Dim lblNoBooking As New Label()
         lblNoBooking.Text = "No booking data"
-        lblNoBooking.Font = New Font("Poppins", 18, FontStyle.Bold)
+        lblNoBooking.Font = New Font("Arial", 18, FontStyle.Bold)
         lblNoBooking.ForeColor = Color.Black
         lblNoBooking.BackColor = Color.Transparent
         lblNoBooking.AutoSize = False
@@ -181,9 +183,9 @@ Public Class FormCustomerView
         If quicheFont IsNot Nothing Then Return
         Try
             ' If the font is installed on the system:
-            quicheFont = New Font("Poppins", 8, FontStyle.Bold)
+            quicheFont = New Font("Poppins", 12, FontStyle.Bold)
         Catch
-            quicheFont = New Font("Arial", 8, FontStyle.Bold) ' fallback
+            quicheFont = New Font("Arial", 12, FontStyle.Bold) ' fallback
         End Try
     End Sub
 

@@ -31,6 +31,7 @@ Public Class HelperPrice
         If eventEndTime < eventStartTime Then eventEndTime = eventEndTime.AddDays(1)
 
         Dim isOutsideHours As Boolean = (eventStartTime < openingTime) OrElse (eventEndTime > closingTime)
+
         chkOutsideAvailableHours.Enabled = isOutsideHours
         If Not isOutsideHours Then chkOutsideAvailableHours.Checked = False
 

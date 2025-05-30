@@ -352,17 +352,26 @@ Public Class FormBooking
         btBookingProceed.Enabled = True
     End Sub
 
-
     Private Sub btBookingProceed_Click(sender As Object, e As EventArgs) Handles btBookingProceed.Click
-        If Not HelperValidation.ValidateBookingInputs(cbEventType, dtpEventDateStart, dtpEventDateEnd,
-                                                  cbStartHour, cbStartMinutes, cbStartAMPM,
-                                                  cbEndHour, cbEndMinutes, cbEndAMPM,
-                                                  chkOutsideAvailableHours, OpeningHours, ClosingHours, PlaceId) Then
-            btBookingProceed.Enabled = False
-            Exit Sub
-        End If
+        'If Not HelperValidation.ValidateBookingInputs(cbEventType, dtpEventDateStart, dtpEventDateEnd,
+        '                                          cbStartHour, cbStartMinutes, cbStartAMPM,
+        '                                          cbEndHour, cbEndMinutes, cbEndAMPM,
+        '                                          chkOutsideAvailableHours, OpeningHours, ClosingHours, PlaceId) Then
+        '    btBookingProceed.Enabled = False
+        '    Exit Sub
+        'End If
 
         btBookingProceed.Enabled = True
+
+        Dim numGuests As Integer
+        If Not Integer.TryParse(txtNumGuests.Text, numGuests) OrElse numGuests <= 0 Then
+            txtNumGuests.Text = "1" ' Default to 1 if invalid or zero
+        End If
+
+        If numGuests <= 0 Then
+            MessageBox.Show("Number of guests must be at least 1.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
 
 
         Dim eventStartTime As DateTime, eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime
