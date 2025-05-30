@@ -250,11 +250,21 @@ Public Class FormBooking
         Dim openingTime As DateTime = DateTime.Parse(OpeningHours)
         Dim closingTime As DateTime = DateTime.Parse(ClosingHours)
 
-        Dim additionalCharges As Decimal = HelperPrice.ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, startTime, endTime, openingTime, closingTime)
+        Dim outsideFeesResult = HelperPrice.ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, startTime, endTime, openingTime, closingTime)
+        Dim additionalCharges As Decimal = outsideFeesResult.Item1 ' Get the numeric fee value
+        Dim warningMessages As String = outsideFeesResult.Item2 ' Get the warning messages
+
+        If Not String.IsNullOrWhiteSpace(warningMessages) Then
+            MessageBox.Show(warningMessages, "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
+
 
 
         lblPriceBreakdown.Text = HelperPrice.GeneratePriceBreakdown(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                                                     totalDays, servicesCost, additionalCharges, finalTotalPrice)
+                                                                     totalDays, additionalCharges, finalTotalPrice,
+                                                                     chkCatering.Checked, chkClown.Checked, chkSinger.Checked,
+                                                                     chkDancer.Checked, chkVideoke.Checked)
+
 
     End Sub
 
@@ -338,13 +348,22 @@ Public Class FormBooking
         End If
     End Sub
 
+    Private Sub chkOutsideAvailableHours_CheckedChanged(sender As Object, e As EventArgs) Handles chkOutsideAvailableHours.CheckedChanged
+        btBookingProceed.Enabled = True
+    End Sub
+
+
     Private Sub btBookingProceed_Click(sender As Object, e As EventArgs) Handles btBookingProceed.Click
         If Not HelperValidation.ValidateBookingInputs(cbEventType, dtpEventDateStart, dtpEventDateEnd,
-                                                    cbStartHour, cbStartMinutes, cbStartAMPM,
-                                                    cbEndHour, cbEndMinutes, cbEndAMPM,
-                                                    chkOutsideAvailableHours, OpeningHours, ClosingHours, PlaceId) Then
+                                                  cbStartHour, cbStartMinutes, cbStartAMPM,
+                                                  cbEndHour, cbEndMinutes, cbEndAMPM,
+                                                  chkOutsideAvailableHours, OpeningHours, ClosingHours, PlaceId) Then
+            btBookingProceed.Enabled = False
             Exit Sub
         End If
+
+        btBookingProceed.Enabled = True
+
 
         Dim eventStartTime As DateTime, eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime
         Dim timeFormat As String = "h:mm tt"

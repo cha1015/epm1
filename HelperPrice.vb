@@ -4,23 +4,23 @@ Imports System.Text
 Public Class HelperPrice
     ' ------------------ Compute Final Price ------------------
     Public Shared Function ComputeFinalPrice(numGuests As Integer, eventPlaceCapacity As Integer, basePricePerDay As Decimal,
-                                             dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                             chkOutsideAvailableHours As CheckBox,
-                                             cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                             cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                             openingHours As String, closingHours As String,
-                                             chkCatering As CheckBox, chkClown As CheckBox, chkSinger As CheckBox,
-                                             chkDancer As CheckBox, chkVideoke As CheckBox) As Decimal
+                                         dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
+                                         chkOutsideAvailableHours As CheckBox,
+                                         cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
+                                         cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                         openingHours As String, closingHours As String,
+                                         chkCatering As CheckBox, chkClown As CheckBox, chkSinger As CheckBox,
+                                         chkDancer As CheckBox, chkVideoke As CheckBox) As Decimal
         Dim timeFormat As String = "h:mm tt"
         Dim eventStartTime As DateTime
         If Not DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}",
-                                      timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) Then
+                                  timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventStartTime) Then
             Return 0
         End If
 
         Dim eventEndTime As DateTime
         If Not DateTime.TryParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}",
-                                      timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
+                                  timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, eventEndTime) Then
             Return 0
         End If
 
@@ -34,16 +34,24 @@ Public Class HelperPrice
         chkOutsideAvailableHours.Enabled = isOutsideHours
         If Not isOutsideHours Then chkOutsideAvailableHours.Checked = False
 
-        Dim additionalCharges As Decimal = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, eventStartTime, eventEndTime, openingTime, closingTime)
-        Dim servicesCost As Decimal = ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
-
         Dim totalDays As Integer = (dtpEventDateEnd.Value - dtpEventDateStart.Value).Days + 1
 
-        Dim excessGuestCost As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100, 0)
-        Dim totalPrice As Decimal = basePricePerDay * totalDays + excessGuestCost + servicesCost + additionalCharges
+        ' Apply multi-day calculations
+        Dim outsideFeesResult = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, eventStartTime, eventEndTime, openingTime, closingTime)
+        Dim additionalCharges As Decimal = outsideFeesResult.Item1 * totalDays ' Extract and multiply correctly
+        Dim warningMessages As String = outsideFeesResult.Item2
+
+        If Not String.IsNullOrWhiteSpace(warningMessages) Then
+            MessageBox.Show(warningMessages, "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
+
+        Dim servicesCost As Decimal = ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked) * totalDays
+        Dim excessGuestCost As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100 * totalDays, 0)
+        Dim totalPrice As Decimal = (basePricePerDay * totalDays) + excessGuestCost + servicesCost + additionalCharges
 
         Return totalPrice
     End Function
+
 
     ' ------------------ Compute Services Cost ------------------
     Public Shared Function ComputeServicesCost(numGuests As Integer,
@@ -67,8 +75,8 @@ Public Class HelperPrice
 
     ' ------------------ Compute Outside Hours Fee ------------------
     Public Shared Function ComputeOutsideHoursFee(outsideHoursChecked As Boolean, eventStartTime As DateTime,
-                                              eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime) As Decimal
-        If Not outsideHoursChecked Then Return 0D
+                                              eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime) As Tuple(Of Decimal, String)
+        If Not outsideHoursChecked Then Return Tuple.Create(0D, String.Empty)
 
         Dim additionalCharges As Decimal = 0D
         Dim perMinuteRate As Decimal = 17D
@@ -86,13 +94,8 @@ Public Class HelperPrice
             warningMessages.Add($"Your event ends {overtimeMinutes} minutes past closing. Extra fee: ₱{overtimeMinutes * perMinuteRate}")
         End If
 
-        If warningMessages.Count > 0 Then
-            MessageBox.Show(String.Join(vbCrLf, warningMessages), "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End If
-
-        Return additionalCharges
+        Return Tuple.Create(additionalCharges, String.Join(vbCrLf, warningMessages))
     End Function
-
 
 
     ' ------------------ Generate Price Breakdown ------------------
@@ -195,7 +198,14 @@ Public Class HelperPrice
         Dim parsedOpeningTime As DateTime = DateTime.Parse(openingHours)
         Dim parsedClosingTime As DateTime = DateTime.Parse(closingHours)
 
-        Dim outsideFees As Decimal = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, eventStartTime, eventEndTime, parsedOpeningTime, parsedClosingTime)
+        Dim outsideFeesResult = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, eventStartTime, eventEndTime, parsedOpeningTime, parsedClosingTime)
+        Dim outsideFees As Decimal = outsideFeesResult.Item1
+        Dim warningMessages As String = outsideFeesResult.Item2
+
+        If Not String.IsNullOrWhiteSpace(warningMessages) Then
+            MessageBox.Show(warningMessages, "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
+
 
         Dim excessGuestFee As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100, 0)
         Dim extraServicesCost As Decimal = ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)

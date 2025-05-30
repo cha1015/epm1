@@ -9,17 +9,16 @@ Public Class FormMain
 
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         HelperNavigation.RegisterNewForm(Me)
-
         pnlFilter.Left = Me.Width
         pnlFilter.Visible = False
-        pnlFilter.BringToFront()
-        pnlFilter.Dock = DockStyle.None
 
         TimerHide.Interval = 5
         TimerShow.Interval = 5
 
+
         pnlFilter.Left = Me.Width
         pnlFilter.Visible = False
+
 
         EnableDoubleBuffering(pnlFilter)
         EnableDoubleBuffering(flpResults)
@@ -29,24 +28,19 @@ Public Class FormMain
         LoadSearchResults()
         UpdatePanelVisibility()
         AdjustResultsPanel()
-        HiddenTextBox.Location = New Point(-100, -100)
-        HiddenTextBox.Visible = False
-        HiddenTextBox.Focus()
-        HiddenTextBox.Select()
-        cbSort.TabStop = False
     End Sub
+
 
     Private Sub btnFilter_Click(sender As Object, e As EventArgs) Handles btnFilter.Click
         If pnlFilter.Visible Then
             TimerHide.Start()
-            pnlFilter.Visible = False
-            flpResults.Location = New Point(0, flpResults.Location.Y)
-            flpResults.Width = Me.Width
         Else
             pnlFilter.Visible = True
             TimerShow.Start()
         End If
     End Sub
+
+
     Private Sub TimerHide_Tick(sender As Object, e As EventArgs) Handles TimerHide.Tick
         Me.SuspendLayout()
         If pnlFilter.Left < Me.Width Then
@@ -60,6 +54,7 @@ Public Class FormMain
         End If
     End Sub
 
+
     Private Sub TimerShow_Tick(sender As Object, e As EventArgs) Handles TimerShow.Tick
         Me.SuspendLayout()
         If pnlFilter.Left > Me.Width - pnlFilter.Width - 10 Then
@@ -71,18 +66,16 @@ Public Class FormMain
         End If
     End Sub
 
+
     Private Sub AdjustResultsPanel()
         If pnlFilter.Visible Then
-            flpResults.Width = Me.Width
-            If pnlFilter.Visible = False Then
-                flpResults.Location = New Point(0, flpResults.Location.Y)
-                flpResults.Width = Me.Width
-            End If
+            flpResults.Width = Me.Width - (pnlFilter.Width - 145)
         Else
             flpResults.Width = Me.Width
             pnlFilter.Left = Me.Width
         End If
     End Sub
+
     Public Sub EnableDoubleBuffering(ByVal ctrl As Control)
         Dim doubleBufferProp As System.Reflection.PropertyInfo = ctrl.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic Or System.Reflection.BindingFlags.Instance)
         If doubleBufferProp IsNot Nothing Then doubleBufferProp.SetValue(ctrl, True, Nothing)
@@ -91,6 +84,7 @@ Public Class FormMain
     Private Sub UpdatePanelVisibility()
         If Not String.IsNullOrEmpty(CurrentUser.Username) Then
             pnlAccount.Dock = DockStyle.None
+
 
             pnlSignUpLogIn.Visible = False
             pnlAccount.Visible = True
@@ -122,6 +116,7 @@ Public Class FormMain
         End Using
     End Sub
 
+
     Private ReadOnly EventTypeMapping As New Dictionary(Of String, List(Of String)) From {
     {"Classes & Workshops", New List(Of String) From {"Cooking", "Fitness", "Coffee Workshop", "Tea Workshop"}},
     {"Corporate Event", New List(Of String) From {"Dining", "Party"}},
@@ -131,12 +126,14 @@ Public Class FormMain
     {"Weddings & Related Events", New List(Of String) From {"Bachelor/Bachelorette Party", "Bridal Shower", "Ceremony", "Engagement", "Proposal", "Reception", "Solemnization", "Wedding"}}
 }
 
+
     Private Sub LoadSearchResults()
         Dim query As String = "SELECT eventplace.*, " &
                       "CASE WHEN (SELECT COUNT(*) FROM bookings b " &
                       "       WHERE b.place_id = eventplace.place_id AND b.status='Approved') > 0 " &
                       "THEN 'Booked' ELSE 'Available' END AS status " &
                       "FROM eventplace WHERE 1=1"
+
 
         Dim selectedDays As New List(Of String)
         For Each selectedItem As String In clbAvailableOn.CheckedItems
@@ -227,6 +224,7 @@ Public Class FormMain
 
         flpResults.Controls.Clear()
         HelperResultsDisplay.PopulateEventPlaces(flpResults, dt, AddressOf btnBook_Click, Nothing, Nothing, False)
+
     End Sub
 
     Private customerId As Integer = -1
@@ -234,7 +232,9 @@ Public Class FormMain
         customerId = newCustomerId
     End Sub
 
+
     Private Sub btnBook_Click(sender As Object, e As EventArgs)
+        ' Check if the user is logged in
         If String.IsNullOrEmpty(CurrentUser.Username) Then
             Dim result As DialogResult = MessageBox.Show("You need to log in to book an event place. Proceed to login?", "Login Required", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 
@@ -250,6 +250,7 @@ Public Class FormMain
             End If
         End If
 
+        ' Admin check (admins cannot book)
         If CurrentUser.Role = "Admin" Then
             MessageBox.Show("Admins cannot book an event place. Redirecting to Admin Center.", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning)
 
@@ -264,6 +265,7 @@ Public Class FormMain
             Exit Sub
         End If
 
+        ' Extract data from the button's tag (the associated event place data)
         Dim btn As Button = CType(sender, Button)
         Dim row As DataRow = CType(btn.Tag, DataRow)
         Dim placeId As Integer = CInt(row("place_id"))
@@ -285,14 +287,15 @@ Public Class FormMain
             Exit Sub
         End If
 
+        ' If validation passes, proceed to the booking form
         Dim bookingForm As New FormBooking(CurrentUser.UserID, placeId) With {
     .EventPlaceName = row("event_place").ToString(),
-    .EventPlaceCapacity = CInt(row("capacity")),
-    .BasePricePerDay = CDec(row("price_per_day")),
+    .EventPlaceCapacity = capacity,
+    .BasePricePerDay = pricePerDay,
     .EventPlaceFeatures = row("features").ToString(),
     .EventPlaceDescription = row("description").ToString(),
-.OpeningHours = DirectCast(row("opening_hours"), TimeSpan).ToString("hh\:mm\:ss"),
-.ClosingHours = DirectCast(row("closing_hours"), TimeSpan).ToString("hh\:mm\:ss"),
+    .OpeningHours = openingHours,
+    .ClosingHours = closingHours,
     .AvailableDays = row("available_days").ToString(),
     .EventPlaceImageUrl = row("image_url").ToString()
 }
@@ -301,16 +304,22 @@ Public Class FormMain
         Me.Hide()
     End Sub
 
+    ' Validate time format (hh:mm AM/PM or HH:mm 24-hour format)
     Private Function IsValidTimeFormat(time As String) As Boolean
         Dim parsedTime As DateTime
+        ' Try to parse the time using 12-hour format (hh:mm AM/PM)
         If DateTime.TryParseExact(time, "hh:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedTime) Then
             Return True
         End If
+        ' If 12-hour format fails, try parsing with 24-hour format (HH:mm:ss)
         If DateTime.TryParseExact(time, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedTime) Then
             Return True
         End If
+        ' If both formats fail, return false
         Return False
     End Function
+
+
 
     Private Sub btnApply_Click(sender As Object, e As EventArgs) Handles btnApply.Click
         LoadSearchResults()
@@ -332,34 +341,41 @@ Public Class FormMain
     Private Sub btnLogIn_Click(sender As Object, e As EventArgs) Handles btnLogIn.Click
         Dim loginForm As New FormLogIn()
         If loginForm.ShowDialog() = DialogResult.OK Then
+            ' For Admins, open the Admin Center and hide FormMain.
             If CurrentUser.Role = "Admin" Then
                 'Dim adminForm As New FormAdminCenter()
                 'adminForm.Show()
                 Me.Hide()
             ElseIf CurrentUser.CustomerId > 0 Then
+                ' For Users, update the UI to reflect the logged-in state.
                 UpdatePanelVisibility()
                 pnlAccount.Visible = True
                 pnlSignUpLogIn.Visible = False
                 Me.Refresh()
                 Application.DoEvents()
             Else
-                MessageBox.Show("Login failed.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Login failed or customer not found.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
         Else
-            MessageBox.Show("Login failed.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Login failed or customer not found.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
+
+
     Private Sub txtField_Enter(sender As Object, e As EventArgs) Handles txtMinCapacity.Enter, txtMaxCapacity.Enter, txtMinPrice.Enter, txtMaxPrice.Enter
         Dim txt As TextBox = CType(sender, TextBox)
         If txt.Text = "Min" OrElse txt.Text = "Max" Then
             txt.Text = ""
         End If
     End Sub
+
+
     Private Sub txtField_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtMinCapacity.KeyPress, txtMaxCapacity.KeyPress, txtMinPrice.KeyPress, txtMaxPrice.KeyPress
         If Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsDigit(e.KeyChar) Then
             e.Handled = True
         End If
     End Sub
+
     Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
         Dim searchText As String = txtSearch.Text.Trim()
         Dim query As String = "SELECT eventplace.*, " &
@@ -367,6 +383,7 @@ Public Class FormMain
                       "       WHERE b.place_id = eventplace.place_id AND b.status='Approved') > 0 " &
                       "THEN 'Booked' ELSE 'Available' END AS status " &
                       "FROM eventplace WHERE event_place LIKE @search OR event_type LIKE @search"
+
 
         Dim dt As New DataTable()
         Using connection As MySqlConnection = DBHelper.GetConnection()
@@ -387,6 +404,8 @@ Public Class FormMain
         flpResults.Controls.Clear()
 
         HelperResultsDisplay.PopulateEventPlaces(flpResults, dt, AddressOf btnBook_Click, Nothing, Nothing, False)
+
+
     End Sub
 
     Private Sub txtSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearch.KeyDown
@@ -421,6 +440,7 @@ Public Class FormMain
         End If
     End Sub
 
+
     Private Sub ClearFilters()
         clbEventType.ClearSelected()
         txtMinCapacity.Text = "Min"
@@ -428,8 +448,8 @@ Public Class FormMain
         txtMinPrice.Text = "Min"
         txtMaxPrice.Text = "Max"
         cbSort.SelectedIndex = -1
-        txtSearch.Text = ""
     End Sub
+
     Private Sub btnClearFilters_Click(sender As Object, e As EventArgs) Handles btnClearFilters.Click
         ClearFilters()
         For i As Integer = 0 To clbEventType.Items.Count - 1
@@ -438,22 +458,26 @@ Public Class FormMain
         For i As Integer = 0 To clbAvailableOn.Items.Count - 1
             clbAvailableOn.SetItemChecked(i, False)
         Next
+
         LoadSearchResults()
+
     End Sub
 
     Public Sub DisplayAdminUsername()
 
         Dim query As String = "SELECT username FROM Admins WHERE admin_id=@adminId"
         Dim parameters As New Dictionary(Of String, Object) From {
-    {"@adminId", CurrentUser.UserID}
+    {"@adminId", CurrentUser.UserID} ' Ensure this holds the correct admin ID
 }
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
 
         If dt.Rows.Count > 0 Then
-            lblUsername.Text = dt.Rows(0)("username").ToString()
+            lblUsername.Text = dt.Rows(0)("username").ToString() ' Update Admin Name label dynamically
         End If
     End Sub
+
+
 
     Private Sub cbSort_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbSort.SelectedIndexChanged
         If cbSort.SelectedItem IsNot Nothing AndAlso cbSort.SelectedItem.ToString() <> "Select..." Then
@@ -461,6 +485,7 @@ Public Class FormMain
             Me.Refresh()
         End If
     End Sub
+
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
         HelperNavigation.GoBack(Me)
     End Sub
@@ -468,4 +493,6 @@ Public Class FormMain
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
     End Sub
+
+
 End Class

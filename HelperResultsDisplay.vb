@@ -26,7 +26,9 @@ Public Class HelperResultsDisplay
                                             ByVal isAdmin As Boolean)
         Dim scrollbarWidth As Integer = SystemInformation.VerticalScrollBarWidth
         Dim availableWidth As Integer = flpResults.Width - scrollbarWidth - (10 * 6)
-        Dim panelWidth As Integer = availableWidth \ 3
+        ' Dim panelWidth As Integer = availableWidth \ 3
+        Dim maxPanelWidth As Integer = 280 ' Adjust based on your preferred layout
+        Dim panelWidth As Integer = Math.Min(maxPanelWidth, availableWidth \ 3)
         Dim panelHeight As Integer = 280
 
         Dim toolTip As New ToolTip()
@@ -61,8 +63,6 @@ Public Class HelperResultsDisplay
                                                          lblName.Location = New Point(5, 140)
                                                          lblName.Text = row("event_place").ToString()
                                                          lblName.Font = New Font("Poppins", 10, FontStyle.Bold)
-                                                         lblName.AutoEllipsis = True
-                                                         lblName.TextAlign = ContentAlignment.MiddleLeft
 
                                                          ' Label for capacity
                                                          Dim lblCapacity As New Label()
@@ -94,10 +94,8 @@ Public Class HelperResultsDisplay
                                                          lblEventType.Text = "Event Types: " & displayEventTypes
                                                          toolTip.SetToolTip(lblEventType, fullEventTypesText)
                                                          lblEventType.Font = New Font("Poppins", 8)
-                                                         lblEventType.AutoEllipsis = True
-                                                         lblEventType.TextAlign = ContentAlignment.MiddleLeft
 
-                                                         ' Action Button(s): either Book or Update/Delete buttonsgit 
+                                                         ' Action Button(s): either Book or Update/Delete buttons
                                                          If Not isAdmin Then
                                                              Dim btnBook As New Button()
                                                              btnBook.Text = "Book Now"
@@ -569,60 +567,28 @@ Public Class HelperResultsDisplay
 
     '--- Specialized method for Revenue Reports ---
     Public Shared Sub PopulateRevenueReports(ByVal flpRevenueReports As FlowLayoutPanel, ByVal dt As DataTable)
-        ' Create a dictionary to store event places and their total revenue
-        Dim revenueDictionary As New Dictionary(Of String, Decimal)
-
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
                                                          Dim panel As New Panel()
                                                          panel.Size = New Size(250, 60)
                                                          panel.BorderStyle = BorderStyle.FixedSingle
                                                          panel.Margin = New Padding(10)
 
-                                                         Dim eventPlace As String = row("event_place").ToString()
-                                                         Dim totalRevenue As Decimal = Convert.ToDecimal(row("total_revenue"))
-
-                                                         ' Store data in the dictionary
-                                                         revenueDictionary(eventPlace) = totalRevenue
-
                                                          Dim lblEvent As New Label With {
-                                                         .Text = eventPlace,
-                                                         .Location = New Point(5, 5),
-                                                         .AutoSize = True
-                                                     }
+                                                             .Text = row("event_place").ToString(),
+                                                             .Location = New Point(5, 5),
+                                                             .AutoSize = True
+                                                         }
                                                          Dim lblRevenue As New Label With {
-                                                         .Text = "Revenue: ₱" & totalRevenue.ToString("N0"),
-                                                         .Location = New Point(5, 30),
-                                                         .AutoSize = True
-                                                     }
+                                                             .Text = "Revenue: " & row("total_revenue").ToString(),
+                                                             .Location = New Point(5, 30),
+                                                             .AutoSize = True
+                                                         }
                                                          panel.Controls.Add(lblEvent)
                                                          panel.Controls.Add(lblRevenue)
                                                          Return panel
                                                      End Function
-
         PopulateFlowPanel(flpRevenueReports, dt, createPanel)
     End Sub
-
-    '--- Function to Get Revenue Dictionary
-    Public Shared Function GetRevenueDictionary() As Dictionary(Of String, Decimal)
-        Dim query As String = "SELECT e.event_place, " &
-                          "IFNULL(SUM(b.total_price), 0) AS total_revenue " &
-                          "FROM eventplace e " &
-                          "LEFT JOIN bookings b ON e.place_id = b.place_id AND b.status = 'Approved' " &
-                          "GROUP BY e.place_id"
-
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-        Dim revenueDictionary As New Dictionary(Of String, Decimal)
-
-        For Each row As DataRow In dt.Rows
-            Dim eventPlace As String = row("event_place").ToString()
-            Dim totalRevenue As Decimal = Convert.ToDecimal(row("total_revenue"))
-            revenueDictionary(eventPlace) = totalRevenue
-        Next
-
-        Return revenueDictionary
-    End Function
-
-
 
     '--- Specialized method for Invoices (with Accept Payment handler) ---
     Public Shared Sub PopulateInvoices(ByVal flpInvoices As FlowLayoutPanel, ByVal dt As DataTable, ByVal paymentHandler As EventHandler)
@@ -665,46 +631,46 @@ Public Class HelperResultsDisplay
     End Sub
 
     '--- Specialized method for Customer Records ---
-    Public Shared Sub PopulateCustomerRecords(ByVal flpCustomerRecords As FlowLayoutPanel, ByVal dt As DataTable)
-        Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
-                                                         Dim panel As New Panel()
-                                                         panel.Size = New Size(300, 80)
-                                                         panel.BorderStyle = BorderStyle.FixedSingle
-                                                         panel.Margin = New Padding(10)
+    'Public Shared Sub PopulateCustomerRecords(ByVal flpCustomerRecords As FlowLayoutPanel, ByVal dt As DataTable)
+    '    Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
+    '                                                     Dim panel As New Panel()
+    '                                                     panel.Size = New Size(300, 80)
+    '                                                     panel.BorderStyle = BorderStyle.FixedSingle
+    '                                                     panel.Margin = New Padding(10)
 
-                                                         ' Label for customer name
-                                                         Dim lblName As New Label With {
-                                                         .Text = row("name").ToString(),
-                                                         .Location = New Point(5, 5),
-                                                         .AutoSize = True
-                                                     }
-                                                         ' Label for age
-                                                         Dim lblAge As New Label With {
-                                                         .Text = "Age: " & row("age").ToString(),
-                                                         .Location = New Point(5, 25),
-                                                         .AutoSize = True
-                                                     }
-                                                         ' Label for address
-                                                         Dim lblAddress As New Label With {
-                                                         .Text = "Address: " & row("address").ToString(),
-                                                         .Location = New Point(5, 45),
-                                                         .AutoSize = True
-                                                     }
+    '                                                     ' Label for customer name
+    '                                                     Dim lblName As New Label With {
+    '                                                     .Text = row("name").ToString(),
+    '                                                     .Location = New Point(5, 5),
+    '                                                     .AutoSize = True
+    '                                                 }
+    '                                                     ' Label for age
+    '                                                     Dim lblAge As New Label With {
+    '                                                     .Text = "Age: " & row("age").ToString(),
+    '                                                     .Location = New Point(5, 25),
+    '                                                     .AutoSize = True
+    '                                                 }
+    '                                                     ' Label for address
+    '                                                     Dim lblAddress As New Label With {
+    '                                                     .Text = "Address: " & row("address").ToString(),
+    '                                                     .Location = New Point(5, 45),
+    '                                                     .AutoSize = True
+    '                                                 }
 
-                                                         panel.Controls.Add(lblName)
-                                                         panel.Controls.Add(lblAge)
-                                                         panel.Controls.Add(lblAddress)
+    '                                                     panel.Controls.Add(lblName)
+    '                                                     panel.Controls.Add(lblAge)
+    '                                                     panel.Controls.Add(lblAddress)
 
-                                                         ' Add click event to open customer details
-                                                         'AddHandler panel.Click, Sub(sender, e)
-                                                         '                            ShowCustomerDetails(row)
-                                                         '                        End Sub
+    '                                                     ' Add click event to open customer details
+    '                                                     AddHandler panel.Click, Sub(sender, e)
+    '                                                                                 ShowCustomerDetails(row)
+    '                                                                             End Sub
 
-                                                         Return panel
-                                                     End Function
+    '                                                     Return panel
+    '                                                 End Function
 
-        PopulateFlowPanel(flpCustomerRecords, dt, createPanel)
-    End Sub
+    '    PopulateFlowPanel(flpCustomerRecords, dt, createPanel)
+    'End Sub
 
     ' This method will be called when a customer panel is clicked to show their details
     'Public Shared Sub ShowCustomerDetails(row As DataRow)

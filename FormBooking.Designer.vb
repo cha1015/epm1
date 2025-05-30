@@ -37,7 +37,6 @@ Partial Class FormBooking
         Me.txtAge = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.lblDateWarning = New System.Windows.Forms.Label()
-        Me.lblBeyondAvailabilityFee = New System.Windows.Forms.Label()
         Me.lblCapacityExceedanceFee = New System.Windows.Forms.Label()
         Me.chkOutsideAvailableHours = New System.Windows.Forms.CheckBox()
         Me.cbSameDayEvent = New System.Windows.Forms.CheckBox()
@@ -268,22 +267,11 @@ Partial Class FormBooking
         Me.lblDateWarning.BackColor = System.Drawing.Color.Transparent
         Me.lblDateWarning.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDateWarning.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.lblDateWarning.Location = New System.Drawing.Point(389, 113)
+        Me.lblDateWarning.Location = New System.Drawing.Point(353, 113)
         Me.lblDateWarning.Name = "lblDateWarning"
         Me.lblDateWarning.Size = New System.Drawing.Size(189, 19)
         Me.lblDateWarning.TabIndex = 80
         Me.lblDateWarning.Text = "The selected date is unavailable."
-        '
-        'lblBeyondAvailabilityFee
-        '
-        Me.lblBeyondAvailabilityFee.AutoSize = True
-        Me.lblBeyondAvailabilityFee.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblBeyondAvailabilityFee.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.lblBeyondAvailabilityFee.Location = New System.Drawing.Point(349, 171)
-        Me.lblBeyondAvailabilityFee.Name = "lblBeyondAvailabilityFee"
-        Me.lblBeyondAvailabilityFee.Size = New System.Drawing.Size(138, 38)
-        Me.lblBeyondAvailabilityFee.TabIndex = 79
-        Me.lblBeyondAvailabilityFee.Text = "Beyond Availability Fee " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(₱17 per minute)"
         '
         'lblCapacityExceedanceFee
         '
@@ -301,11 +289,11 @@ Partial Class FormBooking
         Me.chkOutsideAvailableHours.AutoSize = True
         Me.chkOutsideAvailableHours.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkOutsideAvailableHours.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.chkOutsideAvailableHours.Location = New System.Drawing.Point(353, 211)
+        Me.chkOutsideAvailableHours.Location = New System.Drawing.Point(356, 180)
         Me.chkOutsideAvailableHours.Name = "chkOutsideAvailableHours"
         Me.chkOutsideAvailableHours.Size = New System.Drawing.Size(186, 42)
         Me.chkOutsideAvailableHours.TabIndex = 77
-        Me.chkOutsideAvailableHours.Text = "Book outside available hours" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(+ extra fee)"
+        Me.chkOutsideAvailableHours.Text = "Book outside available hours" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(₱17 per minute)"
         Me.chkOutsideAvailableHours.UseVisualStyleBackColor = True
         '
         'cbSameDayEvent
@@ -526,7 +514,7 @@ Partial Class FormBooking
         Me.txtTotalPrice.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(231, Byte), Integer))
         Me.txtTotalPrice.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtTotalPrice.ForeColor = System.Drawing.Color.Gray
-        Me.txtTotalPrice.Location = New System.Drawing.Point(133, 332)
+        Me.txtTotalPrice.Location = New System.Drawing.Point(133, 313)
         Me.txtTotalPrice.Name = "txtTotalPrice"
         Me.txtTotalPrice.ReadOnly = True
         Me.txtTotalPrice.Size = New System.Drawing.Size(226, 24)
@@ -570,7 +558,7 @@ Partial Class FormBooking
         Me.lblServicesAvailed.AutoSize = True
         Me.lblServicesAvailed.Font = New System.Drawing.Font("Cinzel", 8.0!, System.Drawing.FontStyle.Bold)
         Me.lblServicesAvailed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.lblServicesAvailed.Location = New System.Drawing.Point(12, 257)
+        Me.lblServicesAvailed.Location = New System.Drawing.Point(12, 238)
         Me.lblServicesAvailed.Name = "lblServicesAvailed"
         Me.lblServicesAvailed.Size = New System.Drawing.Size(109, 13)
         Me.lblServicesAvailed.TabIndex = 52
@@ -932,7 +920,6 @@ Partial Class FormBooking
         Me.tpBookingDetails.BackgroundImage = Global.epm1.My.Resources.Resources.BGplain
         Me.tpBookingDetails.Controls.Add(Me.Label1)
         Me.tpBookingDetails.Controls.Add(Me.lblDateWarning)
-        Me.tpBookingDetails.Controls.Add(Me.lblBeyondAvailabilityFee)
         Me.tpBookingDetails.Controls.Add(Me.lblCapacityExceedanceFee)
         Me.tpBookingDetails.Controls.Add(Me.chkOutsideAvailableHours)
         Me.tpBookingDetails.Controls.Add(Me.cbSameDayEvent)
@@ -977,7 +964,7 @@ Partial Class FormBooking
         Me.lblTotalPrice.AutoSize = True
         Me.lblTotalPrice.Font = New System.Drawing.Font("Cinzel", 8.0!, System.Drawing.FontStyle.Bold)
         Me.lblTotalPrice.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.lblTotalPrice.Location = New System.Drawing.Point(12, 335)
+        Me.lblTotalPrice.Location = New System.Drawing.Point(12, 316)
         Me.lblTotalPrice.Name = "lblTotalPrice"
         Me.lblTotalPrice.Size = New System.Drawing.Size(79, 13)
         Me.lblTotalPrice.TabIndex = 53
@@ -1031,7 +1018,7 @@ Partial Class FormBooking
         Me.chkCatering.AutoSize = True
         Me.chkCatering.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkCatering.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.chkCatering.Location = New System.Drawing.Point(133, 257)
+        Me.chkCatering.Location = New System.Drawing.Point(133, 238)
         Me.chkCatering.Name = "chkCatering"
         Me.chkCatering.Size = New System.Drawing.Size(172, 23)
         Me.chkCatering.TabIndex = 55
@@ -1054,7 +1041,7 @@ Partial Class FormBooking
         Me.chkClown.AutoSize = True
         Me.chkClown.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkClown.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.chkClown.Location = New System.Drawing.Point(133, 279)
+        Me.chkClown.Location = New System.Drawing.Point(133, 260)
         Me.chkClown.Name = "chkClown"
         Me.chkClown.Size = New System.Drawing.Size(158, 23)
         Me.chkClown.TabIndex = 56
@@ -1080,7 +1067,7 @@ Partial Class FormBooking
         Me.chkSinger.AutoSize = True
         Me.chkSinger.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkSinger.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.chkSinger.Location = New System.Drawing.Point(133, 301)
+        Me.chkSinger.Location = New System.Drawing.Point(133, 282)
         Me.chkSinger.Name = "chkSinger"
         Me.chkSinger.Size = New System.Drawing.Size(156, 23)
         Me.chkSinger.TabIndex = 57
@@ -1092,7 +1079,7 @@ Partial Class FormBooking
         Me.chkVideoke.AutoSize = True
         Me.chkVideoke.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkVideoke.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.chkVideoke.Location = New System.Drawing.Point(304, 301)
+        Me.chkVideoke.Location = New System.Drawing.Point(311, 271)
         Me.chkVideoke.Name = "chkVideoke"
         Me.chkVideoke.Size = New System.Drawing.Size(161, 23)
         Me.chkVideoke.TabIndex = 59
@@ -1104,7 +1091,7 @@ Partial Class FormBooking
         Me.chkDancer.AutoSize = True
         Me.chkDancer.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkDancer.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.chkDancer.Location = New System.Drawing.Point(304, 280)
+        Me.chkDancer.Location = New System.Drawing.Point(311, 250)
         Me.chkDancer.Name = "chkDancer"
         Me.chkDancer.Size = New System.Drawing.Size(162, 23)
         Me.chkDancer.TabIndex = 58
@@ -1170,7 +1157,6 @@ Partial Class FormBooking
     Friend WithEvents txtAge As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents lblDateWarning As Label
-    Friend WithEvents lblBeyondAvailabilityFee As Label
     Friend WithEvents lblCapacityExceedanceFee As Label
     Friend WithEvents chkOutsideAvailableHours As CheckBox
     Friend WithEvents cbSameDayEvent As CheckBox
