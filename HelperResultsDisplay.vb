@@ -168,7 +168,12 @@ Public Class HelperResultsDisplay
     End Function
 
 
-    Private Shared Function CreateBookingPanel(ByVal row As DataRow, ByVal panelWidth As Integer, ByVal panelHeight As Integer, ByVal status As String, ByVal approveHandler As EventHandler, ByVal rejectHandler As EventHandler) As Panel
+    Private Shared Function CreateBookingPanel(ByVal row As DataRow,
+                                               ByVal panelWidth As Integer,
+                                               ByVal panelHeight As Integer,
+                                               ByVal status As String,
+                                               ByVal approveHandler As EventHandler,
+                                               ByVal rejectHandler As EventHandler) As Panel
         Dim panel As New Panel()
 
         panel.Size = New Size(panelWidth, panelHeight)
@@ -176,7 +181,6 @@ Public Class HelperResultsDisplay
         panel.Margin = New Padding(10)
 
 
-        ' PictureBox for event image
         Dim pb As New PictureBox()
         pb.Size = New Size(panelWidth, 140)
         pb.Location = New Point(0, 0)
@@ -192,7 +196,7 @@ Public Class HelperResultsDisplay
             pb.Image = Nothing
         End Try
 
-        ' Customer Label
+
         Dim lblName As New Label With {
         .Text = "Customer: " & row("name").ToString(),
         .Location = New Point(5, 145),
@@ -200,7 +204,6 @@ Public Class HelperResultsDisplay
         .Font = New Font("Poppins", 10, FontStyle.Bold)
     }
 
-        ' Event Place Label
         Dim lblEventPlace As New Label With {
         .Text = "Event Place: " & row("event_place").ToString(),
         .Location = New Point(5, 170),
@@ -208,7 +211,6 @@ Public Class HelperResultsDisplay
         .Font = New Font("Poppins", 8)
     }
 
-        ' Event Type Label
         Dim lblEventType As New Label With {
         .Text = "Event Type: " & row("event_type").ToString(),
         .Location = New Point(5, 190),
@@ -216,7 +218,6 @@ Public Class HelperResultsDisplay
         .Font = New Font("Poppins", 8)
     }
 
-        ' Guests Label
         Dim lblGuests As New Label With {
         .Text = "Guests: " & row("num_guests").ToString(),
         .Location = New Point(5, 210),
@@ -224,7 +225,6 @@ Public Class HelperResultsDisplay
         .Font = New Font("Poppins", 8)
     }
 
-        ' Event Date Label - Formatted as "Month day, year"
         Dim lblEventDate As New Label With {
     .Text = "Event Date: " & Convert.ToDateTime(row("event_date")).ToString("MMMM d, yyyy"),
     .Location = New Point(5, 230),
@@ -237,7 +237,6 @@ Public Class HelperResultsDisplay
     .Size = New Size(panelWidth - 20, 20),
     .Font = New Font("Poppins", 8)
 }
-        ' Event Time Label
         Dim startTime As String = "N/A"
         Dim endTime As String = "N/A"
 
@@ -268,7 +267,6 @@ Public Class HelperResultsDisplay
     .Font = New Font("Poppins", 8)
 }
 
-        ' Services Label
         Dim services As String = row("services_availed").ToString()
         Debug.WriteLine("Services Availed (ID list): " & services)
         Dim serviceIds As String() = services.Split(","c)
@@ -287,16 +285,14 @@ Public Class HelperResultsDisplay
             End If
         Next
 
-        ' Update the label text with the correct services string
         Dim lblServices As New Label With {
     .Text = "Services: " & String.Join(", ", services.Split(","c)),
-    .Location = New Point(5, 310), ' Position below the total price label
+    .Location = New Point(5, 310),
     .Size = New Size(panelWidth - 20, 20),
     .Font = New Font("Poppins", 8)
 }
         Debug.WriteLine("Services to display: " & lblServices.Text)
 
-        ' Total Price Label
         Dim lblTotalPrice As New Label With {
     .Text = "Total Price: ₱" & row("total_price").ToString(),
     .Location = New Point(5, 330),
@@ -305,11 +301,10 @@ Public Class HelperResultsDisplay
 }
 
         If status = "Pending" Then
-            ' Show Approve and Reject buttons for pending bookings
             Dim btnApprove As New Button()
             btnApprove.Text = "Approve"
             btnApprove.Size = New Size(panelWidth - 20, 30)
-            btnApprove.Location = New Point((panelWidth - btnApprove.Width) / 2, 350) ' Move the button further down
+            btnApprove.Location = New Point((panelWidth - btnApprove.Width) / 2, 350)
             btnApprove.Tag = row
             AddHandler btnApprove.Click, approveHandler
             btnApprove.FlatStyle = FlatStyle.Flat
@@ -319,7 +314,7 @@ Public Class HelperResultsDisplay
             Dim btnReject As New Button()
             btnReject.Text = "Reject"
             btnReject.Size = New Size(panelWidth - 20, 30)
-            btnReject.Location = New Point((panelWidth - btnReject.Width) / 2, btnApprove.Location.Y + btnApprove.Height + 5) ' 5px below the "Approve" button
+            btnReject.Location = New Point((panelWidth - btnReject.Width) / 2, btnApprove.Location.Y + btnApprove.Height + 5)
             btnReject.Tag = row
             AddHandler btnReject.Click, rejectHandler
             btnReject.FlatStyle = FlatStyle.Flat
@@ -396,16 +391,13 @@ Public Class HelperResultsDisplay
         Dim panelHeight As Integer = 420
 
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
-                                                         ' Fetch the service names for the booking
                                                          Dim services As String = GetServiceNamesByIds(row("services_availed").ToString())
 
-                                                         ' Create the booking panel with service names included
                                                          Dim panel As Panel = CreateBookingPanel(row, panelWidth, panelHeight, "Pending", approveHandler, rejectHandler)
 
-                                                         ' Add the services label
                                                          Dim lblServices As New Label With {
                                                          .Text = "Services: " & services,
-                                                         .Location = New Point(5, 330), ' Position below the total price label
+                                                         .Location = New Point(5, 330),
                                                          .Size = New Size(panelWidth - 20, 20),
                                                          .Font = New Font("Poppins", 8)
                                                      }
@@ -424,10 +416,8 @@ Public Class HelperResultsDisplay
         Dim panelHeight As Integer = 420
 
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
-                                                         ' Fetch the service names for the booking
                                                          Dim services As String = GetServiceNamesByIds(row("services_availed").ToString())
 
-                                                         ' Create the booking panel with service names included
                                                          Dim panel As Panel = CreateBookingPanel(row, panelWidth, panelHeight, "Approved", Nothing, Nothing)
 
                                                          ' Add the services label
@@ -502,69 +492,6 @@ Public Class HelperResultsDisplay
     End Sub
 
 
-    '--- Specialized method for Event Place Availability ---
-    Public Shared Sub PopulateAvailability(ByVal flpAvailability As FlowLayoutPanel, ByVal dt As DataTable)
-        ' Create separate panels for available and booked places
-        Dim createAvailablePanel As Func(Of DataRow, Panel) = Function(row As DataRow)
-                                                                  Dim panel As New Panel()
-                                                                  panel.Size = New Size(200, 50)
-                                                                  panel.BorderStyle = BorderStyle.FixedSingle
-                                                                  panel.Margin = New Padding(10)
-
-                                                                  Dim lblEventPlace As New Label With {
-                                                                   .Text = row("event_place").ToString(),
-                                                                   .Location = New Point(5, 5),
-                                                                   .AutoSize = True
-                                                               }
-                                                                  Dim lblStatus As New Label With {
-                                                                   .Text = "Status: " & row("Availability").ToString(),
-                                                                   .Location = New Point(5, 25),
-                                                                   .AutoSize = True
-                                                               }
-
-                                                                  panel.Controls.Add(lblEventPlace)
-                                                                  panel.Controls.Add(lblStatus)
-
-                                                                  ' Set the background color for available event places
-                                                                  If row("Availability").ToString() = "Available" Then
-                                                                      panel.BackColor = Color.LightGreen
-                                                                  End If
-
-                                                                  Return panel
-                                                              End Function
-
-        Dim createBookedPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
-                                                               Dim panel As New Panel()
-                                                               panel.Size = New Size(200, 50)
-                                                               panel.BorderStyle = BorderStyle.FixedSingle
-                                                               panel.Margin = New Padding(10)
-
-                                                               Dim lblEventPlace As New Label With {
-                                                                .Text = row("event_place").ToString(),
-                                                                .Location = New Point(5, 5),
-                                                                .AutoSize = True
-                                                            }
-                                                               Dim lblStatus As New Label With {
-                                                                .Text = "Status: " & row("Availability").ToString(),
-                                                                .Location = New Point(5, 25),
-                                                                .AutoSize = True
-                                                            }
-
-                                                               panel.Controls.Add(lblEventPlace)
-                                                               panel.Controls.Add(lblStatus)
-
-                                                               ' Set the background color for booked event places
-                                                               If row("Availability").ToString() = "Booked" Then
-                                                                   panel.BackColor = Color.Orange
-                                                               End If
-
-                                                               Return panel
-                                                           End Function
-
-        ' Populate the FlowLayoutPanel with the correct event places
-        PopulateFlowPanel(flpAvailability, dt, createAvailablePanel)  ' This is where available places will be populated
-    End Sub
-
     '--- Specialized method for Revenue Reports ---
     Public Shared Sub PopulateRevenueReports(ByVal flpRevenueReports As FlowLayoutPanel, ByVal dt As DataTable)
         Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
@@ -590,45 +517,6 @@ Public Class HelperResultsDisplay
         PopulateFlowPanel(flpRevenueReports, dt, createPanel)
     End Sub
 
-    '--- Specialized method for Invoices (with Accept Payment handler) ---
-    Public Shared Sub PopulateInvoices(ByVal flpInvoices As FlowLayoutPanel, ByVal dt As DataTable, ByVal paymentHandler As EventHandler)
-        Dim createPanel As Func(Of DataRow, Panel) = Function(row As DataRow)
-                                                         Dim panel As New Panel()
-                                                         panel.Size = New Size(250, 80)
-                                                         panel.BorderStyle = BorderStyle.FixedSingle
-                                                         panel.Margin = New Padding(10)
-
-                                                         Dim lblInvoiceID As New Label With {
-                                                             .Text = "Invoice #" & row("invoice_id").ToString(),
-                                                             .Location = New Point(5, 5),
-                                                             .AutoSize = True
-                                                         }
-                                                         Dim lblEventPlace As New Label With {
-                                                             .Text = "Event: " & row("event_place").ToString(),
-                                                             .Location = New Point(5, 25),
-                                                             .AutoSize = True
-                                                         }
-                                                         Dim lblAmount As New Label With {
-                                                             .Text = "Amount: " & row("total_amount").ToString(),
-                                                             .Location = New Point(5, 45),
-                                                             .AutoSize = True
-                                                         }
-                                                         panel.Controls.Add(lblInvoiceID)
-                                                         panel.Controls.Add(lblEventPlace)
-                                                         panel.Controls.Add(lblAmount)
-
-                                                         Dim btnPayment As New Button()
-                                                         btnPayment.Text = "Accept Payment"
-                                                         btnPayment.Size = New Size(100, 25)
-                                                         btnPayment.Location = New Point(135, 30)
-                                                         btnPayment.Tag = row
-                                                         AddHandler btnPayment.Click, paymentHandler
-                                                         panel.Controls.Add(btnPayment)
-
-                                                         Return panel
-                                                     End Function
-        PopulateFlowPanel(flpInvoices, dt, createPanel)
-    End Sub
 
     '--- Specialized method for Booked Dates ---
     Public Shared Sub PopulateBookedDates(ByVal flpBookedDates As FlowLayoutPanel, ByVal dt As DataTable)
@@ -762,6 +650,29 @@ Public Class HelperResultsDisplay
                                                                                  End Sub
 
                                                          Return panel
+
+                                                         AddHandler flpEventPlaces.Click, Sub(sender, e)
+                                                                                              txtEventPlace.Text = " "
+                                                                                              txtEventType.Text = " "
+                                                                                              txtCapacity.Text = " "
+                                                                                              txtPricePerDay.Text = " "
+                                                                                              txtFeatures.Text = " "
+                                                                                              txtImageUrl.Text = " "
+                                                                                              cbStartHour.SelectedIndex = -1
+                                                                                              cbStartMinutes.SelectedIndex = -1
+                                                                                              cbStartAMPM.SelectedIndex = -1
+                                                                                              cbEndHour.SelectedIndex = -1
+                                                                                              cbEndMinutes.SelectedIndex = -1
+                                                                                              cbEndAMPM.SelectedIndex = -1
+                                                                                              txtAvailableDays.Text = " "
+                                                                                              txtDescription.Text = " "
+                                                                                              txtPlaceID.Text = " "
+
+                                                                                              btnAdd.Visible = True
+                                                                                              btnUpdate.Visible = False
+                                                                                              btnDelete.Visible = False
+                                                                                          End Sub
+
                                                      End Function
 
         ' Loop through each DataRow and add the created panel to the single FlowLayoutPanel

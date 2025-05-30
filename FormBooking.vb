@@ -219,6 +219,9 @@ Public Class FormBooking
         Else
             MessageBox.Show("Booking failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
+
+
+
     End Sub
 
     Private Sub PopulatePaymentDetails()

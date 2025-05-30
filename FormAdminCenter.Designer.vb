@@ -91,6 +91,8 @@ Partial Class FormAdminCenter
         Me.lblNumCustomersContainer = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtSearchCustomer = New System.Windows.Forms.TextBox()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.btnClear = New System.Windows.Forms.Button()
         Me.tcAdminCenter.SuspendLayout()
         Me.tpBookings.SuspendLayout()
         Me.tcPendApprRej.SuspendLayout()
@@ -212,11 +214,11 @@ Partial Class FormAdminCenter
         Me.tcAdminCenter.Controls.Add(Me.tpInvoicesAndPayments)
         Me.tcAdminCenter.Controls.Add(Me.tpCustomerRecords)
         Me.tcAdminCenter.Font = New System.Drawing.Font("Cinzel", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tcAdminCenter.Location = New System.Drawing.Point(12, 70)
+        Me.tcAdminCenter.Location = New System.Drawing.Point(12, 62)
         Me.tcAdminCenter.Multiline = True
         Me.tcAdminCenter.Name = "tcAdminCenter"
         Me.tcAdminCenter.SelectedIndex = 0
-        Me.tcAdminCenter.Size = New System.Drawing.Size(921, 419)
+        Me.tcAdminCenter.Size = New System.Drawing.Size(921, 427)
         Me.tcAdminCenter.TabIndex = 97
         '
         'tpBookings
@@ -340,7 +342,7 @@ Partial Class FormAdminCenter
         Me.tpEventPlaceMgmt.Location = New System.Drawing.Point(4, 22)
         Me.tpEventPlaceMgmt.Name = "tpEventPlaceMgmt"
         Me.tpEventPlaceMgmt.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(913, 393)
+        Me.tpEventPlaceMgmt.Size = New System.Drawing.Size(913, 401)
         Me.tpEventPlaceMgmt.TabIndex = 0
         Me.tpEventPlaceMgmt.Text = "Event Places"
         '
@@ -357,6 +359,7 @@ Partial Class FormAdminCenter
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.btnClear)
         Me.GroupBox1.Controls.Add(Me.lblErrorClosingHours)
         Me.GroupBox1.Controls.Add(Me.cbEndAMPM)
         Me.GroupBox1.Controls.Add(Me.cbEndMinutes)
@@ -904,6 +907,20 @@ Partial Class FormAdminCenter
         Me.txtSearchCustomer.Size = New System.Drawing.Size(222, 14)
         Me.txtSearchCustomer.TabIndex = 98
         '
+        'btnClear
+        '
+        Me.btnClear.BackColor = System.Drawing.Color.Transparent
+        Me.btnClear.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnClear.FlatAppearance.BorderSize = 0
+        Me.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnClear.ForeColor = System.Drawing.Color.IndianRed
+        Me.btnClear.Location = New System.Drawing.Point(410, -2)
+        Me.btnClear.Name = "btnClear"
+        Me.btnClear.Size = New System.Drawing.Size(42, 30)
+        Me.btnClear.TabIndex = 83
+        Me.btnClear.Text = "✖"
+        Me.btnClear.UseVisualStyleBackColor = False
+        '
         'FormAdminCenter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1011,4 +1028,6 @@ Partial Class FormAdminCenter
     Friend WithEvents lblNumCustomersContainer As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents txtSearchCustomer As TextBox
+    Friend WithEvents btnClear As Button
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 End Class

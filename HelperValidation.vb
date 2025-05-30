@@ -11,14 +11,12 @@ Public Class HelperValidation
         Return ""
     End Function
     ' ------------------ Field Indicator Setup ------------------
-    ' This section sets the default labels for required fields.
     Public Shared Sub ApplyFieldIndicators(labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To labelControls.Length - 1
             labelControls(i).Text = labelTexts(i)
             labelControls(i).ForeColor = SystemColors.ControlText
         Next
     End Sub
-
 
     ' Mark TextBox invalid if empty: show red asterisk and red label text
     Public Shared Sub MarkFieldInvalidIfEmpty(txtControl As TextBox, defaultLabelText As String)
@@ -81,12 +79,10 @@ Public Class HelperValidation
             Dim index As Integer = Array.IndexOf(labelControls.Select(Function(lbl) lbl.Name).ToArray(), txtBox.Tag?.ToString())
             If index >= 0 Then
                 labelControls(index).Text = labelTexts(index)
-                labelControls(index).ForeColor = SystemColors.ControlText ' Reset color to normal
+                labelControls(index).ForeColor = SystemColors.ControlText
             End If
         End If
     End Sub
-
-
 
     Public Shared Sub ValidateFieldsInRealTime(fieldControls As TextBox(), labelControls As Label(), labelTexts As String())
         For i As Integer = 0 To fieldControls.Length - 1
@@ -100,7 +96,6 @@ Public Class HelperValidation
     End Sub
 
     ' ------------------ Combined Validation Error Handling ------------------
-    ' Combines an asterisk (indicating a required field) with a red highlight on the control.
     Public Shared Sub MarkFieldInvalid(targetControl As Control, defaultLabelText As String, Optional errorMsg As String = "")
         Dim labelIndicator As Label = TryCast(targetControl.Tag, Label)
         If labelIndicator IsNot Nothing Then

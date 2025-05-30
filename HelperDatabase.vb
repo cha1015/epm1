@@ -208,6 +208,9 @@ Public Class HelperDatabase
         Dim bookingIdQuery As String = "SELECT LAST_INSERT_ID();"
         Dim bookingIdObj As Object = DBHelper.ExecuteScalarQuery(bookingIdQuery, New Dictionary(Of String, Object)())
         Return If(bookingIdObj IsNot Nothing, Convert.ToInt32(bookingIdObj), -1)
+
+        Debug.WriteLine($"eventType: {eventType}")
+
     End Function
 
 

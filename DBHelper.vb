@@ -64,5 +64,29 @@ Module DBHelper
         Return dt
     End Function
 
+    Public Function GetFirstRow(query As String, parameters As Dictionary(Of String, Object)) As DataRow
+        Dim dt As New DataTable()
+        Using connection As MySqlConnection = GetConnection()
+            Try
+                connection.Open()
+                Using cmd As New MySqlCommand(query, connection)
+                    For Each param In parameters
+                        cmd.Parameters.AddWithValue(param.Key, param.Value)
+                    Next
+                    Dim adapter As New MySqlDataAdapter(cmd)
+                    adapter.Fill(dt)
+                End Using
+            Catch ex As MySqlException
+                Console.WriteLine("Database error: " & ex.Message)
+            End Try
+        End Using
+        ' Return the first row if available
+        If dt.Rows.Count > 0 Then
+            Return dt.Rows(0)
+        Else
+            Return Nothing
+        End If
+    End Function
+
 
 End Module

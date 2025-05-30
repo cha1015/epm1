@@ -29,11 +29,9 @@ Public Class FormAdminCenter
         LoadCustomerRecords()        ' Customer Records
         LoadPaidBookings()
 
-
-        ' Set up field indicators and validation for event place data entry.
-        Dim labels = {lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
-        Dim fields = {txtEventPlace, txtEventType, txtCapacity, txtPricePerDay, txtFeatures, txtImageUrl, txtAvailableDays, txtDescription}
-        Dim texts = {"Event Place", "Event Type", "Capacity", "Price per Day", "Features", "Image URL", "Opening Hours", "Closing Hours", "Available Days", "Description"}
+        Dim labels = {lblPlaceID, lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
+        Dim fields = {txtPlaceID, txtEventPlace, txtEventType, txtCapacity, txtPricePerDay, txtFeatures, txtImageUrl, txtAvailableDays, txtDescription}
+        Dim texts = {"Place ID", "Event Place", "Event Type", "Capacity", "Price per Day", "Features", "Image URL", "Opening Hours", "Closing Hours", "Available Days", "Description"}
 
         HelperValidation.ApplyFieldIndicators(labels, texts)
 
@@ -202,10 +200,8 @@ Public Class FormAdminCenter
                         "
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
-        ' Populate the rejected bookings panel
         HelperResultsDisplay.PopulateRejectedBookings(flpRejected, dt)
 
-        ' Update the tab label based on the number of rejected bookings
         UpdateTabLabel(tpRejected, flpRejected)
     End Sub
 
@@ -242,20 +238,13 @@ Public Class FormAdminCenter
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
-        ' Populate the all bookings panel
         HelperResultsDisplay.PopulateAllBookings(flpAll, dt)
 
-        ' Update the tab label based on the number of all bookings
         UpdateTabLabel(tpAll, flpAll)
     End Sub
 
 
-
-    '--- Load Availability of Event Places
-    ' In FormAdminCenter
-
     Private Sub LoadAvailability()
-        ' Corrected query to fetch event places with the necessary columns and the alias "Availability"
         Dim query As String = "SELECT e.event_place, e.place_id, e.event_type, e.capacity, " &
                           "e.price_per_Day AS price_per_day, e.features, e.available_days, e.description, " &
                           "e.opening_hours, e.closing_hours, " &
@@ -264,19 +253,15 @@ Public Class FormAdminCenter
                           "e.image_url " &
                           "FROM eventplace e"
 
-        ' Retrieve the data into a DataTable
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
-        ' Debug: List out all column names ... check them in Visual Studio's Output window
         For Each col As DataColumn In dt.Columns
             Debug.WriteLine("Column: " & col.ColumnName)
         Next
 
-        ' Make lookup case-insensitive (if needed)
         dt.CaseSensitive = False
 
         If dt.Columns.Contains("Availability") Then
-            ' Populate the single FlowLayoutPanel with all event places
             HelperResultsDisplay.PopulateEventPlacesForAdmin(
             flpEventPlaces, dt,
             txtEventPlace, txtEventType, txtCapacity,
@@ -292,9 +277,7 @@ Public Class FormAdminCenter
 
 
 
-    '--- Load Revenue Reports
     Private Sub LoadRevenueReports()
-        ' Get the total revenue from payments table where payment_status is Paid
         Dim query As String = "SELECT IFNULL(SUM(amount_paid), 0) AS total_revenue FROM payments WHERE payment_status = 'Paid'"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
@@ -303,7 +286,6 @@ Public Class FormAdminCenter
             totalRevenue = Convert.ToDecimal(dt.Rows(0)("total_revenue"))
         End If
 
-        ' Format with peso sign and commas
         lblRevenue.Text = $"Revenue: ₱{totalRevenue:N0}"
 
         Dim perPlaceQuery As String = "SELECT e.event_place, IFNULL(SUM(p.amount_paid), 0) AS total_revenue " &
@@ -314,9 +296,6 @@ Public Class FormAdminCenter
         Dim perPlaceDt As DataTable = DBHelper.GetDataTable(perPlaceQuery, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, perPlaceDt)
     End Sub
-
-
-
 
     '--- Load Invoices
     Private Sub LoadInvoices()
@@ -349,7 +328,6 @@ Public Class FormAdminCenter
         ORDER BY b.event_date ASC"
         paidBookingsTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
-        ' Set "N/A" for any blank or null cell in the table
         For Each row As DataRow In paidBookingsTable.Rows
             For Each col As DataColumn In paidBookingsTable.Columns
                 If row.IsNull(col) OrElse String.IsNullOrWhiteSpace(row(col).ToString()) Then
@@ -361,9 +339,6 @@ Public Class FormAdminCenter
         dgvPaidBookings.DataSource = paidBookingsTable
         Debug.Print("Paid Bookings: " & paidBookingsTable.Rows.Count)
     End Sub
-
-
-
 
 
     ' ------------------ Load Booked Dates ------------------
@@ -387,7 +362,6 @@ Public Class FormAdminCenter
         Return bookedDates
     End Function
 
-
     '--- Load Customer Count
     Private Sub LoadCustomerCount()
         Dim query As String = "SELECT COUNT(*) FROM users"
@@ -403,7 +377,6 @@ Public Class FormAdminCenter
         last_name, 
         username, 
         email, 
-        role, 
         birthday, 
         age, 
         sex, 
@@ -429,6 +402,7 @@ Public Class FormAdminCenter
             .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
             .AutoResizeColumns()
             .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            .DefaultCellStyle.Font = New Font("Poppins", 8)
         End With
     End Sub
 
@@ -520,6 +494,11 @@ Public Class FormAdminCenter
 #End Region
 
 #Region "Event Place Add/Update/Delete and Field Validation"
+    Private Function PlaceIDExists(placeID As String) As Boolean
+        Dim result As Object = DBHelper.ExecuteScalarQuery("SELECT COUNT(*) FROM eventplace WHERE place_id=@id",
+                                                        New Dictionary(Of String, Object) From {{"@id", placeID}})
+        Return Convert.ToInt32(result) > 0
+    End Function
 
     Private Function EventPlaceExists(eventPlaceName As String) As Boolean
         Dim result As Object = DBHelper.ExecuteScalarQuery("SELECT COUNT(*) FROM eventplace WHERE event_place=@name",
@@ -529,78 +508,34 @@ Public Class FormAdminCenter
 
     '--- Add a new event place
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
-        ' Validate ComboBox selections
-        If String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse
+        If String.IsNullOrWhiteSpace(txtEventPlace.Text) OrElse
+       String.IsNullOrWhiteSpace(txtEventType.Text) OrElse
+       String.IsNullOrWhiteSpace(txtCapacity.Text) OrElse
+       String.IsNullOrWhiteSpace(txtFeatures.Text) OrElse
+       String.IsNullOrWhiteSpace(txtPricePerDay.Text) OrElse
+       String.IsNullOrWhiteSpace(txtDescription.Text) OrElse
+       String.IsNullOrWhiteSpace(txtImageUrl.Text) OrElse
+       String.IsNullOrWhiteSpace(txtAvailableDays.Text) OrElse
+       String.IsNullOrWhiteSpace(txtPlaceID.Text) OrElse
+       String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse
        String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse
        String.IsNullOrWhiteSpace(cbStartAMPM.Text) OrElse
        String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse
        String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse
        String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
 
-            MessageBox.Show("Please select valid opening and closing times.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("All fields must be filled out.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
-        ' Confirmation message
+        If EventPlaceExists(txtEventPlace.Text) OrElse PlaceIDExists(txtPlaceID.Text) Then
+            MessageBox.Show("This event place or place ID already exists! Please choose a different one.", "Duplicate Entry", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
         Dim confirmResult As DialogResult = MessageBox.Show("Are you sure you want to add this event place?", "Confirm Add", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If confirmResult = DialogResult.No Then Exit Sub
 
-        ' Proceed with insertion logic
-        Dim openingTimeRaw As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}".Trim()
-        Dim closingTimeRaw As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}".Trim()
-
-        ' Validate and convert time format
-        Dim timeFormats() As String = {"h:mm tt", "hh:mm tt"}
-        Dim parsedOpening As DateTime
-        Dim parsedClosing As DateTime
-
-        If DateTime.TryParseExact(openingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedOpening) AndAlso
-       DateTime.TryParseExact(closingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedClosing) Then
-
-            Dim openingTime As String = parsedOpening.ToString("HH:mm:ss")
-            Dim closingTime As String = parsedClosing.ToString("HH:mm:ss")
-
-            ' Insert query
-            Dim query As String = "INSERT INTO eventplace (event_place, event_type, capacity, features, price_per_day, description, image_url, opening_hours, closing_hours, available_days) " &
-                              "VALUES (@event_place, @event_type, @capacity, @features, @price_per_day, @description, @image_url, @opening_hours, @closing_hours, @available_days)"
-
-            Dim parameters As New Dictionary(Of String, Object) From {
-            {"@event_place", txtEventPlace.Text},
-            {"@event_type", txtEventType.Text},
-            {"@capacity", If(Not IsNumeric(txtCapacity.Text), DBNull.Value, txtCapacity.Text)},
-            {"@features", txtFeatures.Text},
-            {"@price_per_day", If(Not IsNumeric(txtPricePerDay.Text), DBNull.Value, txtPricePerDay.Text)},
-            {"@description", txtDescription.Text},
-            {"@image_url", txtImageUrl.Text},
-            {"@opening_hours", openingTime},
-            {"@closing_hours", closingTime},
-            {"@available_days", txtAvailableDays.Text}
-        }
-
-            Dim rowsAffected As Integer = DBHelper.ExecuteQuery(query, parameters)
-            If rowsAffected > 0 Then
-                MessageBox.Show("Event place added successfully.")
-                LoadSearchResults()
-            Else
-                MessageBox.Show("Insert failed. No rows were affected. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End If
-        Else
-            MessageBox.Show("Invalid time format. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End If
-    End Sub
-
-    Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
-        ' Check if a place has been selected
-        If String.IsNullOrWhiteSpace(txtPlaceID.Text) Then
-            MessageBox.Show("Please select an event place to update.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
-
-        ' Confirmation message
-        Dim confirmResult As DialogResult = MessageBox.Show("Are you sure you want to update this event place?", "Confirm Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        If confirmResult = DialogResult.No Then Exit Sub
-
-        ' Proceed with update logic
         Dim openingTimeRaw As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}".Trim()
         Dim closingTimeRaw As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}".Trim()
 
@@ -614,7 +549,9 @@ Public Class FormAdminCenter
             Dim openingTime As String = parsedOpening.ToString("HH:mm:ss")
             Dim closingTime As String = parsedClosing.ToString("HH:mm:ss")
 
-            Dim query As String = "UPDATE eventplace SET event_place = @event_place, event_type = @event_type, capacity = @capacity, features = @features, price_per_day = @price_per_day, description = @description, image_url = @image_url, opening_hours = @opening_hours, closing_hours = @closing_hours, available_days = @available_days WHERE place_id = @place_id"
+            ' Insert new event place
+            Dim query As String = "INSERT INTO eventplace (place_id, event_place, event_type, capacity, features, price_per_day, description, image_url, opening_hours, closing_hours, available_days) " &
+                              "VALUES (@place_id, @event_place, @event_type, @capacity, @features, @price_per_day, @description, @image_url, @opening_hours, @closing_hours, @available_days)"
 
             Dim parameters As New Dictionary(Of String, Object) From {
             {"@place_id", txtPlaceID.Text},
@@ -632,15 +569,101 @@ Public Class FormAdminCenter
 
             Dim rowsAffected As Integer = DBHelper.ExecuteQuery(query, parameters)
             If rowsAffected > 0 Then
-                MessageBox.Show("Event place updated successfully.")
+                MessageBox.Show("Event place added successfully!")
                 LoadSearchResults()
             Else
-                MessageBox.Show("Update failed. No rows were affected. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Insert failed. No rows were affected. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
         Else
             MessageBox.Show("Invalid time format. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
+
+    Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
+        If String.IsNullOrWhiteSpace(txtEventPlace.Text) OrElse
+       String.IsNullOrWhiteSpace(txtEventType.Text) OrElse
+       String.IsNullOrWhiteSpace(txtCapacity.Text) OrElse
+       String.IsNullOrWhiteSpace(txtFeatures.Text) OrElse
+       String.IsNullOrWhiteSpace(txtPricePerDay.Text) OrElse
+       String.IsNullOrWhiteSpace(txtDescription.Text) OrElse
+       String.IsNullOrWhiteSpace(txtImageUrl.Text) OrElse
+       String.IsNullOrWhiteSpace(txtAvailableDays.Text) OrElse
+       String.IsNullOrWhiteSpace(txtPlaceID.Text) OrElse
+       String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse
+       String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse
+       String.IsNullOrWhiteSpace(cbStartAMPM.Text) OrElse
+       String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse
+       String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse
+       String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
+
+            MessageBox.Show("All fields must be filled out.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        Dim checkQuery As String = "SELECT * FROM eventplace WHERE place_id = @place_id"
+        Dim checkParams As New Dictionary(Of String, Object) From {{"@place_id", txtPlaceID.Text}}
+        Dim currentValues As DataRow = DBHelper.GetFirstRow(checkQuery, checkParams)
+
+        If currentValues IsNot Nothing Then
+            Dim openingTimeRaw As String = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}".Trim()
+            Dim closingTimeRaw As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}".Trim()
+
+            Dim timeFormats() As String = {"h:mm tt", "hh:mm tt"}
+            Dim parsedOpening As DateTime
+            Dim parsedClosing As DateTime
+
+            If DateTime.TryParseExact(openingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedOpening) AndAlso
+           DateTime.TryParseExact(closingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedClosing) Then
+
+                Dim openingTime As String = parsedOpening.ToString("HH:mm:ss")
+                Dim closingTime As String = parsedClosing.ToString("HH:mm:ss")
+
+                If txtEventPlace.Text = currentValues("event_place").ToString() AndAlso
+               txtEventType.Text = currentValues("event_type").ToString() AndAlso
+               txtCapacity.Text = currentValues("capacity").ToString() AndAlso
+               txtFeatures.Text = currentValues("features").ToString() AndAlso
+               txtPricePerDay.Text = currentValues("price_per_day").ToString() AndAlso
+               txtDescription.Text = currentValues("description").ToString() AndAlso
+               txtImageUrl.Text = currentValues("image_url").ToString() AndAlso
+               txtAvailableDays.Text = currentValues("available_days").ToString() AndAlso
+               openingTime = currentValues("opening_hours").ToString() AndAlso
+               closingTime = currentValues("closing_hours").ToString() Then
+
+                    MessageBox.Show("No changes detected. Update canceled.", "Update Not Needed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Exit Sub
+                End If
+
+                Dim updateQuery As String = "UPDATE eventplace SET event_place = @event_place, event_type = @event_type, capacity = @capacity, features = @features, price_per_day = @price_per_day, description = @description, image_url = @image_url, opening_hours = @opening_hours, closing_hours = @closing_hours, available_days = @available_days WHERE place_id = @place_id"
+
+                Dim updateParams As New Dictionary(Of String, Object) From {
+                {"@place_id", txtPlaceID.Text},
+                {"@event_place", txtEventPlace.Text},
+                {"@event_type", txtEventType.Text},
+                {"@capacity", If(Not IsNumeric(txtCapacity.Text), DBNull.Value, txtCapacity.Text)},
+                {"@features", txtFeatures.Text},
+                {"@price_per_day", If(Not IsNumeric(txtPricePerDay.Text), DBNull.Value, txtPricePerDay.Text)},
+                {"@description", txtDescription.Text},
+                {"@image_url", txtImageUrl.Text},
+                {"@opening_hours", openingTime},
+                {"@closing_hours", closingTime},
+                {"@available_days", txtAvailableDays.Text}
+            }
+
+                Dim rowsAffected As Integer = DBHelper.ExecuteQuery(updateQuery, updateParams)
+                If rowsAffected > 0 Then
+                    MessageBox.Show("Event place updated successfully.")
+                    LoadSearchResults()
+                Else
+                    MessageBox.Show("Update failed. No rows were affected. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Else
+                MessageBox.Show("Invalid time format. Please check your input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        Else
+            MessageBox.Show("Event place not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+    End Sub
+
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         If HasActiveBookings(txtPlaceID.Text) Then
@@ -795,5 +818,27 @@ Public Class FormAdminCenter
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
         editForm.ShowDialog()
+    End Sub
+
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        txtEventPlace.Clear()
+        txtEventType.Clear()
+        txtCapacity.Clear()
+        txtPricePerDay.Clear()
+        txtFeatures.Clear()
+        txtImageUrl.Clear()
+        cbStartHour.SelectedIndex = -1
+        cbStartMinutes.SelectedIndex = -1
+        cbStartAMPM.SelectedIndex = -1
+        cbEndHour.SelectedIndex = -1
+        cbEndMinutes.SelectedIndex = -1
+        cbEndAMPM.SelectedIndex = -1
+        txtAvailableDays.Clear()
+        txtDescription.Clear()
+        txtPlaceID.Clear()
+
+        btnAdd.Visible = True
+        btnUpdate.Visible = False
+        btnDelete.Visible = False
     End Sub
 End Class
