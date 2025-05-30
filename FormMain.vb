@@ -291,8 +291,8 @@ Public Class FormMain
     .BasePricePerDay = CDec(row("price_per_day")),
     .EventPlaceFeatures = row("features").ToString(),
     .EventPlaceDescription = row("description").ToString(),
-    .OpeningHours = row("opening_hours").ToString(),
-    .ClosingHours = row("closing_hours").ToString(),
+.OpeningHours = DirectCast(row("opening_hours"), TimeSpan).ToString("hh\:mm\:ss"),
+.ClosingHours = DirectCast(row("closing_hours"), TimeSpan).ToString("hh\:mm\:ss"),
     .AvailableDays = row("available_days").ToString(),
     .EventPlaceImageUrl = row("image_url").ToString()
 }
@@ -343,10 +343,10 @@ Public Class FormMain
                 Me.Refresh()
                 Application.DoEvents()
             Else
-                MessageBox.Show("Login failed or customer not found.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Login failed.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
         Else
-            MessageBox.Show("Login failed or customer not found.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Login failed.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
     Private Sub txtField_Enter(sender As Object, e As EventArgs) Handles txtMinCapacity.Enter, txtMaxCapacity.Enter, txtMinPrice.Enter, txtMaxPrice.Enter

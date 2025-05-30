@@ -203,7 +203,7 @@ Public Class FormSignUp
         Next
     End Sub
 
-    Private Sub btnSignUp_Click(sender As Object, e As EventArgs) Handles btnSignUp.Click
+    Private Sub btnSignUp_Click(sender As Object, e As EventArgs)
         HideErrorLabels()
 
         If Not ValidateSignUpFields() Then

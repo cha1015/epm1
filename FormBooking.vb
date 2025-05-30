@@ -62,8 +62,10 @@ Public Class FormBooking
             cbEventType.Text = lastBooking.Rows(0)("event_type").ToString()
             txtNumGuests.Text = lastBooking.Rows(0)("num_guests").ToString()
 
-            Dim eventTime As TimeSpan = Convert.ToDateTime(lastBooking.Rows(0)("event_time")).TimeOfDay
-            Dim eventEndTime As TimeSpan = If(lastBooking.Rows(0)("event_end_time") Is DBNull.Value, TimeSpan.Zero, Convert.ToDateTime(lastBooking.Rows(0)("event_end_time")).TimeOfDay)
+            Dim eventTime As TimeSpan = DirectCast(lastBooking.Rows(0)("event_time"), TimeSpan)
+
+            Dim eventEndTime As TimeSpan = If(lastBooking.Rows(0)("event_end_time") Is DBNull.Value, TimeSpan.Zero, DirectCast(lastBooking.Rows(0)("event_end_time"), TimeSpan))
+
 
             ' Format using two-digit hour, so it matches the combobox items (e.g., "08")
             cbStartHour.Text = eventTime.Hours.ToString("00")
@@ -178,7 +180,7 @@ Public Class FormBooking
     End Sub
 
 
-    Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs) Handles btnPlaceBooking.Click
+    Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs)
         ' Check for duplicate booking
         If bookedDates.Contains(dtpEventDateStart.Value.Date) Then
             MessageBox.Show("This date is already booked. Please select another.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)

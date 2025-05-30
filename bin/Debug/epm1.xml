@@ -122,6 +122,11 @@ epm1
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:epm1.My.Resources.Resources.btnSignUppp">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:epm1.My.Resources.Resources.BttnAdd">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
@@ -257,6 +262,11 @@ epm1
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:epm1.My.Resources.Resources.Log_In__7_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:epm1.My.Resources.Resources.LogIn">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
@@ -293,6 +303,11 @@ epm1
 </summary>
 </member>
 <member name="P:epm1.My.Resources.Resources.Sign_Up__nolbl_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:epm1.My.Resources.Resources.signupppp">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>

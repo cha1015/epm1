@@ -263,6 +263,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property btnSignUppp() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("btnSignUppp", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property BttnAdd() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("BttnAdd", resourceCulture)
@@ -533,6 +543,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property Log_In__7_() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Log In (7)", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property LogIn() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("LogIn", resourceCulture)
@@ -606,6 +626,16 @@ Namespace My.Resources
         Friend ReadOnly Property Sign_Up__nolbl_() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Sign Up (nolbl)", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property signupppp() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("signupppp", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

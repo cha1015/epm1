@@ -74,12 +74,14 @@ Partial Class FormMain
         '
         'txtMaxCapacity
         '
-        Me.txtMaxCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMaxCapacity.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(231, Byte), Integer))
+        Me.txtMaxCapacity.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtMaxCapacity.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxCapacity.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.txtMaxCapacity.Location = New System.Drawing.Point(88, 229)
+        Me.txtMaxCapacity.Location = New System.Drawing.Point(118, 227)
         Me.txtMaxCapacity.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtMaxCapacity.Name = "txtMaxCapacity"
-        Me.txtMaxCapacity.Size = New System.Drawing.Size(50, 20)
+        Me.txtMaxCapacity.Size = New System.Drawing.Size(75, 18)
         Me.txtMaxCapacity.TabIndex = 61
         Me.txtMaxCapacity.Text = "Max"
         '
@@ -88,10 +90,10 @@ Partial Class FormMain
         Me.pnlSignUpLogIn.BackColor = System.Drawing.Color.Transparent
         Me.pnlSignUpLogIn.Controls.Add(Me.btnLogIn)
         Me.pnlSignUpLogIn.Controls.Add(Me.btnSignUp)
-        Me.pnlSignUpLogIn.Location = New System.Drawing.Point(828, 9)
+        Me.pnlSignUpLogIn.Location = New System.Drawing.Point(736, 9)
         Me.pnlSignUpLogIn.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.pnlSignUpLogIn.Name = "pnlSignUpLogIn"
-        Me.pnlSignUpLogIn.Size = New System.Drawing.Size(107, 63)
+        Me.pnlSignUpLogIn.Size = New System.Drawing.Size(199, 63)
         Me.pnlSignUpLogIn.TabIndex = 69
         '
         'btnLogIn
@@ -102,10 +104,10 @@ Partial Class FormMain
         Me.btnLogIn.FlatAppearance.BorderSize = 0
         Me.btnLogIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLogIn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnLogIn.Location = New System.Drawing.Point(15, 34)
+        Me.btnLogIn.Location = New System.Drawing.Point(110, 15)
         Me.btnLogIn.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnLogIn.Name = "btnLogIn"
-        Me.btnLogIn.Size = New System.Drawing.Size(90, 24)
+        Me.btnLogIn.Size = New System.Drawing.Size(90, 33)
         Me.btnLogIn.TabIndex = 1
         Me.btnLogIn.UseVisualStyleBackColor = False
         '
@@ -117,10 +119,10 @@ Partial Class FormMain
         Me.btnSignUp.FlatAppearance.BorderSize = 0
         Me.btnSignUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSignUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSignUp.Location = New System.Drawing.Point(14, 8)
+        Me.btnSignUp.Location = New System.Drawing.Point(2, 15)
         Me.btnSignUp.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnSignUp.Name = "btnSignUp"
-        Me.btnSignUp.Size = New System.Drawing.Size(90, 24)
+        Me.btnSignUp.Size = New System.Drawing.Size(104, 33)
         Me.btnSignUp.TabIndex = 0
         Me.btnSignUp.UseVisualStyleBackColor = False
         '
@@ -130,7 +132,7 @@ Partial Class FormMain
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold)
         Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label4.Location = New System.Drawing.Point(5, 255)
+        Me.Label4.Location = New System.Drawing.Point(6, 255)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(39, 13)
@@ -143,7 +145,7 @@ Partial Class FormMain
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold)
         Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label3.Location = New System.Drawing.Point(5, 208)
+        Me.Label3.Location = New System.Drawing.Point(7, 210)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(64, 13)
@@ -156,7 +158,7 @@ Partial Class FormMain
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold)
         Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label2.Location = New System.Drawing.Point(5, 106)
+        Me.Label2.Location = New System.Drawing.Point(7, 117)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(90, 13)
@@ -172,34 +174,37 @@ Partial Class FormMain
         Me.btnClearFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnClearFilters.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClearFilters.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.btnClearFilters.Location = New System.Drawing.Point(26, 344)
+        Me.btnClearFilters.Location = New System.Drawing.Point(37, 339)
         Me.btnClearFilters.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnClearFilters.Name = "btnClearFilters"
-        Me.btnClearFilters.Size = New System.Drawing.Size(72, 24)
+        Me.btnClearFilters.Size = New System.Drawing.Size(126, 33)
         Me.btnClearFilters.TabIndex = 64
         Me.btnClearFilters.UseVisualStyleBackColor = False
         '
         'clbAvailableOn
         '
         Me.clbAvailableOn.BackColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.clbAvailableOn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.clbAvailableOn.ForeColor = System.Drawing.Color.Gray
+        Me.clbAvailableOn.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.clbAvailableOn.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.clbAvailableOn.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.clbAvailableOn.FormattingEnabled = True
         Me.clbAvailableOn.Items.AddRange(New Object() {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"})
-        Me.clbAvailableOn.Location = New System.Drawing.Point(8, 126)
+        Me.clbAvailableOn.Location = New System.Drawing.Point(10, 132)
         Me.clbAvailableOn.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.clbAvailableOn.Name = "clbAvailableOn"
-        Me.clbAvailableOn.Size = New System.Drawing.Size(183, 49)
+        Me.clbAvailableOn.Size = New System.Drawing.Size(183, 76)
         Me.clbAvailableOn.TabIndex = 67
         '
         'txtMaxPrice
         '
-        Me.txtMaxPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMaxPrice.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(231, Byte), Integer))
+        Me.txtMaxPrice.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtMaxPrice.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxPrice.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.txtMaxPrice.Location = New System.Drawing.Point(86, 276)
+        Me.txtMaxPrice.Location = New System.Drawing.Point(119, 272)
         Me.txtMaxPrice.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtMaxPrice.Name = "txtMaxPrice"
-        Me.txtMaxPrice.Size = New System.Drawing.Size(50, 20)
+        Me.txtMaxPrice.Size = New System.Drawing.Size(76, 18)
         Me.txtMaxPrice.TabIndex = 63
         Me.txtMaxPrice.Text = "Max"
         '
@@ -212,10 +217,10 @@ Partial Class FormMain
         Me.btnApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnApply.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnApply.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.btnApply.Location = New System.Drawing.Point(103, 344)
+        Me.btnApply.Location = New System.Drawing.Point(37, 303)
         Me.btnApply.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnApply.Name = "btnApply"
-        Me.btnApply.Size = New System.Drawing.Size(72, 24)
+        Me.btnApply.Size = New System.Drawing.Size(126, 32)
         Me.btnApply.TabIndex = 58
         Me.btnApply.UseVisualStyleBackColor = False
         '
@@ -225,6 +230,7 @@ Partial Class FormMain
         Me.cbSort.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
         Me.cbSort.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.cbSort.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
+        Me.cbSort.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.cbSort.Font = New System.Drawing.Font("Poppins", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbSort.ForeColor = System.Drawing.Color.DimGray
         Me.cbSort.FormattingEnabled = True
@@ -237,37 +243,42 @@ Partial Class FormMain
         '
         'txtMinPrice
         '
-        Me.txtMinPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMinPrice.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(231, Byte), Integer))
+        Me.txtMinPrice.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtMinPrice.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMinPrice.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.txtMinPrice.Location = New System.Drawing.Point(8, 276)
+        Me.txtMinPrice.Location = New System.Drawing.Point(10, 272)
         Me.txtMinPrice.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtMinPrice.Name = "txtMinPrice"
-        Me.txtMinPrice.Size = New System.Drawing.Size(50, 20)
+        Me.txtMinPrice.Size = New System.Drawing.Size(77, 18)
         Me.txtMinPrice.TabIndex = 62
         Me.txtMinPrice.Text = "Min"
         '
         'txtMinCapacity
         '
-        Me.txtMinCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMinCapacity.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(231, Byte), Integer))
+        Me.txtMinCapacity.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtMinCapacity.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMinCapacity.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.txtMinCapacity.Location = New System.Drawing.Point(9, 229)
+        Me.txtMinCapacity.Location = New System.Drawing.Point(10, 227)
         Me.txtMinCapacity.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtMinCapacity.Name = "txtMinCapacity"
-        Me.txtMinCapacity.Size = New System.Drawing.Size(50, 20)
+        Me.txtMinCapacity.Size = New System.Drawing.Size(77, 18)
         Me.txtMinCapacity.TabIndex = 60
         Me.txtMinCapacity.Text = "Min"
         '
         'clbEventType
         '
         Me.clbEventType.BackColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.clbEventType.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.clbEventType.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.clbEventType.ForeColor = System.Drawing.Color.Gray
+        Me.clbEventType.ForeColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.clbEventType.FormattingEnabled = True
         Me.clbEventType.Items.AddRange(New Object() {"Classes & Workshops", "    Coffee Workshop", "    Cooking", "    Fitness", "    Tea Workshop", "Corporate Event", "    Dining", "    Party", "Formal Meetings & Team Gatherings", "    Conference", "    Interview", "    Sales Meeting", "    Team Bonding", "    Training", "Parties & Celebrations", "    Anniversary", "    Baby Shower", "    Birthday Party", "    Holiday & Festive Celebrations", "        Deepavali", "        Hari Raya", "        Year-End Party", "    Graduation Party", "    Lunch/Dinner", "    Prom", "Shoots & Productions", "    Green Screen Shoot", "    Live Webinar", "    Video Production", "Weddings & Related Events", "    Bridal Shower", "    Ceremony", "    Engagement", "    Proposal", "    Reception", "    Solemnization", "    Wedding"})
-        Me.clbEventType.Location = New System.Drawing.Point(8, 24)
+        Me.clbEventType.Location = New System.Drawing.Point(10, 25)
         Me.clbEventType.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.clbEventType.Name = "clbEventType"
-        Me.clbEventType.Size = New System.Drawing.Size(185, 76)
+        Me.clbEventType.Size = New System.Drawing.Size(183, 90)
         Me.clbEventType.TabIndex = 57
         '
         'pnlAccount
@@ -279,10 +290,10 @@ Partial Class FormMain
         Me.pnlAccount.Controls.Add(Me.btnCustomerView)
         Me.pnlAccount.Controls.Add(Me.lblUser)
         Me.pnlAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.pnlAccount.Location = New System.Drawing.Point(734, 11)
+        Me.pnlAccount.Location = New System.Drawing.Point(736, 11)
         Me.pnlAccount.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.pnlAccount.Name = "pnlAccount"
-        Me.pnlAccount.Size = New System.Drawing.Size(213, 63)
+        Me.pnlAccount.Size = New System.Drawing.Size(208, 63)
         Me.pnlAccount.TabIndex = 68
         '
         'btnLogOut
@@ -348,7 +359,7 @@ Partial Class FormMain
         Me.btnSearch.FlatAppearance.BorderSize = 0
         Me.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSearch.Location = New System.Drawing.Point(663, 31)
+        Me.btnSearch.Location = New System.Drawing.Point(659, 33)
         Me.btnSearch.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Size = New System.Drawing.Size(24, 20)
@@ -364,7 +375,7 @@ Partial Class FormMain
         Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtSearch.Font = New System.Drawing.Font("Poppins", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSearch.ForeColor = System.Drawing.Color.DimGray
-        Me.txtSearch.Location = New System.Drawing.Point(237, 29)
+        Me.txtSearch.Location = New System.Drawing.Point(229, 32)
         Me.txtSearch.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.Size = New System.Drawing.Size(422, 24)
@@ -386,7 +397,7 @@ Partial Class FormMain
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(5, 4)
+        Me.Label1.Location = New System.Drawing.Point(7, 10)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(73, 13)
@@ -409,7 +420,7 @@ Partial Class FormMain
         Me.pnlFilter.Controls.Add(Me.txtMinCapacity)
         Me.pnlFilter.Controls.Add(Me.txtMinPrice)
         Me.pnlFilter.ForeColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.pnlFilter.Location = New System.Drawing.Point(938, 109)
+        Me.pnlFilter.Location = New System.Drawing.Point(937, 96)
         Me.pnlFilter.Name = "pnlFilter"
         Me.pnlFilter.Size = New System.Drawing.Size(200, 382)
         Me.pnlFilter.TabIndex = 82
@@ -423,7 +434,7 @@ Partial Class FormMain
         Me.btnFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnFilter.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnFilter.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.btnFilter.Location = New System.Drawing.Point(692, 32)
+        Me.btnFilter.Location = New System.Drawing.Point(687, 32)
         Me.btnFilter.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnFilter.Name = "btnFilter"
         Me.btnFilter.Size = New System.Drawing.Size(19, 21)
@@ -439,7 +450,7 @@ Partial Class FormMain
         Me.btnBack.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnBack.Location = New System.Drawing.Point(169, 32)
         Me.btnBack.Name = "btnBack"
-        Me.btnBack.Size = New System.Drawing.Size(18, 20)
+        Me.btnBack.Size = New System.Drawing.Size(24, 26)
         Me.btnBack.TabIndex = 84
         Me.btnBack.UseVisualStyleBackColor = False
         '
@@ -452,7 +463,7 @@ Partial Class FormMain
         Me.btnNext.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnNext.Location = New System.Drawing.Point(193, 32)
         Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(18, 20)
+        Me.btnNext.Size = New System.Drawing.Size(24, 26)
         Me.btnNext.TabIndex = 85
         Me.btnNext.UseVisualStyleBackColor = False
         '
