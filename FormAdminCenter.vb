@@ -409,7 +409,9 @@ Public Class FormAdminCenter
         sex, 
         address 
     FROM users 
+    WHERE role = 'User' 
     ORDER BY first_name, last_name ASC"
+
         usersTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         ' Set "N/A" for any blank or null cell in the table
@@ -454,8 +456,6 @@ Public Class FormAdminCenter
             dgvCustomerRec.DataSource = dv
         End If
     End Sub
-
-
 
 #End Region
 
