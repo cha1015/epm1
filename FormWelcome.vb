@@ -2,7 +2,7 @@
 
 
     Private Sub FormWelcome_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        welcomeTimer.Interval = 5000 ' 7 seconds
+        welcomeTimer.Interval = 1000
         welcomeTimer.Start()
     End Sub
 

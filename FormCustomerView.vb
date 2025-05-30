@@ -218,6 +218,7 @@ Public Class FormCustomerView
                                                               Return status = "approved" AndAlso paymentStatus <> "paid"
                                                           Case Else
                                                               lblSelected.Text = "Select what to view!"
+                                                              lblSelected.ForeColor = Color.Red
                                                               Return False
                                                       End Select
                                                   End Function)

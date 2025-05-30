@@ -237,13 +237,13 @@ Partial Class FormCustomerView
         '
         Me.lblRole.AutoSize = True
         Me.lblRole.BackColor = System.Drawing.Color.Transparent
-        Me.lblRole.Font = New System.Drawing.Font("Cinzel", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblRole.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRole.ForeColor = System.Drawing.Color.White
         Me.lblRole.Location = New System.Drawing.Point(743, 43)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(46, 13)
+        Me.lblRole.Size = New System.Drawing.Size(33, 19)
         Me.lblRole.TabIndex = 85
-        Me.lblRole.Text = "Admin"
+        Me.lblRole.Text = "User"
         '
         'btnEdit
         '
@@ -262,13 +262,13 @@ Partial Class FormCustomerView
         '
         Me.lblUsername.AutoSize = True
         Me.lblUsername.BackColor = System.Drawing.Color.Transparent
-        Me.lblUsername.Font = New System.Drawing.Font("Cinzel", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblUsername.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.White
         Me.lblUsername.Location = New System.Drawing.Point(743, 23)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(81, 13)
+        Me.lblUsername.Size = New System.Drawing.Size(33, 19)
         Me.lblUsername.TabIndex = 84
-        Me.lblUsername.Text = "Admin Name"
+        Me.lblUsername.Text = "User"
         '
         'btnNext
         '

@@ -137,9 +137,8 @@ Partial Class FormAdminCenter
         Me.btnLogOut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnLogOut.FlatAppearance.BorderSize = 0
         Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLogOut.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogOut.ForeColor = System.Drawing.Color.Black
-        Me.btnLogOut.Location = New System.Drawing.Point(848, 43)
+        Me.btnLogOut.Location = New System.Drawing.Point(848, 44)
         Me.btnLogOut.Margin = New System.Windows.Forms.Padding(2)
         Me.btnLogOut.Name = "btnLogOut"
         Me.btnLogOut.Size = New System.Drawing.Size(90, 24)
@@ -153,9 +152,8 @@ Partial Class FormAdminCenter
         Me.btnEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnEdit.FlatAppearance.BorderSize = 0
         Me.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnEdit.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnEdit.ForeColor = System.Drawing.Color.Black
-        Me.btnEdit.Location = New System.Drawing.Point(848, 16)
+        Me.btnEdit.Location = New System.Drawing.Point(848, 17)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Size = New System.Drawing.Size(90, 24)
@@ -166,11 +164,11 @@ Partial Class FormAdminCenter
         '
         Me.lblRole.AutoSize = True
         Me.lblRole.BackColor = System.Drawing.Color.Transparent
-        Me.lblRole.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblRole.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRole.ForeColor = System.Drawing.Color.White
-        Me.lblRole.Location = New System.Drawing.Point(746, 43)
+        Me.lblRole.Location = New System.Drawing.Point(743, 40)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(46, 13)
+        Me.lblRole.Size = New System.Drawing.Size(44, 19)
         Me.lblRole.TabIndex = 91
         Me.lblRole.Text = "Admin"
         '
@@ -178,11 +176,11 @@ Partial Class FormAdminCenter
         '
         Me.lblUsername.AutoSize = True
         Me.lblUsername.BackColor = System.Drawing.Color.Transparent
-        Me.lblUsername.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblUsername.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.White
-        Me.lblUsername.Location = New System.Drawing.Point(746, 27)
+        Me.lblUsername.Location = New System.Drawing.Point(743, 24)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(84, 13)
+        Me.lblUsername.Size = New System.Drawing.Size(80, 19)
         Me.lblUsername.TabIndex = 90
         Me.lblUsername.Text = "Admin Name"
         '

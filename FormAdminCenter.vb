@@ -528,7 +528,7 @@ Public Class FormAdminCenter
     End Function
 
     '--- Add a new event place
-    Private Sub btnAdd_Click(sender As Object, e As EventArgs)
+    Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         ' Validate ComboBox selections
         If String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse
        String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse
@@ -589,7 +589,7 @@ Public Class FormAdminCenter
         End If
     End Sub
 
-    Private Sub btnUpdate_Click(sender As Object, e As EventArgs)
+    Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
         ' Check if a place has been selected
         If String.IsNullOrWhiteSpace(txtPlaceID.Text) Then
             MessageBox.Show("Please select an event place to update.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -642,7 +642,7 @@ Public Class FormAdminCenter
         End If
     End Sub
 
-    Private Sub btnDelete_Click(sender As Object, e As EventArgs)
+    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         If HasActiveBookings(txtPlaceID.Text) Then
             MessageBox.Show("Cannot delete event place with active bookings.", "Deletion Blocked", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
@@ -715,7 +715,7 @@ Public Class FormAdminCenter
     End Sub
 
     '--- Log Out ---
-    Private Sub btnLogOut_Click(sender As Object, e As EventArgs)
+    Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
         Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
         If result = DialogResult.Yes Then
@@ -753,10 +753,6 @@ Public Class FormAdminCenter
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
-    End Sub
-    Private Sub btnEditInformation_Click(sender As Object, e As EventArgs)
-        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
-        editForm.ShowDialog()
     End Sub
 
     Private Sub FilterPaidBookings()
@@ -796,5 +792,8 @@ Public Class FormAdminCenter
         FilterCustomerRecords()
     End Sub
 
-
+    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
+        editForm.ShowDialog()
+    End Sub
 End Class
