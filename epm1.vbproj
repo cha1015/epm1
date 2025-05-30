@@ -129,6 +129,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormAdminCode.Designer.vb">
+      <DependentUpon>FormAdminCode.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAdminCode.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormBooking.Designer.vb">
       <DependentUpon>FormBooking.vb</DependentUpon>
     </Compile>
@@ -218,6 +224,9 @@
   <ItemGroup>
     <EmbeddedResource Include="FormAdminCenter.resx">
       <DependentUpon>FormAdminCenter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAdminCode.resx">
+      <DependentUpon>FormAdminCode.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormBooking.resx">
       <DependentUpon>FormBooking.vb</DependentUpon>

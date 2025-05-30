@@ -64,11 +64,14 @@ Public Class FormLogIn
 
                 Select Case CurrentUser.Role
                     Case "Admin"
-                        Dim adminCode As String = InputBox("Please enter the admin authentication code:", "Admin Authentication")
-                        If String.Compare(adminCode.Trim(), "SECURE123", True) <> 0 Then
-                            lblGeneralError.Text = "Invalid admin authentication code."
-                            lblGeneralError.Visible = True
-                            Exit Sub
+                        Dim adminForm As New FormAdminCode()
+                        If adminForm.ShowDialog() = DialogResult.OK Then
+                            Dim adminCode As String = adminForm.AdminCode
+                            If String.Compare(adminCode.Trim(), "SECURE123", True) <> 0 Then
+                                lblGeneralError.Text = "Invalid admin authentication code."
+                                lblGeneralError.Visible = True
+                                Exit Sub
+                            End If
                         End If
                         CurrentUser.CustomerId = -1
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)

@@ -350,44 +350,48 @@ Partial Class FormSignUp
         Me.lblPasswordError.AutoSize = True
         Me.lblPasswordError.BackColor = System.Drawing.Color.Transparent
         Me.lblPasswordError.Font = New System.Drawing.Font("Poppins", 7.8!)
-        Me.lblPasswordError.ForeColor = System.Drawing.Color.Gray
-        Me.lblPasswordError.Location = New System.Drawing.Point(8, 299)
+        Me.lblPasswordError.ForeColor = System.Drawing.Color.IndianRed
+        Me.lblPasswordError.Location = New System.Drawing.Point(211, 295)
         Me.lblPasswordError.Name = "lblPasswordError"
         Me.lblPasswordError.Size = New System.Drawing.Size(147, 19)
         Me.lblPasswordError.TabIndex = 77
         Me.lblPasswordError.Text = "Passwords do not match!"
+        Me.lblPasswordError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblPwStrength
         '
         Me.lblPwStrength.Font = New System.Drawing.Font("Poppins", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPwStrength.ForeColor = System.Drawing.Color.Gray
-        Me.lblPwStrength.Location = New System.Drawing.Point(8, 280)
+        Me.lblPwStrength.ForeColor = System.Drawing.Color.IndianRed
+        Me.lblPwStrength.Location = New System.Drawing.Point(211, 276)
         Me.lblPwStrength.Name = "lblPwStrength"
         Me.lblPwStrength.Size = New System.Drawing.Size(142, 19)
         Me.lblPwStrength.TabIndex = 75
         Me.lblPwStrength.Text = "Strength:"
+        Me.lblPwStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblEmailError
         '
         Me.lblEmailError.AutoSize = True
         Me.lblEmailError.Font = New System.Drawing.Font("Poppins", 7.8!)
-        Me.lblEmailError.ForeColor = System.Drawing.Color.Gray
-        Me.lblEmailError.Location = New System.Drawing.Point(8, 261)
+        Me.lblEmailError.ForeColor = System.Drawing.Color.IndianRed
+        Me.lblEmailError.Location = New System.Drawing.Point(211, 257)
         Me.lblEmailError.Name = "lblEmailError"
         Me.lblEmailError.Size = New System.Drawing.Size(120, 19)
         Me.lblEmailError.TabIndex = 74
         Me.lblEmailError.Text = "Email already exists!"
+        Me.lblEmailError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblUsernameError
         '
         Me.lblUsernameError.AutoSize = True
         Me.lblUsernameError.Font = New System.Drawing.Font("Poppins", 7.8!)
-        Me.lblUsernameError.ForeColor = System.Drawing.Color.Gray
-        Me.lblUsernameError.Location = New System.Drawing.Point(8, 242)
+        Me.lblUsernameError.ForeColor = System.Drawing.Color.IndianRed
+        Me.lblUsernameError.Location = New System.Drawing.Point(211, 238)
         Me.lblUsernameError.Name = "lblUsernameError"
         Me.lblUsernameError.Size = New System.Drawing.Size(146, 19)
         Me.lblUsernameError.TabIndex = 73
         Me.lblUsernameError.Text = "Username already exists!"
+        Me.lblUsernameError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblRole
         '
@@ -407,11 +411,11 @@ Partial Class FormSignUp
         Me.lblConfirmPassword.BackColor = System.Drawing.Color.Transparent
         Me.lblConfirmPassword.Font = New System.Drawing.Font("Cinzel", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblConfirmPassword.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.lblConfirmPassword.Location = New System.Drawing.Point(88, 179)
+        Me.lblConfirmPassword.Location = New System.Drawing.Point(75, 181)
         Me.lblConfirmPassword.Name = "lblConfirmPassword"
-        Me.lblConfirmPassword.Size = New System.Drawing.Size(66, 14)
+        Me.lblConfirmPassword.Size = New System.Drawing.Size(134, 14)
         Me.lblConfirmPassword.TabIndex = 71
-        Me.lblConfirmPassword.Text = "Confirm"
+        Me.lblConfirmPassword.Text = "Confirm Password"
         '
         'lblPassword
         '
@@ -531,10 +535,10 @@ Partial Class FormSignUp
         Me.txtConfPass.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtConfPass.Font = New System.Drawing.Font("Poppins", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtConfPass.ForeColor = System.Drawing.Color.DimGray
-        Me.txtConfPass.Location = New System.Drawing.Point(160, 179)
+        Me.txtConfPass.Location = New System.Drawing.Point(215, 179)
         Me.txtConfPass.Name = "txtConfPass"
         Me.txtConfPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtConfPass.Size = New System.Drawing.Size(318, 23)
+        Me.txtConfPass.Size = New System.Drawing.Size(263, 23)
         Me.txtConfPass.TabIndex = 61
         '
         'FormSignUp
