@@ -76,7 +76,7 @@ Public Class FormAdminCenter
         txtPricePerDay, txtFeatures, txtImageUrl,
         cbStartHour, cbStartMinutes, cbStartAMPM,
         cbEndHour, cbEndMinutes, cbEndAMPM,
-        txtAvailableDays, txtDescription, txtPlaceID,
+        txtAvailableDays, txtDescription, txtPlaceID, btnAdd,
         btnUpdate, btnDelete)
     End Sub
 
@@ -283,7 +283,7 @@ Public Class FormAdminCenter
             txtPricePerDay, txtFeatures, txtImageUrl,
             cbStartHour, cbStartMinutes, cbStartAMPM,
             cbEndHour, cbEndMinutes, cbEndAMPM,
-            txtAvailableDays, txtDescription, txtPlaceID,
+            txtAvailableDays, txtDescription, txtPlaceID, btnAdd,
             btnUpdate, btnDelete)
         Else
             MessageBox.Show("The 'Availability' column does not exist in the DataTable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
