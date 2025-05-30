@@ -290,7 +290,7 @@ Partial Class FormMain
         Me.pnlAccount.Controls.Add(Me.btnCustomerView)
         Me.pnlAccount.Controls.Add(Me.lblUser)
         Me.pnlAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.pnlAccount.Location = New System.Drawing.Point(736, 11)
+        Me.pnlAccount.Location = New System.Drawing.Point(736, 9)
         Me.pnlAccount.Margin = New System.Windows.Forms.Padding(2)
         Me.pnlAccount.Name = "pnlAccount"
         Me.pnlAccount.Size = New System.Drawing.Size(208, 63)
@@ -314,12 +314,12 @@ Partial Class FormMain
         'lblUsername
         '
         Me.lblUsername.AutoSize = True
-        Me.lblUsername.Font = New System.Drawing.Font("Cinzel", 7.799999!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblUsername.Font = New System.Drawing.Font("Poppins Medium", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.White
         Me.lblUsername.Location = New System.Drawing.Point(12, 13)
         Me.lblUsername.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(67, 13)
+        Me.lblUsername.Size = New System.Drawing.Size(74, 19)
         Me.lblUsername.TabIndex = 37
         Me.lblUsername.Text = "Username"
         '

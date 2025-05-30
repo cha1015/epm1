@@ -125,7 +125,9 @@ Public Class HelperDatabase
     End Sub
 
     Public Shared Function PlaceBooking(customerId As Integer, placeId As Integer, numGuests As Integer, eventDateStart As Date,
-                                      eventStartTime As String, eventEndTime As String, eventEndDate As Date, totalPrice As Decimal) As Integer
+                                        eventStartTime As String, eventEndTime As String, eventEndDate As Date,
+                                        totalPrice As Decimal, eventType As String) As Integer
+
         ' ------------------ Check if customer exists ------------------
         Dim checkCustomerQuery As String = "SELECT COUNT(*) FROM Customers WHERE customer_id = @customer_id"
         Dim checkCustomerParams As New Dictionary(Of String, Object) From {
@@ -181,18 +183,20 @@ Public Class HelperDatabase
         Dim formattedEndTime As String = parsedEnd.ToString("HH:mm:ss")
 
         ' ------------------ Insert Booking ------------------
-        Dim insertQuery As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, event_end_date, total_price) " &
-                                "VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @event_end_date, @total_price)"
+        Dim insertQuery As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, event_end_date, total_price, event_type) " &
+                             "VALUES (@customer_id, @place_id, @num_guests, @event_date, @event_time, @event_end_time, @event_end_date, @total_price, @event_type)"
         Dim insertParams As New Dictionary(Of String, Object) From {
-        {"@customer_id", customerId},
-        {"@place_id", placeId},
-        {"@num_guests", numGuests},
-        {"@event_date", eventDateStart},
-        {"@event_time", formattedStartTime},
-        {"@event_end_time", formattedEndTime},
-        {"@event_end_date", eventEndDate},  ' New field added for multi-day events
-        {"@total_price", totalPrice}
-    }
+    {"@customer_id", customerId},
+    {"@place_id", placeId},
+    {"@num_guests", numGuests},
+    {"@event_date", eventDateStart},
+    {"@event_time", formattedStartTime},
+    {"@event_end_time", formattedEndTime},
+    {"@event_end_date", eventEndDate},
+    {"@total_price", totalPrice},
+    {"@event_type", eventType}
+}
+
 
         Dim insertResult As Integer = DBHelper.ExecuteQuery(insertQuery, insertParams)
         ' If the insert did not affect any rows, then fail.

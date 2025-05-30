@@ -72,57 +72,73 @@ Public Class HelperPrice
 
         Dim additionalCharges As Decimal = 0D
         Dim perMinuteRate As Decimal = 17D
-        Dim warningMessage As New StringBuilder()
+        Dim warningMessages As New List(Of String)
 
         If eventStartTime < openingTime Then
             Dim earlyMinutes As Integer = Math.Max(0, CInt((openingTime - eventStartTime).TotalMinutes))
             additionalCharges += earlyMinutes * perMinuteRate
-            warningMessage.AppendLine($"Your event starts {earlyMinutes} minutes before opening. Extra fee: ₱{earlyMinutes * perMinuteRate}")
+            warningMessages.Add($"Your event starts {earlyMinutes} minutes before opening. Extra fee: ₱{earlyMinutes * perMinuteRate}")
         End If
 
         If eventEndTime > closingTime Then
             Dim overtimeMinutes As Integer = Math.Max(0, CInt((eventEndTime - closingTime).TotalMinutes))
             additionalCharges += overtimeMinutes * perMinuteRate
-            warningMessage.AppendLine($"Your event ends {overtimeMinutes} minutes past closing. Extra fee: ₱{overtimeMinutes * perMinuteRate}")
+            warningMessages.Add($"Your event ends {overtimeMinutes} minutes past closing. Extra fee: ₱{overtimeMinutes * perMinuteRate}")
         End If
 
-        ' Show a single MessageBox if there are warnings
-        If warningMessage.Length > 0 Then
-            MessageBox.Show(warningMessage.ToString(), "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        If warningMessages.Count > 0 Then
+            MessageBox.Show(String.Join(vbCrLf, warningMessages), "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
         Return additionalCharges
     End Function
 
+
+
     ' ------------------ Generate Price Breakdown ------------------
     Public Shared Function GeneratePriceBreakdown(numGuests As Integer, eventPlaceCapacity As Integer,
-                                              basePricePerDay As Decimal, totalDays As Integer, servicesCost As Decimal,
-                                              additionalCharges As Decimal, finalTotalPrice As Decimal) As String
+                                              basePricePerDay As Decimal, totalDays As Integer, additionalCharges As Decimal, finalTotalPrice As Decimal,
+                                              chkCatering As Boolean, chkClown As Boolean, chkSinger As Boolean,
+                                              chkDancer As Boolean, chkVideoke As Boolean) As String
         Dim breakdown As New StringBuilder()
 
-        breakdown.AppendLine($"Base Price ({totalDays} day/s): ₱{basePricePerDay * totalDays:F2} - Cost per day for the event place.")
+        ' Base Price Breakdown
+        breakdown.AppendLine($"Base Price: {totalDays} Days x ₱{basePricePerDay:F2} = ₱{basePricePerDay * totalDays:F2}")
 
-        Dim excessGuestCost As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100, 0)
+        ' Excess Guest Fee Breakdown
+        Dim excessGuests As Integer = Math.Max(0, numGuests - eventPlaceCapacity)
+        Dim excessGuestCost As Decimal = excessGuests * 100D * totalDays
         If excessGuestCost > 0 Then
-            breakdown.AppendLine($"Guest Capacity Exceeded Fee: ₱{excessGuestCost:F2} - Additional charge for extra guests.")
+            breakdown.AppendLine($"Guest Capacity Exceeded Fee: {totalDays} Days x ({excessGuests} People x ₱100.00) = ₱{excessGuestCost:F2}")
         End If
 
-        If servicesCost > 0 Then
-            breakdown.AppendLine($"Total Services Fee: ₱{servicesCost:F2} - Includes catering, entertainment, etc.")
+        ' Individual Service Costs (Multiplied Per Day)
+        Dim cateringCost As Decimal = If(chkCatering, numGuests * 400D * totalDays, 0D)
+        Dim clownCost As Decimal = If(chkClown, numGuests * 200D * totalDays, 0D)
+        Dim singerCost As Decimal = If(chkSinger, numGuests * 140D * totalDays, 0D)
+        Dim dancerCost As Decimal = If(chkDancer, numGuests * 140D * totalDays, 0D)
+        Dim videokeCost As Decimal = If(chkVideoke, numGuests * 20D * totalDays, 0D)
+        Dim servicesCost As Decimal = cateringCost + clownCost + singerCost + dancerCost + videokeCost
+
+        ' Services Breakdown (Multi-Day Adjusted)
+        If cateringCost > 0 Then breakdown.AppendLine($"Catering: {totalDays} Days x ({numGuests} People x ₱400.00) = ₱{cateringCost:F2}")
+        If clownCost > 0 Then breakdown.AppendLine($"Clown: {totalDays} Days x ({numGuests} People x ₱200.00) = ₱{clownCost:F2}")
+        If singerCost > 0 Then breakdown.AppendLine($"Singer: {totalDays} Days x ({numGuests} People x ₱140.00) = ₱{singerCost:F2}")
+        If dancerCost > 0 Then breakdown.AppendLine($"Dancer: {totalDays} Days x ({numGuests} People x ₱140.00) = ₱{dancerCost:F2}")
+        If videokeCost > 0 Then breakdown.AppendLine($"Videoke: {totalDays} Days x ({numGuests} People x ₱20.00) = ₱{videokeCost:F2}")
+
+        ' Outside Available Hours Fee Breakdown (Multiplied Per Day)
+        Dim adjustedAdditionalCharges As Decimal = additionalCharges * totalDays
+        If adjustedAdditionalCharges > 0 Then
+            breakdown.AppendLine($"Outside Available Hours Fee: {totalDays} Days x ₱{additionalCharges:F2} = ₱{adjustedAdditionalCharges:F2}")
         End If
 
-        If totalDays > 1 Then
-            breakdown.AppendLine($"Multi-Day Fee ({totalDays} days): ₱{basePricePerDay * totalDays:F2} - Cost for multiple-day event.")
-        End If
-
-        If additionalCharges > 0 Then
-            breakdown.AppendLine($"Outside Available Hours Fee: ₱{additionalCharges:F2} - Charges for scheduling beyond normal operating hours.")
-        End If
-
+        ' Final Total Price
         breakdown.AppendLine($"Total: ₱{finalTotalPrice:F2}")
 
         Return breakdown.ToString()
     End Function
+
 
 
     ' ------------------ Time Validation ------------------
@@ -141,13 +157,13 @@ Public Class HelperPrice
         Return True
     End Function
 
-    Public Shared Sub UpdateTotalPrice(txtNumGuests As TextBox, chkCatering As CheckBox, chkClown As CheckBox,
-                                      chkSinger As CheckBox, chkDancer As CheckBox, chkVideoke As CheckBox, chkOutsideAvailableHours As CheckBox,
-                                      cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                      cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
-                                      openingHours As String, closingHours As String, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                      eventPlaceCapacity As Integer, basePricePerDay As Decimal,
-                                      lblTotalPricePaymentContainer As Label, lblPriceBreakdown As Label, txtTotalPrice As TextBox)
+    Public Shared Sub UpdateTotalPriceAndGenerateBreakdown(txtNumGuests As TextBox, chkCatering As CheckBox, chkClown As CheckBox,
+                                          chkSinger As CheckBox, chkDancer As CheckBox, chkVideoke As CheckBox, chkOutsideAvailableHours As CheckBox,
+                                          cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
+                                          cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,
+                                          openingHours As String, closingHours As String, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
+                                          eventPlaceCapacity As Integer, basePricePerDay As Decimal,
+                                          lblTotalPricePaymentContainer As Label, lblPriceBreakdown As Label, txtTotalPrice As TextBox)
 
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then numGuests = 0
@@ -181,26 +197,8 @@ Public Class HelperPrice
 
         Dim outsideFees As Decimal = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, eventStartTime, eventEndTime, parsedOpeningTime, parsedClosingTime)
 
-        lblPriceBreakdown.Text = GeneratePriceBreakdown(numGuests, eventPlaceCapacity, basePricePerDay,
-                                                     (dtpEventDateEnd.Value - dtpEventDateStart.Value).Days + 1,
-                                                     ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked),
-                                                     outsideFees, finalTotalPrice)
-    End Sub
-
-    Public Shared Function GeneratePriceBreakdown(numGuests As Integer, eventPlaceCapacity As Integer,
-                                              basePricePerDay As Decimal, dtpEventDateStart As DateTimePicker, dtpEventDateEnd As DateTimePicker,
-                                              chkOutsideAvailableHours As CheckBox, cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
-                                              cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox, OpeningHours As String, ClosingHours As String,
-                                              chkCatering As CheckBox, chkClown As CheckBox, chkSinger As CheckBox, chkDancer As CheckBox, chkVideoke As CheckBox,
-                                              finalTotalPrice As Decimal) As String
-
         Dim excessGuestFee As Decimal = If(numGuests > eventPlaceCapacity, (numGuests - eventPlaceCapacity) * 100, 0)
         Dim extraServicesCost As Decimal = ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
-
-        Dim outsideHoursFee As Decimal = ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked,
-                                                        DateTime.Parse($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}"),
-                                                        DateTime.Parse($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"),
-                                                        DateTime.Parse(OpeningHours), DateTime.Parse(ClosingHours))
 
         Dim breakdown As New StringBuilder()
         breakdown.AppendLine($"Base Price: ₱{basePricePerDay:F2}")
@@ -208,12 +206,14 @@ Public Class HelperPrice
 
         If excessGuestFee > 0 Then breakdown.AppendLine($"Excess Guest Fee: ₱{excessGuestFee:F2}")
         If extraServicesCost > 0 Then breakdown.AppendLine($"Extra Services: ₱{extraServicesCost:F2}")
-        If outsideHoursFee > 0 Then breakdown.AppendLine($"Outside Available Hours Fee: ₱{outsideHoursFee:F2}")
+        If outsideFees > 0 Then breakdown.AppendLine($"Outside Available Hours Fee: ₱{outsideFees:F2}")
 
         breakdown.AppendLine($"Final Total Price: ₱{finalTotalPrice:F2}")
 
-        Return breakdown.ToString()
-    End Function
+        lblPriceBreakdown.Text = breakdown.ToString()
+
+    End Sub
+
 
 
 End Class
