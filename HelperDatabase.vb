@@ -225,7 +225,15 @@ Public Class HelperDatabase
     End Function
 
     Public Shared Function GetLastBooking(userId As Integer) As DataTable
-        Dim query As String = "SELECT event_type, num_guests, event_time, event_end_time FROM Bookings WHERE customer_id = @userId ORDER BY booking_id DESC LIMIT 1"
+        Dim query As String = "SELECT 
+    b.event_type, b.num_guests, b.event_time, b.event_end_time, 
+    s.catering, s.clown, s.singer, s.dancer, s.videoke
+FROM Bookings b
+JOIN Services s ON b.booking_id = s.booking_id
+WHERE b.customer_id = @userId
+ORDER BY b.booking_id DESC
+LIMIT 1;
+"
 
         Dim params As New Dictionary(Of String, Object) From {{"@userId", userId}}
         Return DBHelper.GetDataTable(query, params)

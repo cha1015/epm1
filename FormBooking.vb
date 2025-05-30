@@ -32,6 +32,7 @@ Public Class FormBooking
 
     Private Sub FormBooking_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblDateWarning.Visible = False
+        lblTotalPricePaymentContainer.Visible = False
 
         lblEventPlace.Text = EventPlaceName
         lblPlaceIDContainer.Text = PlaceId.ToString()
@@ -180,7 +181,7 @@ Public Class FormBooking
     End Sub
 
 
-    Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs)
+    Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs) Handles btnPlaceBooking.Click
         ' Check for duplicate booking
         If bookedDates.Contains(dtpEventDateStart.Value.Date) Then
             MessageBox.Show("This date is already booked. Please select another.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -391,6 +392,5 @@ Public Class FormBooking
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         HelperNavigation.GoNext(Me)
     End Sub
-
 
 End Class
