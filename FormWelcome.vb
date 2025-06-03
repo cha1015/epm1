@@ -2,7 +2,7 @@
 
 
     Private Sub FormWelcome_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        welcomeTimer.Interval = 1000
+        welcomeTimer.Interval = 5000
         welcomeTimer.Start()
     End Sub
 
@@ -12,11 +12,6 @@
         mainForm.Show()
         Me.Hide()
     End Sub
-
-    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-
-    End Sub
-
 
 End Class
 

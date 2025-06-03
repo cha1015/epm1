@@ -4,6 +4,8 @@ Imports System.Globalization
 Imports System.IO
 Imports System
 Public Class FormBooking
+
+#Region "properties"
     ' ------------------ Properties ------------------
     Public Property PlaceId As Integer
     Public Property EventPlaceName As String
@@ -22,6 +24,7 @@ Public Class FormBooking
     Public Property FirstName As String
     Public Property LastName As String
     Dim bookedDates As New List(Of Date)
+    Private tooltip As New ToolTip()
     ' ------------------ Constructor ------------------
     Public Sub New(customerId As Integer, placeId As Integer)
         InitializeComponent()
@@ -29,9 +32,20 @@ Public Class FormBooking
         Me.PlaceId = placeId
     End Sub
 
+#End Region
+
 
     Private Sub FormBooking_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        lblDateWarning.Visible = False
+        With tooltip
+            .ShowAlways = True
+        End With
+
+        Dim tooltipText As String = "Book outside available hours: ₱17.00 per minute"
+        tooltip.SetToolTip(txtNumGuests, "Capacity exceedance fee: ₱100.00 per additional guest")
+        For Each cb As Control In {cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM}
+            tooltip.SetToolTip(cb, tooltipText)
+        Next
+
         lblTotalPricePaymentContainer.Visible = False
 
         lblEventPlace.Text = EventPlaceName
@@ -81,34 +95,47 @@ Public Class FormBooking
                 cbEndAMPM.Text = "PM"
             End If
 
-            chkCatering.Checked = Convert.ToBoolean(lastBooking.Rows(0)("catering"))
-            chkClown.Checked = Convert.ToBoolean(lastBooking.Rows(0)("clown"))
-            chkSinger.Checked = Convert.ToBoolean(lastBooking.Rows(0)("singer"))
-            chkDancer.Checked = Convert.ToBoolean(lastBooking.Rows(0)("dancer"))
-            chkVideoke.Checked = Convert.ToBoolean(lastBooking.Rows(0)("videoke"))
+            Dim servicesOffered As String = lastBooking.Rows(0)("services_offered").ToString()
+
+            chkCatering.Checked = servicesOffered.Contains("Catering")
+            chkClown.Checked = servicesOffered.Contains("Clown")
+            chkSinger.Checked = servicesOffered.Contains("Singer")
+            chkDancer.Checked = servicesOffered.Contains("Dancer")
+            chkVideoke.Checked = servicesOffered.Contains("Videoke")
+
         End If
 
         HelperUI.LoadEventPlaceImage(EventPlaceImageUrl, pb)
-        Dim customerData As DataTable = HelperDatabase.GetCustomerData(CurrentUser.UserID)
 
-        If customerData.Rows.Count > 0 Then
-            txtCustomerName.Text = customerData.Rows(0)("name").ToString()
-            dtpBirthday.Value = Convert.ToDateTime(customerData.Rows(0)("birthday"))
-            cmbSex.Text = customerData.Rows(0)("sex").ToString()
-            txtAddress.Text = customerData.Rows(0)("address").ToString()
+        Dim query As String = "SELECT first_name, last_name, birthday, sex, address FROM Users WHERE user_id = @user_id"
+        Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", CurrentUser.UserID}}
+
+        Dim userData As DataTable = DBHelper.GetDataTable(query, parameters)
+
+        If userData.Rows.Count > 0 Then
+            txtCustomerName.Text = userData.Rows(0)("first_name").ToString() & " " & userData.Rows(0)("last_name").ToString()
+            dtpBirthday.Value = Convert.ToDateTime(userData.Rows(0)("birthday"))
+            cmbSex.Text = userData.Rows(0)("sex").ToString()
+            txtAddress.Text = userData.Rows(0)("address").ToString()
+            Me.Refresh()
+            Debug.WriteLine("Retrieved User Data - Name: " & userData.Rows(0)("first_name").ToString() & " " & userData.Rows(0)("last_name").ToString() &
+                ", Birthday: " & userData.Rows(0)("birthday").ToString() &
+                ", Sex: " & userData.Rows(0)("sex").ToString() &
+                ", Address: " & userData.Rows(0)("address").ToString())
+
         Else
-            MessageBox.Show("Customer information not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Customer information not found. Base load", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
         AddHandler dtpEventDateStart.ValueChanged, Sub(s, evt)
-                                                       HelperValidation.PreventBookedDate(dtpEventDateStart, bookedDates, lblDateWarning)
+                                                       HelperValidation.PreventBookedDate(dtpEventDateStart, bookedDates)
                                                    End Sub
 
         If Not String.IsNullOrWhiteSpace(OpeningHours) Then
             Dim parsedOpening As DateTime
             Dim formats() As String = {"HH:mm:ss", "H:mm:ss"}
             If DateTime.TryParseExact(OpeningHours, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, parsedOpening) Then
-                cbStartHour.Text = parsedOpening.ToString("hh")   ' Use two digits (e.g., "08")
+                cbStartHour.Text = parsedOpening.ToString("hh")
                 cbStartMinutes.Text = parsedOpening.ToString("mm")
                 cbStartAMPM.Text = parsedOpening.ToString("tt")
             End If
@@ -128,13 +155,17 @@ Public Class FormBooking
             txtNumGuests.Text = "1"
         End If
 
-        HelperPrice.UpdateTotalPriceAndGenerateBreakdown(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke, chkOutsideAvailableHours,
-                                                         cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
-                                                         OpeningHours, ClosingHours, dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity,
-                                                         BasePricePerDay, lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
+        HelperPrice.UpdateTotalPriceAndGenerateBreakdown(
+            txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
+            cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
+            OpeningHours, ClosingHours, dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity,
+            BasePricePerDay, lblTotalPricePaymentContainer, dgvPriceBreakdown, txtTotalPrice)
 
+        Debug.WriteLine("Retrieved User Data - Name: " & userData.Rows(0)("first_name").ToString() & " " & userData.Rows(0)("last_name").ToString() &
+    ", Birthday: " & userData.Rows(0)("birthday").ToString() &
+    ", Sex: " & userData.Rows(0)("sex").ToString() &
+    ", Address: " & userData.Rows(0)("address").ToString())
     End Sub
-
 
     Private Function ConvertTo12HourFormat(time As String) As String
         Dim parsedTime As DateTime
@@ -144,7 +175,6 @@ Public Class FormBooking
         Return String.Empty
     End Function
 
-
     Private Sub dtpBirthday_ValueChanged(sender As Object, e As EventArgs) Handles dtpBirthday.ValueChanged
         Dim birthDate As Date = dtpBirthday.Value
         Dim today As Date = Date.Today
@@ -153,12 +183,8 @@ Public Class FormBooking
         txtAge.Text = age.ToString()
     End Sub
 
-
-
     Private Sub btnCustomerProceed_Click(sender As Object, e As EventArgs) Handles btnCustomerProceed.Click
         If Not HelperValidation.IsValidCustomerInfo(txtCustomerName, dtpBirthday, cmbSex, txtAddress) Then Exit Sub
-        PopulatePaymentDetails()
-        tcDetails.SelectedTab = tpPaymentDetails
 
         If Not HelperValidation.ValidateCustomerAge(dtpBirthday) Then Exit Sub
 
@@ -168,14 +194,17 @@ Public Class FormBooking
         If birthDate > today.AddYears(-age) Then age -= 1
 
         txtAge.Text = age.ToString()
+
+        PopulatePaymentDetails()
+        tcDetails.SelectedTab = tpPaymentDetails
     End Sub
 
+    Private Sub ShowError(ByVal message As String)
+        MessageBox.Show(message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    End Sub
 
     Private Sub btnPlaceBooking_Click(sender As Object, e As EventArgs) Handles btnPlaceBooking.Click
-        If bookedDates.Contains(dtpEventDateStart.Value.Date) Then
-            MessageBox.Show("This date is already booked. Please select another.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
+
 
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then
@@ -186,128 +215,151 @@ Public Class FormBooking
         Dim eventEndStr As String = $"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
 
         Dim finalTotalPrice As Decimal = HelperPrice.ComputeFinalPrice(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                           dtpEventDateStart, dtpEventDateEnd,
-                                           chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                                           cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                           chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
-
-        Dim customerResult As CustomerResult = HelperDatabase.CreateNewCustomer(txtCustomerName.Text, dtpBirthday.Value, cmbSex.Text, txtAddress.Text, numGuests)
-
-        If customerResult.CustomerId <= 0 Then
-            MessageBox.Show($"Customer creation failed! Error: {customerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                       dtpEventDateStart, dtpEventDateEnd, cbStartHour, cbStartMinutes, cbStartAMPM,
+                                       cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
+                                       chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
+        If finalTotalPrice <= 0 Then
+            MessageBox.Show("Final price calculation error. Booking cannot proceed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
 
-        HelperDatabase.InsertUserCustomer(CurrentUser.UserID, customerResult.CustomerId)
+        Dim customerId As Integer = -1
+        Dim customerResult As CustomerResult = Nothing
+        Dim customerData As DataTable = HelperDatabase.GetCustomerData(CurrentUser.UserID)
+        If customerData.Rows.Count > 0 Then
+            If customerData.Columns.Contains("customer_id") Then
+                customerId = Convert.ToInt32(customerData.Rows(0)("customer_id"))
+            ElseIf customerData.Columns.Contains("id") Then
+                customerId = Convert.ToInt32(customerData.Rows(0)("id"))
+            Else
+                MessageBox.Show("Customer ID column not found in customer data.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+        Else
 
-        Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerResult.CustomerId, PlaceId, numGuests,
-                                                       dtpEventDateStart.Value.Date, eventStartStr, eventEndStr,
-                                                       dtpEventDateEnd.Value.Date, finalTotalPrice, cbEventType.Text)
+            customerResult = HelperDatabase.CreateNewCustomer(txtCustomerName.Text, dtpBirthday.Value, cmbSex.Text, txtAddress.Text, numGuests, CurrentUser.UserID)
+            Debug.WriteLine("UserID: " & CurrentUser.UserID)
 
+            If customerResult.CustomerId <= 0 Then
+                MessageBox.Show($"Customer creation failed! Error: {customerResult.ErrorMessage}", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+            customerId = customerResult.CustomerId
+            HelperDatabase.InsertUserCustomer(CurrentUser.UserID, customerId)
+        End If
 
+        CurrentUser.CustomerId = customerId
+
+        Dim bookingId As Integer = HelperDatabase.PlaceBooking(customerId, PlaceId, numGuests, dtpEventDateStart.Value.Date, eventStartStr, eventEndStr, dtpEventDateEnd.Value.Date, finalTotalPrice, cbEventType.Text)
 
         If bookingId > 0 Then
             HelperDatabase.SaveBookingServices(bookingId, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
-            HelperDatabase.InsertPaymentRecord(bookingId, customerResult.CustomerId, finalTotalPrice)
+            HelperDatabase.InsertPaymentRecord(bookingId, CurrentUser.UserID, customerId, finalTotalPrice)
 
             Dim result = MessageBox.Show("Booking and payment recorded successfully! Do you want to review your customer details?",
-                                 "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                             "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
             If result = DialogResult.Yes Then
-                Dim customerViewForm As New FormCustomerView(CurrentUser.CustomerId)
+                Dim customerViewForm As New FormCustomerView(customerId)
                 customerViewForm.Show()
             End If
+
         Else
             MessageBox.Show("Booking failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
-
-
-
     End Sub
-
     Private Sub PopulatePaymentDetails()
         lblCustomerContainer.Text = txtCustomerName.Text
         lblEventPlacePaymentContainer.Text = lblEventPlace.Text
         lblEventTypePaymentContainer.Text = cbEventType.Text
         lblNumGuestsPaymentContainer.Text = txtNumGuests.Text
         lblEventDatePaymentContainer.Text = If(cbSameDayEvent.Checked, dtpEventDateStart.Value.ToShortDateString(),
-                                       $"{dtpEventDateStart.Value.ToShortDateString()} - {dtpEventDateEnd.Value.ToShortDateString()}")
+                                           $"{dtpEventDateStart.Value.ToShortDateString()} - {dtpEventDateEnd.Value.ToShortDateString()}")
         lblEventTimePaymentContainer.Text = $"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text} - {cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}"
 
         Dim numGuests As Integer
-        If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then numGuests = 0
+        If Not Integer.TryParse(txtNumGuests.Text, numGuests) Then numGuests = 1
 
         Dim finalTotalPrice As Decimal = HelperPrice.ComputeFinalPrice(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                                               dtpEventDateStart, dtpEventDateEnd,
-                                                               chkOutsideAvailableHours, cbStartHour, cbStartMinutes, cbStartAMPM,
-                                                               cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
-                                                               chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
-
-        txtTotalPrice.Text = "₱" & finalTotalPrice.ToString("F2")
-        lblTotalPricePaymentContainer.Text = txtTotalPrice.Text
+                                                                   dtpEventDateStart, dtpEventDateEnd, cbStartHour, cbStartMinutes, cbStartAMPM,
+                                                                   cbEndHour, cbEndMinutes, cbEndAMPM, OpeningHours, ClosingHours,
+                                                                   chkCatering, chkClown, chkSinger, chkDancer, chkVideoke)
 
         Dim totalDays As Integer = (dtpEventDateEnd.Value - dtpEventDateStart.Value).Days + 1
         Dim servicesCost As Decimal = HelperPrice.ComputeServicesCost(numGuests, chkCatering.Checked, chkClown.Checked, chkSinger.Checked, chkDancer.Checked, chkVideoke.Checked)
 
-        Dim startTime As DateTime = DateTime.Parse($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}")
-        Dim endTime As DateTime = DateTime.Parse($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}")
-        Dim openingTime As DateTime = DateTime.Parse(OpeningHours)
-        Dim closingTime As DateTime = DateTime.Parse(ClosingHours)
+        Dim timeFormat As String = "h:mm tt"
+        Dim startTime, endTime, openingTime, closingTime As DateTime
 
-        Dim outsideFeesResult = HelperPrice.ComputeOutsideHoursFee(chkOutsideAvailableHours.Checked, startTime, endTime, openingTime, closingTime)
-        Dim additionalCharges As Decimal = outsideFeesResult.Item1 ' Get the numeric fee value
-        Dim warningMessages As String = outsideFeesResult.Item2 ' Get the warning messages
-
-        If Not String.IsNullOrWhiteSpace(warningMessages) Then
-            MessageBox.Show(warningMessages, "Extra Charges Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        If Not DateTime.TryParseExact($"{cbStartHour.Text}:{cbStartMinutes.Text} {cbStartAMPM.Text}", timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, startTime) Then
+            MessageBox.Show("Invalid start time format. Please re-enter correctly.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
         End If
 
+        If Not DateTime.TryParseExact($"{cbEndHour.Text}:{cbEndMinutes.Text} {cbEndAMPM.Text}", timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, endTime) Then
+            MessageBox.Show("Invalid end time format. Please re-enter correctly.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
 
+        If Not DateTime.TryParse(OpeningHours, openingTime) Then
+            MessageBox.Show("Invalid opening hours format. Please check the venue's schedule.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
 
-        lblPriceBreakdown.Text = HelperPrice.GeneratePriceBreakdown(numGuests, EventPlaceCapacity, BasePricePerDay,
-                                                                     totalDays, additionalCharges, finalTotalPrice,
-                                                                     chkCatering.Checked, chkClown.Checked, chkSinger.Checked,
-                                                                     chkDancer.Checked, chkVideoke.Checked)
+        If Not DateTime.TryParse(ClosingHours, closingTime) Then
+            MessageBox.Show("Invalid closing hours format. Please check the venue's schedule.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
 
+        Dim outsideFees As Decimal = HelperPrice.ComputeOutsideHoursFee(startTime, endTime, openingTime, closingTime)
+
+        finalTotalPrice += outsideFees
+        txtTotalPrice.Text = "₱" & finalTotalPrice.ToString("F2")
+        lblTotalPricePaymentContainer.Text = txtTotalPrice.Text
+        lblTotalPricePaymentContainer.Tag = finalTotalPrice
+
+        HelperPrice.UpdateTotalPriceAndGenerateBreakdown(
+            txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
+            cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
+            OpeningHours, ClosingHours, dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity,
+            BasePricePerDay, lblTotalPricePaymentContainer, dgvPriceBreakdown, txtTotalPrice)
 
     End Sub
-
-    Private Sub tcDetails_Selecting(sender As Object, e As TabControlCancelEventArgs) Handles tcDetails.Selecting
-        HelperValidation.ValidateBooking(e, tcDetails, tpCustomerDetails, tpPaymentDetails,
-                                     cbEventType, txtNumGuests, dtpEventDateStart, dtpEventDateEnd,
-                                     cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
-                                     chkOutsideAvailableHours, txtCustomerName, dtpBirthday, cmbSex,
-                                     txtAddress, OpeningHours, ClosingHours, PlaceId)
-    End Sub
-
 
 
     Private Sub cbEndHour_SelectedIndexChanged(sender As Object, e As EventArgs)
         HelperEvent.HandleEndHourChange(cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM, dtpEventDateStart, dtpEventDateEnd, cbSameDayEvent)
     End Sub
 
-    Private Sub dtpEventDateStart_ValueChanged(sender As Object, e As EventArgs)
+
+    Private Sub dtpEventDateStart_ValueChanged(sender As Object, e As EventArgs) Handles dtpEventDateStart.ValueChanged, dtpEventDateEnd.ValueChanged
         HelperEvent.HandleEventStartDateChange(dtpEventDateStart, dtpEventDateEnd, cbSameDayEvent)
         If cbSameDayEvent.Checked Then
             dtpEventDateEnd.Value = dtpEventDateStart.Value
         End If
+        'If dtpEventDateStart.Value.Date > dtpEventDateEnd.Value.Date Then
+        '    MessageBox.Show("The event start date cannot be after the end date. Please select valid dates.", "Invalid Date Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        '    dtpEventDateStart.Value = dtpEventDateEnd.Value.Date
+        'End If
     End Sub
-
-    Private Sub UpdateTotalPrice() Handles cbEndHour.SelectedIndexChanged, cbEndMinutes.SelectedIndexChanged, cbEndAMPM.SelectedIndexChanged,
-                                    cbStartHour.SelectedIndexChanged, cbStartMinutes.SelectedIndexChanged, cbStartAMPM.SelectedIndexChanged,
-                                    txtNumGuests.TextChanged, chkCatering.CheckedChanged, chkClown.CheckedChanged,
-                                    chkSinger.CheckedChanged, chkDancer.CheckedChanged, chkVideoke.CheckedChanged,
-                                    chkOutsideAvailableHours.CheckedChanged
-
-        HelperPrice.UpdateTotalPriceAndGenerateBreakdown(txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke, chkOutsideAvailableHours,
-                                                         cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
-                                                         OpeningHours, ClosingHours, dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity,
-                                                         BasePricePerDay, lblTotalPricePaymentContainer, lblPriceBreakdown, txtTotalPrice)
-
-    End Sub
-
-
-    Private Sub UpdateTotalPrice(sender As Object, e As EventArgs) Handles txtNumGuests.TextChanged, chkVideoke.CheckedChanged, chkSinger.CheckedChanged, chkOutsideAvailableHours.CheckedChanged, chkDancer.CheckedChanged, chkClown.CheckedChanged, chkCatering.CheckedChanged, cbStartMinutes.SelectedIndexChanged, cbStartHour.SelectedIndexChanged, cbStartAMPM.SelectedIndexChanged, cbEndMinutes.SelectedIndexChanged, cbEndHour.SelectedIndexChanged, cbEndAMPM.SelectedIndexChanged
-
+    Private Sub UpdateTotalPrice() Handles cbEndHour.SelectedIndexChanged,
+                                          cbEndMinutes.SelectedIndexChanged,
+                                          cbEndAMPM.SelectedIndexChanged,
+                                          cbStartHour.SelectedIndexChanged,
+                                          cbStartMinutes.SelectedIndexChanged,
+                                          cbStartAMPM.SelectedIndexChanged,
+                                          txtNumGuests.TextChanged,
+                                          chkCatering.CheckedChanged,
+                                          chkClown.CheckedChanged,
+                                          chkSinger.CheckedChanged,
+                                          chkDancer.CheckedChanged,
+                                          chkVideoke.CheckedChanged,
+                                          dtpEventDateStart.ValueChanged,
+                                          dtpEventDateEnd.ValueChanged
+        HelperPrice.UpdateTotalPriceAndGenerateBreakdown(
+            txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
+            cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
+            OpeningHours, ClosingHours, dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity,
+            BasePricePerDay, lblTotalPricePaymentContainer, dgvPriceBreakdown, txtTotalPrice)
     End Sub
 
     Private Sub cbSameDayEvent_CheckedChanged(sender As Object, e As EventArgs) Handles cbSameDayEvent.CheckedChanged
@@ -344,6 +396,11 @@ Public Class FormBooking
         Dim eventStartTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, startHour, startMinutes, 0)
         Dim eventEndTime As New DateTime(dtpEventDateStart.Value.Year, dtpEventDateStart.Value.Month, dtpEventDateStart.Value.Day, endHour, endMinutes, 0)
 
+        If eventStartTime = DateTime.MinValue Or eventEndTime = DateTime.MinValue Then
+            MessageBox.Show("Invalid event time selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
         If eventEndTime <= eventStartTime Then
             dtpEventDateEnd.Value = dtpEventDateStart.Value.AddDays(1)
         Else
@@ -351,31 +408,33 @@ Public Class FormBooking
         End If
     End Sub
 
-    Private Sub chkOutsideAvailableHours_CheckedChanged(sender As Object, e As EventArgs) Handles chkOutsideAvailableHours.CheckedChanged
-        btBookingProceed.Enabled = True
-    End Sub
-
     Private Sub btBookingProceed_Click(sender As Object, e As EventArgs) Handles btBookingProceed.Click
-        'If Not HelperValidation.ValidateBookingInputs(cbEventType, dtpEventDateStart, dtpEventDateEnd,
-        '                                          cbStartHour, cbStartMinutes, cbStartAMPM,
-        '                                          cbEndHour, cbEndMinutes, cbEndAMPM,
-        '                                          chkOutsideAvailableHours, OpeningHours, ClosingHours, PlaceId) Then
-        '    btBookingProceed.Enabled = False
-        '    Exit Sub
-        'End If
+        If String.IsNullOrWhiteSpace(cbEventType.Text) OrElse
+       String.IsNullOrWhiteSpace(txtNumGuests.Text) OrElse Not Integer.TryParse(txtNumGuests.Text, Nothing) OrElse
+       String.IsNullOrWhiteSpace(cbStartHour.Text) OrElse String.IsNullOrWhiteSpace(cbStartMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbStartAMPM.Text) OrElse
+       String.IsNullOrWhiteSpace(cbEndHour.Text) OrElse String.IsNullOrWhiteSpace(cbEndMinutes.Text) OrElse String.IsNullOrWhiteSpace(cbEndAMPM.Text) Then
+            MessageBox.Show("Please complete all required fields before proceeding.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        If bookedDates.Contains(dtpEventDateStart.Value.Date) Then
+            MessageBox.Show("This date is already booked. Please select another.", "Booking Conflict", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        If dtpEventDateStart.Value.Date > dtpEventDateEnd.Value.Date Then
+            MessageBox.Show("The event start date cannot be after the end date. Please select valid dates.", "Invalid Date Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
 
         btBookingProceed.Enabled = True
 
         Dim numGuests As Integer
         If Not Integer.TryParse(txtNumGuests.Text, numGuests) OrElse numGuests <= 0 Then
-            txtNumGuests.Text = "1" ' Default to 1 if invalid or zero
-        End If
-
-        If numGuests <= 0 Then
             MessageBox.Show("Number of guests must be at least 1.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
-
 
         Dim eventStartTime As DateTime, eventEndTime As DateTime, openingTime As DateTime, closingTime As DateTime
         Dim timeFormat As String = "h:mm tt"
@@ -384,32 +443,57 @@ Public Class FormBooking
         DateTime.TryParse(OpeningHours, openingTime)
         DateTime.TryParse(ClosingHours, closingTime)
 
+        HelperPrice.UpdateTotalPriceAndGenerateBreakdown(
+            txtNumGuests, chkCatering, chkClown, chkSinger, chkDancer, chkVideoke,
+            cbStartHour, cbStartMinutes, cbStartAMPM, cbEndHour, cbEndMinutes, cbEndAMPM,
+            OpeningHours, ClosingHours, dtpEventDateStart, dtpEventDateEnd, EventPlaceCapacity,
+            BasePricePerDay, lblTotalPricePaymentContainer, dgvPriceBreakdown, txtTotalPrice)
+
         Dim finalTotalPrice As Decimal = Convert.ToDecimal(lblTotalPricePaymentContainer.Tag)
 
-        Dim confirmProceed As DialogResult = MessageBox.Show($"Total Price Updated: ₱{finalTotalPrice:F2}. Do you want to proceed to customer details?", "Price Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+        Dim confirmProceed As DialogResult = MessageBox.Show($"Total Price Updated: ₱{finalTotalPrice:F2}. Do you want to proceed to customer details?", "Price Confirmation",
+                                                             MessageBoxButtons.YesNo, MessageBoxIcon.Information)
 
         If confirmProceed = DialogResult.Yes Then
             tcDetails.SelectedTab = tpCustomerDetails
-        End If
-
-        If chkOutsideAvailableHours.Checked Then
-            Dim perMinuteRate As Decimal = 17D
-            Dim additionalCharges As Decimal = 0D
-
-            If eventStartTime < openingTime Then
-                Dim earlyMinutes As Integer = Math.Max(0, CInt((openingTime - eventStartTime).TotalMinutes))
-                additionalCharges += earlyMinutes * perMinuteRate
-            End If
-
-            If eventEndTime > closingTime Then
-                Dim overtimeMinutes As Integer = Math.Max(0, CInt((eventEndTime - closingTime).TotalMinutes))
-                additionalCharges += overtimeMinutes * perMinuteRate
-            End If
-
-            finalTotalPrice += additionalCharges
+            Application.DoEvents()
         End If
     End Sub
 
+    'Public Sub LoadCustomerData()
+    '    Dim customerData As DataTable = HelperDatabase.GetCustomerData(CurrentUser.UserID)
+
+    '    If customerData.Rows.Count > 0 Then
+    '        txtCustomerName.Text = customerData.Rows(0)("name").ToString()
+    '        dtpBirthday.Value = Convert.ToDateTime(customerData.Rows(0)("birthday"))
+    '        cmbSex.Text = customerData.Rows(0)("sex").ToString()
+    '        txtAddress.Text = customerData.Rows(0)("address").ToString()
+
+    '        Me.Refresh()
+    '    Else
+    '        MessageBox.Show("Customer information not found. LoadCustomerData", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    '    End If
+    'End Sub
+
+    'Private Sub FormBooking_Activated(sender As Object, e As EventArgs) Handles Me.Activated
+    '    LoadCustomerData()
+    'End Sub
+
+    'Public Sub RefreshBookingDetails()
+    '    bookedDates = HelperDatabase.LoadBookedDates(PlaceId)
+    '    LoadCustomerData()
+    '    Me.Refresh()
+    'End Sub
+
+    Private Sub txtNumGuests_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtNumGuests.KeyPress
+        ' Allow only digits and control keys (like Backspace)
+        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
+        End If
+    End Sub
+
+
+#Region "back and next"
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
         HelperNavigation.GoBack(Me)
     End Sub
@@ -418,4 +502,20 @@ Public Class FormBooking
         HelperNavigation.GoNext(Me)
     End Sub
 
+    Private Sub btnMain_Click(sender As Object, e As EventArgs) Handles btnMain.Click
+
+        Dim mainForm As New FormMain()
+        mainForm.StartPosition = FormStartPosition.CenterScreen
+        mainForm.WindowState = FormWindowState.Normal
+        mainForm.Show()
+        mainForm.BringToFront()
+        mainForm.Activate()
+
+        Me.Refresh()
+        Application.DoEvents()
+    End Sub
+
+
+
+#End Region
 End Class

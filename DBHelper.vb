@@ -80,7 +80,6 @@ Module DBHelper
                 Console.WriteLine("Database error: " & ex.Message)
             End Try
         End Using
-        ' Return the first row if available
         If dt.Rows.Count > 0 Then
             Return dt.Rows(0)
         Else

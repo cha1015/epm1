@@ -23,6 +23,21 @@ Partial Class FormCustomerView
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormCustomerView))
+        Me.btnMain = New System.Windows.Forms.Button()
+        Me.btnNext = New System.Windows.Forms.Button()
+        Me.btnBack = New System.Windows.Forms.Button()
+        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.lblRole = New System.Windows.Forms.Label()
+        Me.lblUsername = New System.Windows.Forms.Label()
+        Me.btnEdit = New System.Windows.Forms.Button()
+        Me.btnclose = New System.Windows.Forms.Button()
         Me.lblSelected = New System.Windows.Forms.Label()
         Me.btnPaid = New System.Windows.Forms.Button()
         Me.btnApproved = New System.Windows.Forms.Button()
@@ -30,137 +45,74 @@ Partial Class FormCustomerView
         Me.btnPending = New System.Windows.Forms.Button()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.btnminimize = New System.Windows.Forms.Button()
-        Me.btnclose = New System.Windows.Forms.Button()
         Me.btnLogOut = New System.Windows.Forms.Button()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.lblRole = New System.Windows.Forms.Label()
-        Me.btnEdit = New System.Windows.Forms.Button()
-        Me.lblUsername = New System.Windows.Forms.Label()
-        Me.btnNext = New System.Windows.Forms.Button()
-        Me.btnBack = New System.Windows.Forms.Button()
-        Me.Panel1.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'lblSelected
+        'btnMain
         '
-        Me.lblSelected.AutoSize = True
-        Me.lblSelected.BackColor = System.Drawing.Color.Transparent
-        Me.lblSelected.Font = New System.Drawing.Font("Cinzel", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSelected.Location = New System.Drawing.Point(356, 94)
-        Me.lblSelected.Name = "lblSelected"
-        Me.lblSelected.Size = New System.Drawing.Size(11, 13)
-        Me.lblSelected.TabIndex = 98
-        Me.lblSelected.Text = "-"
-        Me.lblSelected.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.btnMain.BackColor = System.Drawing.Color.FromArgb(CType(CType(243, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(237, Byte), Integer))
+        Me.btnMain.BackgroundImage = Global.epm1.My.Resources.Resources.BttnChinomsOrBackToMain
+        Me.btnMain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnMain.FlatAppearance.BorderSize = 0
+        Me.btnMain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnMain.Location = New System.Drawing.Point(8, 26)
+        Me.btnMain.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnMain.Name = "btnMain"
+        Me.btnMain.Size = New System.Drawing.Size(169, 45)
+        Me.btnMain.TabIndex = 118
+        Me.btnMain.UseVisualStyleBackColor = False
         '
-        'btnPaid
+        'btnNext
         '
-        Me.btnPaid.BackColor = System.Drawing.Color.Transparent
-        Me.btnPaid.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnPaid.FlatAppearance.BorderSize = 0
-        Me.btnPaid.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnPaid.ForeColor = System.Drawing.Color.Transparent
-        Me.btnPaid.Location = New System.Drawing.Point(839, 96)
-        Me.btnPaid.Name = "btnPaid"
-        Me.btnPaid.Size = New System.Drawing.Size(61, 16)
-        Me.btnPaid.TabIndex = 97
-        Me.btnPaid.UseVisualStyleBackColor = False
+        Me.btnNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(236, Byte), Integer))
+        Me.btnNext.BackgroundImage = Global.epm1.My.Resources.Resources.BttnNext
+        Me.btnNext.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnNext.FlatAppearance.BorderSize = 0
+        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNext.Location = New System.Drawing.Point(200, 38)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Size = New System.Drawing.Size(18, 20)
+        Me.btnNext.TabIndex = 116
+        Me.btnNext.UseVisualStyleBackColor = False
         '
-        'btnApproved
+        'btnBack
         '
-        Me.btnApproved.BackColor = System.Drawing.Color.Transparent
-        Me.btnApproved.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnApproved.FlatAppearance.BorderSize = 0
-        Me.btnApproved.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnApproved.ForeColor = System.Drawing.Color.Transparent
-        Me.btnApproved.Location = New System.Drawing.Point(774, 96)
-        Me.btnApproved.Name = "btnApproved"
-        Me.btnApproved.Size = New System.Drawing.Size(59, 16)
-        Me.btnApproved.TabIndex = 96
-        Me.btnApproved.UseVisualStyleBackColor = False
+        Me.btnBack.BackColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(236, Byte), Integer))
+        Me.btnBack.BackgroundImage = Global.epm1.My.Resources.Resources.BttnPrevious
+        Me.btnBack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnBack.FlatAppearance.BorderSize = 0
+        Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnBack.Location = New System.Drawing.Point(176, 38)
+        Me.btnBack.Name = "btnBack"
+        Me.btnBack.Size = New System.Drawing.Size(18, 20)
+        Me.btnBack.TabIndex = 115
+        Me.btnBack.UseVisualStyleBackColor = False
         '
-        'btnRejected
+        'FlowLayoutPanel1
         '
-        Me.btnRejected.BackColor = System.Drawing.Color.Transparent
-        Me.btnRejected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnRejected.FlatAppearance.BorderSize = 0
-        Me.btnRejected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRejected.ForeColor = System.Drawing.Color.Transparent
-        Me.btnRejected.Location = New System.Drawing.Point(709, 96)
-        Me.btnRejected.Name = "btnRejected"
-        Me.btnRejected.Size = New System.Drawing.Size(59, 16)
-        Me.btnRejected.TabIndex = 95
-        Me.btnRejected.UseVisualStyleBackColor = False
+        Me.FlowLayoutPanel1.AutoScroll = True
+        Me.FlowLayoutPanel1.BackColor = System.Drawing.Color.Transparent
+        Me.FlowLayoutPanel1.Controls.Add(Me.Panel1)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(19, 122)
+        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(903, 364)
+        Me.FlowLayoutPanel1.TabIndex = 105
         '
-        'btnPending
+        'Panel1
         '
-        Me.btnPending.BackColor = System.Drawing.Color.Transparent
-        Me.btnPending.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnPending.FlatAppearance.BorderSize = 0
-        Me.btnPending.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnPending.ForeColor = System.Drawing.Color.Transparent
-        Me.btnPending.Location = New System.Drawing.Point(635, 98)
-        Me.btnPending.Name = "btnPending"
-        Me.btnPending.Size = New System.Drawing.Size(68, 14)
-        Me.btnPending.TabIndex = 94
-        Me.btnPending.UseVisualStyleBackColor = False
-        '
-        'txtSearch
-        '
-        Me.txtSearch.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
-        Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtSearch.ForeColor = System.Drawing.Color.Black
-        Me.txtSearch.Location = New System.Drawing.Point(93, 98)
-        Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(222, 13)
-        Me.txtSearch.TabIndex = 93
-        '
-        'btnminimize
-        '
-        Me.btnminimize.BackColor = System.Drawing.Color.Transparent
-        Me.btnminimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btnminimize.FlatAppearance.BorderSize = 0
-        Me.btnminimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnminimize.ForeColor = System.Drawing.Color.Transparent
-        Me.btnminimize.Location = New System.Drawing.Point(900, 10)
-        Me.btnminimize.Name = "btnminimize"
-        Me.btnminimize.Size = New System.Drawing.Size(12, 12)
-        Me.btnminimize.TabIndex = 92
-        Me.btnminimize.UseVisualStyleBackColor = False
-        '
-        'btnclose
-        '
-        Me.btnclose.BackColor = System.Drawing.Color.Transparent
-        Me.btnclose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btnclose.FlatAppearance.BorderSize = 0
-        Me.btnclose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnclose.ForeColor = System.Drawing.Color.Transparent
-        Me.btnclose.Location = New System.Drawing.Point(917, 10)
-        Me.btnclose.Name = "btnclose"
-        Me.btnclose.Size = New System.Drawing.Size(12, 12)
-        Me.btnclose.TabIndex = 91
-        Me.btnclose.UseVisualStyleBackColor = False
-        '
-        'btnLogOut
-        '
-        Me.btnLogOut.BackColor = System.Drawing.Color.Transparent
-        Me.btnLogOut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnLogOut.FlatAppearance.BorderSize = 0
-        Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLogOut.ForeColor = System.Drawing.Color.Transparent
-        Me.btnLogOut.Location = New System.Drawing.Point(853, 43)
-        Me.btnLogOut.Name = "btnLogOut"
-        Me.btnLogOut.Size = New System.Drawing.Size(83, 24)
-        Me.btnLogOut.TabIndex = 90
-        Me.btnLogOut.UseVisualStyleBackColor = False
+        Me.Panel1.BackColor = System.Drawing.Color.DimGray
+        Me.Panel1.Controls.Add(Me.Panel6)
+        Me.Panel1.Controls.Add(Me.Panel3)
+        Me.Panel1.Controls.Add(Me.Panel5)
+        Me.Panel1.Controls.Add(Me.Panel4)
+        Me.Panel1.Controls.Add(Me.TextBox1)
+        Me.Panel1.Controls.Add(Me.Panel2)
+        Me.Panel1.Location = New System.Drawing.Point(3, 3)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(864, 181)
+        Me.Panel1.TabIndex = 0
         '
         'Panel6
         '
@@ -209,54 +161,17 @@ Partial Class FormCustomerView
         Me.Panel2.Size = New System.Drawing.Size(218, 152)
         Me.Panel2.TabIndex = 0
         '
-        'Panel1
-        '
-        Me.Panel1.BackColor = System.Drawing.Color.DimGray
-        Me.Panel1.Controls.Add(Me.Panel6)
-        Me.Panel1.Controls.Add(Me.Panel3)
-        Me.Panel1.Controls.Add(Me.Panel5)
-        Me.Panel1.Controls.Add(Me.Panel4)
-        Me.Panel1.Controls.Add(Me.TextBox1)
-        Me.Panel1.Controls.Add(Me.Panel2)
-        Me.Panel1.Location = New System.Drawing.Point(3, 3)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(864, 181)
-        Me.Panel1.TabIndex = 0
-        '
-        'FlowLayoutPanel1
-        '
-        Me.FlowLayoutPanel1.AutoScroll = True
-        Me.FlowLayoutPanel1.BackColor = System.Drawing.Color.Transparent
-        Me.FlowLayoutPanel1.Controls.Add(Me.Panel1)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(22, 118)
-        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(903, 364)
-        Me.FlowLayoutPanel1.TabIndex = 87
-        '
         'lblRole
         '
         Me.lblRole.AutoSize = True
         Me.lblRole.BackColor = System.Drawing.Color.Transparent
         Me.lblRole.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRole.ForeColor = System.Drawing.Color.White
-        Me.lblRole.Location = New System.Drawing.Point(743, 43)
+        Me.lblRole.Location = New System.Drawing.Point(740, 47)
         Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(33, 19)
-        Me.lblRole.TabIndex = 85
+        Me.lblRole.Size = New System.Drawing.Size(42, 25)
+        Me.lblRole.TabIndex = 104
         Me.lblRole.Text = "User"
-        '
-        'btnEdit
-        '
-        Me.btnEdit.BackColor = System.Drawing.Color.Transparent
-        Me.btnEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnEdit.FlatAppearance.BorderSize = 0
-        Me.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnEdit.ForeColor = System.Drawing.Color.Transparent
-        Me.btnEdit.Location = New System.Drawing.Point(853, 12)
-        Me.btnEdit.Name = "btnEdit"
-        Me.btnEdit.Size = New System.Drawing.Size(81, 25)
-        Me.btnEdit.TabIndex = 86
-        Me.btnEdit.UseVisualStyleBackColor = False
         '
         'lblUsername
         '
@@ -264,37 +179,139 @@ Partial Class FormCustomerView
         Me.lblUsername.BackColor = System.Drawing.Color.Transparent
         Me.lblUsername.Font = New System.Drawing.Font("Poppins", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUsername.ForeColor = System.Drawing.Color.White
-        Me.lblUsername.Location = New System.Drawing.Point(743, 23)
+        Me.lblUsername.Location = New System.Drawing.Point(740, 27)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(33, 19)
-        Me.lblUsername.TabIndex = 84
+        Me.lblUsername.Size = New System.Drawing.Size(42, 25)
+        Me.lblUsername.TabIndex = 103
         Me.lblUsername.Text = "User"
         '
-        'btnNext
+        'btnEdit
         '
-        Me.btnNext.BackColor = System.Drawing.Color.Transparent
-        Me.btnNext.BackgroundImage = Global.epm1.My.Resources.Resources.BttnNext
-        Me.btnNext.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btnNext.FlatAppearance.BorderSize = 0
-        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnNext.Location = New System.Drawing.Point(193, 30)
-        Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(18, 20)
-        Me.btnNext.TabIndex = 100
-        Me.btnNext.UseVisualStyleBackColor = False
+        Me.btnEdit.BackColor = System.Drawing.Color.FromArgb(CType(CType(93, Byte), Integer), CType(CType(93, Byte), Integer), CType(CType(93, Byte), Integer))
+        Me.btnEdit.BackgroundImage = Global.epm1.My.Resources.Resources.bttnEditInfo
+        Me.btnEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnEdit.FlatAppearance.BorderSize = 0
+        Me.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnEdit.ForeColor = System.Drawing.Color.Black
+        Me.btnEdit.Location = New System.Drawing.Point(850, 18)
+        Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnEdit.Name = "btnEdit"
+        Me.btnEdit.Size = New System.Drawing.Size(91, 24)
+        Me.btnEdit.TabIndex = 117
+        Me.btnEdit.UseVisualStyleBackColor = False
         '
-        'btnBack
+        'btnclose
         '
-        Me.btnBack.BackColor = System.Drawing.Color.Transparent
-        Me.btnBack.BackgroundImage = Global.epm1.My.Resources.Resources.BttnPrevious
-        Me.btnBack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btnBack.FlatAppearance.BorderSize = 0
-        Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnBack.Location = New System.Drawing.Point(169, 30)
-        Me.btnBack.Name = "btnBack"
-        Me.btnBack.Size = New System.Drawing.Size(18, 20)
-        Me.btnBack.TabIndex = 99
-        Me.btnBack.UseVisualStyleBackColor = False
+        Me.btnclose.BackColor = System.Drawing.Color.Transparent
+        Me.btnclose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnclose.FlatAppearance.BorderSize = 0
+        Me.btnclose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnclose.ForeColor = System.Drawing.Color.Transparent
+        Me.btnclose.Location = New System.Drawing.Point(914, 14)
+        Me.btnclose.Name = "btnclose"
+        Me.btnclose.Size = New System.Drawing.Size(12, 12)
+        Me.btnclose.TabIndex = 107
+        Me.btnclose.UseVisualStyleBackColor = False
+        '
+        'lblSelected
+        '
+        Me.lblSelected.AutoSize = True
+        Me.lblSelected.BackColor = System.Drawing.Color.Transparent
+        Me.lblSelected.Font = New System.Drawing.Font("Cinzel", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSelected.Location = New System.Drawing.Point(353, 98)
+        Me.lblSelected.Name = "lblSelected"
+        Me.lblSelected.Size = New System.Drawing.Size(13, 17)
+        Me.lblSelected.TabIndex = 114
+        Me.lblSelected.Text = "-"
+        Me.lblSelected.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btnPaid
+        '
+        Me.btnPaid.BackColor = System.Drawing.Color.Transparent
+        Me.btnPaid.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnPaid.FlatAppearance.BorderSize = 0
+        Me.btnPaid.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPaid.ForeColor = System.Drawing.Color.Transparent
+        Me.btnPaid.Location = New System.Drawing.Point(836, 100)
+        Me.btnPaid.Name = "btnPaid"
+        Me.btnPaid.Size = New System.Drawing.Size(61, 16)
+        Me.btnPaid.TabIndex = 113
+        Me.btnPaid.UseVisualStyleBackColor = False
+        '
+        'btnApproved
+        '
+        Me.btnApproved.BackColor = System.Drawing.Color.Transparent
+        Me.btnApproved.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnApproved.FlatAppearance.BorderSize = 0
+        Me.btnApproved.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnApproved.ForeColor = System.Drawing.Color.Transparent
+        Me.btnApproved.Location = New System.Drawing.Point(771, 100)
+        Me.btnApproved.Name = "btnApproved"
+        Me.btnApproved.Size = New System.Drawing.Size(59, 16)
+        Me.btnApproved.TabIndex = 112
+        Me.btnApproved.UseVisualStyleBackColor = False
+        '
+        'btnRejected
+        '
+        Me.btnRejected.BackColor = System.Drawing.Color.Transparent
+        Me.btnRejected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnRejected.FlatAppearance.BorderSize = 0
+        Me.btnRejected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRejected.ForeColor = System.Drawing.Color.Transparent
+        Me.btnRejected.Location = New System.Drawing.Point(706, 100)
+        Me.btnRejected.Name = "btnRejected"
+        Me.btnRejected.Size = New System.Drawing.Size(59, 16)
+        Me.btnRejected.TabIndex = 111
+        Me.btnRejected.UseVisualStyleBackColor = False
+        '
+        'btnPending
+        '
+        Me.btnPending.BackColor = System.Drawing.Color.Transparent
+        Me.btnPending.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnPending.FlatAppearance.BorderSize = 0
+        Me.btnPending.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPending.ForeColor = System.Drawing.Color.Transparent
+        Me.btnPending.Location = New System.Drawing.Point(632, 102)
+        Me.btnPending.Name = "btnPending"
+        Me.btnPending.Size = New System.Drawing.Size(68, 14)
+        Me.btnPending.TabIndex = 110
+        Me.btnPending.UseVisualStyleBackColor = False
+        '
+        'txtSearch
+        '
+        Me.txtSearch.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
+        Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtSearch.ForeColor = System.Drawing.Color.Black
+        Me.txtSearch.Location = New System.Drawing.Point(90, 102)
+        Me.txtSearch.Name = "txtSearch"
+        Me.txtSearch.Size = New System.Drawing.Size(222, 13)
+        Me.txtSearch.TabIndex = 109
+        '
+        'btnminimize
+        '
+        Me.btnminimize.BackColor = System.Drawing.Color.Transparent
+        Me.btnminimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnminimize.FlatAppearance.BorderSize = 0
+        Me.btnminimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnminimize.ForeColor = System.Drawing.Color.Transparent
+        Me.btnminimize.Location = New System.Drawing.Point(897, 14)
+        Me.btnminimize.Name = "btnminimize"
+        Me.btnminimize.Size = New System.Drawing.Size(12, 12)
+        Me.btnminimize.TabIndex = 108
+        Me.btnminimize.UseVisualStyleBackColor = False
+        '
+        'btnLogOut
+        '
+        Me.btnLogOut.BackColor = System.Drawing.Color.Transparent
+        Me.btnLogOut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnLogOut.FlatAppearance.BorderSize = 0
+        Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLogOut.ForeColor = System.Drawing.Color.Transparent
+        Me.btnLogOut.Location = New System.Drawing.Point(850, 47)
+        Me.btnLogOut.Name = "btnLogOut"
+        Me.btnLogOut.Size = New System.Drawing.Size(83, 24)
+        Me.btnLogOut.TabIndex = 106
+        Me.btnLogOut.UseVisualStyleBackColor = False
         '
         'FormCustomerView
         '
@@ -303,8 +320,14 @@ Partial Class FormCustomerView
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(944, 501)
+        Me.Controls.Add(Me.btnMain)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
+        Me.Controls.Add(Me.FlowLayoutPanel1)
+        Me.Controls.Add(Me.lblRole)
+        Me.Controls.Add(Me.lblUsername)
+        Me.Controls.Add(Me.btnEdit)
+        Me.Controls.Add(Me.btnclose)
         Me.Controls.Add(Me.lblSelected)
         Me.Controls.Add(Me.btnPaid)
         Me.Controls.Add(Me.btnApproved)
@@ -312,24 +335,34 @@ Partial Class FormCustomerView
         Me.Controls.Add(Me.btnPending)
         Me.Controls.Add(Me.txtSearch)
         Me.Controls.Add(Me.btnminimize)
-        Me.Controls.Add(Me.btnclose)
         Me.Controls.Add(Me.btnLogOut)
-        Me.Controls.Add(Me.FlowLayoutPanel1)
-        Me.Controls.Add(Me.lblRole)
-        Me.Controls.Add(Me.btnEdit)
-        Me.Controls.Add(Me.lblUsername)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "FormCustomerView"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormCustomerView"
+        Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
+    Friend WithEvents btnMain As Button
+    Friend WithEvents btnNext As Button
+    Friend WithEvents btnBack As Button
+    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Panel6 As Panel
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents lblRole As Label
+    Friend WithEvents lblUsername As Label
+    Friend WithEvents btnEdit As Button
+    Friend WithEvents btnclose As Button
     Friend WithEvents lblSelected As Label
     Friend WithEvents btnPaid As Button
     Friend WithEvents btnApproved As Button
@@ -337,19 +370,5 @@ Partial Class FormCustomerView
     Friend WithEvents btnPending As Button
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents btnminimize As Button
-    Friend WithEvents btnclose As Button
     Friend WithEvents btnLogOut As Button
-    Friend WithEvents Panel6 As Panel
-    Friend WithEvents Panel3 As Panel
-    Friend WithEvents Panel5 As Panel
-    Friend WithEvents Panel4 As Panel
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents Panel2 As Panel
-    Friend WithEvents Panel1 As Panel
-    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
-    Friend WithEvents lblRole As Label
-    Friend WithEvents btnEdit As Button
-    Friend WithEvents lblUsername As Label
-    Friend WithEvents btnNext As Button
-    Friend WithEvents btnBack As Button
 End Class

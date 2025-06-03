@@ -2,6 +2,7 @@
 Imports System.Data
 Imports System.Text
 Imports System.Drawing.Text
+Imports System.Security.Principal
 Public Class FormCustomerView
 
     Private currentFilter As String = "all" ' Options: "pending", "rejected", "approved", "paid"
@@ -17,13 +18,12 @@ Public Class FormCustomerView
     Private lblAmountPaid As Label
     Private lblPaymentDate As Label
     Private lblPaymentStatus As Label
+    Public Property EventPlaceImageUrl As String
 
     Private allBookings As New List(Of DataRow)
     Private currentBookingIndex As Integer = 0
-    ' At the top of FormCustomerView
+
     Private customer_id As Integer
-
-
 
     Private placeNames As String() = {
         "Auditorium", "Ballroom", "Banquet Hall", "Bar", "Cafe", "Club",
@@ -62,7 +62,6 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub FormCustomerView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        customer_id = CurrentUser.CustomerId
         Debug.WriteLine("customer_id used for query: " & customer_id)
         LoadAllBookings()
         PopulateBookingPanels()
@@ -71,6 +70,8 @@ Public Class FormCustomerView
 
         lblUsername.Text = CurrentUser.Username
         lblRole.Text = CurrentUser.Role
+
+
     End Sub
 
     Private Sub SetPanelDoubleBuffered(p As Panel)
@@ -81,34 +82,45 @@ Public Class FormCustomerView
 
     Private Sub LoadAllBookings()
         allBookings.Clear()
-        Debug.WriteLine("customer_id used for query: " & CurrentUser.CustomerId)
+        Dim parameters As New Dictionary(Of String, Object) From {{"@user_id", CurrentUser.UserID}}
+
+
+        Debug.WriteLine("customer_id used for query: " & customer_id)
 
         Dim query As String = "
-        SELECT b.booking_id, b.place_id, p.event_place, b.event_date, b.event_time, b.event_end_time, b.status,
-               pay.payment_id, pay.amount_to_pay, pay.amount_paid, pay.payment_date, pay.payment_status,
-               b.customer_id, c.name AS customer_name
-        FROM bookings b
-        LEFT JOIN payments pay ON pay.booking_id = b.booking_id
-        JOIN eventplace p ON b.place_id = p.place_id
-        JOIN customers c ON b.customer_id = c.customer_id
-        WHERE b.customer_id = @customer_id
-        ORDER BY b.event_date DESC, b.booking_id DESC
-    "
-        Dim parameters As New Dictionary(Of String, Object) From {{"@customer_id", CurrentUser.CustomerId}}
+SELECT 
+    b.booking_id, 
+    b.place_id, 
+    p.event_place, 
+    p.image_url,  -- Include the image_url column here
+    b.event_date, 
+    b.event_time, 
+    b.event_end_time, 
+    b.status,
+    pay.payment_id, 
+    pay.amount_to_pay, 
+    pay.amount_paid, 
+    pay.payment_date, 
+    pay.payment_status,
+    b.customer_id, 
+    c.name AS customer_name
+FROM bookings b
+LEFT JOIN payments pay ON pay.booking_id = b.booking_id
+JOIN eventplace p ON b.place_id = p.place_id
+JOIN customers c ON b.customer_id = c.customer_id
+WHERE b.customer_id IN (
+    SELECT customer_id FROM usercustomers WHERE user_id = @user_id
+)
+ORDER BY b.event_date DESC, b.booking_id DESC;
+"
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, parameters)
         For Each row As DataRow In dt.Rows
             allBookings.Add(row)
         Next
         Debug.WriteLine($"Loaded {allBookings.Count} bookings for customer {CurrentUser.CustomerId}")
+
     End Sub
-
-
-
-
-
-
-
 
     Private Sub ShowNoBookingPanel()
         pnlPlaceBrowser.BackgroundImage = Nothing
@@ -157,26 +169,25 @@ Public Class FormCustomerView
         pnlPlaceBrowser.Visible = True
     End Sub
 
-    Private Sub MakeButtonRound(sender As Object, e As PaintEventArgs)
-        Dim btn As Button = CType(sender, Button)
-        Dim path As New Drawing2D.GraphicsPath()
-        path.AddEllipse(0, 0, btn.Width, btn.Height)
-        btn.Region = New Region(path)
-    End Sub
+    'Private Sub MakeButtonRound(sender As Object, e As PaintEventArgs)
+    '    Dim btn As Button = CType(sender, Button)
+    '    Dim path As New Drawing2D.GraphicsPath()
+    '    path.AddEllipse(0, 0, btn.Width, btn.Height)
+    '    btn.Region = New Region(path)
+    'End Sub
 
-    Private Sub MakePanelRound(sender As Object, e As PaintEventArgs)
-        Dim panel As Panel = CType(sender, Panel)
-        Dim cornerRadius As Integer = 30
-        Dim path As New Drawing2D.GraphicsPath()
-        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
-        path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
-        path.AddArc(panel.Width - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
-        path.AddArc(0, panel.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
-        path.CloseFigure()
-        panel.Region = New Region(path)
-    End Sub
+    'Private Sub MakePanelRound(sender As Object, e As PaintEventArgs)
+    '    Dim panel As Panel = CType(sender, Panel)
+    '    Dim cornerRadius As Integer = 30
+    '    Dim path As New Drawing2D.GraphicsPath()
+    '    path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
+    '    path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
+    '    path.AddArc(panel.Width - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
+    '    path.AddArc(0, panel.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
+    '    path.CloseFigure()
+    '    panel.Region = New Region(path)
+    'End Sub
 
-    ' At the class level
     Private quicheFont As Font = Nothing
 
     Private Sub LoadCustomFont()
@@ -190,6 +201,10 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub PopulateBookingPanels()
+        For Each row In allBookings
+            Debug.WriteLine($"BookingID: {row("booking_id")}, Status: {row("status")}, CustomerID: {row("customer_id")}")
+        Next
+
         LoadCustomFont()
         FlowLayoutPanel1.Controls.Clear()
         FlowLayoutPanel1.Visible = True
@@ -218,14 +233,10 @@ Public Class FormCustomerView
                                                               Return status = "approved" AndAlso paymentStatus <> "paid"
                                                           Case Else
                                                               lblSelected.Text = "Select what to view!"
-                                                              lblSelected.ForeColor = Color.Red
                                                               Return False
                                                       End Select
                                                   End Function)
 
-
-
-        ' Search filtering
         Dim searchText = txtSearch.Text.Trim().ToLower()
         If searchText.Length > 0 Then
             filteredBookings = filteredBookings.Where(Function(row)
@@ -242,8 +253,9 @@ Public Class FormCustomerView
                                                       End Function)
         End If
 
-        ' Sort by event_date DESC, booking_id DESC (already sorted in LoadAllBookings, but ensure)
         filteredBookings = filteredBookings.OrderByDescending(Function(row) Convert.ToDateTime(row("event_date"))).ThenByDescending(Function(row) Convert.ToInt32(row("booking_id")))
+
+#Region "Panel"
 
         If Not filteredBookings.Any() Then
             Dim lblNoBooking As New Label()
@@ -258,26 +270,28 @@ Public Class FormCustomerView
         End If
 
         For Each dataRow As DataRow In filteredBookings
-            ' Main panel
             Dim panel As New Panel()
             panel.Size = New Size(864, 181)
             panel.Margin = New Padding(10)
             panel.BackColor = Color.FromArgb(229, 222, 210)
             panel.BorderStyle = BorderStyle.None
-            AddHandler panel.Paint, AddressOf MakePanelRound
+
             SetPanelDoubleBuffered(panel)
 
-            ' PictureBox (rounded rectangle)
             Dim pb As New PictureBox()
             pb.Location = New Point(13, 13)
             pb.Size = New Size(218, 152)
             pb.SizeMode = PictureBoxSizeMode.StretchImage
             Dim placeId As Integer = Convert.ToInt32(dataRow("place_id"))
-            Dim imageName As String = "_" & placeId.ToString()
-            pb.Image = TryCast(My.Resources.ResourceManager.GetObject(imageName), Image)
+            'Dim imageName As String = "_" & placeId.ToString()
+            'pb.Image = TryCast(My.Resources.ResourceManager.GetObject(imageName), Image)
             pb.BackColor = Color.White
             pb.BorderStyle = BorderStyle.None
-            AddHandler pb.Paint, AddressOf MakePictureBoxRoundedRect
+            Dim imgPath As String = dataRow("image_url").ToString().Trim()
+            HelperUI.LoadEventPlaceImage(imgPath, pb)
+
+            'AddHandler pb.Paint, AddressOf MakePictureBoxRoundedRect
+
             panel.Controls.Add(pb)
 
             ' Panel1: Place Name (rounded rectangle, set region directly)
@@ -287,11 +301,11 @@ Public Class FormCustomerView
             panel1.BackColor = Color.FromArgb(255, 206, 200, 189)
             panel1.BorderStyle = BorderStyle.None
             SetPanelDoubleBuffered(panel1)
-            SetPanelRoundedRect(panel1, 18) ' Set region directly
+            'SetPanelRoundedRect(panel1, 18) ' Set region directly
 
             Dim lblPlaceName As New Label()
             lblPlaceName.Text = dataRow("event_place").ToString()
-            lblPlaceName.Font = New Font(quicheFont.FontFamily, 18, FontStyle.Bold)
+            lblPlaceName.Font = New Font(quicheFont.FontFamily, 20, FontStyle.Bold)
             lblPlaceName.ForeColor = Color.Black
             lblPlaceName.Dock = DockStyle.Fill
             lblPlaceName.TextAlign = ContentAlignment.MiddleCenter
@@ -304,27 +318,27 @@ Public Class FormCustomerView
             panel2.Size = New Size(405, 95)
             panel2.BackColor = Color.FromArgb(255, 206, 200, 189)
             panel2.BorderStyle = BorderStyle.None
-            AddHandler panel2.Paint, AddressOf MakePanelRound
+            'AddHandler panel2.Paint, AddressOf MakePanelRound
             SetPanelDoubleBuffered(panel2)
 
             Dim detailsFont As New Font(quicheFont.FontFamily, 9, FontStyle.Regular)
             Dim y As Integer = 8
 
             ' Row 1: Customer Name (left), Booking ID (right)
-            Dim customerName As String = If(dataRow.Table.Columns.Contains("customer_name"), dataRow("customer_name").ToString(), CurrentUser.Username)
-            Dim lblCustomerName As New Label()
-            lblCustomerName.Text = "Customer Name: " & customerName
-            lblCustomerName.Font = detailsFont
-            lblCustomerName.ForeColor = Color.Black
-            lblCustomerName.Location = New Point(10, y)
-            lblCustomerName.Size = New Size(180, 18)
-            panel2.Controls.Add(lblCustomerName)
+            'Dim customerName As String = If(dataRow.Table.Columns.Contains("customer_name"), dataRow("customer_name").ToString(), CurrentUser.Username)
+            'Dim lblCustomerName As New Label()
+            'lblCustomerName.Text = "Customer Name: " & customerName
+            'lblCustomerName.Font = detailsFont
+            'lblCustomerName.ForeColor = Color.Black
+            'lblCustomerName.Location = New Point(10, y)
+            'lblCustomerName.Size = New Size(180, 18)
+            'panel2.Controls.Add(lblCustomerName)
 
             Dim lblBookingId As New Label()
             lblBookingId.Text = "Booking ID: " & dataRow("booking_id").ToString()
             lblBookingId.Font = detailsFont
             lblBookingId.ForeColor = Color.Black
-            lblBookingId.Location = New Point(200, y)
+            lblBookingId.Location = New Point(10, y)
             lblBookingId.Size = New Size(180, 18)
             panel2.Controls.Add(lblBookingId)
             y += 20
@@ -382,8 +396,6 @@ Public Class FormCustomerView
             lblAmountPaid.Size = New Size(180, 18)
             panel2.Controls.Add(lblAmountPaid)
 
-
-
             panel.Controls.Add(panel2)
 
             ' Panel3: Approval & Price (rounded rectangle, match color to panel1/panel2)
@@ -397,7 +409,7 @@ Public Class FormCustomerView
             panel3.Size = New Size(189, 152)
             panel3.BackColor = Color.FromArgb(255, 206, 200, 189) ' Match panel1/panel2
             panel3.BorderStyle = BorderStyle.None
-            AddHandler panel3.Paint, AddressOf MakePanelRound
+            'AddHandler panel3.Paint, AddressOf MakePanelRound
             SetPanelDoubleBuffered(panel3)
 
             Dim paid As Decimal = If(IsDBNull(dataRow("amount_paid")), 0D, Convert.ToDecimal(dataRow("amount_paid")))
@@ -476,6 +488,8 @@ Public Class FormCustomerView
 
             AddHandler btnPay.Click,
         Sub(senderBtn, eBtn)
+
+#End Region
             Dim payAmount As Decimal
             If Not Decimal.TryParse(txtPayment.Text, payAmount) OrElse payAmount <= 0 Then
                 MessageBox.Show("Please enter a valid payment amount.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -498,24 +512,19 @@ Public Class FormCustomerView
                 {"@payment_status", "Paid"},
                 {"@payment_id", paymentId}
             }
-            DBHelper.ExecuteQuery(updateQuery, parameters)
 
-            ' Also update the booking status to "paid" BEFORE reloading bookings
             Dim bookingId = dataRow("booking_id")
             Dim updateBookingQuery As String = "UPDATE bookings SET status = @status WHERE booking_id = @booking_id"
             Dim bookingParams As New Dictionary(Of String, Object) From {
                 {"@status", "paid"},
                 {"@booking_id", bookingId}
             }
+            DBHelper.ExecuteQuery(updateQuery, parameters)
             DBHelper.ExecuteQuery(updateBookingQuery, bookingParams)
 
             MessageBox.Show("Payment successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             LoadAllBookings()
             PopulateBookingPanels()
-
-
-
-
 
         End Sub
 
@@ -529,32 +538,8 @@ Public Class FormCustomerView
     End Sub
 
 
-    Private Sub SetPanelRoundedRect(p As Panel, cornerRadius As Integer)
-        Dim path As New Drawing2D.GraphicsPath()
-        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
-        path.AddArc(p.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
-        path.AddArc(p.Width - cornerRadius, p.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
-        path.AddArc(0, p.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
-        path.CloseFigure()
-        p.Region = New Region(path)
-    End Sub
 
-    Private Sub MakePictureBoxRoundedRect(sender As Object, e As PaintEventArgs)
-        Dim pb As PictureBox = CType(sender, PictureBox)
-        Dim cornerRadius As Integer = 32
-        Dim path As New Drawing2D.GraphicsPath()
-        path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90)
-        path.AddArc(pb.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90)
-        path.AddArc(pb.Width - cornerRadius, pb.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90)
-        path.AddArc(0, pb.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90)
-        path.CloseFigure()
-        pb.Region = New Region(path)
-    End Sub
-
-
-    Private Sub lblUsername_Click(sender As Object, e As EventArgs) Handles lblUsername.Click
-
-    End Sub
+#Region "click"
 
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
         Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Log Out Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -574,10 +559,8 @@ Public Class FormCustomerView
             Me.Hide()
         End If
     End Sub
-
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        FormMain.Show()
-        Me.Hide()
+        HelperNavigation.GoBack(Me)
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
@@ -621,6 +604,22 @@ Public Class FormCustomerView
     End Sub
 
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
-
+        Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
+        editForm.ShowDialog()
     End Sub
+
+    Private Sub btnMain_Click(sender As Object, e As EventArgs) Handles btnMain.Click
+
+        Dim mainForm As New FormMain()
+        mainForm.StartPosition = FormStartPosition.CenterScreen
+        mainForm.WindowState = FormWindowState.Normal
+        mainForm.Show()
+        mainForm.BringToFront()
+        mainForm.Activate()
+
+        Me.Refresh()
+        Application.DoEvents()
+    End Sub
+
+#End Region
 End Class

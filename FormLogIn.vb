@@ -78,12 +78,28 @@ Public Class FormLogIn
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
                         FormAdminCenter.Show()
+                        FormAdminCenter.StartPosition = FormStartPosition.CenterScreen
+                        FormAdminCenter.WindowState = FormWindowState.Normal
+                        FormAdminCenter.Show()
+                        FormAdminCenter.BringToFront()
+                        FormAdminCenter.Activate()
+
+                        Me.Refresh()
+
+
                     Case "User"
                         CurrentUser.CustomerId = CurrentUser.UserID
                         MessageBox.Show("Login successful!", "Welcome " & CurrentUser.Username, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Me.DialogResult = DialogResult.OK
                         Me.Close()
                         FormMain.Show()
+                        FormMain.StartPosition = FormStartPosition.CenterScreen
+                        FormMain.WindowState = FormWindowState.Normal
+                        FormMain.Show()
+                        FormMain.BringToFront()
+                        FormMain.Activate()
+
+                        Me.Refresh()
                     Case Else
                         lblGeneralError.Text = "Invalid role detected! Contact support."
                         lblGeneralError.Visible = True

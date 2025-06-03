@@ -3,7 +3,7 @@ Imports MySql.Data.MySqlClient
 
 Public Class HelperDatabase
     ' ------------------ Create a New Customer ------------------
-    Public Shared Function CreateNewCustomer(name As String, birthday As Date, sex As String, address As String, age As Integer) As CustomerResult
+    Public Shared Function CreateNewCustomer(name As String, birthday As Date, sex As String, address As String, age As Integer, userId As Integer) As CustomerResult
         Dim result As New CustomerResult()
         Dim insertQuery As String = "INSERT INTO Customers (name, birthday, sex, address, age) VALUES (@name, @birthday, @sex, @address, @age); SELECT LAST_INSERT_ID();"
 
@@ -16,12 +16,17 @@ Public Class HelperDatabase
         }
 
         Dim customerId As Object = DBHelper.ExecuteScalarQuery(insertQuery, params)
-
         result.CustomerId = If(customerId IsNot Nothing, Convert.ToInt32(customerId), -1)
-        result.ErrorMessage = If(result.CustomerId > 0, String.Empty, "Failed to create customer")
+
+        If result.CustomerId > 0 Then
+            InsertUserCustomer(userId, result.CustomerId)
+        Else
+            result.ErrorMessage = "Failed to create customer"
+        End If
 
         Return result
     End Function
+
 
     ' ------------------ Insert User-Customer Relationship ------------------
     Public Shared Sub InsertUserCustomer(userId As Integer, customerId As Integer)
@@ -35,13 +40,11 @@ Public Class HelperDatabase
 
     ' ------------------ Save Booking Services ------------------
     Public Shared Sub SaveBookingServices(bookingId As Integer, catering As Boolean, clown As Boolean, singer As Boolean, dancer As Boolean, videoke As Boolean)
-        ' Delete previous entries
         Dim deleteQuery As String = "DELETE FROM BookingServices WHERE booking_id = @bookingId"
         Dim deleteParams As New Dictionary(Of String, Object) From {{"@bookingId", bookingId}}
         DBHelper.ExecuteQuery(deleteQuery, deleteParams)
 
-        ' Insert selected services dynamically
-        Dim serviceList As New List(Of String) ' List to store selected services
+        Dim serviceList As New List(Of String)
         Dim insertQuery As String = "INSERT INTO BookingServices (booking_id, service_id) VALUES (@bookingId, @serviceId)"
 
         Using connection As MySqlConnection = DBHelper.GetConnection()
@@ -50,7 +53,6 @@ Public Class HelperDatabase
                 Using cmd As New MySqlCommand(insertQuery, connection)
                     cmd.Parameters.AddWithValue("@bookingId", bookingId)
 
-                    ' Add each selected service to the service list
                     Dim serviceSelections As Dictionary(Of Integer, Boolean) = New Dictionary(Of Integer, Boolean) From {
                     {1, catering},
                     {2, clown},
@@ -63,8 +65,8 @@ Public Class HelperDatabase
                         If service.Value Then
                             cmd.Parameters.AddWithValue("@serviceId", service.Key)
                             cmd.ExecuteNonQuery()
-                            serviceList.Add(service.Key.ToString()) ' Add the service ID to the list
-                            cmd.Parameters.RemoveAt("@serviceId") ' Reset parameter for next iteration
+                            serviceList.Add(service.Key.ToString())
+                            cmd.Parameters.RemoveAt("@serviceId")
                         End If
                     Next
                 End Using
@@ -75,7 +77,6 @@ Public Class HelperDatabase
             End Try
         End Using
 
-        ' Now update the services_availed column in the bookings table with a concatenated list of selected services
         Dim services As String = String.Join(", ", serviceList)
         Dim updateQuery As String = "UPDATE bookings SET services_availed = @services WHERE booking_id = @bookingId"
         Dim updateParams As New Dictionary(Of String, Object) From {
@@ -97,15 +98,16 @@ Public Class HelperDatabase
             Dim startDate As Date = Convert.ToDateTime(row("event_date"))
             Dim endDate As Date = Convert.ToDateTime(row("event_end_date"))
 
-            ' Add all dates in the range to the booked list
-            For Each d As Date In Enumerable.Range(0, (endDate - startDate).Days + 1).Select(Function(i) startDate.AddDays(i))
-                bookedDates.Add(d)
-            Next
+            If endDate >= startDate Then
+                For Each d As Date In Enumerable.Range(0, (endDate - startDate).Days + 1).Select(Function(i) startDate.AddDays(i))
+                    bookedDates.Add(d)
+                Next
+            End If
         Next
-
 
         Return bookedDates
     End Function
+
 
     ' ------------------ Populate Event Type Combo ------------------
     Public Shared Sub PopulateEventTypeCombo(eventPlaceName As String, cbEventType As ComboBox)
@@ -150,15 +152,18 @@ Public Class HelperDatabase
             Return -1
         End If
 
+        Debug.WriteLine($"Checking duplicate bookings for place {placeId} on {eventDateStart}: Found {duplicateCount} existing records.")
+
+
         ' ------------------ Time String Correction & Parsing ------------------
         Dim timeFormats() As String = {"h:mm tt", "hh:mm tt"}
 
         Dim correctedEventStartTime As String = eventStartTime.Trim()
         If Not correctedEventStartTime.Contains(":") Then
-            correctedEventStartTime &= ":00"  ' Append default minutes if missing.
+            correctedEventStartTime &= ":00"
         End If
         If Not (correctedEventStartTime.ToUpper().Contains("AM") OrElse correctedEventStartTime.ToUpper().Contains("PM")) Then
-            correctedEventStartTime &= " AM"  ' Append default meridiem if missing.
+            correctedEventStartTime &= " AM"
         End If
 
         Dim parsedStart As DateTime
@@ -181,6 +186,10 @@ Public Class HelperDatabase
 
         Dim formattedStartTime As String = parsedStart.ToString("HH:mm:ss")
         Dim formattedEndTime As String = parsedEnd.ToString("HH:mm:ss")
+        Debug.WriteLine($"Raw Event Start Time: {eventStartTime}")
+        Debug.WriteLine($"Raw Event End Time: {eventEndTime}")
+        Debug.WriteLine($"Formatted Event Start Time: {formattedStartTime}")
+        Debug.WriteLine($"Formatted Event End Time: {formattedEndTime}")
 
         ' ------------------ Insert Booking ------------------
         Dim insertQuery As String = "INSERT INTO Bookings (customer_id, place_id, num_guests, event_date, event_time, event_end_time, event_end_date, total_price, event_type) " &
@@ -197,9 +206,7 @@ Public Class HelperDatabase
     {"@event_type", eventType}
 }
 
-
         Dim insertResult As Integer = DBHelper.ExecuteQuery(insertQuery, insertParams)
-        ' If the insert did not affect any rows, then fail.
         If insertResult <= 0 Then
             Return -1
         End If
@@ -213,31 +220,40 @@ Public Class HelperDatabase
 
     End Function
 
-
     ' ------------------ Insert Payment Record ------------------
-    Public Shared Sub InsertPaymentRecord(bookingId As Integer, customerId As Integer, amountToPay As Decimal)
-        Dim query As String = "INSERT INTO payments (booking_id, customer_id, amount_to_pay) VALUES (@booking_id, @customer_id, @amount_to_pay)"
+    Public Shared Sub InsertPaymentRecord(bookingId As Integer, userId As Integer, customerId As Integer, amountToPay As Decimal)
+        Dim query As String = "INSERT INTO payments (booking_id, user_id, customer_id, amount_to_pay) VALUES (@booking_id, @user_id, @customer_id, @amount_to_pay)"
         Dim params As New Dictionary(Of String, Object) From {
-            {"@booking_id", bookingId},
-            {"@customer_id", customerId},
-            {"@amount_to_pay", amountToPay}
-        }
+        {"@booking_id", bookingId},
+        {"@user_id", userId},
+        {"@customer_id", customerId},
+        {"@amount_to_pay", amountToPay}
+    }
         DBHelper.ExecuteQuery(query, params)
     End Sub
 
+
     Public Shared Function GetCustomerData(userId As Integer) As DataTable
-        Dim query As String = "SELECT name, birthday, sex, address FROM Customers WHERE user_id = @userId"
+        Dim query As String = "
+            SELECT c.customer_id, c.name, c.birthday, c.sex, c.address
+            FROM Customers c
+            INNER JOIN UserCustomers uc ON c.customer_id = uc.customer_id
+            WHERE uc.user_id = @userId
+            LIMIT 1"
         Dim parameters As New Dictionary(Of String, Object) From {{"@userId", userId}}
         Return DBHelper.GetDataTable(query, parameters)
     End Function
 
     Public Shared Function GetLastBooking(userId As Integer) As DataTable
-        Dim query As String = "SELECT 
+        Dim query As String = "
+SELECT 
     b.event_type, b.num_guests, b.event_time, b.event_end_time, 
-    s.catering, s.clown, s.singer, s.dancer, s.videoke
+    GROUP_CONCAT(s.service_name SEPARATOR ', ') AS services_offered
 FROM Bookings b
-JOIN Services s ON b.booking_id = s.booking_id
+JOIN BookingServices bs ON b.booking_id = bs.booking_id
+JOIN Services s ON bs.service_id = s.service_id
 WHERE b.customer_id = @userId
+GROUP BY b.booking_id, b.event_type, b.num_guests, b.event_time, b.event_end_time
 ORDER BY b.booking_id DESC
 LIMIT 1;
 "

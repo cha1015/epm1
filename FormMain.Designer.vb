@@ -68,7 +68,7 @@ Partial Class FormMain
         Me.Label11.Location = New System.Drawing.Point(43, 102)
         Me.Label11.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(53, 13)
+        Me.Label11.Size = New System.Drawing.Size(62, 16)
         Me.Label11.TabIndex = 80
         Me.Label11.Text = "Sort By"
         '
@@ -81,7 +81,7 @@ Partial Class FormMain
         Me.txtMaxCapacity.Location = New System.Drawing.Point(118, 227)
         Me.txtMaxCapacity.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMaxCapacity.Name = "txtMaxCapacity"
-        Me.txtMaxCapacity.Size = New System.Drawing.Size(75, 18)
+        Me.txtMaxCapacity.Size = New System.Drawing.Size(75, 23)
         Me.txtMaxCapacity.TabIndex = 61
         Me.txtMaxCapacity.Text = "Max"
         '
@@ -135,7 +135,7 @@ Partial Class FormMain
         Me.Label4.Location = New System.Drawing.Point(6, 255)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(39, 13)
+        Me.Label4.Size = New System.Drawing.Size(46, 16)
         Me.Label4.TabIndex = 73
         Me.Label4.Text = "Price"
         '
@@ -148,7 +148,7 @@ Partial Class FormMain
         Me.Label3.Location = New System.Drawing.Point(7, 210)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(64, 13)
+        Me.Label3.Size = New System.Drawing.Size(75, 16)
         Me.Label3.TabIndex = 72
         Me.Label3.Text = "Capacity"
         '
@@ -161,7 +161,7 @@ Partial Class FormMain
         Me.Label2.Location = New System.Drawing.Point(7, 117)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(90, 13)
+        Me.Label2.Size = New System.Drawing.Size(103, 16)
         Me.Label2.TabIndex = 71
         Me.Label2.Text = "Available On"
         '
@@ -192,7 +192,7 @@ Partial Class FormMain
         Me.clbAvailableOn.Location = New System.Drawing.Point(10, 132)
         Me.clbAvailableOn.Margin = New System.Windows.Forms.Padding(2)
         Me.clbAvailableOn.Name = "clbAvailableOn"
-        Me.clbAvailableOn.Size = New System.Drawing.Size(183, 76)
+        Me.clbAvailableOn.Size = New System.Drawing.Size(183, 69)
         Me.clbAvailableOn.TabIndex = 67
         '
         'txtMaxPrice
@@ -204,7 +204,7 @@ Partial Class FormMain
         Me.txtMaxPrice.Location = New System.Drawing.Point(119, 272)
         Me.txtMaxPrice.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMaxPrice.Name = "txtMaxPrice"
-        Me.txtMaxPrice.Size = New System.Drawing.Size(76, 18)
+        Me.txtMaxPrice.Size = New System.Drawing.Size(76, 23)
         Me.txtMaxPrice.TabIndex = 63
         Me.txtMaxPrice.Text = "Max"
         '
@@ -238,7 +238,7 @@ Partial Class FormMain
         Me.cbSort.Location = New System.Drawing.Point(100, 95)
         Me.cbSort.Margin = New System.Windows.Forms.Padding(2)
         Me.cbSort.Name = "cbSort"
-        Me.cbSort.Size = New System.Drawing.Size(224, 30)
+        Me.cbSort.Size = New System.Drawing.Size(224, 34)
         Me.cbSort.TabIndex = 56
         '
         'txtMinPrice
@@ -250,7 +250,7 @@ Partial Class FormMain
         Me.txtMinPrice.Location = New System.Drawing.Point(10, 272)
         Me.txtMinPrice.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMinPrice.Name = "txtMinPrice"
-        Me.txtMinPrice.Size = New System.Drawing.Size(77, 18)
+        Me.txtMinPrice.Size = New System.Drawing.Size(77, 23)
         Me.txtMinPrice.TabIndex = 62
         Me.txtMinPrice.Text = "Min"
         '
@@ -263,7 +263,7 @@ Partial Class FormMain
         Me.txtMinCapacity.Location = New System.Drawing.Point(10, 227)
         Me.txtMinCapacity.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMinCapacity.Name = "txtMinCapacity"
-        Me.txtMinCapacity.Size = New System.Drawing.Size(77, 18)
+        Me.txtMinCapacity.Size = New System.Drawing.Size(77, 23)
         Me.txtMinCapacity.TabIndex = 60
         Me.txtMinCapacity.Text = "Min"
         '
@@ -278,7 +278,7 @@ Partial Class FormMain
         Me.clbEventType.Location = New System.Drawing.Point(10, 25)
         Me.clbEventType.Margin = New System.Windows.Forms.Padding(2)
         Me.clbEventType.Name = "clbEventType"
-        Me.clbEventType.Size = New System.Drawing.Size(183, 90)
+        Me.clbEventType.Size = New System.Drawing.Size(183, 88)
         Me.clbEventType.TabIndex = 57
         '
         'pnlAccount
@@ -319,7 +319,7 @@ Partial Class FormMain
         Me.lblUsername.Location = New System.Drawing.Point(12, 13)
         Me.lblUsername.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(74, 19)
+        Me.lblUsername.Size = New System.Drawing.Size(93, 25)
         Me.lblUsername.TabIndex = 37
         Me.lblUsername.Text = "Username"
         '
@@ -347,7 +347,7 @@ Partial Class FormMain
         Me.lblUser.Location = New System.Drawing.Point(12, 32)
         Me.lblUser.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblUser.Name = "lblUser"
-        Me.lblUser.Size = New System.Drawing.Size(34, 13)
+        Me.lblUser.Size = New System.Drawing.Size(38, 16)
         Me.lblUser.TabIndex = 39
         Me.lblUser.Text = "User"
         '
@@ -378,7 +378,7 @@ Partial Class FormMain
         Me.txtSearch.Location = New System.Drawing.Point(229, 32)
         Me.txtSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(422, 24)
+        Me.txtSearch.Size = New System.Drawing.Size(422, 30)
         Me.txtSearch.TabIndex = 65
         '
         'flpResults
@@ -400,7 +400,7 @@ Partial Class FormMain
         Me.Label1.Location = New System.Drawing.Point(7, 10)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(73, 13)
+        Me.Label1.Size = New System.Drawing.Size(85, 16)
         Me.Label1.TabIndex = 70
         Me.Label1.Text = "Event Type"
         '

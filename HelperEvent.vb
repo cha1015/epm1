@@ -28,7 +28,6 @@ Public Class HelperEvent
         End If
     End Sub
 
-
     ' ------------------ Adjust End Date for Overnight Event ------------------
     Public Shared Sub AdjustEndDateForOvernightEvent(cbStartHour As ComboBox, cbStartMinutes As ComboBox, cbStartAMPM As ComboBox,
                                                      cbEndHour As ComboBox, cbEndMinutes As ComboBox, cbEndAMPM As ComboBox,

@@ -5,9 +5,8 @@ Imports System.Text.RegularExpressions
 
 Public Class FormSignUp
     Private passwordVisible As Boolean = True
-    'Private hasAttemptedSubmit As Boolean = False 'removed
-    Private hasAttemptedSubmitPersonalInfo As Boolean = False 'added
-    Private hasAttemptedSubmitAccountDetails As Boolean = False 'added
+    Private hasAttemptedSubmitPersonalInfo As Boolean = False
+    Private hasAttemptedSubmitAccountDetails As Boolean = False
 
     Private labels As Label()
     Private fields As TextBox()
@@ -33,16 +32,15 @@ Public Class FormSignUp
         dtpBirthday.Tag = lblBirthday
         cmbSex.Tag = lblSex
         txtAddress.Tag = lblAddress
-        txtUsername.Tag = lblUsername 'added
-        txtEmail.Tag = lblEmail 'added
-        txtPass.Tag = lblPassword 'added
-        txtConfPass.Tag = lblConfirmPassword 'added
-        cmbRole.Tag = lblRole 'added
+        txtUsername.Tag = lblUsername
+        txtEmail.Tag = lblEmail
+        txtPass.Tag = lblPassword
+        txtConfPass.Tag = lblConfirmPassword
+        cmbRole.Tag = lblRole
 
         Me.ActiveControl = txtFirstName
         Me.BeginInvoke(Sub() txtFirstName.Select())
 
-        ' Add handlers for personal info fields for real-time validation after submit attempt
         Dim personalInfoFields As Control() = {txtFirstName, txtLastName, dtpBirthday, cmbSex, txtAddress}
         For Each ctrl In personalInfoFields
             If TypeOf ctrl Is TextBox Then
@@ -54,7 +52,6 @@ Public Class FormSignUp
             End If
         Next
 
-        ' Add handlers for account detail fields for real-time validation after submit attempt
         Dim accountDetailFields As Control() = {txtUsername, txtEmail, txtPass, txtConfPass, cmbRole}
         For Each ctrl In accountDetailFields
             If TypeOf ctrl Is TextBox Then
@@ -63,9 +60,6 @@ Public Class FormSignUp
                 AddHandler CType(ctrl, ComboBox).SelectedIndexChanged, AddressOf AccountDetailsField_TextChanged
             End If
         Next
-
-
-
 
         AddHandler txtUsername.TextChanged, AddressOf CheckUsernameAvailability
         AddHandler txtEmail.TextChanged, AddressOf CheckEmailAvailability
@@ -82,8 +76,7 @@ Public Class FormSignUp
         dtpBirthday_ValueChanged(Nothing, Nothing)
     End Sub
 
-    ' Real-time validation for Personal Information fields after Proceed clicked
-    Private Sub PersonalInfoField_TextChanged(sender As Object, e As EventArgs) 'added
+    Private Sub PersonalInfoField_TextChanged(sender As Object, e As EventArgs)
         If hasAttemptedSubmitPersonalInfo Then
             ValidatePersonalInformationFieldsRealTime()
 
@@ -95,11 +88,10 @@ Public Class FormSignUp
         End If
     End Sub
 
-    Private Sub ValidatePersonalInformationFieldsRealTime() 'added
+    Private Sub ValidatePersonalInformationFieldsRealTime()
         HelperValidation.MarkFieldInvalidIfEmpty(txtFirstName, "First Name")
         HelperValidation.MarkFieldInvalidIfEmpty(txtLastName, "Last Name")
 
-        ' Birthday and Age validation:
         Dim birthday As Date = dtpBirthday.Value
         Dim today As Date = Date.Today
         Dim age As Integer = today.Year - birthday.Year
@@ -125,14 +117,13 @@ Public Class FormSignUp
         HelperValidation.MarkFieldInvalidIfEmpty(txtAddress, "Address")
     End Sub
 
-    ' Real-time validation for Account Details fields after SignUp clicked
-    Private Sub AccountDetailsField_TextChanged(sender As Object, e As EventArgs) 'added
+    Private Sub AccountDetailsField_TextChanged(sender As Object, e As EventArgs)
         If hasAttemptedSubmitAccountDetails Then
             ValidateAccountDetailsFieldsRealTime()
         End If
     End Sub
 
-    Private Sub ValidateAccountDetailsFieldsRealTime() 'added
+    Private Sub ValidateAccountDetailsFieldsRealTime()
         HelperValidation.MarkFieldInvalidIfEmpty(txtUsername, "Username")
         HelperValidation.MarkFieldInvalidIfEmpty(txtEmail, "Email")
         HelperValidation.MarkFieldInvalidIfEmpty(txtPass, "Password")
@@ -146,17 +137,14 @@ Public Class FormSignUp
         Dim birthday As Date = dtpBirthday.Value
         Dim today As Date = Date.Today
 
-        ' If user has not picked a date (still default today), clear age label
         If birthday = today Then
             lblAgeContainer.Text = ""
         Else
             Dim age As Integer = today.Year - birthday.Year
             If birthday > today.AddYears(-age) Then age -= 1
 
-            ' Show age only if non-negative, else empty
             lblAgeContainer.Text = If(age >= 0, age.ToString(), "")
 
-            ' Show red marks only after clicking Proceed
             If hasAttemptedSubmitPersonalInfo Then
                 Dim birthdayIsValid As Boolean = (birthday <> today)
                 Dim ageIsValid As Boolean = (age >= 18)
@@ -209,7 +197,6 @@ Public Class FormSignUp
             lblPwStrength.Visible = True
         End If
 
-        ' Also update password match label live when password changes
         ValidatePasswordMatch()
     End Sub
 
@@ -331,11 +318,9 @@ Public Class FormSignUp
             Exit Sub
         End If
 
-
         CheckUsernameAvailability(Nothing, Nothing)
         CheckEmailAvailability(Nothing, Nothing)
         txtConfPass_Leave(Nothing, Nothing)
-
 
         Dim passwordStrength As String = CheckPasswordStrength(txtPass.Text)
         lblPwStrength.Text = passwordStrength
@@ -343,11 +328,10 @@ Public Class FormSignUp
 
         If passwordStrength.StartsWith("Very Weak") OrElse passwordStrength.StartsWith("Weak Password") Then
             MessageBox.Show("Your password is not strong enough. Please choose a stronger password.",
-                    "Weak Password", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        "Weak Password", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
-        ' Make sure password mismatch label is updated:
         ValidatePasswordMatch()
 
         If txtPass.Text <> txtConfPass.Text Then
@@ -357,22 +341,17 @@ Public Class FormSignUp
 
         If lblUsernameError.Visible OrElse lblEmailError.Visible OrElse lblPasswordError.Visible Then
             MessageBox.Show("Please resolve the indicated errors before proceeding.",
-                    "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        If lblUsernameError.Visible OrElse lblEmailError.Visible OrElse lblPasswordError.Visible Then
-            MessageBox.Show("Please resolve the indicated errors before proceeding.",
                         "Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
+
         If cmbRole.SelectedItem.ToString() = "Admin" Then
             Dim adminForm As New FormAdminCode()
             If adminForm.ShowDialog() = DialogResult.OK Then
                 Dim adminCode As String = adminForm.AdminCode
                 If String.Compare(adminCode.Trim(), "SECURE123", True) <> 0 Then
                     MessageBox.Show("Invalid admin authentication code. Please try again.",
-                            "Authentication Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        "Authentication Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Exit Sub
                 End If
             Else
@@ -380,7 +359,7 @@ Public Class FormSignUp
             End If
         End If
 
-        Dim password As String = txtPass.Text ' Consider hashing in future
+        Dim password As String = txtPass.Text
 
         Dim userQuery As String = "INSERT INTO Users (first_name, last_name, username, email, password, role, birthday, age, sex, address) " &
                               "VALUES (@fname, @lname, @uname, @email, @password, @role, @birthday, @age, @sex, @address); SELECT LAST_INSERT_ID();"
@@ -407,17 +386,18 @@ Public Class FormSignUp
             End If
 
             If cmbRole.SelectedItem.ToString() <> "Admin" Then
-                Dim customerQuery As String = "INSERT INTO Customers (user_id, name, birthday, age, sex, address) " &
-                                          "VALUES (@user_id, @name, @birthday, @age, @sex, @address)"
-                Dim customerParams As New Dictionary(Of String, Object) From {
-                {"@user_id", newUserId},
-                {"@name", txtFirstName.Text & " " & txtLastName.Text},
-                {"@birthday", dtpBirthday.Value.Date},
-                {"@age", Convert.ToInt32(lblAgeContainer.Text)},
-                {"@sex", cmbSex.SelectedItem.ToString()},
-                {"@address", txtAddress.Text}
-            }
-                DBHelper.ExecuteQuery(customerQuery, customerParams)
+                Dim customerResult As CustomerResult = HelperDatabase.CreateNewCustomer(
+                txtFirstName.Text & " " & txtLastName.Text,
+                dtpBirthday.Value.Date,
+                cmbSex.SelectedItem.ToString(),
+                txtAddress.Text,
+                Convert.ToInt32(lblAgeContainer.Text),
+                newUserId)
+
+                If customerResult.CustomerId <= 0 Then
+                    MessageBox.Show("Customer creation failed: " & customerResult.ErrorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Return
+                End If
             End If
 
             MessageBox.Show("Account created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -429,31 +409,24 @@ Public Class FormSignUp
         End Try
     End Sub
 
-
-
     Private Sub ValidatePasswordMatch()
         Dim pwd As String = txtPass.Text
         Dim confPwd As String = txtConfPass.Text
 
-        ' Hide error if confirm password is empty (user hasn't typed yet)
         If String.IsNullOrEmpty(confPwd) Then
             lblPasswordError.Visible = False
             lblPasswordError.Text = ""
             Return
         End If
 
-        ' Show error only if passwords don't match and confirm password is not empty
         Dim passwordsMatch As Boolean = (pwd = confPwd)
         lblPasswordError.Text = If(passwordsMatch, "", "Passwords do not match!")
         lblPasswordError.Visible = Not passwordsMatch
     End Sub
 
-
-
     Private Sub PasswordFields_TextChanged(sender As Object, e As EventArgs)
         ValidatePasswordMatch()
     End Sub
-
 
     Private Function ValidateSignUpFields() As Boolean
         Dim isValid As Boolean = True
@@ -480,7 +453,6 @@ Public Class FormSignUp
             isValid = False
         End If
 
-        ' Validate Personal Info too (should already be done but added for completeness)
         If Not ValidatePersonalInformation() Then
             isValid = False
         End If

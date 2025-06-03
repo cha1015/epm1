@@ -4,7 +4,6 @@ Imports System.Text
 Imports System.IO
 
 Public Class HelperBooking
-    ' ------------------ Database Methods ------------------
     Public Shared Function GetCustomerData(userId As Integer) As DataTable
         Dim query As String = "SELECT name, birthday, sex, address FROM Customers WHERE user_id = @userId"
         Dim parameters As New Dictionary(Of String, Object) From {{"@userId", userId}}

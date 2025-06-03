@@ -10,49 +10,37 @@ Public Class FormAdminCenter
     Private totalRevenueLabel As Label = Nothing
     Private paidBookingsTable As DataTable
     Private usersTable As DataTable
-
-
     Private Sub FormAdminCenter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        HelperNavigation.RegisterNewForm(Me)
+        Me.BringToFront()
+        Me.Activate()
+
+        lblNumCustomersContainer.Visible = False
         lblUsername.Text = CurrentUser.Username
 
-        ' Load all datasets into FlowLayoutPanels:
-        LoadSearchResults()          ' Event Places (with update/delete)
-        LoadPendingBookings()        ' Pending Bookings (with Approve/Reject)
-        LoadApprovedBookings()       ' Approved Bookings
-        LoadRejectedBookings()       ' Rejected Bookings
-        LoadAllBookings()            ' All Bookings
-        LoadAvailability()           ' Availability of Event Places
-        LoadRevenueReports()         ' Revenue per Event Place
-        LoadInvoices()               ' Invoices with Accept Payment
-        LoadCustomerCount()          ' Customer Count
-        LoadCustomerRecords()        ' Customer Records
+        LoadSearchResults()
+        LoadPendingBookings()
+        LoadApprovedBookings()
+        LoadRejectedBookings()
+        LoadAllBookings()
+        LoadAvailability()
+        LoadRevenueReports()
+        LoadInvoices()
+        LoadCustomerCount()
+        LoadCustomerRecords()        '
         LoadPaidBookings()
 
-        Dim labels = {lblPlaceID, lblEventPlace, lblEventType, lblCapacity, lblPricePerDay, lblFeatures, lblImageUrl, lblOpeningHours, lblClosingHours, lblAvailableDays, lblDescription}
-        Dim fields = {txtPlaceID, txtEventPlace, txtEventType, txtCapacity, txtPricePerDay, txtFeatures, txtImageUrl, txtAvailableDays, txtDescription}
-        Dim texts = {"Place ID", "Event Place", "Event Type", "Capacity", "Price per Day", "Features", "Image URL", "Opening Hours", "Closing Hours", "Available Days", "Description"}
-
-        HelperValidation.ApplyFieldIndicators(labels, texts)
-
-        For Each field In fields
-            AddHandler field.TextChanged, Sub(senderObj, args) HelperValidation.ValidateFieldsInRealTime(fields, labels, texts)
-            AddHandler field.Leave, Sub(senderObj, args) HelperValidation.RemoveAsteriskOnInput(senderObj, labels, texts)
-        Next
     End Sub
-
-    ' Add DateChanged event handler for the MonthCalendar control
 
 #Region "Data Loading using HelperResultsDisplay (FlowLayoutPanels)"
 
-    '--- Load Event Places (Search Results)
     Private Sub LoadSearchResults()
-        ' Updated query: alias the status column as "Availability"
-        Dim query As String = "SELECT place_id, event_place, event_type, capacity, price_per_day, description, image_url, " &
-                          "CASE WHEN EXISTS (SELECT 1 FROM bookings WHERE bookings.place_id = eventplace.place_id) " &
-                          "THEN 'Booked' ELSE 'Available' END AS Availability " &
-                          "FROM eventplace WHERE 1=1"
-
+        Dim query As String = "
+SELECT place_id, event_place, event_type, capacity, price_per_day, description, image_url, 
+       CAST(available_days AS CHAR) AS available_days, opening_hours, closing_hours, features,
+       CASE WHEN EXISTS (SELECT 1 FROM bookings WHERE bookings.place_id = eventplace.place_id) 
+       THEN 'Booked' ELSE 'Available' END AS Availability 
+FROM eventplace WHERE 1=1
+"
         Dim dt As New DataTable()
         Using connection As MySqlConnection = DBHelper.GetConnection()
             Using cmd As New MySqlCommand(query, connection)
@@ -67,7 +55,6 @@ Public Class FormAdminCenter
             End Using
         End Using
 
-        ' Now populate the single FlowLayoutPanel with the data
         HelperResultsDisplay.PopulateEventPlacesForAdmin(
         flpEventPlaces, dt,
         txtEventPlace, txtEventType, txtCapacity,
@@ -82,164 +69,175 @@ Public Class FormAdminCenter
     '--- Load Pending Bookings
     Private Sub LoadPendingBookings()
         Dim query As String = "SELECT 
-                            b.booking_id, 
-                            c.name, 
-                            e.event_place, 
-                            b.event_type, 
-                            b.num_guests, 
-                            e.image_url, 
-                            b.event_date, 
-                            b.event_time, 
-                            b.event_end_time, 
-                            b.event_end_date, 
-                            b.total_price, 
-                            b.status, 
-                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
-                        FROM 
-                            bookings b
-                        JOIN 
-                            customers c ON b.customer_id = c.customer_id
-                        JOIN 
-                            eventplace e ON b.place_id = e.place_id
-                        LEFT JOIN 
-                            bookingservices bs ON b.booking_id = bs.booking_id
-                        LEFT JOIN 
-                            services s ON bs.service_id = s.service_id
-                        WHERE 
-                            b.status = 'Pending' 
-                        GROUP BY 
-                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
-                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
-                        ORDER BY 
-                            b.event_date ASC
-                        "
-        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
+                        b.booking_id, 
+                        CONCAT(u.first_name, ' ', u.last_name) AS name, 
+                        e.event_place, 
+                        b.event_type, 
+                        b.num_guests, 
+                        e.image_url, 
+                        b.event_date, 
+                        b.event_time, 
+                        b.event_end_time, 
+                        b.event_end_date, 
+                        b.total_price, 
+                        b.status, 
+                        GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                    FROM 
+                        bookings b
+                    JOIN 
+                        customers c ON b.customer_id = c.customer_id
+                    JOIN 
+                        usercustomers uc ON c.customer_id = uc.customer_id
+                    JOIN 
+                        users u ON uc.user_id = u.user_id
+                    JOIN 
+                        eventplace e ON b.place_id = e.place_id
+                    LEFT JOIN 
+                        bookingservices bs ON b.booking_id = bs.booking_id
+                    LEFT JOIN 
+                        services s ON bs.service_id = s.service_id
+                    WHERE 
+                        b.status = 'Pending' 
+                    GROUP BY 
+                        b.booking_id, u.first_name, u.last_name, e.event_place, b.event_type, 
+                        b.num_guests, e.image_url, b.event_date, b.event_time, b.event_end_time, 
+                        b.event_end_date, b.total_price, b.status
+                    ORDER BY 
+                        b.event_date ASC"
 
-        ' Populate the pending bookings panel
+        Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
         HelperResultsDisplay.PopulatePendingBookings(flpPending, dt, AddressOf ApproveBooking_Click, AddressOf RejectBooking_Click, Me)
         flpPending.Refresh()
-
-        ' Update the tab label based on the number of pending bookings
         UpdateTabLabel(tpPendings, flpPending)
     End Sub
 
+
     Private Sub LoadApprovedBookings()
         Dim query As String = "SELECT 
-                            b.booking_id, 
-                            c.name, 
-                            e.event_place, 
-                            b.event_type, 
-                            b.num_guests, 
-                            e.image_url, 
-                            b.event_date, 
-                            b.event_time, 
-                            b.event_end_time, 
-                            b.event_end_date, 
-                            b.total_price, 
-                            b.status, 
-                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
-                        FROM 
-                            bookings b
-                        JOIN 
-                            customers c ON b.customer_id = c.customer_id
-                        JOIN 
-                            eventplace e ON b.place_id = e.place_id
-                        LEFT JOIN 
-                            bookingservices bs ON b.booking_id = bs.booking_id
-                        LEFT JOIN 
-                            services s ON bs.service_id = s.service_id
-                        WHERE 
-                            b.status = 'Approved' 
-                        GROUP BY 
-                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
-                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
-                        ORDER BY 
-                            b.event_date ASC
-                        "
+                              b.booking_id, 
+                              CONCAT(u.first_name, ' ', u.last_name) AS name, 
+                              e.event_place, 
+                              b.event_type, 
+                              b.num_guests, 
+                              e.image_url, 
+                              b.event_date, 
+                              b.event_time, 
+                              b.event_end_time, 
+                              b.event_end_date, 
+                              b.total_price, 
+                              b.status, 
+                              GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                          FROM 
+                              bookings b
+                          JOIN 
+                              customers c ON b.customer_id = c.customer_id
+                          JOIN 
+                              usercustomers uc ON c.customer_id = uc.customer_id
+                          JOIN 
+                              users u ON uc.user_id = u.user_id
+                          JOIN 
+                              eventplace e ON b.place_id = e.place_id
+                          LEFT JOIN 
+                              bookingservices bs ON b.booking_id = bs.booking_id
+                          LEFT JOIN 
+                              services s ON bs.service_id = s.service_id
+                          WHERE 
+                              b.status = 'Approved'
+                          GROUP BY 
+                              b.booking_id, u.first_name, u.last_name, e.event_place, b.event_type, 
+                              b.num_guests, e.image_url, b.event_date, b.event_time, b.event_end_time, 
+                              b.event_end_date, b.total_price, b.status
+                          ORDER BY 
+                              b.event_date ASC"
+
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-
-        ' Populate the approved bookings panel
         HelperResultsDisplay.PopulateApprovedBookings(flpApproved, dt)
-
-        ' Update the tab label based on the number of approved bookings
         UpdateTabLabel(tpApproved, flpApproved)
     End Sub
 
+
     Private Sub LoadRejectedBookings()
         Dim query As String = "SELECT 
-                            b.booking_id, 
-                            c.name, 
-                            e.event_place, 
-                            b.event_type, 
-                            b.num_guests, 
-                            e.image_url, 
-                            b.event_date, 
-                            b.event_time, 
-                            b.event_end_time, 
-                            b.event_end_date, 
-                            b.total_price, 
-                            b.status, 
-                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
-                        FROM 
-                            bookings b
-                        JOIN 
-                            customers c ON b.customer_id = c.customer_id
-                        JOIN 
-                            eventplace e ON b.place_id = e.place_id
-                        LEFT JOIN 
-                            bookingservices bs ON b.booking_id = bs.booking_id
-                        LEFT JOIN 
-                            services s ON bs.service_id = s.service_id
-                        WHERE 
-                            b.status = 'Rejected' 
-                        GROUP BY 
-                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
-                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
-                        ORDER BY 
-                            b.event_date ASC
-                        "
+                              b.booking_id, 
+                              CONCAT(u.first_name, ' ', u.last_name) AS name, 
+                              e.event_place, 
+                              b.event_type, 
+                              b.num_guests, 
+                              e.image_url, 
+                              b.event_date, 
+                              b.event_time, 
+                              b.event_end_time, 
+                              b.event_end_date, 
+                              b.total_price, 
+                              b.status, 
+                              GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                          FROM 
+                              bookings b
+                          JOIN 
+                              customers c ON b.customer_id = c.customer_id
+                          JOIN 
+                              usercustomers uc ON c.customer_id = uc.customer_id
+                          JOIN 
+                              users u ON uc.user_id = u.user_id
+                          JOIN 
+                              eventplace e ON b.place_id = e.place_id
+                          LEFT JOIN 
+                              bookingservices bs ON b.booking_id = bs.booking_id
+                          LEFT JOIN 
+                              services s ON bs.service_id = s.service_id
+                          WHERE 
+                              b.status = 'Rejected'
+                          GROUP BY 
+                              b.booking_id, u.first_name, u.last_name, e.event_place, b.event_type, 
+                              b.num_guests, e.image_url, b.event_date, b.event_time, b.event_end_time, 
+                              b.event_end_date, b.total_price, b.status
+                          ORDER BY 
+                              b.event_date ASC"
+
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-
         HelperResultsDisplay.PopulateRejectedBookings(flpRejected, dt)
-
         UpdateTabLabel(tpRejected, flpRejected)
     End Sub
 
+
     Private Sub LoadAllBookings()
         Dim query As String = "SELECT 
-                            b.booking_id, 
-                            c.name, 
-                            e.event_place, 
-                            b.event_type, 
-                            b.num_guests, 
-                            e.image_url, 
-                            b.event_date, 
-                            b.event_time, 
-                            b.event_end_time, 
-                            b.event_end_date, 
-                            b.total_price, 
-                            b.status, 
-                            GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
-                        FROM 
-                            bookings b
-                        JOIN 
-                            customers c ON b.customer_id = c.customer_id
-                        JOIN 
-                            eventplace e ON b.place_id = e.place_id
-                        LEFT JOIN 
-                            bookingservices bs ON b.booking_id = bs.booking_id
-                        LEFT JOIN 
-                            services s ON bs.service_id = s.service_id
-                        GROUP BY 
-                            b.booking_id, c.name, e.event_place, b.event_type, b.num_guests, e.image_url, 
-                            b.event_date, b.event_time, b.event_end_time, b.event_end_date, b.total_price, b.status
-                        ORDER BY 
-                            b.event_date ASC"
+                              b.booking_id, 
+                              CONCAT(u.first_name, ' ', u.last_name) AS name, 
+                              e.event_place, 
+                              b.event_type, 
+                              b.num_guests, 
+                              e.image_url, 
+                              b.event_date, 
+                              b.event_time, 
+                              b.event_end_time, 
+                              b.event_end_date, 
+                              b.total_price, 
+                              b.status, 
+                              GROUP_CONCAT(s.service_name ORDER BY s.service_name) AS services_availed
+                          FROM 
+                              bookings b
+                          JOIN 
+                              customers c ON b.customer_id = c.customer_id
+                          JOIN 
+                              usercustomers uc ON c.customer_id = uc.customer_id
+                          JOIN 
+                              users u ON uc.user_id = u.user_id
+                          JOIN 
+                              eventplace e ON b.place_id = e.place_id
+                          LEFT JOIN 
+                              bookingservices bs ON b.booking_id = bs.booking_id
+                          LEFT JOIN 
+                              services s ON bs.service_id = s.service_id
+                          GROUP BY 
+                              b.booking_id, u.first_name, u.last_name, e.event_place, b.event_type, 
+                              b.num_guests, e.image_url, b.event_date, b.event_time, b.event_end_time, 
+                              b.event_end_date, b.total_price, b.status
+                          ORDER BY 
+                              b.event_date ASC"
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
-
         HelperResultsDisplay.PopulateAllBookings(flpAll, dt)
-
         UpdateTabLabel(tpAll, flpAll)
     End Sub
 
@@ -276,7 +274,6 @@ Public Class FormAdminCenter
     End Sub
 
 
-
     Private Sub LoadRevenueReports()
         Dim query As String = "SELECT IFNULL(SUM(amount_paid), 0) AS total_revenue FROM payments WHERE payment_status = 'Paid'"
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
@@ -289,13 +286,23 @@ Public Class FormAdminCenter
         lblRevenue.Text = $"Revenue: ₱{totalRevenue:N0}"
 
         Dim perPlaceQuery As String = "SELECT e.event_place, IFNULL(SUM(p.amount_paid), 0) AS total_revenue " &
-            "FROM eventplace e " &
-            "LEFT JOIN bookings b ON e.place_id = b.place_id " &
-            "LEFT JOIN payments p ON b.booking_id = p.booking_id AND p.payment_status = 'Paid' " &
-            "GROUP BY e.place_id"
+        "FROM eventplace e " &
+        "LEFT JOIN bookings b ON e.place_id = b.place_id " &
+        "LEFT JOIN payments p ON b.booking_id = p.booking_id AND p.payment_status = 'Paid' " &
+        "GROUP BY e.place_id"
+
         Dim perPlaceDt As DataTable = DBHelper.GetDataTable(perPlaceQuery, New Dictionary(Of String, Object))
-        HelperResultsDisplay.PopulateRevenueReports(flpRevenueReports, perPlaceDt)
+
+        dgvRevenue.DataSource = perPlaceDt
+        With dgvRevenue
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+            .AutoResizeColumns()
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            .DefaultCellStyle.Font = New Font("Poppins", 8)
+        End With
+
     End Sub
+
 
     '--- Load Invoices
     Private Sub LoadInvoices()
@@ -309,37 +316,59 @@ Public Class FormAdminCenter
     End Sub
 
     '--- Load Paid Bookings
-    Private Sub LoadPaidBookings()
+    Public Sub LoadPaidBookings()
         Dim query As String = "
-        SELECT 
-            b.customer_id, 
-            u.username,
-            u.email,
-            b.booking_id, 
-            b.place_id, 
-            b.total_price, 
-            b.services_availed, 
-            b.num_guests, 
-            b.event_date
-        FROM bookings b
-        LEFT JOIN customers c ON b.customer_id = c.customer_id
-        LEFT JOIN users u ON c.user_id = u.user_id
-        WHERE b.status = 'paid'
-        ORDER BY b.event_date ASC"
+SELECT 
+    b.customer_id, 
+    COALESCE(u.user_id, 'N/A') AS user_id,
+    COALESCE(u.first_name, 'N/A') AS first_name,
+    COALESCE(u.last_name, 'N/A') AS last_name,
+    COALESCE(u.email, 'N/A') AS email,
+    b.booking_id, 
+    b.place_id, 
+    b.total_price AS total_amount, 
+    b.services_availed, 
+    b.num_guests, 
+    b.event_date,
+    p.payment_status,
+    p.amount_paid,
+    p.payment_date,
+    e.event_place
+FROM bookings b 
+LEFT JOIN customers c ON b.customer_id = c.customer_id 
+LEFT JOIN usercustomers uc ON c.customer_id = uc.customer_id 
+LEFT JOIN users u ON uc.user_id = u.user_id
+LEFT JOIN payments p ON b.booking_id = p.booking_id
+LEFT JOIN eventplace e ON b.place_id = e.place_id 
+ORDER BY b.event_date ASC;
+
+"
         paidBookingsTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
         For Each row As DataRow In paidBookingsTable.Rows
             For Each col As DataColumn In paidBookingsTable.Columns
                 If row.IsNull(col) OrElse String.IsNullOrWhiteSpace(row(col).ToString()) Then
-                    row(col) = "N/A"
+                    If col.DataType Is GetType(Integer) OrElse col.DataType Is GetType(Decimal) Then
+                        row(col) = DBNull.Value
+                    ElseIf col.DataType Is GetType(DateTime) Then
+                        row(col) = DBNull.Value
+                    Else
+                        row(col) = "N/A"
+                    End If
                 End If
             Next
         Next
 
+        dgvPaidBookings.AutoGenerateColumns = True
         dgvPaidBookings.DataSource = paidBookingsTable
+        With dgvPaidBookings
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+            .AutoResizeColumns()
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            .DefaultCellStyle.Font = New Font("Poppins", 8)
+        End With
         Debug.Print("Paid Bookings: " & paidBookingsTable.Rows.Count)
     End Sub
-
 
     ' ------------------ Load Booked Dates ------------------
     Public Shared Function LoadBookedDates(placeId As Integer) As List(Of Date)
@@ -387,7 +416,6 @@ Public Class FormAdminCenter
 
         usersTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 
-        ' Set "N/A" for any blank or null cell in the table
         For Each row As DataRow In usersTable.Rows
             For Each col As DataColumn In usersTable.Columns
                 If row.IsNull(col) OrElse String.IsNullOrWhiteSpace(row(col).ToString()) Then
@@ -442,7 +470,7 @@ Public Class FormAdminCenter
         Dim row As DataRow = DirectCast(btn.Tag, DataRow)
         Dim bookingId As Object = row("booking_id")
         Dim rowsAffected As Integer = DBHelper.ExecuteQuery("UPDATE bookings SET status='Approved' WHERE booking_id=@id",
-                                                              New Dictionary(Of String, Object) From {{"@id", bookingId}})
+                                                      New Dictionary(Of String, Object) From {{"@id", bookingId}})
         If rowsAffected > 0 Then
             MessageBox.Show("Booking approved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
@@ -450,11 +478,12 @@ Public Class FormAdminCenter
         End If
         LoadPendingBookings()
         LoadAvailability()
-        ' After approving or rejecting the booking, reload the panels
         LoadApprovedBookings()
         LoadRejectedBookings()
         LoadAllBookings()
     End Sub
+
+
 
     '--- Reject individual booking
     Private Sub RejectBooking_Click(sender As Object, e As EventArgs)
@@ -532,6 +561,14 @@ Public Class FormAdminCenter
             MessageBox.Show("This event place or place ID already exists! Please choose a different one.", "Duplicate Entry", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
+        Dim validDays As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+
+        Dim inputDays As String() = txtAvailableDays.Text.Split(","c).Select(Function(d) d.Trim()).ToArray()
+
+        If inputDays.Any(Function(d) Not validDays.Contains(d)) Then
+            MessageBox.Show("Invalid day(s) entered. Please provide a list of valid days (Monday-Sunday) separated by commas.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
 
         Dim confirmResult As DialogResult = MessageBox.Show("Are you sure you want to add this event place?", "Confirm Add", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If confirmResult = DialogResult.No Then Exit Sub
@@ -546,10 +583,28 @@ Public Class FormAdminCenter
         If DateTime.TryParseExact(openingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedOpening) AndAlso
        DateTime.TryParseExact(closingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedClosing) Then
 
+            If parsedClosing <= parsedOpening Then
+                MessageBox.Show("Closing time must be later than opening time.", "Invalid Time", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+
             Dim openingTime As String = parsedOpening.ToString("HH:mm:ss")
             Dim closingTime As String = parsedClosing.ToString("HH:mm:ss")
 
-            ' Insert new event place
+            If Not IO.File.Exists(txtImageUrl.Text.Trim()) Then
+                MessageBox.Show("The specified image file does not exist. Please provide a valid file path.", "Invalid Image Path", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+
+            Dim validExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {".jpg", ".jpeg", ".png", ".gif", ".bmp"}
+            Dim fileExtension As String = IO.Path.GetExtension(txtImageUrl.Text.Trim())
+
+            If Not validExtensions.Contains(fileExtension) Then
+                MessageBox.Show("Invalid image format. Please select a valid image file (.jpg, .png, .gif, .bmp).", "Invalid Image Format", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+
+
             Dim query As String = "INSERT INTO eventplace (place_id, event_place, event_type, capacity, features, price_per_day, description, image_url, opening_hours, closing_hours, available_days) " &
                               "VALUES (@place_id, @event_place, @event_type, @capacity, @features, @price_per_day, @description, @image_url, @opening_hours, @closing_hours, @available_days)"
 
@@ -580,6 +635,13 @@ Public Class FormAdminCenter
     End Sub
 
     Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
+        ' First, check if an event place is selected by ensuring the place ID textbox is not empty
+        If String.IsNullOrWhiteSpace(txtPlaceID.Text) Then
+            MessageBox.Show("Please select an available event place first.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        ' Validate that all fields are filled out
         If String.IsNullOrWhiteSpace(txtEventPlace.Text) OrElse
        String.IsNullOrWhiteSpace(txtEventType.Text) OrElse
        String.IsNullOrWhiteSpace(txtCapacity.Text) OrElse
@@ -600,6 +662,13 @@ Public Class FormAdminCenter
             Exit Sub
         End If
 
+        Dim validDays As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+        Dim inputDays As String() = txtAvailableDays.Text.Split(","c).Select(Function(d) d.Trim()).ToArray()
+        If inputDays.Any(Function(d) Not validDays.Contains(d)) Then
+            MessageBox.Show("Invalid day(s) entered. Please provide a list of valid days (Monday-Sunday) separated by commas.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
         Dim checkQuery As String = "SELECT * FROM eventplace WHERE place_id = @place_id"
         Dim checkParams As New Dictionary(Of String, Object) From {{"@place_id", txtPlaceID.Text}}
         Dim currentValues As DataRow = DBHelper.GetFirstRow(checkQuery, checkParams)
@@ -615,8 +684,25 @@ Public Class FormAdminCenter
             If DateTime.TryParseExact(openingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedOpening) AndAlso
            DateTime.TryParseExact(closingTimeRaw, timeFormats, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, parsedClosing) Then
 
+                If parsedClosing <= parsedOpening Then
+                    MessageBox.Show("Closing time must be later than opening time.", "Invalid Time", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Exit Sub
+                End If
+
                 Dim openingTime As String = parsedOpening.ToString("HH:mm:ss")
                 Dim closingTime As String = parsedClosing.ToString("HH:mm:ss")
+
+                If Not IO.File.Exists(txtImageUrl.Text.Trim()) Then
+                    MessageBox.Show("The specified image file does not exist. Please provide a valid file path.", "Invalid Image Path", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Exit Sub
+                End If
+
+                Dim validExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {".jpg", ".jpeg", ".png", ".gif", ".bmp"}
+                Dim fileExtension As String = IO.Path.GetExtension(txtImageUrl.Text.Trim())
+                If Not validExtensions.Contains(fileExtension) Then
+                    MessageBox.Show("Invalid image format. Please select a valid image file (.jpg, .png, .gif, .bmp).", "Invalid Image Format", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Exit Sub
+                End If
 
                 If txtEventPlace.Text = currentValues("event_place").ToString() AndAlso
                txtEventType.Text = currentValues("event_type").ToString() AndAlso
@@ -664,24 +750,44 @@ Public Class FormAdminCenter
         End If
     End Sub
 
-
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
+        If String.IsNullOrWhiteSpace(txtPlaceID.Text) Then
+            MessageBox.Show("Please select an available event place first.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
         If HasActiveBookings(txtPlaceID.Text) Then
             MessageBox.Show("Cannot delete event place with active bookings.", "Deletion Blocked", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
-        ' Confirmation message
         Dim confirmResult As DialogResult = MessageBox.Show("Are you sure you want to delete this event place?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
         If confirmResult = DialogResult.No Then Exit Sub
 
         DBHelper.ExecuteQuery("DELETE FROM eventplace WHERE place_id = @place_id", New Dictionary(Of String, Object) From {{"@place_id", txtPlaceID.Text}})
         LoadSearchResults()
+
+        txtPlaceID.Text = ""
+        txtEventPlace.Text = ""
+        txtEventType.Text = ""
+        txtCapacity.Text = ""
+        txtPricePerDay.Text = ""
+        txtFeatures.Text = ""
+        txtImageUrl.Text = ""
+        cbStartHour.SelectedIndex = -1
+        cbStartMinutes.SelectedIndex = -1
+        cbStartAMPM.SelectedIndex = -1
+        cbEndHour.SelectedIndex = -1
+        cbEndMinutes.SelectedIndex = -1
+        cbEndAMPM.SelectedIndex = -1
+        txtAvailableDays.Text = ""
+        txtDescription.Text = ""
+        btnAdd.Visible = True
+
         MessageBox.Show("Event place deleted successfully.", "Deletion Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
 
-    '--- Delete the selected event place (if no active bookings)
     Private Function HasActiveBookings(placeID As String) As Boolean
         Dim result As Object = DBHelper.ExecuteScalarQuery("SELECT COUNT(*) FROM bookings WHERE place_id=@id AND status='Approved'",
                                                             New Dictionary(Of String, Object) From {{"@id", placeID}})
@@ -689,53 +795,25 @@ Public Class FormAdminCenter
     End Function
 
     '--- Field Validation ---
-    Private Sub txtCapacity_Validating(sender As Object, e As EventArgs)
-        HelperValidation.IsValidNumericField(txtCapacity, lblErrorCapacity, "Capacity must be a number.")
-    End Sub
+    'Private Sub txtCapacity_Validating(sender As Object, e As EventArgs)
+    '    HelperValidation.IsValidNumericField(txtCapacity, lblErrorCapacity, "Capacity must be a number.")
+    'End Sub
 
-    Private Sub txtPricePerDay_Validating(sender As Object, e As EventArgs)
-        HelperValidation.IsValidNumericField(txtPricePerDay, lblErrorPrice, "Price must be a number.")
-    End Sub
+    'Private Sub txtPricePerDay_Validating(sender As Object, e As EventArgs)
+    '    HelperValidation.IsValidNumericField(txtPricePerDay, lblErrorPrice, "Price must be a number.")
+    'End Sub
 
-    Private Sub txtCapacity_KeyPress(sender As Object, e As KeyPressEventArgs)
-        HelperValidation.NumericOnly_KeyPress(sender, e)
-    End Sub
+    'Private Sub txtCapacity_KeyPress(sender As Object, e As KeyPressEventArgs)
+    '    HelperValidation.NumericOnly_KeyPress(sender, e)
+    'End Sub
 
-    Private Sub NumericOnly_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtCapacity.KeyPress, txtPricePerDay.KeyPress
+    Private Sub NumericOnly_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtCapacity.KeyPress, txtPricePerDay.KeyPress, txtPlaceID.KeyPress
         If Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsDigit(e.KeyChar) Then
             e.Handled = True
         End If
     End Sub
 
 #End Region
-
-    ' Store a reference to the booking details form so we can hide it later
-    Private bookingDetailsForm As FormBookingDetails
-
-    ' Show booking details
-    Public Sub ShowBookingDetails(ByVal row As DataRow)
-        If bookingDetailsForm Is Nothing OrElse bookingDetailsForm.IsDisposed Then
-            ' Create a new form if it doesn't exist
-            bookingDetailsForm = New FormBookingDetails()
-        End If
-
-        ' Ensure the bookingId is valid
-        Dim bookingId As Integer = Convert.ToInt32(row("booking_id"))
-        Debug.Print("Booking ID: " & bookingId.ToString())
-
-        ' Load the booking details into the form
-        'bookingDetailsForm.LoadBookingDetails(bookingId)
-        bookingDetailsForm.ShowDialog()
-    End Sub
-
-
-    ' Hide booking details
-    Public Sub HideBookingDetails()
-        ' Close the booking details form when the mouse button is released
-        If bookingDetailsForm IsNot Nothing AndAlso bookingDetailsForm.Visible Then
-            bookingDetailsForm.Hide()
-        End If
-    End Sub
 
     '--- Log Out ---
     Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
@@ -758,7 +836,6 @@ Public Class FormAdminCenter
     End Sub
 
     Private Sub UpdateTabLabel(tabPage As TabPage, flowLayoutPanel As FlowLayoutPanel)
-        ' Update the tab label with the number of items in the FlowLayoutPanel
         Dim itemCount As Integer = flowLayoutPanel.Controls.Count
         tabPage.Text = $"{tabPage.Text.Split(" "c)(0)} ({itemCount})"
     End Sub
@@ -770,13 +847,6 @@ Public Class FormAdminCenter
         End Using
     End Sub
 
-    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-        HelperNavigation.GoBack(Me)
-    End Sub
-
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        HelperNavigation.GoNext(Me)
-    End Sub
 
     Private Sub FilterPaidBookings()
         If paidBookingsTable Is Nothing Then Return
@@ -807,10 +877,6 @@ Public Class FormAdminCenter
     Private Sub tpCustomerRecords_Click(sender As Object, e As EventArgs)
 
     End Sub
-
-    Private Sub tpInvoicesAndPayments_Click(sender As Object, e As EventArgs)
-
-    End Sub
     Private Sub txtSearchCustomer_TextChanged(sender As Object, e As EventArgs)
         FilterCustomerRecords()
     End Sub
@@ -819,26 +885,33 @@ Public Class FormAdminCenter
         Dim editForm As New FormCustomerAdminInfo(CurrentUser.UserID)
         editForm.ShowDialog()
     End Sub
-
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        txtEventPlace.Clear()
-        txtEventType.Clear()
-        txtCapacity.Clear()
-        txtPricePerDay.Clear()
-        txtFeatures.Clear()
-        txtImageUrl.Clear()
+        txtEventPlace.Text = ""
+        txtEventType.Text = ""
+        txtCapacity.Text = ""
+        txtPricePerDay.Text = ""
+        txtFeatures.Text = ""
+        txtImageUrl.Text = ""
         cbStartHour.SelectedIndex = -1
         cbStartMinutes.SelectedIndex = -1
         cbStartAMPM.SelectedIndex = -1
         cbEndHour.SelectedIndex = -1
         cbEndMinutes.SelectedIndex = -1
         cbEndAMPM.SelectedIndex = -1
-        txtAvailableDays.Clear()
-        txtDescription.Clear()
-        txtPlaceID.Clear()
+        txtAvailableDays.Text = ""
+        txtDescription.Text = ""
+        txtPlaceID.Text = ""
 
         btnAdd.Visible = True
         btnUpdate.Visible = False
         btnDelete.Visible = False
     End Sub
+
+    Private Sub Control_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs) Handles txtPlaceID.KeyPress, txtEventPlace.KeyPress, txtEventType.KeyPress, txtCapacity.KeyPress, txtPricePerDay.KeyPress, txtFeatures.KeyPress, txtImageUrl.KeyPress, cbStartHour.KeyPress, cbStartMinutes.KeyPress, cbStartAMPM.KeyPress, cbEndHour.KeyPress, cbEndMinutes.KeyPress, cbEndAMPM.KeyPress, txtAvailableDays.KeyPress, txtDescription.KeyPress
+        If e.KeyChar = ChrW(Keys.Enter) Then
+            e.Handled = True
+            SendKeys.Send("{TAB}")
+        End If
+    End Sub
+
 End Class

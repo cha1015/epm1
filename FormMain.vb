@@ -66,7 +66,6 @@ Public Class FormMain
         End If
     End Sub
 
-
     Private Sub AdjustResultsPanel()
         If pnlFilter.Visible Then
             flpResults.Width = Me.Width - (pnlFilter.Width - 145)
@@ -234,7 +233,6 @@ Public Class FormMain
 
 
     Private Sub btnBook_Click(sender As Object, e As EventArgs)
-        ' Check if the user is logged in
         If String.IsNullOrEmpty(CurrentUser.Username) Then
             Dim result As DialogResult = MessageBox.Show("You need to log in to book an event place. Proceed to login?", "Login Required", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 
@@ -250,7 +248,6 @@ Public Class FormMain
             End If
         End If
 
-        ' Admin check (admins cannot book)
         If CurrentUser.Role = "Admin" Then
             MessageBox.Show("Admins cannot book an event place. Redirecting to Admin Center.", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning)
 
@@ -265,18 +262,15 @@ Public Class FormMain
             Exit Sub
         End If
 
-        ' Extract data from the button's tag (the associated event place data)
         Dim btn As Button = CType(sender, Button)
         Dim row As DataRow = CType(btn.Tag, DataRow)
         Dim placeId As Integer = CInt(row("place_id"))
         Dim capacity As Integer = CInt(row("capacity"))
         Dim pricePerDay As Decimal = CDec(row("price_per_day"))
 
-        ' Get the opening and closing hours
         Dim openingHours As String = row("opening_hours").ToString()
         Dim closingHours As String = row("closing_hours").ToString()
 
-        ' Validate the opening and closing hours formats
         If Not IsValidTimeFormat(openingHours) Then
             MessageBox.Show("Invalid opening hour format. Please check the format (hh:mm AM/PM or HH:mm 24-hour).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
@@ -287,7 +281,6 @@ Public Class FormMain
             Exit Sub
         End If
 
-        ' If validation passes, proceed to the booking form
         Dim bookingForm As New FormBooking(CurrentUser.UserID, placeId) With {
     .EventPlaceName = row("event_place").ToString(),
     .EventPlaceCapacity = capacity,
@@ -304,18 +297,14 @@ Public Class FormMain
         Me.Hide()
     End Sub
 
-    ' Validate time format (hh:mm AM/PM or HH:mm 24-hour format)
     Private Function IsValidTimeFormat(time As String) As Boolean
         Dim parsedTime As DateTime
-        ' Try to parse the time using 12-hour format (hh:mm AM/PM)
         If DateTime.TryParseExact(time, "hh:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedTime) Then
             Return True
         End If
-        ' If 12-hour format fails, try parsing with 24-hour format (HH:mm:ss)
         If DateTime.TryParseExact(time, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedTime) Then
             Return True
         End If
-        ' If both formats fail, return false
         Return False
     End Function
 
@@ -326,11 +315,15 @@ Public Class FormMain
     End Sub
 
     Private Sub btnCustomerView_Click(sender As Object, e As EventArgs) Handles btnCustomerView.Click
-        Debug.WriteLine($"Attempting to open CustomerView with CustomerId: {CurrentUser.CustomerId}")
+        Dim customerData As DataTable = HelperDatabase.GetCustomerData(CurrentUser.UserID)
+        If customerData.Rows.Count > 0 AndAlso customerData.Columns.Contains("customer_id") Then
+            Dim customerId As Integer = Convert.ToInt32(customerData.Rows(0)("customer_id"))
+            Dim customerViewForm As New FormCustomerView(customerId)
+            customerViewForm.Show()
+        Else
+            MessageBox.Show("No customer record found for this user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
 
-        Dim customerView As New FormCustomerView(CurrentUser.CustomerId)
-        customerView.ShowDialog()
-        Me.Hide()
     End Sub
 
     Private Sub btnSignUp_Click(sender As Object, e As EventArgs) Handles btnSignUp.Click
@@ -341,26 +334,22 @@ Public Class FormMain
     Private Sub btnLogIn_Click(sender As Object, e As EventArgs) Handles btnLogIn.Click
         Dim loginForm As New FormLogIn()
         If loginForm.ShowDialog() = DialogResult.OK Then
-            ' For Admins, open the Admin Center and hide FormMain.
             If CurrentUser.Role = "Admin" Then
-                'Dim adminForm As New FormAdminCenter()
-                'adminForm.Show()
-                Me.Hide()
+                Application.DoEvents()
+                Me.Close()
             ElseIf CurrentUser.CustomerId > 0 Then
-                ' For Users, update the UI to reflect the logged-in state.
                 UpdatePanelVisibility()
                 pnlAccount.Visible = True
                 pnlSignUpLogIn.Visible = False
-                Me.Refresh()
+
                 Application.DoEvents()
             Else
-                MessageBox.Show("Login failed or customer not found.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Login failed.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
         Else
             MessageBox.Show("Login failed or customer not found.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
-
 
     Private Sub txtField_Enter(sender As Object, e As EventArgs) Handles txtMinCapacity.Enter, txtMaxCapacity.Enter, txtMinPrice.Enter, txtMaxPrice.Enter
         Dim txt As TextBox = CType(sender, TextBox)

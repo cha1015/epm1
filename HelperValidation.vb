@@ -339,10 +339,26 @@ Public Class HelperValidation
             If eventEndTime < eventStartTime Then eventEndTime = eventEndTime.AddDays(1)
 
             If (eventStartTime < openingTime OrElse eventEndTime > closingTime) AndAlso Not chkOutsideAvailableHours.Checked Then
+                MessageBox.Show("Validation blocked transition: Time is outside available hours.", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                MarkFieldInvalid(chkOutsideAvailableHours, chkOutsideAvailableHours.Tag?.ToString() & "", "Selected time is outside available hours.")
+                e.Cancel = True
+                Exit Sub
+            End If
+
+            If (eventStartTime < openingTime OrElse eventEndTime > closingTime) Then
+                If Not chkOutsideAvailableHours.Checked Then
+                    MarkFieldInvalid(chkOutsideAvailableHours, chkOutsideAvailableHours.Tag?.ToString() & "", "Selected time is outside available hours.")
+                    e.Cancel = True
+                    Exit Sub
+                End If
+            End If
+
+            If (eventStartTime < openingTime OrElse eventEndTime > closingTime) AndAlso Not chkOutsideAvailableHours.Checked Then
                 MarkFieldInvalid(chkOutsideAvailableHours, chkOutsideAvailableHours.Tag?.ToString() & "",
                                  "Selected time is outside available hours.")
                 e.Cancel = True
                 Exit Sub
+
             End If
         End If
 
@@ -469,17 +485,13 @@ Public Class HelperValidation
     End Function
 
     ' ------------------ Prevent Booked Date in Date Picker ------------------
-    Public Shared Sub PreventBookedDate(picker As DateTimePicker, bookedDates As List(Of Date), lblDateWarning As Label)
+    Public Shared Sub PreventBookedDate(picker As DateTimePicker, bookedDates As List(Of Date))
         If bookedDates.Contains(picker.Value.Date) Then
-            lblDateWarning.Text = "Oops! That date is unavailable. Please choose another."
-            lblDateWarning.Visible = True
-
             Dim nextAvailableDate As Date = picker.Value.AddDays(1)
             While bookedDates.Contains(nextAvailableDate)
                 nextAvailableDate = nextAvailableDate.AddDays(1)
             End While
             picker.Value = nextAvailableDate
-            lblDateWarning.Visible = False
         End If
     End Sub
 
