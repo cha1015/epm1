@@ -486,7 +486,6 @@ Public Class FormBooking
     'End Sub
 
     Private Sub txtNumGuests_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtNumGuests.KeyPress
-        ' Allow only digits and control keys (like Backspace)
         If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
             e.Handled = True
         End If

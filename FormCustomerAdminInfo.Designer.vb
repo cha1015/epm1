@@ -42,7 +42,6 @@ Partial Class FormCustomerAdminInfo
         Me.tpAccountDetails = New System.Windows.Forms.TabPage()
         Me.pnlPass = New System.Windows.Forms.Panel()
         Me.btnConfirmPasswordChange = New System.Windows.Forms.Button()
-        Me.lblPasswordError = New System.Windows.Forms.Label()
         Me.lblPwStrength = New System.Windows.Forms.Label()
         Me.lblConfirmPassword = New System.Windows.Forms.Label()
         Me.lblPassword = New System.Windows.Forms.Label()
@@ -278,7 +277,6 @@ Partial Class FormCustomerAdminInfo
         'pnlPass
         '
         Me.pnlPass.Controls.Add(Me.btnConfirmPasswordChange)
-        Me.pnlPass.Controls.Add(Me.lblPasswordError)
         Me.pnlPass.Controls.Add(Me.lblPwStrength)
         Me.pnlPass.Controls.Add(Me.lblConfirmPassword)
         Me.pnlPass.Controls.Add(Me.lblPassword)
@@ -299,18 +297,6 @@ Partial Class FormCustomerAdminInfo
         Me.btnConfirmPasswordChange.TabIndex = 77
         Me.btnConfirmPasswordChange.Text = "Change Password"
         Me.btnConfirmPasswordChange.UseVisualStyleBackColor = True
-        '
-        'lblPasswordError
-        '
-        Me.lblPasswordError.AutoSize = True
-        Me.lblPasswordError.BackColor = System.Drawing.Color.Transparent
-        Me.lblPasswordError.Font = New System.Drawing.Font("Poppins", 8.0!)
-        Me.lblPasswordError.ForeColor = System.Drawing.Color.Gray
-        Me.lblPasswordError.Location = New System.Drawing.Point(366, 61)
-        Me.lblPasswordError.Name = "lblPasswordError"
-        Me.lblPasswordError.Size = New System.Drawing.Size(187, 25)
-        Me.lblPasswordError.TabIndex = 85
-        Me.lblPasswordError.Text = "Passwords do not match!"
         '
         'lblPwStrength
         '
@@ -519,7 +505,7 @@ Partial Class FormCustomerAdminInfo
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.btnBack)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "FormCustomerAdminInfo"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FormCustomerAdminInfo"
@@ -553,7 +539,6 @@ Partial Class FormCustomerAdminInfo
     Friend WithEvents tpAccountDetails As TabPage
     Friend WithEvents pnlPass As Panel
     Friend WithEvents btnConfirmPasswordChange As Button
-    Friend WithEvents lblPasswordError As Label
     Friend WithEvents lblPwStrength As Label
     Friend WithEvents lblConfirmPassword As Label
     Friend WithEvents lblPassword As Label

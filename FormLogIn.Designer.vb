@@ -43,7 +43,7 @@ Partial Class FormLogIn
         Me.lblPassword.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblPassword.Location = New System.Drawing.Point(292, 258)
         Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.Size = New System.Drawing.Size(72, 14)
+        Me.lblPassword.Size = New System.Drawing.Size(89, 18)
         Me.lblPassword.TabIndex = 40
         Me.lblPassword.Text = "Password"
         '
@@ -55,7 +55,7 @@ Partial Class FormLogIn
         Me.lblEmail.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblEmail.Location = New System.Drawing.Point(292, 229)
         Me.lblEmail.Name = "lblEmail"
-        Me.lblEmail.Size = New System.Drawing.Size(44, 14)
+        Me.lblEmail.Size = New System.Drawing.Size(54, 18)
         Me.lblEmail.TabIndex = 39
         Me.lblEmail.Text = "Email"
         '
@@ -95,7 +95,7 @@ Partial Class FormLogIn
         Me.txtEmail.ForeColor = System.Drawing.Color.DimGray
         Me.txtEmail.Location = New System.Drawing.Point(370, 224)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(282, 20)
+        Me.txtEmail.Size = New System.Drawing.Size(282, 25)
         Me.txtEmail.TabIndex = 32
         '
         'lnklblSignUp
@@ -107,7 +107,7 @@ Partial Class FormLogIn
         Me.lnklblSignUp.LinkColor = System.Drawing.Color.Gray
         Me.lnklblSignUp.Location = New System.Drawing.Point(273, 313)
         Me.lnklblSignUp.Name = "lnklblSignUp"
-        Me.lnklblSignUp.Size = New System.Drawing.Size(182, 19)
+        Me.lnklblSignUp.Size = New System.Drawing.Size(233, 25)
         Me.lnklblSignUp.TabIndex = 35
         Me.lnklblSignUp.TabStop = True
         Me.lnklblSignUp.Text = "Don't have an account? Sign Up"
@@ -121,7 +121,7 @@ Partial Class FormLogIn
         Me.txtPass.Location = New System.Drawing.Point(370, 253)
         Me.txtPass.Name = "txtPass"
         Me.txtPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPass.Size = New System.Drawing.Size(253, 20)
+        Me.txtPass.Size = New System.Drawing.Size(253, 25)
         Me.txtPass.TabIndex = 33
         '
         'lblGeneralError
@@ -132,7 +132,7 @@ Partial Class FormLogIn
         Me.lblGeneralError.ForeColor = System.Drawing.Color.DimGray
         Me.lblGeneralError.Location = New System.Drawing.Point(558, 313)
         Me.lblGeneralError.Name = "lblGeneralError"
-        Me.lblGeneralError.Size = New System.Drawing.Size(112, 19)
+        Me.lblGeneralError.Size = New System.Drawing.Size(140, 25)
         Me.lblGeneralError.TabIndex = 42
         Me.lblGeneralError.Text = "Invalid credentials."
         '

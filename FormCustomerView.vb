@@ -5,7 +5,7 @@ Imports System.Drawing.Text
 Imports System.Security.Principal
 Public Class FormCustomerView
 
-    Private currentFilter As String = "all" ' Options: "pending", "rejected", "approved", "paid"
+    Private currentFilter As String = "all"
 
     Private user_id As Integer
     Private pnlPlaceBrowser As Panel
@@ -70,7 +70,6 @@ Public Class FormCustomerView
 
         lblUsername.Text = CurrentUser.Username
         lblRole.Text = CurrentUser.Role
-
 
     End Sub
 

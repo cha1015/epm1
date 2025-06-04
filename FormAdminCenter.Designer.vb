@@ -263,11 +263,11 @@ Partial Class FormAdminCenter
         Me.dgvPaidBookings.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.dgvPaidBookings.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvPaidBookings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvPaidBookings.Location = New System.Drawing.Point(6, 29)
+        Me.dgvPaidBookings.Location = New System.Drawing.Point(6, 6)
         Me.dgvPaidBookings.Name = "dgvPaidBookings"
         Me.dgvPaidBookings.ReadOnly = True
         Me.dgvPaidBookings.RowHeadersWidth = 51
-        Me.dgvPaidBookings.Size = New System.Drawing.Size(902, 358)
+        Me.dgvPaidBookings.Size = New System.Drawing.Size(902, 381)
         Me.dgvPaidBookings.TabIndex = 98
         '
         'lblSearch
@@ -315,11 +315,11 @@ Partial Class FormAdminCenter
         Me.dgvCustomerRec.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.dgvCustomerRec.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvCustomerRec.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCustomerRec.Location = New System.Drawing.Point(6, 29)
+        Me.dgvCustomerRec.Location = New System.Drawing.Point(6, 3)
         Me.dgvCustomerRec.Name = "dgvCustomerRec"
         Me.dgvCustomerRec.ReadOnly = True
         Me.dgvCustomerRec.RowHeadersWidth = 51
-        Me.dgvCustomerRec.Size = New System.Drawing.Size(901, 358)
+        Me.dgvCustomerRec.Size = New System.Drawing.Size(901, 384)
         Me.dgvCustomerRec.TabIndex = 102
         '
         'lblNumCustomersContainer
@@ -827,7 +827,7 @@ Partial Class FormAdminCenter
         Me.txtPricePerDay.ForeColor = System.Drawing.Color.Black
         Me.txtPricePerDay.Location = New System.Drawing.Point(103, 116)
         Me.txtPricePerDay.Name = "txtPricePerDay"
-        Me.txtPricePerDay.Size = New System.Drawing.Size(83, 21)
+        Me.txtPricePerDay.Size = New System.Drawing.Size(305, 21)
         Me.txtPricePerDay.TabIndex = 2
         '
         'txtCapacity
@@ -838,7 +838,7 @@ Partial Class FormAdminCenter
         Me.txtCapacity.ForeColor = System.Drawing.Color.Black
         Me.txtCapacity.Location = New System.Drawing.Point(103, 92)
         Me.txtCapacity.Name = "txtCapacity"
-        Me.txtCapacity.Size = New System.Drawing.Size(83, 21)
+        Me.txtCapacity.Size = New System.Drawing.Size(305, 21)
         Me.txtCapacity.TabIndex = 1
         '
         'ImageList1

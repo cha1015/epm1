@@ -553,7 +553,7 @@ Public Class HelperResultsDisplay
                                                          If availStatus = "available" Then
                                                              panel.BackColor = Color.LightGreen
                                                          Else
-                                                             panel.BackColor = Color.Orange
+                                                             panel.BackColor = Color.LightPink
                                                          End If
 
                                                          AddHandler panel.Click, Sub(sender, e)

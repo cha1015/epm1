@@ -14,6 +14,10 @@ Public Class FormAdminCenter
         Me.BringToFront()
         Me.Activate()
 
+        txtSearchCustomer.Visible = False
+        Label2.Visible = False
+        txtSearch.Visible = False
+        lblSearch.Visible = False
         lblNumCustomersContainer.Visible = False
         lblUsername.Text = CurrentUser.Username
 
@@ -244,12 +248,13 @@ FROM eventplace WHERE 1=1
 
     Private Sub LoadAvailability()
         Dim query As String = "SELECT e.event_place, e.place_id, e.event_type, e.capacity, " &
-                          "e.price_per_Day AS price_per_day, e.features, e.available_days, e.description, " &
-                          "e.opening_hours, e.closing_hours, " &
-                          "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status='Approved') " &
-                          "THEN 'Booked' ELSE 'Available' END AS Availability, " &
-                          "e.image_url " &
-                          "FROM eventplace e"
+                      "e.price_per_Day AS price_per_day, e.features, e.available_days, e.description, " &
+                      "e.opening_hours, e.closing_hours, " &
+                      "CASE WHEN EXISTS (SELECT 1 FROM bookings b WHERE b.place_id = e.place_id AND b.status IN ('Approved', 'Pending')) " &
+                      "THEN 'Booked' ELSE 'Available' END AS Availability, " &
+                      "e.image_url " &
+                      "FROM eventplace e"
+
 
         Dim dt As DataTable = DBHelper.GetDataTable(query, New Dictionary(Of String, Object))
 

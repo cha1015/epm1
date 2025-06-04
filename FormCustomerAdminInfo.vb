@@ -151,6 +151,7 @@ Public Class FormCustomerAdminInfo
             DBHelper.ExecuteQuery(updateQuery, updateParams)
             MessageBox.Show("Your details have been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
+            CurrentUser.Username = txtUsername.Text
 
             Dim roleQuery As String = "SELECT role FROM Users WHERE user_id = @user_id"
             Dim roleParams As New Dictionary(Of String, Object) From {{"@user_id", userId}}
@@ -283,13 +284,6 @@ Public Class FormCustomerAdminInfo
             MessageBox.Show("Changes have been reverted.", "Changes Reverted", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
-
-    'Private Sub FormCustomerAdminInfo_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
-    '    Dim bookingForm As FormBooking = Application.OpenForms.OfType(Of FormBooking)().FirstOrDefault()
-    '    If bookingForm IsNot Nothing Then
-    '        bookingForm.RefreshBookingDetails() ' Explicitly refresh booking details
-    '    End If
-    'End Sub
 
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
         HelperNavigation.GoBack(Me)

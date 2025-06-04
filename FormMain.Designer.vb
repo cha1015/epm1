@@ -232,7 +232,7 @@ Partial Class FormMain
         Me.cbSort.BackColor = System.Drawing.Color.FromArgb(CType(CType(225, Byte), Integer), CType(CType(223, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.cbSort.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.cbSort.Font = New System.Drawing.Font("Poppins", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbSort.ForeColor = System.Drawing.Color.DarkGray
+        Me.cbSort.ForeColor = System.Drawing.Color.DimGray
         Me.cbSort.FormattingEnabled = True
         Me.cbSort.Items.AddRange(New Object() {"Alphabetical (A-Z)", "Alphabetical (Z-A)", "Capacity (Lowest to Highest)", "Capacity (Highest to Lowest)", "Price (Lowest to Highest)", "Price (Highest to Lowest)"})
         Me.cbSort.Location = New System.Drawing.Point(100, 95)
